@@ -1,0 +1,14 @@
+# some comment here
+
+[[tenet]]
+	url="github.com/lingo-reviews/tenets/space_after_forward_slash"
+
+[[tenet]]
+	url="github.com/lingo-reviews/tenets/unused_function_args"
+
+[[tenet]]
+	url="github.com/lingo-reviews/tenets/license"
+	[tenet.options]
+		license_header="""
+// MIT
+"""

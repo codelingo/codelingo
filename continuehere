@@ -1,0 +1,13 @@
+Jess:
+
+- tenetseed/tmp.go: write lib for 1. parsing args 2. generating help topics for those args.
+- lingo tenetseed review --output-type=plain-text --output-template="some {{.template}}" --diff --interactive --config="json serialised tenet options" --src="path/to/dir"
+
+use testing.patchexecutable to write docker tests
+
+complete tenetseed, get it working with licence check
+
+Matt:
+
+	- search code for "Matt", comments left for you. When you finish, leave a note here where to pickup again.
+	- writing unit tests might be another good place to start.
