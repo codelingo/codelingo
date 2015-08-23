@@ -11,8 +11,9 @@ import (
 )
 
 type ReviewResult struct {
-	Issues []*tenet.Issue
-	Errs   []string
+	TenetName string
+	Issues    []*tenet.Issue
+	Errs      []string
 }
 
 func (t *Tenet) Review(args ...string) (*ReviewResult, error) {
@@ -28,6 +29,7 @@ func (t *Tenet) Review(args ...string) (*ReviewResult, error) {
 
 	reviewResult := &ReviewResult{}
 	err = json.Unmarshal([]byte(result), reviewResult)
+	reviewResult.TenetName = t.Name
 	return reviewResult, err
 }
 
