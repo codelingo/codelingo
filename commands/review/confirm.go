@@ -11,7 +11,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/tenet"
 	"github.com/skratchdot/open-golang/open"
-	"github.com/waigani/diffparser"
+	// "github.com/waigani/diffparser"
 )
 
 type issueConfirmer struct {
@@ -48,26 +48,30 @@ func hostAbsBasePath(c *cli.Context) string {
 
 // TODO(waigani) screen diff tenet side - see other diff comment.
 func newInDiffFunc() func(issue *tenet.Issue) bool {
-	diff := diffparser.Parse(rawDiff())
-	diffChanges := diff.Changed()
-
+	// TODO(waigani) CONTINUEHERE publish diffparser so we can use it.
 	return func(issue *tenet.Issue) bool {
-		start := issue.Position.Start.Line
-		end := start
-		if issue.Position.End != nil {
-			end = issue.Position.End.Line
-		}
-
-		// was issue found in diff?
-		if newLines, ok := diffChanges[issue.Filename()]; ok {
-			for _, lineNo := range newLines {
-				if lineNo >= start && lineNo <= end {
-					return true
-				}
-			}
-		}
 		return false
 	}
+	// 	diff := diffparser.Parse(rawDiff())
+	// 	diffChanges := diff.Changed()
+
+	// 	return func(issue *tenet.Issue) bool {
+	// 		start := issue.Position.Start.Line
+	// 		end := start
+	// 		if issue.Position.End != nil {
+	// 			end = issue.Position.End.Line
+	// 		}
+
+	// 		// was issue found in diff?
+	// 		if newLines, ok := diffChanges[issue.Filename()]; ok {
+	// 			for _, lineNo := range newLines {
+	// 				if lineNo >= start && lineNo <= end {
+	// 					return true
+	// 				}
+	// 			}
+	// 		}
+	// 		return false
+	// 	}
 }
 
 // TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
