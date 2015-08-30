@@ -9,6 +9,8 @@ import (
 	"os/user"
 	"strings"
 
+	"text/template"
+
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/dev/tenet"
 )
@@ -62,20 +64,14 @@ func Output(outputType OutputFormat, outputPath string, issues []*tenet.Issue) s
 
 func format(outputFmt OutputFormat, issues []*tenet.Issue) bytes.Buffer {
 	var b bytes.Buffer
-	fileTemplates := map[string]string{}
 	switch outputFmt {
 	case plainText:
-		for _, issue := range issues {
-			fileTemplates[issue.Filename()] += "\n" + issue.String()
+		if len(issues) == 0 {
+			fmt.Fprintln(&b, "No issues found")
+			break
 		}
-
-		if len(fileTemplates) == 0 {
-			fmt.Fprintln(&b, "No Issues Found")
-		} else {
-			fmt.Fprintln(&b, "Issues Found:")
-			for _, ft := range fileTemplates {
-				fmt.Fprintln(&b, ft)
-			}
+		for _, issue := range issues {
+			fmt.Fprintln(&b, FormatPlainText(issue))
 		}
 	case jsonPretty:
 		formatted, err := json.MarshalIndent(issues, "", "\t")
@@ -93,4 +89,31 @@ func format(outputFmt OutputFormat, issues []*tenet.Issue) bytes.Buffer {
 		panic(errors.Errorf("Unrecognised output format %q", outputFmt))
 	}
 	return b
+}
+
+// Comment returns the comment for the issue, depending on the context of the issue.
+func Comment(issue *tenet.Issue, commSet *tenet.CommentSet) (string, error) {
+	comments := commSet.CommentsForContext(issue.Context)
+	if len(comments) == 0 {
+		comments = commSet.CommentsForContext(tenet.All)
+	}
+
+	// build comments with template args
+	t := template.New("comment template")
+	// default message if no comment set
+	commentTemplate := "Issue Found"
+	if len(comments) > 0 {
+		commentTemplate = comments[0].Template
+	}
+	ct, err := t.Parse(commentTemplate) // TODO(waigani) This only returns the first comment for each context.
+	if err != nil {
+		return "", err
+	}
+	var b bytes.Buffer
+	err = ct.Execute(&b, issue.CommVars)
+	if err != nil {
+		return "", err
+	}
+
+	return b.String(), nil
 }

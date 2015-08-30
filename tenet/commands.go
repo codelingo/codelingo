@@ -22,9 +22,10 @@ func (t *Tenet) Review(args ...string) (*ReviewResult, error) {
 	// ignoring a "not found" error.
 	t.RemoveContainer()
 
-	result, err := t.call("Review", args...)
+	var result string
+	err := t.call("Review", &result, args...)
 	if err != nil {
-		return nil, errors.Trace(err)
+		return nil, errors.Annotate(err, "error calling method Review")
 	}
 
 	reviewResult := &ReviewResult{}
@@ -34,31 +35,50 @@ func (t *Tenet) Review(args ...string) (*ReviewResult, error) {
 }
 
 func (t *Tenet) Help() (string, error) {
-	return t.call("Help")
+	var response string
+	if err := t.call("Help", &response); err != nil {
+		return "", err
+	}
+	return response, nil
 }
 
 func (t *Tenet) Version() (string, error) {
-	return t.call("Version")
+	var response string
+	if err := t.call("Version", &response); err != nil {
+		return "", err
+	}
+	return response, nil
 }
 
 func (t *Tenet) Debug(args ...string) string {
-	str, err := t.call("Debug", args...)
+	var response string
+	err := t.call("Debug", &response, args...)
 	if err != nil {
-		str += " error: " + err.Error()
+		response += " error: " + err.Error()
 	}
-	return str
+	return response
 }
 
-func (t *Tenet) call(method string, args ...string) (string, error) {
-	// this block is just for debugging
-	// _ = dockerArgs
-	// path := "/home/jesse/go/src/github.com/lingo-reviews/dev/tenetseed/tenetseed"
-	// client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, path)
-	// if err != nil {
-	// 	log.Fatalf("Error running plugin: %s", err)
-	// }
-	// defer client.Close()
+func (t *Tenet) CommentSet() (*tenet.CommentSet, error) {
+	var comments tenet.CommentSet
+	err := t.call("CommentSet", &comments)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	return &comments, nil
+}
 
+// TODO(matt) currently, call is hardcoded to call the tenet via a docker
+// container. Make this configurable, with a "tenet-protocol" option, such
+// that tenets can be executed as:
+// - binary executables on host
+// - remote web service
+// - lxc
+// - lxd
+// - etc...
+//
+// result must be a pointer of type compatable with that returned by the remote method.
+func (t *Tenet) call(method string, result interface{}, args ...string) error {
 	containerName := t.ContainerName()
 
 	// reuse existing container
@@ -71,7 +91,7 @@ func (t *Tenet) call(method string, args ...string) (string, error) {
 			// mount pwd as read only dir at root of container
 			pwd, err := os.Getwd()
 			if err != nil {
-				return "", errors.Trace(err)
+				return errors.Trace(err)
 			}
 			dockerArgs = append(dockerArgs, "-v", pwd+":/source:ro")
 		}
@@ -81,13 +101,7 @@ func (t *Tenet) call(method string, args ...string) (string, error) {
 	client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, "docker", dockerArgs...)
 	defer client.Close()
 	if err != nil {
-		return "", errors.Annotate(err, "error running plugin")
+		return errors.Annotate(err, "error running plugin")
 	}
-
-	var result string
-	err = client.Call("Tenet."+method, args, &result)
-	if err != nil {
-		return "", errors.Annotatef(err, "error calling method %q", method)
-	}
-	return result, nil
+	return client.Call("Tenet."+method, args, result)
 }

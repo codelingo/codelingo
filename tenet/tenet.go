@@ -7,7 +7,6 @@ import (
 	"github.com/juju/errors"
 )
 
-// TODO(waigani) where should tenet live?
 type Tenet struct {
 	// Name of the image
 	Name string `toml:"name"`

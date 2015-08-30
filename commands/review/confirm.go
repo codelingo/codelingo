@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/tenet"
 	"github.com/skratchdot/open-golang/open"
 	"github.com/waigani/diffparser"
@@ -104,9 +105,7 @@ func (c issueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 		}
 	}
 	if attempt == 0 {
-		// TODO(matt) currently formatting is in Comment func within
-		// lingo-reviews/dev/tenet. Move the formatting to lingo.
-		fmt.Println(issue.String())
+		fmt.Println(FormatPlainText(issue))
 	}
 
 	attempt++
@@ -163,4 +162,32 @@ func (c issueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 
 func (c *issueConfirmer) hostFilePath(file string) string {
 	return strings.Replace(file, "/source", c.hostAbsBasePath, 1)
+}
+
+// TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
+// representation of tenet.Issue.
+func FormatPlainText(issue *tenet.Issue) string {
+	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
+	y := color.New(color.FgYellow).SprintfFunc()
+	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
+	c := color.New(color.FgCyan).SprintfFunc()
+
+	address := m("%s-%d:%d", issue.Position.Start.String(), issue.Position.End.Line, issue.Position.End.Column)
+	comment := strings.Trim(issue.Comment, "\n")
+	comment = c(indent("\n"+comment+"\n", false))
+
+	ctxBefore := indent(yf("\n...\n%s", issue.CtxBefore), false)
+	issueLines := indent(y("\n%s", issue.LineText), true)
+	ctxAfter := indent(yf("\n%s\n...", issue.CtxAfter), false)
+	src := ctxBefore + issueLines + ctxAfter
+
+	return fmt.Sprintf("%s\n%s\n%s", address, comment, src)
+}
+
+func indent(str string, point bool) string {
+	replace := "\n    "
+	if point {
+		replace = "\n  > "
+	}
+	return strings.Replace(str, "\n", replace, -1)
 }

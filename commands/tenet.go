@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/commands/review"
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
@@ -35,7 +36,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 			return
 		}
 		for _, i := range reviewResult.Issues {
-			fmt.Println(i.String())
+			fmt.Println(review.FormatPlainText(i))
 		}
 		for _, e := range reviewResult.Errs {
 			fmt.Println(e)
@@ -56,6 +57,16 @@ func TenetCMD(ctx *cli.Context, command string) {
 		fmt.Println(text)
 	case "Debug":
 		fmt.Println(t.Debug(args...))
+	case "CommentSet":
+		commSet, err := t.CommentSet()
+		if err != nil {
+			oserrf("error running method %q, %s", method, err.Error())
+			return
+		}
+		fmt.Println("\nThis command is provided for debugging purposes only. The following is a dump of the comments in the tenet's CommentSet.\n")
+		for _, c := range commSet.Comments {
+			fmt.Printf("\n%#v\n", c)
+		}
 	default:
 		oserrf("tenet does not have method %q", method)
 		return

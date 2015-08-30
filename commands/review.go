@@ -88,6 +88,7 @@ func reviewAction(c *cli.Context) {
 		panic(err)
 	}
 	f = strings.Replace(f, "/source", basePath, 1)
+	commentSets = map[string]*t.CommentSet{}
 
 	ts := tenets(c)
 	// setup a chan of results.
@@ -101,10 +102,18 @@ func reviewAction(c *cli.Context) {
 	}()
 
 	for _, tn := range ts {
-		go func() {
+		go func(tn tenet.Tenet) {
 			defer wg.Done()
-
 			err := tn.DockerInit()
+			if err != nil {
+				oserrf(err.Error())
+				return
+			}
+
+			// Grab and store the tenet's CommentSet in a global map. We'll
+			// use this to set the appropriate comment for each issue.
+			// TODO(matt) allow these default comments to be overwritten from tenet.toml
+			commentSets[tn.Name], err = tn.CommentSet()
 			if err != nil {
 				oserrf(err.Error())
 				return
@@ -126,7 +135,7 @@ func reviewAction(c *cli.Context) {
 			// from tenet to chan. Use fan-in pattern:
 			// https://blog.golang.org/pipelines
 			results <- reviewResult
-		}()
+		}(tn)
 	}
 
 	r := allResults(c, results)
@@ -148,7 +157,6 @@ func reviewAction(c *cli.Context) {
 		default:
 			return
 		}
-
 	}
 
 	outputFmt := review.OutputFormat(c.String("output-fmt"))
@@ -160,6 +168,8 @@ type result struct {
 	issues []*t.Issue
 	errors []error
 }
+
+var commentSets map[string]*t.CommentSet
 
 // TODO(waigani) TECHDEBT if diff is true, we only report the issues found
 // within the diff, even though results contains all issues in the target
@@ -187,8 +197,15 @@ l:
 			wg.Add(len(r.Errs))
 			go func() {
 				for _, i := range r.Issues {
+					defer wg.Done()
+
+					comm, err := review.Comment(i, commentSets[r.TenetName])
+					if err != nil {
+						tenetErrs <- err.Error()
+						return
+					}
+					i.Comment = comm
 					issues <- i
-					wg.Done()
 				}
 			}()
 
@@ -230,6 +247,7 @@ l:
 				issuesClosed = true
 				continue
 			}
+
 			if cfm.Confirm(0, issue) {
 				confirmedIssues = append(confirmedIssues, issue)
 			}
