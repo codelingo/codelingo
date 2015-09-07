@@ -7,6 +7,8 @@ import (
 	"github.com/juju/errors"
 )
 
+type Options map[string]interface{}
+
 type Tenet struct {
 	// Name of the image
 	Name string `toml:"name"`
@@ -18,7 +20,7 @@ type Tenet struct {
 	Registry string `toml:"registry"`
 
 	// Config options for tenet
-	Options map[string]interface{} `toml:"options"`
+	Options Options `toml:"options"`
 
 	dockerClient *docker.Client
 }

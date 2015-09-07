@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -119,13 +120,35 @@ func reviewAction(c *cli.Context) {
 				return
 			}
 
+			// Start with options specified in config
+			var opts tenet.Options
+			if tn.Options != nil {
+				opts = tn.Options
+			} else {
+				opts = make(tenet.Options)
+			}
+			// Add or override command line specified options
+			if commandOptions := c.String("options"); commandOptions != "" {
+				var o map[string]interface{}
+				json.Unmarshal([]byte(commandOptions), &o)
+				for k, v := range o {
+					opts[k] = v
+				}
+			}
+
 			// TODO(waigani)
 			// - no args should recursively review all files in pwd.
 			// - --diff should drop any file not in the diff.
 			args := c.Args()
-			if opts := c.String("options"); opts != "" {
-				args = append([]string{"--options", opts}, args...)
+			if len(opts) != 0 {
+				jsonOpts, err := json.Marshal(opts)
+				if err != nil {
+					oserrf(err.Error())
+					return
+				}
+				args = append([]string{"--options", string(jsonOpts)}, args...)
 			}
+
 			reviewResult, err := tn.Review(args...)
 			if err != nil {
 				oserrf("error running review %s", err.Error())
