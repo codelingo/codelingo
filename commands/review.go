@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -101,6 +102,16 @@ func reviewAction(c *cli.Context) {
 		close(results)
 	}()
 
+	commandOptions := map[string]tenet.Options{}
+	// Parse command line specified options
+	if commandOptionsJson := c.String("options"); commandOptionsJson != "" {
+		err := json.Unmarshal([]byte(commandOptionsJson), &commandOptions)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+	}
+
 	for _, tn := range ts {
 		go func(tn tenet.Tenet) {
 			defer wg.Done()
@@ -119,13 +130,29 @@ func reviewAction(c *cli.Context) {
 				return
 			}
 
+			// Start with options specified in config
+			opts := tenet.Options{}
+			if tn.Options != nil {
+				opts = tn.Options
+			}
+			// Merge in options from command line
+			for k, v := range commandOptions[tn.Name] {
+				opts[k] = v
+			}
+
 			// TODO(waigani)
 			// - no args should recursively review all files in pwd.
 			// - --diff should drop any file not in the diff.
 			args := c.Args()
-			if opts := c.String("options"); opts != "" {
-				args = append([]string{"--options", opts}, args...)
+			if len(opts) != 0 {
+				jsonOpts, err := json.Marshal(opts)
+				if err != nil {
+					oserrf(err.Error())
+					return
+				}
+				args = append([]string{"--options", string(jsonOpts)}, args...)
 			}
+
 			reviewResult, err := tn.Review(args...)
 			if err != nil {
 				oserrf("error running review %s", err.Error())
