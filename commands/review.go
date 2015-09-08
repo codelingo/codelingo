@@ -102,6 +102,16 @@ func reviewAction(c *cli.Context) {
 		close(results)
 	}()
 
+	commandOptions := map[string]tenet.Options{}
+	// Parse command line specified options
+	if commandOptionsJson := c.String("options"); commandOptionsJson != "" {
+		err := json.Unmarshal([]byte(commandOptionsJson), &commandOptions)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+	}
+
 	for _, tn := range ts {
 		go func(tn tenet.Tenet) {
 			defer wg.Done()
@@ -121,19 +131,13 @@ func reviewAction(c *cli.Context) {
 			}
 
 			// Start with options specified in config
-			var opts tenet.Options
+			opts := tenet.Options{}
 			if tn.Options != nil {
 				opts = tn.Options
-			} else {
-				opts = make(tenet.Options)
 			}
-			// Add or override command line specified options
-			if commandOptions := c.String("options"); commandOptions != "" {
-				var o map[string]interface{}
-				json.Unmarshal([]byte(commandOptions), &o)
-				for k, v := range o {
-					opts[k] = v
-				}
+			// Merge in options from command line
+			for k, v := range commandOptions[tn.Name] {
+				opts[k] = v
 			}
 
 			// TODO(waigani)
