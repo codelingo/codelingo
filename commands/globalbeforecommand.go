@@ -5,6 +5,11 @@ import (
 	"github.com/juju/errors"
 )
 
+// List of commands which can be run without needing a config file
+// TODO(matt) remove synonimous commands from here and use a resolving function
+// once UI for that is sorted out
+var standaloneCommands = []string{"", "init", "help", "h"}
+
 func BeforeCMD(c *cli.Context) error {
 	var currentCMDName string
 	args := c.Args()
@@ -13,10 +18,16 @@ func BeforeCMD(c *cli.Context) error {
 	}
 
 	// ensure we have a tenet.toml file
-	if currentCMDName != "init" {
+	standalone := false
+	for _, c := range standaloneCommands {
+		if c == currentCMDName {
+			standalone = true
+			break
+		}
+	}
+	if !standalone {
 		if cfgPath, _ := tenetCfgPath(c); cfgPath == "" {
-			desiredCfg := desiredTenetCfgPath(c)
-			return errors.Errorf("not a lingo project. %s not found (nor in any of the parent directories). Run `lingo init` to write a tenet.toml file in the current directory", desiredCfg)
+			return errors.Wrap(errors.New("No tenet.toml configuration found. Run `lingo init` to create a tenet.toml file in the current directory"), errors.New("ui"))
 		}
 	}
 
