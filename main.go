@@ -16,8 +16,7 @@ func main() {
 				fmt.Println(e.Underlying())
 				os.Exit(1)
 			}
-		} else {
-			panic(errors.ErrorStack(err))
 		}
+		panic(errors.ErrorStack(err))
 	}
 }

@@ -8,7 +8,7 @@ import (
 // List of commands which can be run without needing a config file
 // TODO(matt) remove synonimous commands from here and use a resolving function
 // once UI for that is sorted out
-var standaloneCommands = [...]string{"", "init", "help", "h"}
+var standaloneCommands = []string{"", "init", "help", "h"}
 
 func BeforeCMD(c *cli.Context) error {
 	var currentCMDName string
@@ -22,6 +22,7 @@ func BeforeCMD(c *cli.Context) error {
 	for _, c := range standaloneCommands {
 		if c == currentCMDName {
 			standalone = true
+			break
 		}
 	}
 	if !standalone {
