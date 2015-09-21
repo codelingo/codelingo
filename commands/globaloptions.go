@@ -78,7 +78,7 @@ var GlobalOptions = []cli.Flag{
 	cli.StringFlag{
 		tenetCfgFlg.String(),
 		defaultTenetCfgPath,
-		"path to the toml config file that details the tenets used. Defaults to tenet.toml in pwd.",
+		"path to the toml config file that details the tenets used. Defaults to " + defaultTenetCfgPath + " in current directory",
 		"LINGO_TENET_CONFIG_NAME",
 	}, cli.StringFlag{
 		outputTypeFlg.String(),

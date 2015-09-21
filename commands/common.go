@@ -39,7 +39,7 @@ var exiter = func(code int) {
 // TODO(waigani) write osoutf, replace all fmt.Print
 
 func oserrf(format string, a ...interface{}) {
-	fmt.Fprintf(stderr, "error: "+format, a...)
+	fmt.Fprintf(stderr, "error: "+format+"\n", a...)
 	exiter(1)
 }
 
@@ -193,11 +193,16 @@ func hasTenet(cfg *tenetCfg, imageName string) bool {
 // 	return parts[0], parts[1], nil
 // }
 
-func expectedArgs(c *cli.Context, expected int) error {
+func exactArgs(c *cli.Context, expected int) {
 	if l := len(c.Args()); l != expected {
-		return errors.Errorf("expected %d argument(s), got %d", expected, l)
+		oserrf("expected %d argument(s), got %d", expected, l)
 	}
-	return nil
+}
+
+func maxArgs(c *cli.Context, max int) {
+	if l := len(c.Args()); l > max {
+		oserrf("expected up to %d argument(s), got %d", max, l)
+	}
 }
 
 // func CheckerConfig(configFile string) *Config {
