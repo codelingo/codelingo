@@ -42,7 +42,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 			fmt.Println(e)
 		}
 	case "Help":
-		text, err := t.Help()
+		text, err := t.Help(args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return

@@ -3,8 +3,6 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
@@ -82,13 +80,6 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
-	f := "/source/file.go"
-	p := c.GlobalString("repo-path")
-	basePath, err := filepath.Abs(p)
-	if err != nil {
-		panic(err)
-	}
-	f = strings.Replace(f, "/source", basePath, 1)
 	commentSets = map[string]*t.CommentSet{}
 
 	ts := tenets(c)

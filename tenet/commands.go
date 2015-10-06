@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"net/rpc/jsonrpc"
 	"os"
+	"path"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/tenet"
 	"github.com/natefinch/pie"
+
+	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/dev/tenet"
 )
 
 type ReviewResult struct {
@@ -34,9 +37,9 @@ func (t *Tenet) Review(args ...string) (*ReviewResult, error) {
 	return reviewResult, err
 }
 
-func (t *Tenet) Help() (string, error) {
+func (t *Tenet) Help(args ...string) (string, error) {
 	var response string
-	if err := t.call("Help", &response); err != nil {
+	if err := t.call("Help", &response, args...); err != nil {
 		return "", err
 	}
 	return response, nil
@@ -79,6 +82,25 @@ func (t *Tenet) CommentSet() (*tenet.CommentSet, error) {
 //
 // result must be a pointer of type compatable with that returned by the remote method.
 func (t *Tenet) call(method string, result interface{}, args ...string) error {
+	// TODO: Choose a driver based on cli flags
+	return t.callDocker(method, result, args...)
+}
+
+// Put binary tenets in ~/.lingo/tenets/<repo>/<tenet> and call them with this
+func (t *Tenet) callBinary(method string, result interface{}, args ...string) error {
+	// TODO: tenetPath := path.Join(c.GlobalString(lingoHomeFlg.long), t.String())
+	tenetPath := path.Join("/home/matthew/.lingo/tenets/", t.String())
+
+	client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, tenetPath)
+	if err != nil {
+		return errors.Annotate(err, "error running tenet")
+	}
+	defer client.Close()
+
+	return client.Call("Tenet."+method, args, result)
+}
+
+func (t *Tenet) callDocker(method string, result interface{}, args ...string) error {
 	containerName := t.ContainerName()
 
 	// reuse existing container
@@ -99,9 +121,30 @@ func (t *Tenet) call(method string, result interface{}, args ...string) error {
 	}
 
 	client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, "docker", dockerArgs...)
-	defer client.Close()
 	if err != nil {
-		return errors.Annotate(err, "error running plugin")
+		return errors.Annotate(err, "error running tenet")
 	}
-	return client.Call("Tenet."+method, args, result)
+	defer client.Close()
+
+	pass := len(args) // Number of args to leave alone - for non-review commands: all of them
+	// Prepend filenames with /source/ for reviews
+	if method == "Review" {
+		cmd := api.ReviewCMD()
+		err := cmd.Flags.Parse(args)
+		if err != nil {
+			return errors.Annotate(err, "could not parse arguments")
+		}
+		pass -= cmd.Flags.NArg()
+	}
+
+	var transformedArgs []string
+	for i, a := range args {
+		if i < pass {
+			transformedArgs = append(transformedArgs, a)
+		} else {
+			transformedArgs = append(transformedArgs, path.Join("/source/", a))
+		}
+	}
+
+	return client.Call("Tenet."+method, transformedArgs, result)
 }
