@@ -25,7 +25,10 @@ var configSeed = `
 // TODO(waigani) set lingo-home flag and test init creates correct home dir.
 
 func initLingo(c *cli.Context) {
-	maxArgs(c, 1)
+	if err := maxArgs(c, 1); err != nil {
+		oserrf(err.Error())
+		return
+	}
 
 	// TODO(anyone) create dir for tenet plugin executables. Then, work out how to install the plugins.
 
@@ -37,9 +40,9 @@ func initLingo(c *cli.Context) {
 
 		// Check that it exists and is a directory
 		if pathInfo, err := os.Stat(cfgPath); os.IsNotExist(err) {
-			oserrf("directory %q must exist", cfgPath)
+			oserrf("directory %q not found", cfgPath)
 		} else if !pathInfo.IsDir() {
-			oserrf("%q must by a directory", cfgPath)
+			oserrf("%q is not a directory", cfgPath)
 		}
 
 		// Use default config filename
