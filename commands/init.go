@@ -4,21 +4,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/codegangsta/cli"
 )
 
 var InitCMD = cli.Command{
-	Name:  "init",
-	Usage: "Create a tenet.toml config file in pwd",
-	Flags: []cli.Flag{
-		cli.BoolFlag{
-			Name:  "pwd",
-			Usage: "initialise the current directory to use it's own set of tenets",
-		},
-	},
+	Name:   "init",
+	Usage:  "create a " + defaultTenetCfgPath + " config file in current or specified directory",
 	Action: initLingo,
 }
 
@@ -32,60 +25,37 @@ var configSeed = `
 // TODO(waigani) set lingo-home flag and test init creates correct home dir.
 
 func initLingo(c *cli.Context) {
-	initPWD := c.Bool("pwd")
-	// first init lingo
-	home := c.GlobalString(lingoHomeFlg.long)
-	// CONTINUE HERE create dir for tenet plugin executables. Then, work out how to install the plugins.
-	defaultTenets := path.Join(home, defaultTenetCfgPath)
-	if _, err := os.Stat(defaultTenets); err == nil {
-		if !initPWD {
-			fmt.Printf(`
-error: lingo already initiated. Using these tenets:
- %s 
- If you wish to initiate this directory with it's own tenets, run:
- $ lingo init --pwd
-`[1:], defaultTenets)
-			return
-		}
-
-	} else {
-		// init lingo
-
-		// write tenet config
-		if err := writeFileAll(defaultTenets, []byte("# run `lingo add <tenet>` to add tenets to this file"), 0777); err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		readMe := []byte(`
-This directory holds tenet executables. To add a tenet run:
-$ lingo add <author>:<tenet-name>
-
-`[1:])
-
-		if err := writeFileAll(path.Join(home, "tenets", "README"), readMe, 0777); err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Printf("lingo successfully initiated. Tenets config file written to %q", defaultTenets)
+	if err := maxArgs(c, 1); err != nil {
+		oserrf(err.Error())
+		return
 	}
 
-	// then init pwd
-	if initPWD {
-		cfgPath, err := filepath.Abs(c.GlobalString("tenet-config"))
-		if err != nil {
-			fmt.Printf("error: %s", err.Error())
+	// TODO(anyone) create dir for tenet plugin executables. Then, work out how to install the plugins.
+
+	// Create a new tenet config file at either the provided directory or
+	// a location from flags or environment, or the current directory
+	cfgPath, _ := filepath.Abs(desiredTenetCfgPath(c))
+	if len(c.Args()) > 0 {
+		cfgPath, _ = filepath.Abs(c.Args()[0])
+
+		// Check that it exists and is a directory
+		if pathInfo, err := os.Stat(cfgPath); os.IsNotExist(err) {
+			oserrf("directory %q not found", cfgPath)
+		} else if !pathInfo.IsDir() {
+			oserrf("%q is not a directory", cfgPath)
 		}
 
-		if _, err := os.Stat(cfgPath); err == nil {
-			fmt.Printf("error: pwd is already initiated. Using tenets config file %q in pwd.\n", cfgPath)
-			return
-		}
-
-		if err := ioutil.WriteFile(cfgPath, []byte("# run `lingo add <tenet>` to add tenets to this file"), 0644); err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Printf("pwd successfully initiated. Tenets config file written to %q", cfgPath)
+		// Use default config filename
+		cfgPath = filepath.Join(cfgPath, defaultTenetCfgPath)
 	}
+
+	if _, err := os.Stat(cfgPath); err == nil {
+		oserrf("Already initialised using tenet config file %q", cfgPath)
+	}
+
+	if err := ioutil.WriteFile(cfgPath, []byte("# run `lingo add <tenet>` to add tenets to this file"), 0644); err != nil {
+		oserrf(err.Error())
+	}
+
+	fmt.Printf("Successfully initialised. Lingo config file written to %q\n", cfgPath)
 }

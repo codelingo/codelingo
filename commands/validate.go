@@ -17,7 +17,7 @@ var ValidateCMD = cli.Command{
 // images should have key: reviews.lingo.tenet
 
 func validate(c *cli.Context) {
-	if err := expectedArgs(c, 1); err != nil {
+	if err := exactArgs(c, 1); err != nil {
 		oserrf(err.Error())
 		return
 	}
