@@ -11,6 +11,7 @@ import (
 
 	t "github.com/lingo-reviews/dev/tenet"
 	"github.com/lingo-reviews/lingo/commands/review"
+	"github.com/lingo-reviews/lingo/drivers"
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
@@ -80,6 +81,13 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
+	// Create and initialise a driver
+	driver, err := drivers.New(c.GlobalString(driverFlg.long), c)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+
 	commentSets = map[string]*t.CommentSet{}
 
 	ts := tenets(c)
@@ -115,7 +123,7 @@ func reviewAction(c *cli.Context) {
 			// Grab and store the tenet's CommentSet in a global map. We'll
 			// use this to set the appropriate comment for each issue.
 			// TODO(matt) allow these default comments to be overwritten from tenet.toml
-			commentSets[tn.Name], err = tn.CommentSet()
+			commentSets[tn.Name], err = driver.CommentSet(&tn)
 			if err != nil {
 				oserrf(err.Error())
 				return
@@ -144,7 +152,7 @@ func reviewAction(c *cli.Context) {
 				args = append([]string{"--options", string(jsonOpts)}, args...)
 			}
 
-			reviewResult, err := tn.Review(args...)
+			reviewResult, err := driver.Review(&tn, args...)
 			if err != nil {
 				oserrf("error running review %s", err.Error())
 				return

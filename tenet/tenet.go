@@ -5,6 +5,8 @@ import (
 
 	"github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
+
+	devTenet "github.com/lingo-reviews/dev/tenet"
 )
 
 type Options map[string]interface{}
@@ -25,8 +27,15 @@ type Tenet struct {
 	dockerClient *docker.Client
 }
 
+type ReviewResult struct {
+	TenetName string
+	Issues    []*devTenet.Issue
+	Errs      []string
+}
+
 var dClient *docker.Client
 
+// TODO: Move to driver.newDocker
 func init() {
 	// TODO(waigani) get endpoint from ~/.lingo/config.toml
 	endpoint := "unix:///var/run/docker.sock"

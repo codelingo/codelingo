@@ -7,6 +7,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/lingo-reviews/lingo/commands/review"
+	"github.com/lingo-reviews/lingo/drivers"
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
@@ -22,6 +23,13 @@ func TenetCMD(ctx *cli.Context, command string) {
 		return
 	}
 
+	// Create and initialise a driver
+	driver, err := drivers.New(ctx.GlobalString(driverFlg.long), ctx)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+
 	method := "Help"
 	args := ctx.Args()
 	if len(args[1:]) > 0 {
@@ -30,7 +38,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 
 	switch method {
 	case "Review":
-		reviewResult, err := t.Review(args[2:]...)
+		reviewResult, err := driver.Review(t, args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
@@ -42,23 +50,23 @@ func TenetCMD(ctx *cli.Context, command string) {
 			fmt.Println(e)
 		}
 	case "Help":
-		text, err := t.Help(args[2:]...)
+		text, err := driver.Help(t, args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
 		}
 		fmt.Println(text)
 	case "Version":
-		text, err := t.Version()
+		text, err := driver.Version(t)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
 		}
 		fmt.Println(text)
 	case "Debug":
-		fmt.Println(t.Debug(args...))
+		fmt.Println(driver.Debug(t, args...))
 	case "CommentSet":
-		commSet, err := t.CommentSet()
+		commSet, err := driver.CommentSet(t)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
