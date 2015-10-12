@@ -27,10 +27,10 @@ type Driver interface {
 
 func New(d string, c *cli.Context) (Driver, error) {
 	switch d {
+	case "docker", "": // Default driver
+		return newDocker(c)
 	case "binary":
 		return newBinary(c)
-	case "docker":
-		return newDocker(c)
 	}
 	return nil, fmt.Errorf("Invalid driver specified: %q", d)
 }

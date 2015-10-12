@@ -46,10 +46,6 @@ var (
 		"lingo-home",
 		"l",
 	}
-	driverFlg = flagName{
-		"driver",
-		"r",
-	}
 	diffFlg = flagName{
 		"diff",
 		"d",
@@ -94,11 +90,6 @@ var GlobalOptions = []cli.Flag{
 		"cli",
 		"filepath to write output to. By default output will be printed to the CLI",
 		"LINGO_OUTPUT",
-	}, cli.StringFlag{
-		driverFlg.String(),
-		"docker",
-		"tenet execution driver: docker or binary.",
-		"LINGO_DRIVER",
 	}, cli.StringFlag{
 		repoURLFlg.String(),
 		"",

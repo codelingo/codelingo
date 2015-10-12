@@ -81,13 +81,6 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
-	// Create and initialise a driver
-	driver, err := drivers.New(c.GlobalString(driverFlg.long), c)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
-
 	commentSets = map[string]*t.CommentSet{}
 
 	ts := tenets(c)
@@ -114,7 +107,15 @@ func reviewAction(c *cli.Context) {
 	for _, tn := range ts {
 		go func(tn tenet.Tenet) {
 			defer wg.Done()
-			err := tn.DockerInit()
+
+			// Create and initialise a driver
+			driver, err := drivers.New(tn.Driver, c)
+			if err != nil {
+				oserrf(err.Error())
+				return
+			}
+
+			err = tn.DockerInit()
 			if err != nil {
 				oserrf(err.Error())
 				return

@@ -24,7 +24,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 	}
 
 	// Create and initialise a driver
-	driver, err := drivers.New(ctx.GlobalString(driverFlg.long), ctx)
+	driver, err := drivers.New(t.Driver, ctx)
 	if err != nil {
 		oserrf(err.Error())
 		return

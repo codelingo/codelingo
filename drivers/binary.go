@@ -13,7 +13,7 @@ import (
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
-// Put binary tenets in ~/.lingo/tenets/<repo>/<tenet>
+// Binary is a tenet driver to execute binary tenets found in ~/.lingo/tenets/<repo>/<tenet>
 type Binary struct {
 	context *cli.Context
 }

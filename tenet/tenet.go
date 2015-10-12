@@ -18,6 +18,9 @@ type Tenet struct {
 	// Tag of the image
 	Tag string `toml:"tag"`
 
+	// Name of the driver to use
+	Driver string `toml:"driver"`
+
 	// Registry server to pull the image from
 	Registry string `toml:"registry"`
 
@@ -52,6 +55,7 @@ func New(name string) (*Tenet, error) {
 	t := Tenet{
 		Name:     parts[0],
 		Registry: "hub.docker.com",
+		Driver:   "docker",
 	}
 
 	l := len(parts)
@@ -72,6 +76,11 @@ func New(name string) (*Tenet, error) {
 // also pulls the image if missing.
 func (t *Tenet) DockerInit() error {
 	t.dockerClient = dClient
+
+	// TODO: Remove this line when this function is part of docker driver
+	if t.Driver != "docker" {
+		return nil
+	}
 
 	if !t.HaveImage() {
 		if err := t.PullImage(); err != nil {
