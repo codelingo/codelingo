@@ -25,7 +25,7 @@ const (
 )
 
 type tenetCfg struct {
-	Tenets []tenet.Tenet `toml:"tenet"`
+	Configs []tenet.Config `toml:"tenet"`
 }
 
 // stderr is a var for mocking in tests
@@ -53,6 +53,30 @@ func lingoWeb(uri string) url.URL {
 		// RawQuery string // encoded query values, without '?'
 		// Fragment string // fragment for references, without '#'
 	}
+}
+
+func tenetCfgs(c *cli.Context) []tenet.Config {
+	cfg, err := readTenetCfgFile(c)
+	if err != nil {
+		oserrf("reading config file: %s", err.Error())
+		return nil
+	}
+	return cfg.Configs
+}
+
+func tenets(c *cli.Context) []tenet.Tenet {
+	cfgs := tenetCfgs(c)
+	var ts []tenet.Tenet
+	for _, cfg := range cfgs {
+		tenet, err := tenet.New(c, cfg)
+		if err != nil {
+			oserrf("could not create tenet '%s': %s", cfg.Name, err.Error())
+			return nil
+		}
+		ts = append(ts, tenet)
+	}
+
+	return ts
 }
 
 // pathToCfg can be either a local file system path or a URL.
@@ -175,8 +199,8 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 }
 
 func hasTenet(cfg *tenetCfg, imageName string) bool {
-	for _, tenet := range cfg.Tenets {
-		if tenet.Name == imageName {
+	for _, config := range cfg.Configs {
+		if config.Name == imageName {
 			return true
 		}
 	}

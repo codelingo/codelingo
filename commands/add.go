@@ -34,7 +34,7 @@ func add(c *cli.Context) {
 		return
 	}
 
-	cfg.Tenets = append(cfg.Tenets, tenet.Tenet{Name: imageName})
+	cfg.Configs = append(cfg.Configs, tenet.Config{Name: imageName})
 
 	if err := writeTenetCfgFile(c, cfg); err != nil {
 		oserrf(err.Error())

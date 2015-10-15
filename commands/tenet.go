@@ -7,7 +7,6 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/lingo-reviews/lingo/commands/review"
-	"github.com/lingo-reviews/lingo/drivers"
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
@@ -17,14 +16,14 @@ func TenetCMD(ctx *cli.Context, command string) {
 	// TODO(matt) read about bash completion on
 	// https://github.com/codegangsta/cli. Is there a nice way that we could
 	// add bash completion for tenet names (as they'll be long and clumsy).
-	t, err := tenet.New(command)
+	t, err := tenet.New(ctx, tenet.Config{Name: command})
 	if err != nil {
 		oserrf("command or tenet not found: %s", err.Error())
 		return
 	}
 
-	// Create and initialise a driver
-	driver, err := drivers.New(t.Driver, ctx)
+	// Initialise the tenet driver
+	err = t.InitDriver()
 	if err != nil {
 		oserrf(err.Error())
 		return
@@ -38,7 +37,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 
 	switch method {
 	case "Review":
-		reviewResult, err := driver.Review(t, args[2:]...)
+		reviewResult, err := t.Review(args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
@@ -50,23 +49,23 @@ func TenetCMD(ctx *cli.Context, command string) {
 			fmt.Println(e)
 		}
 	case "Help":
-		text, err := driver.Help(t, args[2:]...)
+		text, err := t.Help(args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
 		}
 		fmt.Println(text)
 	case "Version":
-		text, err := driver.Version(t)
+		text, err := t.Version()
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
 		}
 		fmt.Println(text)
 	case "Debug":
-		fmt.Println(driver.Debug(t, args...))
+		fmt.Println(t.Debug(args...))
 	case "CommentSet":
-		commSet, err := driver.CommentSet(t)
+		commSet, err := t.CommentSet()
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return

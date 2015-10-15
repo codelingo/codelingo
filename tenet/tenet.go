@@ -1,113 +1,38 @@
 package tenet
 
 import (
-	"strings"
+	"fmt"
 
-	"github.com/fsouza/go-dockerclient"
-	"github.com/juju/errors"
+	"github.com/codegangsta/cli"
 
 	devTenet "github.com/lingo-reviews/dev/tenet"
+
+	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
-type Options map[string]interface{}
+// TODO: Better way to re-export, or way to avoid?
+type Config driver.Common
 
-type Tenet struct {
-	// Name of the image
-	Name string `toml:"name"`
-
-	// Tag of the image
-	Tag string `toml:"tag"`
-
-	// Name of the driver to use
-	Driver string `toml:"driver"`
-
-	// Registry server to pull the image from
-	Registry string `toml:"registry"`
-
-	// Config options for tenet
-	Options Options `toml:"options"`
-
-	dockerClient *docker.Client
+type Tenet interface {
+	String() string
+	InitDriver() error // TODO: Can this be private?
+	Review(args ...string) (*driver.ReviewResult, error)
+	Help(args ...string) (string, error)
+	Version() (string, error)
+	CommentSet() (*devTenet.CommentSet, error)
+	Debug(args ...string) string
+	GetOptions() driver.Options
+	Pull() error
 }
 
-type ReviewResult struct {
-	TenetName string
-	Issues    []*devTenet.Issue
-	Errs      []string
-}
-
-var dClient *docker.Client
-
-// TODO: Move to driver.newDocker
-func init() {
-	// TODO(waigani) get endpoint from ~/.lingo/config.toml
-	endpoint := "unix:///var/run/docker.sock"
-	var err error
-	dClient, err = docker.NewClient(endpoint)
-	if err != nil {
-		panic(err)
-	}
-}
-
-// NewTenet builds and returns a Tenet. name is a docker image name of form <repo>/<image>:[tag]
-func New(name string) (*Tenet, error) {
-	parts := strings.Split(name, ":")
-	t := Tenet{
-		Name:     parts[0],
-		Registry: "hub.docker.com",
-		Driver:   "docker",
+// NewTenet builds and returns a Tenet that is not yet initialised.
+func New(ctx *cli.Context, cfg Config) (Tenet, error) {
+	switch cfg.Driver {
+	case "docker", "": // Default driver
+		return driver.NewDocker(ctx, driver.Common(cfg))
+	case "binary":
+		return driver.NewBinary(ctx, driver.Common(cfg))
 	}
 
-	l := len(parts)
-	switch {
-	case l > 2:
-		return nil, errors.Errorf("%q is wrong format")
-	case l == 2:
-		t.Tag = parts[1]
-	}
-
-	if err := t.DockerInit(); err != nil {
-		return nil, errors.Trace(err)
-	}
-	return &t, nil
-}
-
-// DockerInit prepares the object to talk to the docker image backing it. It
-// also pulls the image if missing.
-func (t *Tenet) DockerInit() error {
-	t.dockerClient = dClient
-
-	// TODO: Remove this line when this function is part of docker driver
-	if t.Driver != "docker" {
-		return nil
-	}
-
-	if !t.HaveImage() {
-		if err := t.PullImage(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (t *Tenet) String() string {
-	if t.Tag != "" {
-		return t.Name + ":" + t.Tag
-	}
-	return t.Name
-}
-
-func apiAuth() (docker.AuthConfiguration, error) {
-	auths, err := docker.NewAuthConfigurationsFromDockerCfg()
-	if err != nil {
-		return docker.AuthConfiguration{}, errors.Errorf("error getting auth config: %s", err.Error())
-	}
-	if auth, ok := auths.Configs["https://index.docker.io/v1/"]; ok {
-		return auth, nil
-	}
-	// otherwise return first auth found
-	for _, auth := range auths.Configs {
-		return auth, nil
-	}
-	return docker.AuthConfiguration{}, errors.New("auth not found")
+	return nil, fmt.Errorf("Unknown driver specified: %q", cfg.Driver)
 }

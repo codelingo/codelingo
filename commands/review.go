@@ -11,8 +11,9 @@ import (
 
 	t "github.com/lingo-reviews/dev/tenet"
 	"github.com/lingo-reviews/lingo/commands/review"
-	"github.com/lingo-reviews/lingo/drivers"
 	"github.com/lingo-reviews/lingo/tenet"
+	// TODO: Avoid driver import
+	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 var ReviewCMD = cli.Command{
@@ -85,7 +86,7 @@ func reviewAction(c *cli.Context) {
 
 	ts := tenets(c)
 	// setup a chan of results.
-	results := make(chan *tenet.ReviewResult, len(ts))
+	results := make(chan *driver.ReviewResult, len(ts))
 	var wg sync.WaitGroup
 	wg.Add(len(ts))
 	// wait for all results to come in before closing the chan.
@@ -94,7 +95,7 @@ func reviewAction(c *cli.Context) {
 		close(results)
 	}()
 
-	commandOptions := map[string]tenet.Options{}
+	commandOptions := map[string]driver.Options{}
 	// Parse command line specified options
 	if commandOptionsJson := c.String("options"); commandOptionsJson != "" {
 		err := json.Unmarshal([]byte(commandOptionsJson), &commandOptions)
@@ -108,14 +109,8 @@ func reviewAction(c *cli.Context) {
 		go func(tn tenet.Tenet) {
 			defer wg.Done()
 
-			// Create and initialise a driver
-			driver, err := drivers.New(tn.Driver, c)
-			if err != nil {
-				oserrf(err.Error())
-				return
-			}
-
-			err = tn.DockerInit()
+			// Initialise the tenet driver
+			err := tn.InitDriver()
 			if err != nil {
 				oserrf(err.Error())
 				return
@@ -124,19 +119,19 @@ func reviewAction(c *cli.Context) {
 			// Grab and store the tenet's CommentSet in a global map. We'll
 			// use this to set the appropriate comment for each issue.
 			// TODO(matt) allow these default comments to be overwritten from tenet.toml
-			commentSets[tn.Name], err = driver.CommentSet(&tn)
+			commentSets[tn.String()], err = tn.CommentSet()
 			if err != nil {
 				oserrf(err.Error())
 				return
 			}
 
 			// Start with options specified in config
-			opts := tenet.Options{}
-			if tn.Options != nil {
-				opts = tn.Options
+			opts := driver.Options{}
+			if tn.GetOptions() != nil {
+				opts = tn.GetOptions()
 			}
 			// Merge in options from command line
-			for k, v := range commandOptions[tn.Name] {
+			for k, v := range commandOptions[tn.String()] {
 				opts[k] = v
 			}
 
@@ -153,7 +148,7 @@ func reviewAction(c *cli.Context) {
 				args = append([]string{"--options", string(jsonOpts)}, args...)
 			}
 
-			reviewResult, err := driver.Review(&tn, args...)
+			reviewResult, err := tn.Review(args...)
 			if err != nil {
 				oserrf("error running review %s", err.Error())
 				return
@@ -205,7 +200,7 @@ var commentSets map[string]*t.CommentSet
 // nodes/lines within the diff.
 
 // allResults returns all the issues all the tenets found.
-func allResults(c *cli.Context, results chan *tenet.ReviewResult) result {
+func allResults(c *cli.Context, results chan *driver.ReviewResult) result {
 	issues := make(chan *t.Issue)
 	tenetErrs := make(chan string)
 
