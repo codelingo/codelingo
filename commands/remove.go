@@ -31,13 +31,13 @@ func remove(c *cli.Context) {
 		oserrf(`error: tenet "%s" not found in %q`, imageName, c.GlobalString(tenetCfgFlg.long))
 	}
 
-	var tenets []tenet.Tenet
-	for _, t := range cfg.Tenets {
+	var tenets []tenet.Config
+	for _, t := range cfg.Configs {
 		if t.Name != imageName {
 			tenets = append(tenets, t)
 		}
 	}
-	cfg.Tenets = tenets
+	cfg.Configs = tenets
 
 	if err := writeTenetCfgFile(c, cfg); err != nil {
 		oserrf(err.Error())

@@ -16,9 +16,16 @@ func TenetCMD(ctx *cli.Context, command string) {
 	// TODO(matt) read about bash completion on
 	// https://github.com/codegangsta/cli. Is there a nice way that we could
 	// add bash completion for tenet names (as they'll be long and clumsy).
-	t, err := tenet.New(command)
+	t, err := tenet.New(ctx, tenet.Config{Name: command})
 	if err != nil {
 		oserrf("command or tenet not found: %s", err.Error())
+		return
+	}
+
+	// Initialise the tenet driver
+	err = t.InitDriver()
+	if err != nil {
+		oserrf(err.Error())
 		return
 	}
 
@@ -42,7 +49,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 			fmt.Println(e)
 		}
 	case "Help":
-		text, err := t.Help()
+		text, err := t.Help(args[2:]...)
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return

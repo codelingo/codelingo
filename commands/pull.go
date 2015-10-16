@@ -45,38 +45,41 @@ func pull(c *cli.Context) {
 		}
 		return
 	}
-	if err := pullOne(c.Args().First()); err != nil {
+	if err := pullOne(c, c.Args().First()); err != nil {
 		oserrf(err.Error())
 	}
 }
 
+// Pull all tenets from config using assigned drivers.
 func pullAll(c *cli.Context) error {
-	cfg, err := readTenetCfgFile(c)
-	if err != nil {
-		return errors.Errorf("reading config file: %s", err.Error())
-	}
-
-	for _, t := range cfg.Tenets {
-		err := pullOne(t.Name)
+	for _, t := range tenets(c) {
+		// TODO(waigani) don't return on err, collect errs and report at end
+		err := t.InitDriver()
 		if err != nil {
-			// TODO(waigani) don't return on err, collect errs and report at end
+			return err
+		}
+		err = t.Pull()
+		if err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func pullOne(name string) error {
-	t, err := tenet.New(name)
+// Pull a tenet by name, assuming docker driver and default registry.
+func pullOne(c *cli.Context, name string) error {
+	// TODO: Add --driver, --registry flags for more info
+	t, err := tenet.New(c, tenet.Config{Name: name})
 	if err != nil {
 		return errors.Trace(err)
 	}
 
-	err = t.PullImage()
+	err = t.InitDriver()
 	if err != nil {
-		return errors.Trace(err)
+		return err
 	}
-	return nil
+
+	return t.Pull()
 }
 
 // // pullTenetImage attempts to pull the docker image <author>/<tenetName> from docker hub

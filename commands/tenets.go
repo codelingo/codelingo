@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var TenetsCMD = cli.Command{
@@ -15,16 +14,7 @@ var TenetsCMD = cli.Command{
 }
 
 func tenetsAction(c *cli.Context) {
-	for _, t := range tenets(c) {
-		fmt.Println(t.String())
+	for _, t := range tenetCfgs(c) {
+		fmt.Println(t.Name)
 	}
-}
-
-func tenets(c *cli.Context) []tenet.Tenet {
-	cfg, err := readTenetCfgFile(c)
-	if err != nil {
-		oserrf("reading config file: %s", err.Error())
-		return nil
-	}
-	return cfg.Tenets
 }
