@@ -8,6 +8,8 @@ import (
 	"github.com/juju/errors"
 )
 
+// TODO: There's some dead code in this file (StartContainer, StopContainer), do we need it?
+
 // TODO(matt) These will turn into very long container names. Is there a limit
 // on docker container names? We should create shorter unique names.
 func ContainerName(name string) string {

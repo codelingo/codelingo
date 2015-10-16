@@ -68,6 +68,7 @@ func pullAll(c *cli.Context) error {
 
 // Pull a tenet by name, assuming docker driver and default registry.
 func pullOne(c *cli.Context, name string) error {
+	// TODO: Add --driver, --registry flags for more info
 	t, err := tenet.New(c, tenet.Config{Name: name})
 	if err != nil {
 		return errors.Trace(err)

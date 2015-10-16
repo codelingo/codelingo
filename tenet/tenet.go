@@ -10,18 +10,17 @@ import (
 	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
-// TODO: Better way to re-export, or way to avoid?
 type Config driver.Common
 
 type Tenet interface {
 	String() string
-	InitDriver() error // TODO: Can this be private?
-	Review(args ...string) (*driver.ReviewResult, error)
+	InitDriver() error
+	Review(args ...string) (*driver.ReviewResult, error) // TODO: Refactor to not expose driver to callers
 	Help(args ...string) (string, error)
 	Version() (string, error)
 	CommentSet() (*devTenet.CommentSet, error)
 	Debug(args ...string) string
-	GetOptions() driver.Options
+	GetOptions() driver.Options // TODO: Use AddOptions instead to apply cli json args
 	Pull() error
 }
 
