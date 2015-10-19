@@ -24,8 +24,18 @@ const (
 	defaultTenetCfgPath = "tenet.toml"
 )
 
-type tenetCfg struct {
-	Configs []tenet.Config `toml:"tenet"`
+type CascadeDirection int
+
+const (
+	CascadeNone CascadeDirection = iota // Only read config in the current working directory
+	CascadeUp                           // Walk up parent directories and include found tenets
+	CascadeDown                         // Search subdirectories recursively and include found tenets
+	CascadeBoth                         // Combine CascadeUp and CascadeDown
+)
+
+type configuration struct {
+	Include string         `toml:"include"`
+	Tenets  []tenet.Config `toml:"tenet"`
 }
 
 // stderr is a var for mocking in tests
@@ -56,22 +66,19 @@ func lingoWeb(uri string) url.URL {
 	}
 }
 
-func tenetCfgs(c *cli.Context) []tenet.Config {
-	cfg, err := readTenetCfgFile(c)
+// TODO: Pass in a config object here, return ([]tenet.Tenet, err)
+func tenets(c *cli.Context) []tenet.Tenet {
+	cfg, err := buildConfiguration(c, CascadeUp)
 	if err != nil {
-		oserrf("reading config file: %s", err.Error())
+		oserrf("could not read configuration: %s", err.Error())
 		return nil
 	}
-	return cfg.Configs
-}
 
-func tenets(c *cli.Context) []tenet.Tenet {
-	cfgs := tenetCfgs(c)
 	var ts []tenet.Tenet
-	for _, cfg := range cfgs {
-		tenet, err := tenet.New(c, cfg)
+	for _, tn := range cfg.Tenets {
+		tenet, err := tenet.New(c, tn)
 		if err != nil {
-			oserrf("could not create tenet '%s': %s", cfg.Name, err.Error())
+			oserrf("could not create tenet '%s': %s", tn.Name, err.Error())
 			return nil
 		}
 		ts = append(ts, tenet)
@@ -80,24 +87,103 @@ func tenets(c *cli.Context) []tenet.Tenet {
 	return ts
 }
 
-// pathToCfg can be either a local file system path or a URL.
-func readTenetCfgFile(c *cli.Context) (*tenetCfg, error) {
-	cfgPath, err := tenetCfgPath(c)
+// Combine cascaded configuration files into a single configuration object.
+func buildConfiguration(c *cli.Context, dir CascadeDirection) (*configuration, error) {
+	startCfgPath, err := tenetCfgPath(c)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	cfg := &tenetCfg{}
+
+	if dir == CascadeNone {
+		return readConfigFile(startCfgPath)
+	}
+
+	cfg := &configuration{}
+
+	switch dir {
+	case CascadeUp, CascadeDown:
+		buildConfigurationRecursive(startCfgPath, dir, cfg)
+		return cfg, nil
+	case CascadeBoth:
+		buildConfigurationRecursive(startCfgPath, CascadeUp, cfg)
+		buildConfigurationRecursive(startCfgPath, CascadeDown, cfg)
+		return cfg, nil
+	}
+
+	return nil, errors.New("invalid cascade direction")
+}
+
+// Build up a configuration object by following directories up or down.
+func buildConfigurationRecursive(cfgPath string, dir CascadeDirection, cfg *configuration) {
+	currentCfg, err := readConfigFile(cfgPath)
+	if err == nil {
+		// Add the non-tenet properties - always when cascading down, otherwise
+		// only if not already specified
+		if dir == CascadeDown || cfg.Include == "" {
+			cfg.Include = currentCfg.Include
+		}
+
+	DupeCheck:
+		for _, t := range currentCfg.Tenets {
+			// Don't duplicate tenets
+			for _, existing := range cfg.Tenets {
+				if existing.Name == t.Name {
+					continue DupeCheck
+				}
+			}
+			cfg.Tenets = append(cfg.Tenets, t)
+		}
+	}
+
+	if err != nil && !os.IsNotExist(err) {
+		// Just leave the current state of cfg on encountering an error
+		return
+	}
+
+	currentDir, filename := path.Split(cfgPath)
+	switch dir {
+	case CascadeUp:
+		if currentDir == "/" {
+			return
+		}
+
+		parent := path.Dir(path.Dir(currentDir))
+
+		buildConfigurationRecursive(path.Join(parent, filename), dir, cfg)
+	case CascadeDown:
+		files, err := filepath.Glob(path.Join(currentDir, "*"))
+		if err != nil {
+			return
+		}
+
+		for _, f := range files {
+			file, err := os.Open(f)
+			if err != nil {
+				return
+			}
+			if fi, err := file.Stat(); err == nil && fi.IsDir() {
+				buildConfigurationRecursive(path.Join(f, filename), dir, cfg)
+			}
+		}
+	default:
+		oserrf("invalid cascade direction")
+	}
+}
+
+// Read a single config file into a configuration object.
+func readConfigFile(cfgPath string) (*configuration, error) {
+	cfg := &configuration{}
 
 	// TODO(waigani) also support yaml and json
-	_, err = toml.DecodeFile(cfgPath, cfg)
+	_, err := toml.DecodeFile(cfgPath, cfg)
 	if err != nil {
-		return nil, errors.Trace(err)
+		return nil, err
 	}
 	return cfg, nil
 }
 
-// pathToCfg can be either a local file system path or a URL.
-func writeTenetCfgFile(c *cli.Context, cfg *tenetCfg) error {
+// Write a config file in the current directory from a configuration object.
+func writeConfigFile(c *cli.Context, cfg *configuration) error {
 	fPath, err := tenetCfgPath(c)
 	if err != nil {
 		return errors.Trace(err)
@@ -150,19 +236,20 @@ func defaultLingoHome() string {
 	return path.Join(home, ".lingo")
 }
 
-func tenetHome(c *cli.Context) string {
-	home := c.GlobalString(lingoHomeFlg.long)
-	return path.Join(home, "tenets")
-}
+// TODO: TECHDEBT Check if commented code will be needed and prune as appropriate
+// func tenetHome(c *cli.Context) string {
+// 	home := c.GlobalString(lingoHomeFlg.long)
+// 	return path.Join(home, "tenets")
+// }
 
 // writeFileAll writes the given file and any missing dirs in it's path.
-func writeFileAll(filePath string, data []byte, perm os.FileMode) error {
-	dir := path.Dir(filePath)
-	if err := os.MkdirAll(dir, perm); err != nil {
-		return err
-	}
-	return ioutil.WriteFile(filePath, data, perm)
-}
+// func writeFileAll(filePath string, data []byte, perm os.FileMode) error {
+// 	dir := path.Dir(filePath)
+// 	if err := os.MkdirAll(dir, perm); err != nil {
+// 		return err
+// 	}
+// 	return ioutil.WriteFile(filePath, data, perm)
+// }
 
 // tenetCfgPathRecusive looks for a config file at cfgPath. If the config
 // file name is equal to defaultTenetCfgPath, the func recursively searches the
@@ -199,8 +286,8 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 	return cfgPath, nil
 }
 
-func hasTenet(cfg *tenetCfg, imageName string) bool {
-	for _, config := range cfg.Configs {
+func hasTenet(cfg *configuration, imageName string) bool {
+	for _, config := range cfg.Tenets {
 		if config.Name == imageName {
 			return true
 		}

@@ -20,7 +20,7 @@ func remove(c *cli.Context) {
 		oserrf("error: expected 1 argument, got %d", l)
 	}
 
-	cfg, err := readTenetCfgFile(c)
+	cfg, err := buildConfiguration(c, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
 	}
@@ -32,14 +32,14 @@ func remove(c *cli.Context) {
 	}
 
 	var tenets []tenet.Config
-	for _, t := range cfg.Configs {
+	for _, t := range cfg.Tenets {
 		if t.Name != imageName {
 			tenets = append(tenets, t)
 		}
 	}
-	cfg.Configs = tenets
+	cfg.Tenets = tenets
 
-	if err := writeTenetCfgFile(c, cfg); err != nil {
+	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())
 	}
 }

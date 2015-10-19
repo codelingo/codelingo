@@ -12,11 +12,11 @@ func (*CMDTest) TestAddCMD(c *gc.C) {
 	newTenet := tenet{Author: "waigani", Name: "test"}
 	ctx := mockContext(tenetCfgFlg.longArg(), fName, "add", newTenet.String())
 
-	orig, err := readTenetCfgFile(ctx)
+	orig, err := readConfigFile(ctx)
 	c.Assert(err, jc.ErrorIsNil)
 	c.Assert(AddCMD.Run(ctx), jc.ErrorIsNil)
 
-	obtained, err := readTenetCfgFile(ctx)
+	obtained, err := readConfigFile(ctx)
 	c.Assert(err, jc.ErrorIsNil)
 	expected := append(orig.Tenets, newTenet)
 	c.Assert(obtained.Tenets, gc.DeepEquals, expected)
