@@ -52,9 +52,19 @@ func pull(c *cli.Context) {
 
 // Pull all tenets from config using assigned drivers.
 func pullAll(c *cli.Context) error {
-	for _, t := range tenets(c) {
+	cfg, err := buildConfiguration(c, CascadeBoth)
+	if err != nil {
+		return err
+	}
+
+	ts, err := tenets(c, cfg)
+	if err != nil {
+		return err
+	}
+
+	for _, t := range ts {
 		// TODO(waigani) don't return on err, collect errs and report at end
-		err := t.InitDriver()
+		err = t.InitDriver()
 		if err != nil {
 			return err
 		}
