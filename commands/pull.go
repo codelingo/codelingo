@@ -52,7 +52,11 @@ func pull(c *cli.Context) {
 
 // Pull all tenets from config using assigned drivers.
 func pullAll(c *cli.Context) error {
-	cfg, err := buildConfiguration(c, CascadeBoth)
+	cfgPath, err := tenetCfgPath(c)
+	if err != nil {
+		return err
+	}
+	cfg, err := buildConfiguration(cfgPath, CascadeBoth)
 	if err != nil {
 		return err
 	}

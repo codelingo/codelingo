@@ -21,7 +21,13 @@ func add(c *cli.Context) {
 		oserrf("expected 1 argument, got %d", l)
 		return
 	}
-	cfg, err := buildConfiguration(c, CascadeNone)
+
+	cfgPath, err := tenetCfgPath(c)
+	if err != nil {
+		oserrf("reading config file: %s", err.Error())
+		return
+	}
+	cfg, err := buildConfiguration(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
 		return

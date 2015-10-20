@@ -89,12 +89,7 @@ func tenets(ctx *cli.Context, cfg *configuration) ([]tenet.Tenet, error) {
 }
 
 // Combine cascaded configuration files into a single configuration object.
-func buildConfiguration(c *cli.Context, cascadeDir CascadeDirection) (*configuration, error) {
-	startCfgPath, err := tenetCfgPath(c)
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-
+func buildConfiguration(startCfgPath string, cascadeDir CascadeDirection) (*configuration, error) {
 	if cascadeDir == CascadeNone {
 		return readConfigFile(startCfgPath)
 	}

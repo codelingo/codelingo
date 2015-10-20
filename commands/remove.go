@@ -20,7 +20,12 @@ func remove(c *cli.Context) {
 		oserrf("error: expected 1 argument, got %d", l)
 	}
 
-	cfg, err := buildConfiguration(c, CascadeNone)
+	cfgPath, err := tenetCfgPath(c)
+	if err != nil {
+		oserrf("reading config file: %s", err.Error())
+		return
+	}
+	cfg, err := buildConfiguration(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
 	}
