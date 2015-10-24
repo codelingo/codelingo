@@ -111,6 +111,11 @@ func buildConfiguration(startCfgPath string, cascadeDir CascadeDirection) (*conf
 
 // Build up a configuration object by following directories up or down.
 func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *configuration) {
+	cfgPath, err := filepath.Abs(cfgPath)
+	if err != nil {
+		return
+	}
+
 	currentCfg, err := readConfigFile(cfgPath)
 	if err == nil {
 		// Add the non-tenet properties - always when cascading down, otherwise
