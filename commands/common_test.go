@@ -59,7 +59,7 @@ func testCfg(c *gc.C) (cfgPath string, closer func()) {
 	f, err := ioutil.TempFile("", "mockTenetCfg")
 	c.Assert(err, jc.ErrorIsNil)
 	ctx := mockContext(tenetCfgFlg.longArg(), f.Name(), "noop")
-	c.Assert(writeTenetCfgFile(ctx, mockTenetCfg), jc.ErrorIsNil)
+	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
 	return f.Name(), func() {
 		os.Remove(f.Name())
 		f.Close()
@@ -122,9 +122,9 @@ func (*CMDTest) TestWriteAndReadTenetCfg(c *gc.C) {
 	}()
 	c.Assert(err, jc.ErrorIsNil)
 	ctx := mockContext("", tenetCfgFlg.longArg(), fName)
-	c.Assert(writeTenetCfgFile(ctx, mockTenetCfg), jc.ErrorIsNil)
+	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
 
-	obtained, err := readTenetCfgFile(ctx)
+	obtained, err := readConfigFile(ctx)
 	c.Assert(err, jc.ErrorIsNil)
 
 	c.Assert(obtained, gc.DeepEquals, mockTenetCfg)

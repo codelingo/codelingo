@@ -29,6 +29,8 @@ func New(ctx *cli.Context, cfg Config) (Tenet, error) {
 	switch cfg.Driver {
 	case "docker", "": // Default driver
 		return driver.NewDocker(ctx, driver.Common(cfg))
+	case "dryrun":
+		return driver.NewDryRun(ctx, driver.Common(cfg))
 	case "binary":
 		return driver.NewBinary(ctx, driver.Common(cfg))
 	}

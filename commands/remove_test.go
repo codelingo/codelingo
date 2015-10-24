@@ -15,7 +15,7 @@ func (*CMDTest) TestRemoveCMD(c *gc.C) {
 
 	c.Assert(RemoveCMD.Run(ctx), jc.ErrorIsNil)
 
-	obtained, err := readTenetCfgFile(ctx)
+	obtained, err := readConfigFile(ctx)
 	c.Assert(err, jc.ErrorIsNil)
 	for _, t := range obtained.Tenets {
 		c.Assert(t.String(), gc.Not(gc.Equals), tenetToRemove.String())

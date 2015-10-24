@@ -14,7 +14,18 @@ var TenetsCMD = cli.Command{
 }
 
 func tenetsAction(c *cli.Context) {
-	for _, t := range tenetCfgs(c) {
+	cfgPath, err := tenetCfgPath(c)
+	if err != nil {
+		oserrf("could not read configuration: %s", err.Error())
+		return
+	}
+	cfg, err := buildConfiguration(cfgPath, CascadeNone)
+	if err != nil {
+		oserrf("could not read configuration: %s", err.Error())
+		return
+	}
+
+	for _, t := range cfg.Tenets {
 		fmt.Println(t.Name)
 	}
 }

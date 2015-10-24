@@ -21,7 +21,13 @@ func add(c *cli.Context) {
 		oserrf("expected 1 argument, got %d", l)
 		return
 	}
-	cfg, err := readTenetCfgFile(c)
+
+	cfgPath, err := tenetCfgPath(c)
+	if err != nil {
+		oserrf("reading config file: %s", err.Error())
+		return
+	}
+	cfg, err := buildConfiguration(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
 		return
@@ -34,9 +40,9 @@ func add(c *cli.Context) {
 		return
 	}
 
-	cfg.Configs = append(cfg.Configs, tenet.Config{Name: imageName})
+	cfg.Tenets = append(cfg.Tenets, tenet.Config{Name: imageName})
 
-	if err := writeTenetCfgFile(c, cfg); err != nil {
+	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())
 		return
 	}

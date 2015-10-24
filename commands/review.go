@@ -3,6 +3,9 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -82,13 +85,83 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
+	reviewQueue := make(map[*configuration][]string)
 	commentSets = map[string]*t.CommentSet{}
+	totalTenets := 0
 
-	ts := tenets(c)
+	// Get this first as it might fail, we want to avoid all other work in that case
+	cfm, err := review.NewConfirmer(c)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+
+	args := c.Args()
+	if len(args) > 0 {
+		cfgPath, err := tenetCfgPath(c)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+		cfg, err := buildConfiguration(cfgPath, CascadeUp)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+
+		totalTenets = len(cfg.Tenets)
+
+		reviewQueue[cfg] = args
+	} else {
+		// Starting with current dir
+		// - read config for that dir with CascadeUp (buildConfiguration will handle cascade=false)
+		// - use found cfg.Include to find files in that dir
+		// - insert cfg->files into map
+		// - keep count of total files for channel buffer
+		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				fmt.Println("dir:", relPath) // TODO: Remove
+				cfg, err := buildConfiguration(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
+				if err != nil {
+					return err
+				}
+
+				// TODO: Use include glob/regex?
+				files, err := filepath.Glob(path.Join(relPath, "*.go"))
+				if err != nil { // Non-fatal
+					return nil
+				}
+
+				fileList := []string{}
+				for _, f := range files {
+					file, err := os.Open(f)
+					if err != nil { // Non-fatal
+						break
+					}
+					if fi, err := file.Stat(); err == nil && !fi.IsDir() {
+						fmt.Println("adding", f) // TODO: Remove
+						fileList = append(fileList, f)
+					}
+				}
+
+				if len(fileList) > 0 {
+					totalTenets += len(cfg.Tenets)
+
+					reviewQueue[cfg] = fileList
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+	}
+
 	// setup a chan of results.
-	results := make(chan *driver.ReviewResult, len(ts))
+	results := make(chan *driver.ReviewResult, totalTenets)
 	var wg sync.WaitGroup
-	wg.Add(len(ts))
+	wg.Add(totalTenets)
 	// wait for all results to come in before closing the chan.
 	go func() {
 		wg.Wait()
@@ -105,62 +178,70 @@ func reviewAction(c *cli.Context) {
 		}
 	}
 
-	for _, tn := range ts {
-		go func(tn tenet.Tenet) {
-			defer wg.Done()
+	for cfg, files := range reviewQueue {
+		ts, err := tenets(c, cfg)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+		for _, tn := range ts {
+			fmt.Println(tn.String(), files)
+			go func(tn tenet.Tenet) {
+				defer wg.Done()
 
-			// Initialise the tenet driver
-			err := tn.InitDriver()
-			if err != nil {
-				oserrf(err.Error())
-				return
-			}
-
-			// Grab and store the tenet's CommentSet in a global map. We'll
-			// use this to set the appropriate comment for each issue.
-			// TODO(matt) allow these default comments to be overwritten from tenet.toml
-			commentSets[tn.String()], err = tn.CommentSet()
-			if err != nil {
-				oserrf(err.Error())
-				return
-			}
-
-			// Start with options specified in config
-			opts := driver.Options{}
-			if tn.GetOptions() != nil {
-				opts = tn.GetOptions()
-			}
-			// Merge in options from command line
-			for k, v := range commandOptions[tn.String()] {
-				opts[k] = v
-			}
-
-			// TODO(waigani)
-			// - no args should recursively review all files in pwd.
-			// - --diff should drop any file not in the diff.
-			args := c.Args()
-			if len(opts) != 0 {
-				jsonOpts, err := json.Marshal(opts)
+				// Initialise the tenet driver
+				err := tn.InitDriver()
 				if err != nil {
 					oserrf(err.Error())
 					return
 				}
-				args = append([]string{"--options", string(jsonOpts)}, args...)
-			}
 
-			reviewResult, err := tn.Review(args...)
-			if err != nil {
-				oserrf("error running review %s", err.Error())
-				return
-			}
-			// TODO(waigani) we can be smarter here. Pipe individual issues
-			// from tenet to chan. Use fan-in pattern:
-			// https://blog.golang.org/pipelines
-			results <- reviewResult
-		}(tn)
+				// Grab and store the tenet's CommentSet in a global map. We'll
+				// use this to set the appropriate comment for each issue.
+				// TODO(matt) allow these default comments to be overwritten from tenet.toml
+				commentSets[tn.String()], err = tn.CommentSet()
+				if err != nil {
+					oserrf(err.Error())
+					return
+				}
+
+				// Start with options specified in config
+				opts := driver.Options{}
+				if tn.GetOptions() != nil {
+					opts = tn.GetOptions()
+				}
+				// Merge in options from command line
+				for k, v := range commandOptions[tn.String()] {
+					opts[k] = v
+				}
+
+				// TODO(waigani)
+				// - --diff should drop any file not in the diff.
+
+				// args := c.Args()
+				if len(opts) != 0 {
+					jsonOpts, err := json.Marshal(opts)
+					if err != nil {
+						oserrf(err.Error())
+						return
+					}
+					files = append([]string{"--options", string(jsonOpts)}, files...)
+				}
+
+				reviewResult, err := tn.Review(files...)
+				if err != nil {
+					oserrf("error running review %s", err.Error())
+					return
+				}
+				// TODO(waigani) we can be smarter here. Pipe individual issues
+				// from tenet to chan. Use fan-in pattern:
+				// https://blog.golang.org/pipelines
+				results <- reviewResult
+			}(tn)
+		}
 	}
 
-	r := allResults(c, results)
+	r := allResults(c, cfm, results)
 
 	if len(r.errors) > 0 {
 		fmt.Println("The following errors were encounted:")
@@ -200,7 +281,7 @@ var commentSets map[string]*t.CommentSet
 // nodes/lines within the diff.
 
 // allResults returns all the issues all the tenets found.
-func allResults(c *cli.Context, results chan *driver.ReviewResult) result {
+func allResults(c *cli.Context, cfm *review.IssueConfirmer, results chan *driver.ReviewResult) result {
 	issues := make(chan *t.Issue)
 	tenetErrs := make(chan string)
 
@@ -253,8 +334,6 @@ l:
 		close(issues)
 		close(tenetErrs)
 	}()
-
-	cfm := review.NewConfirmer(c)
 
 	var confirmedIssues []*t.Issue
 	issuesClosed, errsClosed := false, false
