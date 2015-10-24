@@ -11,10 +11,10 @@ import (
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/tenet"
 	"github.com/skratchdot/open-golang/open"
-	// "github.com/waigani/diffparser"
+	"github.com/waigani/diffparser"
 )
 
-type issueConfirmer struct {
+type IssueConfirmer struct {
 	confidence  float64
 	userConfirm bool
 	inDiff      func(*tenet.Issue) bool
@@ -22,56 +22,71 @@ type issueConfirmer struct {
 	hostAbsBasePath string
 }
 
-func NewConfirmer(c *cli.Context) *issueConfirmer {
-	cfm := issueConfirmer{
+func NewConfirmer(c *cli.Context) (*IssueConfirmer, error) {
+	basePath, err := hostAbsBasePath(c)
+	if err != nil {
+		return nil, err
+	}
+
+	cfm := IssueConfirmer{
 		confidence:      c.Float64("confidence"),
 		userConfirm:     !c.Bool("no-user-confirm"),
-		hostAbsBasePath: hostAbsBasePath(c),
+		hostAbsBasePath: basePath,
 	}
 
 	if c.Bool("diff") {
-		cfm.inDiff = newInDiffFunc()
+		diffFunc, err := newInDiffFunc()
+		if err != nil {
+			return nil, err
+		}
+
+		cfm.inDiff = diffFunc
 	}
 
-	return &cfm
+	return &cfm, nil
 }
 
-func hostAbsBasePath(c *cli.Context) string {
+func hostAbsBasePath(c *cli.Context) (string, error) {
 	p := c.GlobalString("repo-path")
 	basePath, err := filepath.Abs(p)
 	if err != nil {
-		// TODO(waigani) return err and have NewConfirmer return err also.
-		panic(err)
+		return "", err
 	}
-	return basePath
+
+	return basePath, nil
 }
 
 // TODO(waigani) screen diff tenet side - see other diff comment.
-func newInDiffFunc() func(issue *tenet.Issue) bool {
-	// TODO(waigani) CONTINUEHERE publish diffparser so we can use it.
-	return func(issue *tenet.Issue) bool {
-		return false
+func newInDiffFunc() (func(*tenet.Issue) bool, error) {
+	diff, err := diffparser.Parse(rawDiff())
+	if err != nil {
+		return nil, err
 	}
-	// 	diff := diffparser.Parse(rawDiff())
-	// 	diffChanges := diff.Changed()
+	diffChanges := diff.Changed()
 
-	// 	return func(issue *tenet.Issue) bool {
-	// 		start := issue.Position.Start.Line
-	// 		end := start
-	// 		if issue.Position.End != nil {
-	// 			end = issue.Position.End.Line
-	// 		}
+	return func(issue *tenet.Issue) bool {
+		start := issue.Position.Start.Line
+		end := start
+		if issue.Position.End != nil {
+			end = issue.Position.End.Line
+		}
 
-	// 		// was issue found in diff?
-	// 		if newLines, ok := diffChanges[issue.Filename()]; ok {
-	// 			for _, lineNo := range newLines {
-	// 				if lineNo >= start && lineNo <= end {
-	// 					return true
-	// 				}
-	// 			}
-	// 		}
-	// 		return false
-	// 	}
+		// Get filename relative to git root folder
+		out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", issue.Filename()).Output()
+		if err != nil {
+			return false
+		}
+		relPath := strings.Split(string(out), "\n")[0]
+
+		if newLines, ok := diffChanges[relPath]; ok {
+			for _, lineNo := range newLines {
+				if lineNo >= start && lineNo <= end {
+					return true
+				}
+			}
+		}
+		return false
+	}, nil
 }
 
 // TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
@@ -98,7 +113,7 @@ var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
-func (c issueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
+func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 	if attempt == 0 {
 		if issue.Confidence < c.confidence ||
 			(c.inDiff != nil && !c.inDiff(issue)) {
@@ -164,7 +179,7 @@ func (c issueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 	return true
 }
 
-func (c *issueConfirmer) hostFilePath(file string) string {
+func (c *IssueConfirmer) hostFilePath(file string) string {
 	return strings.Replace(file, "/source", c.hostAbsBasePath, 1)
 }
 

@@ -89,6 +89,13 @@ func reviewAction(c *cli.Context) {
 	commentSets = map[string]*t.CommentSet{}
 	totalTenets := 0
 
+	// Get this first as it might fail, want to avoid all other work in that case
+	cfm, err := review.NewConfirmer(c)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+
 	args := c.Args()
 	if len(args) > 0 {
 		cfgPath, err := tenetCfgPath(c)
@@ -234,7 +241,7 @@ func reviewAction(c *cli.Context) {
 		}
 	}
 
-	r := allResults(c, results)
+	r := allResults(c, cfm, results)
 
 	if len(r.errors) > 0 {
 		fmt.Println("The following errors were encounted:")
@@ -274,7 +281,7 @@ var commentSets map[string]*t.CommentSet
 // nodes/lines within the diff.
 
 // allResults returns all the issues all the tenets found.
-func allResults(c *cli.Context, results chan *driver.ReviewResult) result {
+func allResults(c *cli.Context, cfm *review.IssueConfirmer, results chan *driver.ReviewResult) result {
 	issues := make(chan *t.Issue)
 	tenetErrs := make(chan string)
 
@@ -327,8 +334,6 @@ l:
 		close(issues)
 		close(tenetErrs)
 	}()
-
-	cfm := review.NewConfirmer(c)
 
 	var confirmedIssues []*t.Issue
 	issuesClosed, errsClosed := false, false
