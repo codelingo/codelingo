@@ -138,7 +138,7 @@ func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cf
 	currentDir, filename := path.Split(cfgPath)
 	switch cascadeDir {
 	case CascadeUp:
-		if currentDir == "/" || !currentCfg.Cascade {
+		if currentDir == "/" || (currentCfg != nil && !currentCfg.Cascade) {
 			return
 		}
 

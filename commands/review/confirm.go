@@ -72,6 +72,7 @@ func newInDiffFunc() (func(*tenet.Issue) bool, error) {
 		}
 
 		// Get filename relative to git root folder
+		// TODO: Handle error in case of git not being installed
 		out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", issue.Filename()).Output()
 		if err != nil {
 			return false

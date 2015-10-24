@@ -89,7 +89,7 @@ func reviewAction(c *cli.Context) {
 	commentSets = map[string]*t.CommentSet{}
 	totalTenets := 0
 
-	// Get this first as it might fail, want to avoid all other work in that case
+	// Get this first as it might fail, we want to avoid all other work in that case
 	cfm, err := review.NewConfirmer(c)
 	if err != nil {
 		oserrf(err.Error())
