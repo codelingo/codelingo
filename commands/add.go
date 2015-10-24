@@ -13,6 +13,13 @@ var AddCMD = cli.Command{
   "lingo remove github.com/lingo-reviews/unused-args"
 
 `[1:],
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "driver",
+			Value: "docker",
+			Usage: "driver to use for this tenet",
+		},
+	},
 	Action: add,
 }
 
@@ -40,7 +47,7 @@ func add(c *cli.Context) {
 		return
 	}
 
-	cfg.Tenets = append(cfg.Tenets, tenet.Config{Name: imageName})
+	cfg.Tenets = append(cfg.Tenets, tenet.Config{Name: imageName, Driver: c.String("driver")})
 
 	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())
