@@ -85,7 +85,7 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
-	reviewQueue := make(map[*configuration][]string)
+	reviewQueue := make(map[*config][]string)
 	commentSets = map[string]*t.CommentSet{}
 	totalTenets := 0
 
@@ -103,7 +103,7 @@ func reviewAction(c *cli.Context) {
 			oserrf(err.Error())
 			return
 		}
-		cfg, err := buildConfiguration(cfgPath, CascadeUp)
+		cfg, err := buildConfig(cfgPath, CascadeUp)
 		if err != nil {
 			oserrf(err.Error())
 			return
@@ -114,14 +114,14 @@ func reviewAction(c *cli.Context) {
 		reviewQueue[cfg] = args
 	} else {
 		// Starting with current dir
-		// - read config for that dir with CascadeUp (buildConfiguration will handle cascade=false)
+		// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
 		// - use found cfg.Include to find files in that dir
 		// - insert cfg->files into map
 		// - keep count of total files for channel buffer
 		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				fmt.Println("dir:", relPath) // TODO: Remove
-				cfg, err := buildConfiguration(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
+				cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
 				if err != nil {
 					return err
 				}

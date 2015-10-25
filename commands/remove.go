@@ -25,7 +25,7 @@ func remove(c *cli.Context) {
 		oserrf("reading config file: %s", err.Error())
 		return
 	}
-	cfg, err := buildConfiguration(cfgPath, CascadeNone)
+	cfg, err := buildConfig(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
 	}

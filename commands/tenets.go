@@ -19,7 +19,7 @@ func tenetsAction(c *cli.Context) {
 		oserrf("could not read configuration: %s", err.Error())
 		return
 	}
-	cfg, err := buildConfiguration(cfgPath, CascadeNone)
+	cfg, err := buildConfig(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("could not read configuration: %s", err.Error())
 		return

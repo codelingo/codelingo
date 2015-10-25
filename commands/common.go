@@ -34,7 +34,7 @@ const (
 	CascadeBoth                         // Combine CascadeUp and CascadeDown
 )
 
-type configuration struct {
+type config struct {
 	Include string         `toml:"include"`
 	Cascade bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
 	Tenets  []tenet.Config `toml:"tenet"`
@@ -73,8 +73,8 @@ func log(format string, a ...interface{}) {
 	fmt.Fprintf(stderr, format+"\n", a...)
 }
 
-// Get a list of instantiated tenets from a configuration object.
-func tenets(ctx *cli.Context, cfg *configuration) ([]tenet.Tenet, error) {
+// Get a list of instantiated tenets from a config object.
+func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
 	for _, tenetData := range cfg.Tenets {
 		tenet, err := tenet.New(ctx, tenetData)
@@ -88,29 +88,29 @@ func tenets(ctx *cli.Context, cfg *configuration) ([]tenet.Tenet, error) {
 	return ts, nil
 }
 
-// Combine cascaded configuration files into a single configuration object.
-func buildConfiguration(startCfgPath string, cascadeDir CascadeDirection) (*configuration, error) {
+// Combine cascaded configuration files into a single config object.
+func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, error) {
 	if cascadeDir == CascadeNone {
 		return readConfigFile(startCfgPath)
 	}
 
-	cfg := &configuration{}
+	cfg := &config{}
 
 	switch cascadeDir {
 	case CascadeUp, CascadeDown:
-		buildConfigurationRecursive(startCfgPath, cascadeDir, cfg)
+		buildConfigRecursive(startCfgPath, cascadeDir, cfg)
 		return cfg, nil
 	case CascadeBoth:
-		buildConfigurationRecursive(startCfgPath, CascadeUp, cfg)
-		buildConfigurationRecursive(startCfgPath, CascadeDown, cfg)
+		buildConfigRecursive(startCfgPath, CascadeUp, cfg)
+		buildConfigRecursive(startCfgPath, CascadeDown, cfg)
 		return cfg, nil
 	}
 
 	return nil, errors.New("invalid cascade direction")
 }
 
-// Build up a configuration object by following directories up or down.
-func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *configuration) {
+// Build up a config object by following directories up or down.
+func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *config) {
 	cfgPath, err := filepath.Abs(cfgPath)
 	if err != nil {
 		return
@@ -127,6 +127,7 @@ func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cf
 	DupeCheck:
 		for _, t := range currentCfg.Tenets {
 			// Don't duplicate tenets
+			// TODO: handle case of same tenet but different options
 			for _, existing := range cfg.Tenets {
 				if existing.Name == t.Name {
 					continue DupeCheck
@@ -149,7 +150,7 @@ func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cf
 
 		parent := path.Dir(path.Dir(currentDir))
 
-		buildConfigurationRecursive(path.Join(parent, filename), cascadeDir, cfg)
+		buildConfigRecursive(path.Join(parent, filename), cascadeDir, cfg)
 	case CascadeDown:
 		files, err := filepath.Glob(path.Join(currentDir, "*"))
 		if err != nil {
@@ -159,10 +160,11 @@ func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cf
 		for _, f := range files {
 			file, err := os.Open(f)
 			if err != nil {
+				log("error reading file: %s", file)
 				return
 			}
 			if fi, err := file.Stat(); err == nil && fi.IsDir() {
-				buildConfigurationRecursive(path.Join(f, filename), cascadeDir, cfg)
+				buildConfigRecursive(path.Join(f, filename), cascadeDir, cfg)
 			}
 		}
 	default:
@@ -170,9 +172,9 @@ func buildConfigurationRecursive(cfgPath string, cascadeDir CascadeDirection, cf
 	}
 }
 
-// Read a single config file into a configuration object.
-func readConfigFile(cfgPath string) (*configuration, error) {
-	cfg := &configuration{}
+// Read a single config file into a config object.
+func readConfigFile(cfgPath string) (*config, error) {
+	cfg := &config{}
 
 	// TODO(waigani) also support yaml and json
 	_, err := toml.DecodeFile(cfgPath, cfg)
@@ -182,8 +184,8 @@ func readConfigFile(cfgPath string) (*configuration, error) {
 	return cfg, nil
 }
 
-// Write a config file in the current directory from a configuration object.
-func writeConfigFile(c *cli.Context, cfg *configuration) error {
+// Write a config file in the current directory from a config object.
+func writeConfigFile(c *cli.Context, cfg *config) error {
 	fPath, err := tenetCfgPath(c)
 	if err != nil {
 		return errors.Trace(err)
@@ -286,7 +288,7 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 	return cfgPath, nil
 }
 
-func hasTenet(cfg *configuration, imageName string) bool {
+func hasTenet(cfg *config, imageName string) bool {
 	for _, config := range cfg.Tenets {
 		if config.Name == imageName {
 			return true
