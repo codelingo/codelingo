@@ -12,7 +12,6 @@ import (
 	"github.com/natefinch/pie"
 
 	"github.com/lingo-reviews/dev/api"
-	devTenet "github.com/lingo-reviews/dev/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
 )
 
@@ -118,15 +117,6 @@ func (d *Docker) Debug(args ...string) string {
 		response += " error: " + err.Error()
 	}
 	return response
-}
-
-func (d *Docker) CommentSet() (*devTenet.CommentSet, error) {
-	var comments devTenet.CommentSet
-	err := d.call("CommentSet", &comments)
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-	return &comments, nil
 }
 
 func (d *Docker) call(method string, result interface{}, args ...string) error {
