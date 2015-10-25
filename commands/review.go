@@ -120,7 +120,6 @@ func reviewAction(c *cli.Context) {
 		// - keep count of total files for channel buffer
 		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
 			if info.IsDir() {
-				fmt.Println("dir:", relPath) // TODO: Remove
 				cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
 				if err != nil {
 					return err
@@ -139,7 +138,6 @@ func reviewAction(c *cli.Context) {
 						break
 					}
 					if fi, err := file.Stat(); err == nil && !fi.IsDir() {
-						fmt.Println("adding", f) // TODO: Remove
 						fileList = append(fileList, f)
 					}
 				}
@@ -185,7 +183,6 @@ func reviewAction(c *cli.Context) {
 			return
 		}
 		for _, tn := range ts {
-			fmt.Println(tn.String(), files)
 			go func(tn tenet.Tenet, files []string) {
 				defer wg.Done()
 
