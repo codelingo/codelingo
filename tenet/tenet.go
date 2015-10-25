@@ -5,8 +5,6 @@ import (
 
 	"github.com/codegangsta/cli"
 
-	devTenet "github.com/lingo-reviews/dev/tenet"
-
 	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
@@ -18,7 +16,6 @@ type Tenet interface {
 	Review(args ...string) (*driver.ReviewResult, error) // TODO: Refactor to not expose driver to callers
 	Help(args ...string) (string, error)
 	Version() (string, error)
-	CommentSet() (*devTenet.CommentSet, error)
 	Debug(args ...string) string
 	GetOptions() driver.Options // TODO: Use AddOptions instead to apply cli json args
 	Pull() error

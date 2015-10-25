@@ -8,8 +8,6 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 	"github.com/natefinch/pie"
-
-	devTenet "github.com/lingo-reviews/dev/tenet"
 )
 
 // Binary is a tenet driver to execute binary tenets found in ~/.lingo/tenets/<repo>/<tenet>
@@ -73,15 +71,6 @@ func (d *Binary) Debug(args ...string) string {
 		response += " error: " + err.Error()
 	}
 	return response
-}
-
-func (d *Binary) CommentSet() (*devTenet.CommentSet, error) {
-	var comments devTenet.CommentSet
-	err := d.call("CommentSet", &comments)
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-	return &comments, nil
 }
 
 // result must be a pointer of type compatable with that returned by the remote method.

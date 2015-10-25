@@ -92,10 +92,11 @@ func format(outputFmt OutputFormat, issues []*tenet.Issue) bytes.Buffer {
 }
 
 // Comment returns the comment for the issue, depending on the context of the issue.
-func Comment(issue *tenet.Issue, commSet *tenet.CommentSet) (string, error) {
+func Comment(issue *tenet.Issue) (string, error) {
+	commSet := issue.Comments()
 	comments := commSet.CommentsForContext(issue.Context)
 	if len(comments) == 0 {
-		comments = commSet.CommentsForContext(tenet.All)
+		comments = commSet.CommentsForContext(tenet.AllComments)
 	}
 
 	// build comments with template args
