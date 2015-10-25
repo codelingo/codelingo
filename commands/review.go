@@ -186,7 +186,7 @@ func reviewAction(c *cli.Context) {
 		}
 		for _, tn := range ts {
 			fmt.Println(tn.String(), files)
-			go func(tn tenet.Tenet) {
+			go func(tn tenet.Tenet, files []string) {
 				defer wg.Done()
 
 				// Initialise the tenet driver
@@ -237,7 +237,7 @@ func reviewAction(c *cli.Context) {
 				// from tenet to chan. Use fan-in pattern:
 				// https://blog.golang.org/pipelines
 				results <- reviewResult
-			}(tn)
+			}(tn, files)
 		}
 	}
 
