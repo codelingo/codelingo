@@ -85,7 +85,7 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
-	reviewQueue := make(map[*configuration][]string)
+	reviewQueue := make(map[*config][]string)
 	totalTenets := 0
 
 	// Get this first as it might fail, we want to avoid all other work in that case
@@ -102,7 +102,7 @@ func reviewAction(c *cli.Context) {
 			oserrf(err.Error())
 			return
 		}
-		cfg, err := buildConfiguration(cfgPath, CascadeUp)
+		cfg, err := buildConfig(cfgPath, CascadeUp)
 		if err != nil {
 			oserrf(err.Error())
 			return
@@ -113,14 +113,14 @@ func reviewAction(c *cli.Context) {
 		reviewQueue[cfg] = args
 	} else {
 		// Starting with current dir
-		// - read config for that dir with CascadeUp (buildConfiguration will handle cascade=false)
+		// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
 		// - use found cfg.Include to find files in that dir
 		// - insert cfg->files into map
 		// - keep count of total files for channel buffer
 		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
-				cfg, err := buildConfiguration(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
+				cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
 				if err != nil {
 					return err
 				}
@@ -185,7 +185,7 @@ func reviewAction(c *cli.Context) {
 		}
 		for _, tn := range ts {
 			// fmt.Println(tn.String(), files) // TODO: put behind a debug flag
-			go func(tn tenet.Tenet) {
+			go func(tn tenet.Tenet, files []string) {
 				defer wg.Done()
 
 				// Initialise the tenet driver
@@ -227,7 +227,7 @@ func reviewAction(c *cli.Context) {
 				// from tenet to chan. Use fan-in pattern:
 				// https://blog.golang.org/pipelines
 				results <- reviewResult
-			}(tn)
+			}(tn, files)
 		}
 	}
 

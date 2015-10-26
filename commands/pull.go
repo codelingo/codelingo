@@ -56,7 +56,7 @@ func pullAll(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	cfg, err := buildConfiguration(cfgPath, CascadeBoth)
+	cfg, err := buildConfig(cfgPath, CascadeBoth)
 	if err != nil {
 		return err
 	}

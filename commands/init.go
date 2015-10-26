@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 )
 
@@ -53,8 +55,17 @@ func initLingo(c *cli.Context) {
 		oserrf("Already initialised using tenet config file %q", cfgPath)
 	}
 
-	if err := ioutil.WriteFile(cfgPath, []byte("# run `lingo add <tenet>` to add tenets to this file"), 0644); err != nil {
+	var buf bytes.Buffer
+	enc := toml.NewEncoder(&buf)
+	err := enc.Encode(&config{Include: "*", Cascade: true})
+	if err != nil {
 		oserrf(err.Error())
+		return
+	}
+
+	if err = ioutil.WriteFile(cfgPath, buf.Bytes(), 0644); err != nil {
+		oserrf(err.Error())
+		return
 	}
 
 	fmt.Printf("Successfully initialised. Lingo config file written to %q\n", cfgPath)
