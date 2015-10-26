@@ -6,7 +6,6 @@ import (
 	"github.com/codegangsta/cli"
 
 	"github.com/lingo-reviews/dev/api"
-	devTenet "github.com/lingo-reviews/dev/tenet"
 )
 
 // DryRun is a tenet driver used to perform no action and simply give a
@@ -68,10 +67,4 @@ func (d *DryRun) Version() (string, error) {
 // Do nothing.
 func (d *DryRun) Debug(args ...string) string {
 	return ""
-}
-
-// Log CommentSet event.
-func (d *DryRun) CommentSet() (*devTenet.CommentSet, error) {
-	fmt.Printf("Calling CommentSet on tenet: %s\n", d.Name)
-	return &devTenet.CommentSet{}, nil
 }

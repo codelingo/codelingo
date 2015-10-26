@@ -86,7 +86,6 @@ Review all files found in pwd, with two speific tenets:
 
 func reviewAction(c *cli.Context) {
 	reviewQueue := make(map[*config][]string)
-	commentSets = map[string]*t.CommentSet{}
 	totalTenets := 0
 
 	// Get this first as it might fail, we want to avoid all other work in that case
@@ -120,6 +119,7 @@ func reviewAction(c *cli.Context) {
 		// - keep count of total files for channel buffer
 		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
 			if info.IsDir() {
+				// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
 				cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
 				if err != nil {
 					return err
@@ -138,6 +138,7 @@ func reviewAction(c *cli.Context) {
 						break
 					}
 					if fi, err := file.Stat(); err == nil && !fi.IsDir() {
+						// fmt.Println("adding", f) // TODO: put behind a debug flag
 						fileList = append(fileList, f)
 					}
 				}
@@ -183,20 +184,12 @@ func reviewAction(c *cli.Context) {
 			return
 		}
 		for _, tn := range ts {
+			// fmt.Println(tn.String(), files) // TODO: put behind a debug flag
 			go func(tn tenet.Tenet, files []string) {
 				defer wg.Done()
 
 				// Initialise the tenet driver
 				err := tn.InitDriver()
-				if err != nil {
-					oserrf(err.Error())
-					return
-				}
-
-				// Grab and store the tenet's CommentSet in a global map. We'll
-				// use this to set the appropriate comment for each issue.
-				// TODO(matt) allow these default comments to be overwritten from tenet.toml
-				commentSets[tn.String()], err = tn.CommentSet()
 				if err != nil {
 					oserrf(err.Error())
 					return
@@ -269,8 +262,6 @@ type result struct {
 	errors []error
 }
 
-var commentSets map[string]*t.CommentSet
-
 // TODO(waigani) TECHDEBT if diff is true, we only report the issues found
 // within the diff, even though results contains all issues in the target
 // file(s). Yes, this is just stupid. We need to pass the file diff boundaries
@@ -299,7 +290,9 @@ l:
 				for _, i := range r.Issues {
 					defer wg.Done()
 
-					comm, err := review.Comment(i, commentSets[r.TenetName])
+					// TODO(waigani) this can all be internal to the issue
+					// now. As it has both the comments and the context.
+					comm, err := review.Comment(i)
 					if err != nil {
 						tenetErrs <- err.Error()
 						return

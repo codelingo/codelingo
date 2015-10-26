@@ -15,7 +15,7 @@ import (
 )
 
 type IssueConfirmer struct {
-	confidence  float64
+	confidence  tenet.Confidence
 	userConfirm bool
 	inDiff      func(*tenet.Issue) bool
 	// TODO(waigani) make this a func var instead
@@ -29,7 +29,7 @@ func NewConfirmer(c *cli.Context) (*IssueConfirmer, error) {
 	}
 
 	cfm := IssueConfirmer{
-		confidence:      c.Float64("confidence"),
+		confidence:      tenet.Confidence(c.Float64("confidence")),
 		userConfirm:     !c.Bool("no-user-confirm"),
 		hostAbsBasePath: basePath,
 	}
@@ -67,8 +67,8 @@ func newInDiffFunc() (func(*tenet.Issue) bool, error) {
 	return func(issue *tenet.Issue) bool {
 		start := issue.Position.Start.Line
 		end := start
-		if issue.Position.End != nil {
-			end = issue.Position.End.Line
+		if endLine := issue.Position.End.Line; endLine != 0 {
+			end = endLine
 		}
 
 		// Get filename relative to git root folder

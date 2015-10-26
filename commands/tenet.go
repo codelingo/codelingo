@@ -64,16 +64,6 @@ func TenetCMD(ctx *cli.Context, command string) {
 		fmt.Println(text)
 	case "Debug":
 		fmt.Println(t.Debug(args...))
-	case "CommentSet":
-		commSet, err := t.CommentSet()
-		if err != nil {
-			oserrf("error running method %q, %s", method, err.Error())
-			return
-		}
-		fmt.Println("\nThis command is provided for debugging purposes only. The following is a dump of the comments in the tenet's CommentSet.\n")
-		for _, c := range commSet.Comments {
-			fmt.Printf("\n%#v\n", c)
-		}
 	default:
 		oserrf("tenet does not have method %q", method)
 		return
