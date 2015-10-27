@@ -59,7 +59,7 @@ Review all files found in pwd, with two speific tenets:
 		},
 		cli.StringFlag{
 			Name:   "output-fmt",
-			Value:  "plain-text",
+			Value:  "none",
 			Usage:  "json, json-pretty, yaml, toml or plain-text. If an output-template is set, it takes precedence",
 			EnvVar: "LINGO-OUTPUT-FMT",
 		},
@@ -253,8 +253,10 @@ func reviewAction(c *cli.Context) {
 	}
 
 	outputFmt := review.OutputFormat(c.String("output-fmt"))
-	output := review.Output(outputFmt, c.String("output"), r.issues)
-	fmt.Println(output)
+	if outputFmt != "none" {
+		output := review.Output(outputFmt, c.String("output"), r.issues)
+		fmt.Print(output)
+	}
 }
 
 type result struct {
