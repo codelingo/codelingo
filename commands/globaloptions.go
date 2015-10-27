@@ -114,6 +114,7 @@ var GlobalOptions = []cli.Flag{
 		diffFlg.String(),
 		"only report issues found in unstaged, uncommited work",
 		"LINGO_DIFF",
+		// TODO(waigani) move dump flag to review cmd flag
 	}, cli.BoolFlag{
 		dumpFlg.String(),
 		"By default, Lingo prompts the user to confirm each issue found. dump skips this phase, dumping out all issues found.",

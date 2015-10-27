@@ -327,6 +327,7 @@ l:
 
 	var confirmedIssues []*t.Issue
 	issuesClosed, errsClosed := false, false
+	dump := c.GlobalBool("dump")
 
 	for {
 		if issuesClosed && errsClosed {
@@ -339,7 +340,7 @@ l:
 				continue
 			}
 
-			if cfm.Confirm(0, issue) {
+			if dump || cfm.Confirm(0, issue) {
 				confirmedIssues = append(confirmedIssues, issue)
 			}
 		case errMsg, ok := <-tenetErrs:
