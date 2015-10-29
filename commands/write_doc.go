@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"text/template"
+
+	"code.google.com/p/go/src/pkg/text/template"
 
 	"github.com/codegangsta/cli"
 
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
-const defaultTemplate = `# Project Tenets
+const defaultTemplate = `# Tenets
 {{range .All}}
 * {{.}}
 {{end}}
@@ -19,7 +20,7 @@ const defaultTemplate = `# Project Tenets
 
 var WriteDocCMD = cli.Command{
 	Name:  "write-docs",
-	Usage: "output documentation generated from tenets",
+	Usage: "write output documentation generated from tenets to a file",
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:   "template, t",
@@ -37,6 +38,12 @@ var WriteDocCMD = cli.Command{
 }
 
 func writeDoc(c *cli.Context) {
+	output := c.String("output")
+	writeTenetDoc(c, c.String("template"), output)
+	fmt.Printf("Tenet documentation written to %s\n", output)
+}
+
+func writeTenetDoc(c *cli.Context, tmpl, output string) {
 	// Find every applicable tenet for this project
 	cfgPath, err := tenetCfgPath(c)
 	if err != nil {
@@ -74,7 +81,7 @@ func writeDoc(c *cli.Context) {
 		ts[r.Replace(tenetData.Name)] = t
 	}
 
-	file, err := os.Create(c.String("output"))
+	file, err := os.Create(output)
 	if err != nil {
 		oserrf(err.Error())
 		return
@@ -96,7 +103,7 @@ func writeDoc(c *cli.Context) {
 		v[n] = d
 	}
 
-	src := c.String("template")
+	src := tmpl
 	if src == "" {
 		src = cfg.Template
 	}
@@ -117,6 +124,4 @@ func writeDoc(c *cli.Context) {
 	if err = tpl.Execute(file, v); err != nil {
 		oserrf(err.Error())
 	}
-
-	fmt.Printf("Tenet documentation written to %s\n", c.String("output"))
 }
