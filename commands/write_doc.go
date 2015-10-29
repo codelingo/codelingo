@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	"code.google.com/p/go/src/pkg/text/template"
+	"text/template"
 
 	"github.com/codegangsta/cli"
 
