@@ -15,6 +15,7 @@ type Tenet interface {
 	InitDriver() error
 	Review(args ...string) (*driver.ReviewResult, error) // TODO: Refactor to not expose driver to callers
 	Help(args ...string) (string, error)
+	Description() (string, error)
 	Version() (string, error)
 	Debug(args ...string) string
 	GetOptions() driver.Options // TODO: Use AddOptions instead to apply cli json args
@@ -33,4 +34,26 @@ func New(ctx *cli.Context, cfg Config) (Tenet, error) {
 	}
 
 	return nil, fmt.Errorf("Unknown driver specified: %q", cfg.Driver)
+}
+
+// Any returns an initialised tenet using any driver that is locally available.
+func Any(ctx *cli.Context, name string) (Tenet, error) {
+	cfg := driver.Common{
+		Name: name,
+	}
+
+	// Try drivers in order of failure speed
+	if t, err := driver.NewBinary(ctx, cfg); err == nil {
+		if t.InitDriver() == nil {
+			return t, nil
+		}
+	}
+
+	if t, err := driver.NewDocker(ctx, cfg); err == nil {
+		if t.InitDriver() == nil {
+			return t, nil
+		}
+	}
+
+	return nil, fmt.Errorf("No driver available for %s", name)
 }

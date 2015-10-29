@@ -15,5 +15,6 @@ var globalCommands = []cli.Command{
 	commands.TenetsCMD,
 	commands.OptionsCMD,
 	commands.WhichCMD,
+	commands.WriteDocCMD,
 	// commands.TryPieCMD,
 }
