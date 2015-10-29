@@ -102,6 +102,14 @@ func (d *Docker) Help(args ...string) (string, error) {
 	return response, nil
 }
 
+func (d *Docker) Description() (string, error) {
+	var response string
+	if err := d.call("Description", &response); err != nil {
+		return "", err
+	}
+	return response, nil
+}
+
 func (d *Docker) Version() (string, error) {
 	var response string
 	if err := d.call("Version", &response); err != nil {

@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"fmt"
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
@@ -28,7 +29,20 @@ func NewBinary(ctx *cli.Context, cfg Common) (*Binary, error) {
 
 // Check that a file exists at the expected location and is executable.
 func (d *Binary) InitDriver() error {
-	// TODO: implement
+	tenetPath := d.binPath()
+
+	file, err := os.Open(tenetPath)
+	if err != nil {
+		return err
+	}
+	fi, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	if fi.Mode().Perm()&0x49 == 0 {
+		return fmt.Errorf("%s not exectuable", tenetPath)
+	}
+
 	return nil
 }
 
@@ -56,6 +70,14 @@ func (d *Binary) Help(args ...string) (string, error) {
 	return response, nil
 }
 
+func (d *Binary) Description() (string, error) {
+	var response string
+	if err := d.call("Description", &response); err != nil {
+		return "", err
+	}
+	return response, nil
+}
+
 func (d *Binary) Version() (string, error) {
 	var response string
 	if err := d.call("Version", &response); err != nil {
@@ -73,10 +95,14 @@ func (d *Binary) Debug(args ...string) string {
 	return response
 }
 
+func (d *Binary) binPath() string {
+	// TODO: Should names like lingoHomeFlg be public so we can use them here/anywhere instead of hard-coding 'lingo-home'?
+	return path.Join(d.context.GlobalString("lingo-home"), "tenets", d.String())
+}
+
 // result must be a pointer of type compatable with that returned by the remote method.
 func (d *Binary) call(method string, result interface{}, args ...string) error {
-	// TODO: Should names like lingoHomeFlg be public so we can use them here/anywhere instead of hard-coding 'lingo-home'?
-	tenetPath := path.Join(d.context.GlobalString("lingo-home"), "tenets", d.String())
+	tenetPath := d.binPath()
 
 	client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, tenetPath)
 	if err != nil {

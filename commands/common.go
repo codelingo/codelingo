@@ -5,6 +5,7 @@ package commands
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -18,6 +19,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/lingo/tenet"
+	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 const (
@@ -35,9 +37,10 @@ const (
 )
 
 type config struct {
-	Include string         `toml:"include"`
-	Cascade bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
-	Tenets  []tenet.Config `toml:"tenet"`
+	Include  string         `toml:"include"`
+	Template string         `toml:"template"`
+	Cascade  bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
+	Tenets   []tenet.Config `toml:"tenet"`
 }
 
 // stderr is a var for mocking in tests
@@ -88,6 +91,56 @@ func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	return ts, nil
 }
 
+func allConfigs(dir string) (map[*config][]string, int, error) {
+	totalTenets := 0
+	queue := make(map[*config][]string)
+
+	// Starting with initial dir
+	// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
+	// - use found cfg.Include to find files in that dir
+	// - insert cfg->files into map
+	// - keep count of total files for channel buffer
+	err := filepath.Walk(dir, func(relPath string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
+			cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
+			if err != nil {
+				return err
+			}
+
+			// TODO: Use cfg.Include glob/regex?
+			files, err := filepath.Glob(path.Join(relPath, "*.go"))
+			if err != nil { // Non-fatal
+				return nil
+			}
+
+			fileList := []string{}
+			for _, f := range files {
+				file, err := os.Open(f)
+				if err != nil { // Non-fatal
+					break
+				}
+				if fi, err := file.Stat(); err == nil && !fi.IsDir() {
+					// fmt.Println("adding", f) // TODO: put behind a debug flag
+					fileList = append(fileList, f)
+				}
+			}
+
+			if len(fileList) > 0 {
+				totalTenets += len(cfg.Tenets)
+
+				queue[cfg] = fileList
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return queue, totalTenets, nil
+}
+
 // Combine cascaded configuration files into a single config object.
 func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, error) {
 	if cascadeDir == CascadeNone {
@@ -120,8 +173,12 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 	if err == nil {
 		// Add the non-tenet properties - always when cascading down, otherwise
 		// only if not already specified
+		// TODO: Use reflection here to avoid forgotten values?
 		if cascadeDir == CascadeDown || cfg.Include == "" {
 			cfg.Include = currentCfg.Include
+		}
+		if cascadeDir == CascadeDown || cfg.Template == "" {
+			cfg.Template = currentCfg.Template
 		}
 
 	DupeCheck:
@@ -219,6 +276,19 @@ func desiredTenetCfgPath(c *cli.Context) string {
 func tenetCfgPath(c *cli.Context) (string, error) {
 	cfgPath := desiredTenetCfgPath(c)
 	return tenetCfgPathRecusive(cfgPath)
+}
+
+// parseOptions returns a map of tenet names to Options from the command line.
+func parseOptions(c *cli.Context) (map[string]driver.Options, error) {
+	commandOptions := map[string]driver.Options{}
+	// Parse command line specified options
+	if commandOptionsJson := c.String("options"); commandOptionsJson != "" {
+		err := json.Unmarshal([]byte(commandOptionsJson), &commandOptions)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return commandOptions, nil
 }
 
 func userHome() (string, error) {

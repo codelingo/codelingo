@@ -3,9 +3,6 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"os"
-	"path"
-	"path/filepath"
 	"sync"
 	"time"
 
@@ -112,45 +109,8 @@ func reviewAction(c *cli.Context) {
 
 		reviewQueue[cfg] = args
 	} else {
-		// Starting with current dir
-		// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
-		// - use found cfg.Include to find files in that dir
-		// - insert cfg->files into map
-		// - keep count of total files for channel buffer
-		err := filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
-				cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
-				if err != nil {
-					return err
-				}
-
-				// TODO: Use include glob/regex?
-				files, err := filepath.Glob(path.Join(relPath, "*.go"))
-				if err != nil { // Non-fatal
-					return nil
-				}
-
-				fileList := []string{}
-				for _, f := range files {
-					file, err := os.Open(f)
-					if err != nil { // Non-fatal
-						break
-					}
-					if fi, err := file.Stat(); err == nil && !fi.IsDir() {
-						// fmt.Println("adding", f) // TODO: put behind a debug flag
-						fileList = append(fileList, f)
-					}
-				}
-
-				if len(fileList) > 0 {
-					totalTenets += len(cfg.Tenets)
-
-					reviewQueue[cfg] = fileList
-				}
-			}
-			return nil
-		})
+		// TODO: Check for dirs amongst args
+		reviewQueue, totalTenets, err = allConfigs(".")
 		if err != nil {
 			oserrf(err.Error())
 			return
@@ -167,14 +127,10 @@ func reviewAction(c *cli.Context) {
 		close(results)
 	}()
 
-	commandOptions := map[string]driver.Options{}
-	// Parse command line specified options
-	if commandOptionsJson := c.String("options"); commandOptionsJson != "" {
-		err := json.Unmarshal([]byte(commandOptionsJson), &commandOptions)
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
+	commandOptions, err := parseOptions(c)
+	if err != nil {
+		oserrf(err.Error())
+		return
 	}
 
 	for cfg, files := range reviewQueue {

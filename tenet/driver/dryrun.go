@@ -58,6 +58,12 @@ func (d *DryRun) Help(args ...string) (string, error) {
 	return "", nil
 }
 
+// Log Description event.
+func (d *DryRun) Description() (string, error) {
+	fmt.Printf("Requesting description of tenet: %s\n", d.Name)
+	return "", nil
+}
+
 // Log Version event.
 func (d *DryRun) Version() (string, error) {
 	fmt.Printf("Requesting version of tenet: %s\n", d.Name)
