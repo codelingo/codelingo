@@ -25,7 +25,7 @@ func tenetsAction(c *cli.Context) {
 		return
 	}
 
-	for _, t := range cfg.Tenets {
+	for _, t := range cfg.AllTenets() {
 		fmt.Println(t.Name)
 	}
 }

@@ -108,7 +108,7 @@ func reviewAction(c *cli.Context) {
 			return
 		}
 
-		totalTenets = len(cfg.Tenets)
+		totalTenets = len(cfg.AllTenets())
 
 		reviewQueue[cfg] = args
 	} else {
@@ -144,7 +144,7 @@ func reviewAction(c *cli.Context) {
 				}
 
 				if len(fileList) > 0 {
-					totalTenets += len(cfg.Tenets)
+					totalTenets += len(cfg.AllTenets())
 
 					reviewQueue[cfg] = fileList
 				}

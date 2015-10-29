@@ -1,9 +1,6 @@
 package commands
 
-import (
-	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/tenet"
-)
+import "github.com/codegangsta/cli"
 
 var RemoveCMD = cli.Command{Name: "remove",
 	Usage: "remove a tenet from lingo",
@@ -12,12 +9,19 @@ var RemoveCMD = cli.Command{Name: "remove",
   "lingo remove github.com/lingo-reviews/unused-args"
 
 `[1:],
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "group",
+			Value: "default",
+			Usage: "group to remove tenet from"},
+	},
 	Action: remove,
 }
 
 func remove(c *cli.Context) {
 	if l := len(c.Args()); l != 1 {
 		oserrf("error: expected 1 argument, got %d", l)
+		return
 	}
 
 	cfgPath, err := tenetCfgPath(c)
@@ -28,23 +32,23 @@ func remove(c *cli.Context) {
 	cfg, err := buildConfig(cfgPath, CascadeNone)
 	if err != nil {
 		oserrf("reading config file: %s", err.Error())
+		return
 	}
 
 	imageName := c.Args().First()
 
-	if !hasTenet(cfg, imageName) {
+	if !cfg.HasTenet(imageName) {
 		oserrf(`error: tenet "%s" not found in %q`, imageName, c.GlobalString(tenetCfgFlg.long))
+		return
 	}
 
-	var tenets []tenet.Config
-	for _, t := range cfg.Tenets {
-		if t.Name != imageName {
-			tenets = append(tenets, t)
-		}
+	if err := cfg.RemoveTenet(imageName, c.String("group")); err != nil {
+		oserrf(err.Error())
+		return
 	}
-	cfg.Tenets = tenets
 
 	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())
+		return
 	}
 }

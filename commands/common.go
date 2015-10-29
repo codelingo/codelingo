@@ -35,9 +35,124 @@ const (
 )
 
 type config struct {
-	Include string         `toml:"include"`
-	Cascade bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
-	Tenets  []tenet.Config `toml:"tenet"`
+	Include     string         `toml:"include"`
+	Cascade     bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
+	TenetGroups []TenetGroup   `toml:"tenet_group"`
+	allTenets   []tenet.Config // TODO(waigani) see comment in AllTenets
+}
+
+type TenetGroup struct {
+	Name   string
+	Tenets []tenet.Config `toml:"tenet"`
+}
+
+func (c *config) AllTenets() []tenet.Config {
+	// TODO(waigani) quick work around. allTenets are the tenets built up
+	// after a cascade read of cfgs. Rework things so it's clear that we are
+	// either getting all tenets for one cfg or all tenets for all cfgs.
+	// We may need a new struct AllCfg or something?
+	s := seer{seen: map[string]bool{}}
+	var tenets []tenet.Config
+	for _, t := range c.allTenets {
+		if !s.Seen(t.Name) {
+			tenets = append(tenets, t)
+		}
+	}
+
+	for _, g := range c.TenetGroups {
+		for _, t := range g.Tenets {
+			if !s.Seen(t.Name) {
+				tenets = append(tenets, t)
+			}
+		}
+	}
+	return tenets
+}
+
+type seer struct {
+	seen map[string]bool
+}
+
+func (s *seer) Seen(name string) (seen bool) {
+	seen = s.seen[name]
+	s.seen[name] = true
+	return
+}
+
+func (c *config) HasTenetGroup(name string) bool {
+	for _, g := range c.TenetGroups {
+		if g.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *config) AddTenetGroup(name string) {
+	c.TenetGroups = append(c.TenetGroups, TenetGroup{Name: name})
+}
+
+func (c *config) RemoveTenetGroup(name string) {
+	var groups []TenetGroup
+	for _, g := range c.TenetGroups {
+		if g.Name != name {
+			groups = append(groups, g)
+			break
+		}
+	}
+	c.TenetGroups = groups
+}
+
+func (c *config) AddTenet(t tenet.Config, group string) error {
+	if !c.HasTenetGroup(group) {
+		c.AddTenetGroup(group)
+	}
+	g, err := c.FindTenetGroup(group)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	// TODO(waigani) use pointers to avoid all this update crap
+	g.Tenets = append(g.Tenets, t)
+	c.UpdateTenetGroup(g)
+	return nil
+}
+
+// TODO(waigani) This shouldn't be needed, move to pointers
+func (c *config) UpdateTenetGroup(group TenetGroup) {
+	var groups []TenetGroup
+	for _, g := range c.TenetGroups {
+		if g.Name != group.Name {
+			groups = append(groups, g)
+		}
+	}
+	groups = append(groups, group)
+	c.TenetGroups = groups
+}
+
+func (c *config) FindTenetGroup(name string) (TenetGroup, error) {
+	for _, g := range c.TenetGroups {
+		if g.Name == name {
+			return g, nil
+		}
+	}
+	return TenetGroup{}, errors.Errorf("tenet group %q not found", name)
+}
+
+func (c *config) RemoveTenet(name string, group string) error {
+	g, err := c.FindTenetGroup(group)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	var tenets []tenet.Config
+	for _, t := range c.AllTenets() {
+		if t.Name != name {
+			tenets = append(tenets, t)
+		}
+	}
+
+	g.Tenets = tenets
+	c.UpdateTenetGroup(g)
+	return nil
 }
 
 // stderr is a var for mocking in tests
@@ -76,7 +191,7 @@ func log(format string, a ...interface{}) {
 // Get a list of instantiated tenets from a config object.
 func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
-	for _, tenetData := range cfg.Tenets {
+	for _, tenetData := range cfg.AllTenets() {
 		tenet, err := tenet.New(ctx, tenetData)
 		if err != nil {
 			message := fmt.Sprintf("could not create tenet '%s': %s", tenetData.Name, err.Error())
@@ -125,15 +240,16 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 		}
 
 	DupeCheck:
-		for _, t := range currentCfg.Tenets {
+		for _, t := range currentCfg.AllTenets() {
 			// Don't duplicate tenets
 			// TODO: handle case of same tenet but different options
-			for _, existing := range cfg.Tenets {
+			for _, existing := range cfg.AllTenets() {
 				if existing.Name == t.Name {
 					continue DupeCheck
 				}
 			}
-			cfg.Tenets = append(cfg.Tenets, t)
+			// TODO(waigani) need to rework this. See comment in AllTenets.
+			cfg.allTenets = append(cfg.AllTenets(), t)
 		}
 	} else if !os.IsNotExist(err) {
 		// Just leave the current state of cfg on encountering an error
@@ -288,13 +404,17 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 	return cfgPath, nil
 }
 
-func hasTenet(cfg *config, imageName string) bool {
-	for _, config := range cfg.Tenets {
-		if config.Name == imageName {
+func hasTenet(tenets []tenet.Config, imageName string) bool {
+	for _, t := range tenets {
+		if t.Name == imageName {
 			return true
 		}
 	}
 	return false
+}
+
+func (c *config) HasTenet(name string) bool {
+	return hasTenet(c.AllTenets(), name)
 }
 
 // Return a string representation of a CascadeDirection
