@@ -208,6 +208,10 @@ func reviewAction(c *cli.Context) {
 		}
 	}
 
+	if len(r.issues) == 0 {
+		return
+	}
+
 	outputFmt := review.OutputFormat(c.String("output-fmt"))
 	if outputFmt != "none" {
 		output := review.Output(outputFmt, c.String("output"), r.issues)
@@ -285,7 +289,6 @@ l:
 
 	var confirmedIssues []*t.Issue
 	issuesClosed, errsClosed := false, false
-	dump := c.GlobalBool("dump")
 
 	for {
 		if issuesClosed && errsClosed {
@@ -298,7 +301,7 @@ l:
 				continue
 			}
 
-			if dump || cfm.Confirm(0, issue) {
+			if cfm.Confirm(0, issue) {
 				confirmedIssues = append(confirmedIssues, issue)
 			}
 		case errMsg, ok := <-tenetErrs:

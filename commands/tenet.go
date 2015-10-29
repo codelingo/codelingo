@@ -13,10 +13,23 @@ import (
 // TenetCMD is a fallthrough CMD which treats command as the tenet name and
 // passes through any arguments to the tenet.
 func TenetCMD(ctx *cli.Context, command string) {
+	var commandIsTenet bool
+	var c tenet.Config
+	for _, c = range listTenets(ctx) {
+		if command == c.Name {
+			commandIsTenet = true
+			break
+		}
+	}
+	if !commandIsTenet {
+		fmt.Println("command not found")
+		return
+	}
+
 	// TODO(matt) read about bash completion on
 	// https://github.com/codegangsta/cli. Is there a nice way that we could
 	// add bash completion for tenet names (as they'll be long and clumsy).
-	t, err := tenet.New(ctx, tenet.Config{Name: command})
+	t, err := tenet.New(ctx, c)
 	if err != nil {
 		oserrf("command or tenet not found: %s", err.Error())
 		return
@@ -49,7 +62,7 @@ func TenetCMD(ctx *cli.Context, command string) {
 			fmt.Println(e)
 		}
 	case "Help":
-		text, err := t.Help(args[2:]...)
+		text, err := t.Help()
 		if err != nil {
 			oserrf("error running method %q, %s", method, err.Error())
 			return
