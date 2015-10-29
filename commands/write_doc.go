@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"text/template"
@@ -116,4 +117,6 @@ func writeDoc(c *cli.Context) {
 	if err = tpl.Execute(file, v); err != nil {
 		oserrf(err.Error())
 	}
+
+	fmt.Printf("Tenet documentation written to %s\n", c.String("output"))
 }
