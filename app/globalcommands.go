@@ -12,8 +12,11 @@ var globalCommands = []cli.Command{
 	commands.ImportCMD,
 	commands.ReviewCMD,
 	commands.PullCMD,
-	commands.TenetsCMD,
+	commands.ListCMD,
 	commands.OptionsCMD,
 	commands.WhichCMD,
+	commands.WriteDocCMD,
+	commands.DocsCMD,
+	commands.EditCMD,
 	// commands.TryPieCMD,
 }
