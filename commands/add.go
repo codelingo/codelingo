@@ -19,6 +19,11 @@ var AddCMD = cli.Command{
 			Value: "docker",
 			Usage: "driver to use for this tenet",
 		},
+		cli.StringFlag{
+			Name:  "group",
+			Value: "default",
+			Usage: "group to add tenet to",
+		},
 	},
 	Action: add,
 }
@@ -42,12 +47,13 @@ func add(c *cli.Context) {
 
 	imageName := c.Args().First()
 
-	if hasTenet(cfg, imageName) {
+	groupName := c.String("group")
+	g, err := cfg.FindTenetGroup(groupName)
+	if err == nil && hasTenet(g.Tenets, imageName) {
 		oserrf(`error: tenet "%s" already added`, imageName)
 		return
 	}
-
-	cfg.Tenets = append(cfg.Tenets, tenet.Config{Name: imageName, Driver: c.String("driver")})
+	cfg.AddTenet(tenet.Config{Name: imageName, Driver: c.String("driver")}, groupName)
 
 	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())

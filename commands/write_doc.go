@@ -58,7 +58,7 @@ func writeTenetDoc(c *cli.Context, tmpl, output string) {
 	r := strings.NewReplacer("/", "_")
 
 	var ts = make(map[string]tenet.Tenet)
-	for _, tenetData := range cfg.Tenets {
+	for _, tenetData := range cfg.AllTenets() {
 		// Try to get any installed tenet with matching name
 		t, err := tenet.Any(c, tenetData.Name)
 		if err != nil {

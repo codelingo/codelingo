@@ -105,7 +105,7 @@ func reviewAction(c *cli.Context) {
 			return
 		}
 
-		totalTenets = len(cfg.Tenets)
+		totalTenets = len(cfg.AllTenets())
 
 		reviewQueue[cfg] = args
 	} else {

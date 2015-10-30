@@ -55,5 +55,5 @@ func listTenets(c *cli.Context) []tenet.Config {
 		oserrf("could not read configuration: %s", err.Error())
 		return nil
 	}
-	return cfg.Tenets
+	return cfg.AllTenets()
 }
