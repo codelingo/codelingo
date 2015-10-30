@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"os"
+	"path"
 	"strings"
 	"text/template"
 
@@ -29,8 +30,8 @@ var WriteDocCMD = cli.Command{
 		},
 		cli.StringFlag{
 			Name:  "output, o",
-			Value: "tenets.md",
-			Usage: "file to write the output to. By default, output file is tenets.md",
+			Value: "lingo_docs/tenets.md",
+			Usage: "file to write the output to. By default, output file is lingo_docs/tenets.md",
 		},
 	},
 	Action: writeDoc,
@@ -78,6 +79,14 @@ func writeTenetDoc(c *cli.Context, tmpl, output string) {
 			}
 		}
 		ts[r.Replace(tenetData.Name)] = t
+	}
+
+	if dir, _ := path.Split(output); dir != "" {
+		err := os.MkdirAll(dir, 0775)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
 	}
 
 	file, err := os.Create(output)
