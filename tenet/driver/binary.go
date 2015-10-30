@@ -8,6 +8,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/dev/tenet"
 	"github.com/natefinch/pie"
 )
 
@@ -59,7 +60,7 @@ func (d *Binary) Review(args ...string) (*ReviewResult, error) {
 		return nil, errors.Annotate(err, "error calling method Review")
 	}
 
-	return decodeResult(d.Name, result)
+	return decodeResult(d.Name, result, func(_ *tenet.Issue) {})
 }
 
 func (d *Binary) Help(args ...string) (string, error) {

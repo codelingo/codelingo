@@ -31,7 +31,7 @@ func PullImage(client *docker.Client, name string, registry string, tag string) 
 	auth, err := apiAuth()
 	if err != nil {
 		// just log err. We should be able to pull without auth.
-		log.Printf("error getting auth config: %s", err.Error())
+		log.Printf("could not get auth config: %s. We'll try pulling image without auth", err.Error())
 	}
 	return client.PullImage(opts, auth)
 }

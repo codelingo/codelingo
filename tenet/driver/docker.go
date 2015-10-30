@@ -12,6 +12,7 @@ import (
 	"github.com/natefinch/pie"
 
 	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/dev/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
 )
 
@@ -91,7 +92,11 @@ func (d *Docker) Review(args ...string) (*ReviewResult, error) {
 		return nil, errors.Annotate(err, "error calling method Review")
 	}
 
-	return decodeResult(d.Name, result)
+	return decodeResult(d.Name, result, func(issue *tenet.Issue) {
+		// TODO(waigani) issue filename should be issue.filename
+		filename := issue.Position.Start.Filename
+		issue.Position.Start.Filename = strings.TrimPrefix(filename, "/source/")
+	})
 }
 
 func (d *Docker) Help(args ...string) (string, error) {

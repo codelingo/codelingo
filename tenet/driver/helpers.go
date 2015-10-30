@@ -12,10 +12,15 @@ type ReviewResult struct {
 	Errs      []string
 }
 
-func decodeResult(name string, result string) (*ReviewResult, error) {
+func decodeResult(name string, result string, callback func(issue *devTenet.Issue)) (*ReviewResult, error) {
 	reviewResult := &ReviewResult{}
 	err := json.Unmarshal([]byte(result), reviewResult)
 	reviewResult.TenetName = name
+
+	for _, issue := range reviewResult.Issues {
+		callback(issue)
+	}
+
 	return reviewResult, err
 }
 
