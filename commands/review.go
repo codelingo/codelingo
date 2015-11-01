@@ -1,13 +1,17 @@
 package commands
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"os/exec"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+	"github.com/waigani/diffparser"
 
 	t "github.com/lingo-reviews/dev/tenet"
 	"github.com/lingo-reviews/lingo/commands/review"
@@ -82,17 +86,37 @@ Review all files found in pwd, with two speific tenets:
 }
 
 func reviewAction(c *cli.Context) {
+	var diff *diffparser.Diff
+	var err error
 	reviewQueue := make(map[*config][]string)
 	totalTenets := 0
 
-	// Get this first as it might fail, we want to avoid all other work in that case
-	cfm, err := review.NewConfirmer(c)
+	args := c.Args()
+
+	// Add only files in diff.
+	if len(args) == 0 && c.Bool("diff") {
+		diff, err = diffparser.Parse(rawDiff())
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+
+		for _, f := range diff.Files {
+			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
+			// support reviewing the cfg also, right now it errors out.
+			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
+				args = append(args, f.NewName)
+			}
+		}
+	}
+
+	// Get this first as it might fail, we want to avoid all other work in that case.
+	cfm, err := review.NewConfirmer(c, diff)
 	if err != nil {
 		oserrf(err.Error())
 		return
 	}
 
-	args := c.Args()
 	if len(args) > 0 {
 		cfgPath, err := tenetCfgPath(c)
 		if err != nil {
@@ -161,10 +185,6 @@ func reviewAction(c *cli.Context) {
 					opts[k] = v
 				}
 
-				// TODO(waigani)
-				// - --diff should drop any file not in the diff.
-
-				// args := c.Args()
 				if len(opts) != 0 {
 					jsonOpts, err := json.Marshal(opts)
 					if err != nil {
@@ -173,7 +193,6 @@ func reviewAction(c *cli.Context) {
 					}
 					files = append([]string{"--options", string(jsonOpts)}, files...)
 				}
-
 				reviewResult, err := tn.Review(files...)
 				if err != nil {
 					oserrf("error running review %s", err.Error())
@@ -208,10 +227,7 @@ func reviewAction(c *cli.Context) {
 		}
 	}
 
-	if len(r.issues) == 0 {
-		return
-	}
-
+	// Even if there are no issues, we still might need to show output.
 	outputFmt := review.OutputFormat(c.String("output-fmt"))
 	if outputFmt != "none" {
 		output := review.Output(outputFmt, c.String("output"), r.issues)
@@ -317,4 +333,25 @@ l:
 	}
 
 	return result{confirmedIssues, errs}
+}
+
+// TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
+// from a flag to a sub command which pipes args to git diff.
+func rawDiff() string {
+	c := exec.Command("git", "reset")
+	c.Run()
+	c = exec.Command("git", "add", "-N", ".") // this includes new files in diff
+	c.Run()
+
+	var stdout bytes.Buffer
+	c = exec.Command("git", "diff")
+	c.Stdout = &stdout
+	// c.Stderr = &stderr
+	c.Run()
+	diff := string(stdout.Bytes())
+
+	c = exec.Command("git", "reset")
+	c.Run()
+
+	return diff
 }

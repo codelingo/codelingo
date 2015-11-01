@@ -1,7 +1,6 @@
 package docker
 
 import (
-	"log"
 	"strings"
 
 	"github.com/fsouza/go-dockerclient"
@@ -69,7 +68,8 @@ func ContainerID(client *docker.Client, name string) (string, error) {
 func HaveContainer(client *docker.Client, name string) bool {
 	id, err := ContainerID(client, name)
 	if err != nil {
-		log.Printf(err.Error())
+		// TODO(waigani) this prints to cli
+		// log.Printf(err.Error())
 	}
 	return id != ""
 }

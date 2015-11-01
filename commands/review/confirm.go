@@ -1,7 +1,6 @@
 package review
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -22,7 +21,7 @@ type IssueConfirmer struct {
 	hostAbsBasePath string
 }
 
-func NewConfirmer(c *cli.Context) (*IssueConfirmer, error) {
+func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
 	basePath, err := hostAbsBasePath(c)
 	if err != nil {
 		return nil, err
@@ -35,7 +34,7 @@ func NewConfirmer(c *cli.Context) (*IssueConfirmer, error) {
 	}
 
 	if c.Bool("diff") {
-		diffFunc, err := newInDiffFunc()
+		diffFunc, err := newInDiffFunc(d)
 		if err != nil {
 			return nil, err
 		}
@@ -57,12 +56,12 @@ func hostAbsBasePath(c *cli.Context) (string, error) {
 }
 
 // TODO(waigani) screen diff tenet side - see other diff comment.
-func newInDiffFunc() (func(*tenet.Issue) bool, error) {
-	diff, err := diffparser.Parse(rawDiff())
-	if err != nil {
-		return nil, err
-	}
+func newInDiffFunc(diff *diffparser.Diff) (func(*tenet.Issue) bool, error) {
 	diffChanges := diff.Changed()
+
+	// for _, f := range diff.Files {
+	// 	xxx.Dump(f.Mode) //== diffparser.NEW
+	// }
 
 	return func(issue *tenet.Issue) bool {
 		start := issue.Position.Start.Line
@@ -71,35 +70,29 @@ func newInDiffFunc() (func(*tenet.Issue) bool, error) {
 			end = endLine
 		}
 
-		// Get filename relative to git root folder
-		// TODO: Handle error in case of git not being installed
-		out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", issue.Filename()).Output()
-		if err != nil {
-			return false
-		}
-		relPath := strings.Split(string(out), "\n")[0]
-
-		if newLines, ok := diffChanges[relPath]; ok {
+		filename := getDiffRootPath(issue.Filename())
+		if newLines, ok := diffChanges[filename]; ok {
 			for _, lineNo := range newLines {
 				if lineNo >= start && lineNo <= end {
 					return true
 				}
 			}
 		}
+
 		return false
 	}, nil
 }
 
-// TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
-// from a flag to a sub command which pipes args to git diff.
-func rawDiff() string {
-	var stdout bytes.Buffer
-	c := exec.Command("git", "diff")
-	c.Stdout = &stdout
-	// c.Stderr = &stderr
-	c.Run()
-
-	return string(stdout.Bytes())
+func getDiffRootPath(filename string) string {
+	// Get filename relative to git root folder
+	// TODO: Handle error in case of git not being installed
+	out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", filename).Output()
+	if err == nil && len(out) != 0 {
+		if len(out) != 0 {
+			filename = strings.TrimSuffix(string(out), "\n")
+		}
+	}
+	return filename
 }
 
 // TODO(waigani) make this configurable.
