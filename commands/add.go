@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"strings"
+
 	"github.com/codegangsta/cli"
 	"github.com/lingo-reviews/lingo/tenet"
 )
@@ -23,6 +25,11 @@ var AddCMD = cli.Command{
 			Name:  "group",
 			Value: "default",
 			Usage: "group to add tenet to",
+		},
+		cli.StringFlag{
+			Name:  "options",
+			Value: "",
+			Usage: "a space separated list of key=value options",
 		},
 	},
 	Action: add,
@@ -53,7 +60,22 @@ func add(c *cli.Context) {
 		oserrf(`error: tenet "%s" already added`, imageName)
 		return
 	}
-	cfg.AddTenet(tenet.Config{Name: imageName, Driver: c.String("driver")}, groupName)
+
+	// TODO(waigani) DEMOWARE. This will panic with wrong input. Matt didn't
+	// your first PR bring in options?
+	opts := map[string]interface{}{}
+	if optStr := c.String("options"); optStr != "" {
+		for _, part := range strings.Split(optStr, " ") {
+			p := strings.Split(part, "=")
+			opts[p[0]] = p[1]
+		}
+	}
+
+	cfg.AddTenet(tenet.Config{
+		Name:    imageName,
+		Driver:  c.String("driver"),
+		Options: opts,
+	}, groupName)
 
 	if err := writeConfigFile(c, cfg); err != nil {
 		oserrf(err.Error())
