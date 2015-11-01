@@ -73,9 +73,9 @@ Review all files found in pwd, with two speific tenets:
 			EnvVar: "LINGO-DIFF",
 		},
 		cli.BoolFlag{
-			Name:   "no-user-confirm",
+			Name:   "keep-all",
 			Usage:  "turns off the default behaviour of stepping through each issue found and asking the user to confirm that it is an issue.",
-			EnvVar: "LINGO-NO-USER-CONFIRM",
+			EnvVar: "LINGO-KEEP-ALL",
 		},
 	},
 	Action: reviewAction,

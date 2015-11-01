@@ -30,7 +30,7 @@ func NewConfirmer(c *cli.Context) (*IssueConfirmer, error) {
 
 	cfm := IssueConfirmer{
 		confidence:      tenet.Confidence(c.Float64("confidence")),
-		userConfirm:     !c.Bool("no-user-confirm"),
+		userConfirm:     !c.Bool("keep-all"),
 		hostAbsBasePath: basePath,
 	}
 
@@ -130,7 +130,12 @@ func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 
 	attempt++
 	var options string
-	fmt.Print("\n[o]pen [d]iscard [K]eep:")
+	fmt.Print("\n[o]pen ")
+	if c.userConfirm {
+		fmt.Print(" [d]iscard [K]eep ")
+	}
+	fmt.Print(":")
+
 	fmt.Scanln(&options)
 	// if err != nil || n != 1 {
 	// 	// TODO(waigani)  handle invalid input
