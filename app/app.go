@@ -20,6 +20,7 @@ func New() *cli.App {
 	app.Commands = globalCommands
 	app.Flags = commands.GlobalOptions
 	app.CommandNotFound = commands.TenetCMD
+	app.EnableBashCompletion = true
 
 	return app
 }
