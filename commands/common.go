@@ -45,8 +45,9 @@ type config struct {
 }
 
 type TenetGroup struct {
-	Name   string         `toml:"name"`
-	Tenets []tenet.Config `toml:"tenet"`
+	Name     string         `toml:"name"`
+	Template string         `toml:"template"`
+	Tenets   []tenet.Config `toml:"tenet"`
 }
 
 func (c *config) AllTenets() []tenet.Config {
@@ -296,17 +297,28 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 			cfg.Template = currentCfg.Template
 		}
 
-	DupeCheck:
-		for _, t := range currentCfg.AllTenets() {
-			// Don't duplicate tenets
-			// TODO: handle case of same tenet but different options
-			for _, existing := range cfg.AllTenets() {
-				if existing.Name == t.Name {
-					continue DupeCheck
+		// DEMOWARE: Need a better way to assign tenets to groups without duplication
+		for _, g := range currentCfg.TenetGroups {
+		DupeCheck:
+			for _, t := range g.Tenets {
+				for _, e := range cfg.allTenets {
+					if e.Name == t.Name {
+						continue DupeCheck
+					}
+				}
+				cfg.AddTenet(t, g.Name)
+				cfg.allTenets = append(cfg.allTenets, t)
+			}
+		}
+		// Asign group properties
+		for _, g := range currentCfg.TenetGroups {
+			for i, cg := range cfg.TenetGroups {
+				if cg.Name == g.Name {
+					if g.Template != "" {
+						cfg.TenetGroups[i].Template = g.Template
+					}
 				}
 			}
-			// TODO(waigani) need to rework this. See comment in AllTenets.
-			cfg.allTenets = append(cfg.AllTenets(), t)
 		}
 	} else if !os.IsNotExist(err) {
 		// Just leave the current state of cfg on encountering an error
