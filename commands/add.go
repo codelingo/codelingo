@@ -65,10 +65,11 @@ func add(c *cli.Context) {
 	// your first PR bring in options?
 	opts := map[string]interface{}{}
 	if optStr := c.String("options"); optStr != "" {
-		for _, part := range strings.Split(optStr, " ") {
-			p := strings.Split(part, "=")
-			opts[p[0]] = p[1]
-		}
+		// TODO: DEMOWARE. Only set one option at a time to allow spaces in value
+		//for _, part := range strings.Split(optStr, " ") {
+		p := strings.Split(optStr, "=")
+		opts[p[0]] = p[1]
+		//}
 	}
 
 	cfg.AddTenet(tenet.Config{
