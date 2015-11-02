@@ -16,6 +16,7 @@ import (
 type IssueConfirmer struct {
 	confidence  tenet.Confidence
 	userConfirm bool
+	output      bool
 	inDiff      func(*tenet.Issue) bool
 	// TODO(waigani) make this a func var instead
 	hostAbsBasePath string
@@ -30,6 +31,7 @@ func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
 	cfm := IssueConfirmer{
 		confidence:      tenet.Confidence(c.Float64("confidence")),
 		userConfirm:     !c.Bool("keep-all"),
+		output:          c.String("output-fmt") != "none",
 		hostAbsBasePath: basePath,
 	}
 
@@ -123,11 +125,11 @@ func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 
 	attempt++
 	var options string
-	fmt.Print("\n[o]pen ")
-	if c.userConfirm {
-		fmt.Print(" [d]iscard [K]eep ")
+	fmt.Print("\n[o]pen")
+	if c.output {
+		fmt.Print(" [d]iscard [K]eep")
 	}
-	fmt.Print(":")
+	fmt.Print(": ")
 
 	fmt.Scanln(&options)
 	// if err != nil || n != 1 {
