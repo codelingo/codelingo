@@ -49,7 +49,7 @@ var mockTenetCfg = &tenetCfg{
 		}, {
 			Name: "lingo-reviews/license",
 			Options: map[string]interface{}{
-				"license_header": "// MIT\n",
+				"header": "// MIT\n",
 			},
 		},
 	},

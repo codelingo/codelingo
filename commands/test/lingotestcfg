@@ -9,6 +9,6 @@
 [[tenet]]
 	url="github.com/lingo-reviews/tenets/license"
 	[tenet.options]
-		license_header="""
+		header="""
 // MIT
 """
