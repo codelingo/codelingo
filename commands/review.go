@@ -158,6 +158,7 @@ func reviewAction(c *cli.Context) {
 	}
 
 	for cfg, files := range reviewQueue {
+		// TODO(waigani) SCALE we need to support looots of files and tenets. Start using chans.
 		ts, err := tenets(c, cfg)
 		if err != nil {
 			oserrf(err.Error())
@@ -193,6 +194,7 @@ func reviewAction(c *cli.Context) {
 					}
 					files = append([]string{"--options", string(jsonOpts)}, files...)
 				}
+				// TODO(waigani) SCALE how many filenames can we handle?
 				reviewResult, err := tn.Review(files...)
 				if err != nil {
 					oserrf("error running review %s", err.Error())
