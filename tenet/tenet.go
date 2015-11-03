@@ -1,7 +1,9 @@
 package tenet
 
 import (
+	"bytes"
 	"fmt"
+	"text/template"
 
 	"github.com/codegangsta/cli"
 
@@ -37,9 +39,10 @@ func New(ctx *cli.Context, cfg Config) (Tenet, error) {
 }
 
 // Any returns an initialised tenet using any driver that is locally available.
-func Any(ctx *cli.Context, name string) (Tenet, error) {
+func Any(ctx *cli.Context, name string, options map[string]interface{}) (Tenet, error) {
 	cfg := driver.Common{
-		Name: name,
+		Name:    name,
+		Options: options,
 	}
 
 	// Try drivers in order of failure speed
@@ -56,4 +59,25 @@ func Any(ctx *cli.Context, name string) (Tenet, error) {
 	}
 
 	return nil, fmt.Errorf("No driver available for %s", name)
+}
+
+func RenderedDescription(t Tenet) (string, error) {
+	desc, err := t.Description()
+	if err != nil {
+		return "", err
+	}
+
+	tpl, err := template.New("desc template").Parse(desc)
+	if err != nil {
+		return "", err
+	}
+
+	v := t.GetOptions()
+
+	var rendered bytes.Buffer
+	if err = tpl.Execute(&rendered, v); err != nil {
+		return "", err
+	}
+
+	return rendered.String(), nil
 }
