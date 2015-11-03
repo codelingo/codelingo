@@ -109,7 +109,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	for _, group := range cfg.TenetGroups {
 		for _, tenetData := range group.Tenets {
 			// Try to get any installed tenet with matching name
-			t, err := tenet.Any(c, tenetData.Name)
+			t, err := tenet.Any(c, tenetData.Name, tenetData.Options)
 			if err != nil {
 				// Otherwise try the driver specified in config
 				t, err := tenet.New(c, tenetData)
@@ -126,7 +126,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 					return
 				}
 			}
-			d, err := t.Description()
+			d, err := tenet.RenderedDescription(t)
 			if err != nil {
 				oserrf(err.Error())
 				return
