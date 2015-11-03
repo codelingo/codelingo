@@ -17,7 +17,7 @@ const defaultTemplate = `# Tenets
 {{range .Groups}}
 {{.}}{{end}}`
 
-const defaultGroupTemplate = `## {{.GroupName}}
+const defaultGroupTemplate = `## {{.GroupName | Title}}
 {{range .All}}
 * {{.}}
 {{end}}
@@ -57,10 +57,17 @@ func writeDoc(c *cli.Context) {
 func makeTemplate(src string, fallback string) (*template.Template, error) {
 	var tpl *template.Template
 	var err error
+
+	// Make some text processing functions available
+	// TODO: Add more. How can we just give the user all of 'strings'?
+	var fnMap = template.FuncMap{"Title": strings.Title}
+
 	if src != "" {
 		tpl, err = template.ParseFiles(src)
+		// TODO: DEMOWARE - This panics on nil pointer - how to make it work?
+		// tpl.Funcs(fnMap)
 	} else {
-		tpl, err = template.New("doc template").Parse(fallback)
+		tpl, err = template.New("doc template").Funcs(fnMap).Parse(fallback)
 	}
 	if err != nil {
 		return nil, err
