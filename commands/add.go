@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var AddCMD = cli.Command{
@@ -72,7 +71,7 @@ func add(c *cli.Context) {
 		//}
 	}
 
-	cfg.AddTenet(tenet.Config{
+	cfg.AddTenet(TenetConfig{
 		Name:    imageName,
 		Driver:  c.String("driver"),
 		Options: opts,

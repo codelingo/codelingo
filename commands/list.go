@@ -8,7 +8,6 @@ import (
 	"path"
 
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var ListCMD = cli.Command{
@@ -44,7 +43,7 @@ func listAction(c *cli.Context) {
 
 }
 
-func listTenets(c *cli.Context) []tenet.Config {
+func listTenets(c *cli.Context) []TenetConfig {
 	cfgPath, err := tenetCfgPath(c)
 	if err != nil {
 		oserrf("could not read configuration: %s", err.Error())

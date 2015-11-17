@@ -8,16 +8,15 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
-	"github.com/lingo-reviews/dev/tenet"
+	"github.com/lingo-reviews/dev/api"
 	"github.com/skratchdot/open-golang/open"
 	"github.com/waigani/diffparser"
 )
 
 type IssueConfirmer struct {
-	confidence  tenet.Confidence
 	userConfirm bool
 	output      bool
-	inDiff      func(*tenet.Issue) bool
+	inDiff      func(*api.Issue) bool
 	// TODO(waigani) make this a func var instead
 	hostAbsBasePath string
 }
@@ -29,7 +28,6 @@ func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
 	}
 
 	cfm := IssueConfirmer{
-		confidence:      tenet.Confidence(c.Float64("confidence")),
 		userConfirm:     !c.Bool("keep-all"),
 		output:          c.String("output-fmt") != "none",
 		hostAbsBasePath: basePath,
@@ -58,21 +56,17 @@ func hostAbsBasePath(c *cli.Context) (string, error) {
 }
 
 // TODO(waigani) screen diff tenet side - see other diff comment.
-func newInDiffFunc(diff *diffparser.Diff) (func(*tenet.Issue) bool, error) {
+func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
 	diffChanges := diff.Changed()
 
-	// for _, f := range diff.Files {
-	// 	xxx.Dump(f.Mode) //== diffparser.NEW
-	// }
-
-	return func(issue *tenet.Issue) bool {
-		start := issue.Position.Start.Line
+	return func(issue *api.Issue) bool {
+		start := int(issue.Position.Start.Line)
 		end := start
-		if endLine := issue.Position.End.Line; endLine != 0 {
+		if endLine := int(issue.Position.End.Line); endLine != 0 {
 			end = endLine
 		}
 
-		filename := getDiffRootPath(issue.Filename())
+		filename := getDiffRootPath(issue.Position.Start.Filename)
 		if newLines, ok := diffChanges[filename]; ok {
 			for _, lineNo := range newLines {
 				if lineNo >= start && lineNo <= end {
@@ -109,10 +103,9 @@ var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
-func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
+func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 	if attempt == 0 {
-		if issue.Confidence < c.confidence ||
-			(c.inDiff != nil && !c.inDiff(issue)) {
+		if c.inDiff != nil && !c.inDiff(issue) {
 			return false
 		}
 		if !c.userConfirm {
@@ -145,7 +138,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 		}
 		fmt.Printf("application (%s):", defaultEditor)
 		fmt.Scanln(&app)
-		filename := c.hostFilePath(issue.Filename())
+		filename := c.hostFilePath(issue.Position.Start.Filename)
 		if app != "" {
 			if _, ok := understandsLines[app]; ok {
 				filename += fmt.Sprintf(":%d", issue.Position.Start.Line)
@@ -185,8 +178,8 @@ func (c *IssueConfirmer) hostFilePath(file string) string {
 }
 
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
-// representation of tenet.Issue.
-func FormatPlainText(issue *tenet.Issue) string {
+// representation of api.Issue.
+func FormatPlainText(issue *api.Issue) string {
 	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()

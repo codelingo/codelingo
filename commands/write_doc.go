@@ -11,6 +11,7 @@ import (
 	"github.com/codegangsta/cli"
 
 	"github.com/lingo-reviews/lingo/tenet"
+	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 const defaultTemplate = `# Tenets
@@ -107,21 +108,23 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	var ts []TenetMeta
 	gs := make(map[string]string)
 	for _, group := range cfg.TenetGroups {
-		for _, tenetData := range group.Tenets {
+		for _, tenetCfg := range group.Tenets {
 			// Try to get any installed tenet with matching name
-			t, err := tenet.Any(c, tenetData.Name, tenetData.Options)
+			t, err := tenet.Any(c, tenetCfg.Name, tenetCfg.Options)
 			if err != nil {
 				// Otherwise try the driver specified in config
-				t, err := tenet.New(c, tenetData)
+				t, err := tenet.New(c, &driver.Base{
+					Name:          tenetCfg.Name,
+					Driver:        tenetCfg.Driver,
+					Registry:      tenetCfg.Registry,
+					Tag:           tenetCfg.Tag,
+					ConfigOptions: tenetCfg.Options,
+				})
 				if err != nil {
 					oserrf(err.Error())
 					return
 				}
-				if err = t.InitDriver(); err != nil {
-					oserrf(err.Error())
-					return
-				}
-				if err = t.Pull(); err != nil {
+				if err = t.Pull(false); err != nil {
 					oserrf(err.Error())
 					return
 				}
@@ -132,7 +135,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 				return
 			}
 			ts = append(ts, TenetMeta{
-				VarName:     r.Replace(tenetData.Name),
+				VarName:     r.Replace(tenetCfg.Name),
 				GroupName:   r.Replace(group.Name),
 				Description: d,
 			})

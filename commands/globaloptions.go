@@ -68,6 +68,14 @@ var (
 		"tags",
 		"g",
 	}
+	registryFlg = flagName{
+		"registry",
+		"r",
+	}
+	driverFlg = flagName{
+		"driver",
+		"i",
+	}
 )
 
 func (f *flagName) String() string {

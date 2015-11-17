@@ -14,6 +14,7 @@ import (
 	"os/user"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
@@ -37,26 +38,44 @@ const (
 )
 
 type config struct {
-	Cascade     bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
-	Include     string         `toml:"include"`
-	Template    string         `toml:"template"`
-	TenetGroups []TenetGroup   `toml:"tenet_group"`
-	allTenets   []tenet.Config // TODO(waigani) see comment in AllTenets
+	Cascade     bool          `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
+	Include     string        `toml:"include"`
+	Template    string        `toml:"template"`
+	TenetGroups []TenetGroup  `toml:"tenet_group"`
+	allTenets   []TenetConfig // TODO(waigani) see comment in AllTenets
+	// the root dir from which the config was build.
+	buildRoot string
 }
 
 type TenetGroup struct {
-	Name     string         `toml:"name"`
-	Template string         `toml:"template"`
-	Tenets   []tenet.Config `toml:"tenet"`
+	Name     string        `toml:"name"`
+	Template string        `toml:"template"`
+	Tenets   []TenetConfig `toml:"tenet"`
 }
 
-func (c *config) AllTenets() []tenet.Config {
+type TenetConfig struct {
+	Name string `toml:"name"`
+
+	// Name of the driver in use
+	Driver string `toml:"driver"`
+
+	// Registry server to pull the image from
+	Registry string `toml:"registry"`
+
+	// Tag server to pull the image from
+	Tag string `toml:"tag"` // TODO(waigani) if we don't need this to pull, get rid of it.
+
+	// Config options for tenet
+	Options map[string]interface{} `toml:"options"`
+}
+
+func (c *config) AllTenets() []TenetConfig {
 	// TODO(waigani) quick work around. allTenets are the tenets built up
 	// after a cascade read of cfgs. Rework things so it's clear that we are
 	// either getting all tenets for one cfg or all tenets for all cfgs.
 	// We may need a new struct AllCfg or something?
 	s := seer{seen: map[string]bool{}}
-	var tenets []tenet.Config
+	var tenets []TenetConfig
 	for _, t := range c.allTenets {
 		if !s.Seen(t.Name) {
 			tenets = append(tenets, t)
@@ -107,7 +126,7 @@ func (c *config) RemoveTenetGroup(name string) {
 	c.TenetGroups = groups
 }
 
-func (c *config) AddTenet(t tenet.Config, group string) error {
+func (c *config) AddTenet(t TenetConfig, group string) error {
 	if !c.HasTenetGroup(group) {
 		c.AddTenetGroup(group)
 	}
@@ -147,7 +166,7 @@ func (c *config) RemoveTenet(name string, group string) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	var tenets []tenet.Config
+	var tenets []TenetConfig
 	for _, t := range c.AllTenets() {
 		if t.Name != name {
 			tenets = append(tenets, t)
@@ -195,10 +214,15 @@ func log(format string, a ...interface{}) {
 // Get a list of instantiated tenets from a config object.
 func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
-	for _, tenetData := range cfg.AllTenets() {
-		tenet, err := tenet.New(ctx, tenetData)
+	for _, tenetCfg := range cfg.AllTenets() {
+		tenet, err := tenet.New(ctx, &driver.Base{
+			Name:          tenetCfg.Name,
+			Driver:        tenetCfg.Driver,
+			Registry:      tenetCfg.Registry,
+			ConfigOptions: tenetCfg.Options,
+		})
 		if err != nil {
-			message := fmt.Sprintf("could not create tenet '%s': %s", tenetData.Name, err.Error())
+			message := fmt.Sprintf("could not create tenet '%s': %s", tenetCfg.Name, err.Error())
 			return nil, errors.Annotate(err, message)
 		}
 		ts = append(ts, tenet)
@@ -207,9 +231,20 @@ func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	return ts, nil
 }
 
-func allConfigs(dir string) (map[*config][]string, int, error) {
+// TODO(waigani) make this externally extendable.
+func fileExtFilterForLang(lang string) string {
+	switch strings.ToLower(lang) {
+	case "go", "golang":
+		return "*.go"
+	}
+	return "*"
+}
+
+// reviewQueue returns a map of all tenets waiting to review, grouped by
+// config. int is the total number of tenets waiting to review.
+func reviewQueue(dir string) (map[*config][]TenetConfig, int, error) {
 	totalTenets := 0
-	queue := make(map[*config][]string)
+	queue := make(map[*config][]TenetConfig)
 
 	// Starting with initial dir
 	// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
@@ -219,33 +254,16 @@ func allConfigs(dir string) (map[*config][]string, int, error) {
 	err := filepath.Walk(dir, func(relPath string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
+			// TODO(waigani) CONTINUE HERE. Add cfg.Root() string which
+			// returns root dir of cfg. Also use this for lingo which.
 			cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
 			if err != nil {
 				return err
 			}
 
-			// TODO: Use cfg.Include glob/regex?
-			files, err := filepath.Glob(path.Join(relPath, "*.go"))
-			if err != nil { // Non-fatal
-				return nil
-			}
-
-			fileList := []string{}
-			for _, f := range files {
-				file, err := os.Open(f)
-				if err != nil { // Non-fatal
-					break
-				}
-				if fi, err := file.Stat(); err == nil && !fi.IsDir() {
-					// fmt.Println("adding", f) // TODO: put behind a debug flag
-					fileList = append(fileList, f)
-				}
-			}
-
-			if len(fileList) > 0 {
-				totalTenets += len(cfg.AllTenets())
-
-				queue[cfg] = fileList
+			for _, tenetCfg := range cfg.AllTenets() {
+				totalTenets++
+				queue[cfg] = append(queue[cfg], tenetCfg)
 			}
 		}
 		return nil
@@ -263,7 +281,7 @@ func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, err
 		return readConfigFile(startCfgPath)
 	}
 
-	cfg := &config{}
+	cfg := &config{buildRoot: startCfgPath}
 
 	switch cascadeDir {
 	case CascadeUp, CascadeDown:
@@ -486,7 +504,7 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 	return cfgPath, nil
 }
 
-func hasTenet(tenets []tenet.Config, imageName string) bool {
+func hasTenet(tenets []TenetConfig, imageName string) bool {
 	for _, t := range tenets {
 		if t.Name == imageName {
 			return true
