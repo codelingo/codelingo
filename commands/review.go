@@ -160,6 +160,7 @@ func reviewAction(ctx *cli.Context) {
 	resultsc := make(chan *result, totalTenets)
 	var wg sync.WaitGroup
 	wg.Add(totalTenets)
+	grpclog.Println("totalTenets", totalTenets)
 	// wait for all results to come in before closing the chan.
 	go func() {
 		wg.Wait()
@@ -188,11 +189,11 @@ func reviewAction(ctx *cli.Context) {
 					// Finish early and close the issues chan if we've returned on an error.
 					if err != nil {
 						r.err = errors.Annotatef(err, "tenet %q errored while reviewing", r.tenetName)
+						grpclog.Print(r.err)
 						close(r.issuesc)
 
 						resultsc <- r
 					}
-					wg.Done()
 				}()
 
 				// Merge in options from command line.
@@ -234,6 +235,7 @@ func reviewAction(ctx *cli.Context) {
 						if err = s.Review(filesc, r.issuesc); err != nil {
 							return
 						}
+						wg.Done()
 					}(s, filesc)
 
 					// Send files to review.
