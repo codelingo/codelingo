@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/lingo-reviews/dev/api"
-	"google.golang.org/grpc/grpclog"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
@@ -97,8 +96,7 @@ func reviewAction(ctx *cli.Context) {
 	var err error
 	rQueue := make(map[*config][]TenetConfig)
 	totalTenets := 0
-
-	args := ctx.Args()
+	files := ctx.Args()
 
 	// create new diff to filter issues by.
 	if ctx.Bool("diff") {
@@ -109,13 +107,13 @@ func reviewAction(ctx *cli.Context) {
 		}
 	}
 
-	// if no files are named, add all files in diff.
-	if len(args) == 0 && diff != nil {
+	// if no files are named and we are diffig, add all files in diff.
+	if len(files) == 0 && diff != nil {
 		for _, f := range diff.Files {
 			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
 			// support reviewing the cfg also, right now it errors out.
 			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
-				args = append(args, f.NewName)
+				files = append(files, f.NewName)
 			}
 		}
 	}
@@ -127,8 +125,8 @@ func reviewAction(ctx *cli.Context) {
 		return
 	}
 
-	if len(args) > 0 {
-		for _, file := range args {
+	if len(files) > 0 {
+		for _, file := range files {
 			cfgPath := path.Join(path.Dir(file), defaultTenetCfgPath)
 			cfg, err := buildConfig(cfgPath, CascadeUp)
 			if err != nil {
@@ -142,7 +140,7 @@ func reviewAction(ctx *cli.Context) {
 			}
 		}
 	} else {
-		// TODO: Check for dirs amongst args
+		// TODO: Check for dirs amongst files
 		rQueue, totalTenets, err = reviewQueue(".")
 		if err != nil {
 			oserrf(err.Error())
@@ -176,12 +174,10 @@ func reviewAction(ctx *cli.Context) {
 
 			// setup results for this tenet.
 			r := &result{
-
 				tenetName: tenetCfg.Name,
 
 				// Setting a buffer will allow the tenet to continue
 				// to find and load issues while the user confirms.
-				// TODO(waigani) check that buffers work across GRPC.
 				issuesc: make(chan *api.Issue, 5),
 			}
 
@@ -248,15 +244,16 @@ func reviewAction(ctx *cli.Context) {
 						}
 
 						// Find files for this tenet.
-						search := path.Join(cfg.buildRoot, fileExtFilterForLang(lang))
+						regex, glob := fileExtFilterForLang(lang)
+						globSearch := path.Join(cfg.buildRoot, glob)
 
-						if fileMatches[search] == nil {
+						if fileMatches[globSearch] == nil {
 							// Use named files if passed in.
 							var fNames []string
-							if len(args) > 0 {
+							if len(files) > 0 {
 								// Add only those files that this tenet is interested in.
-								for _, fName := range args {
-									if m, err := regexp.MatchString(search, fName); !m {
+								for _, fName := range files {
+									if m, err := regexp.MatchString(regex, fName); !m {
 										if err != nil {
 											// TODO(waigani) log msg here
 										}
@@ -265,7 +262,7 @@ func reviewAction(ctx *cli.Context) {
 									fNames = append(fNames, fName)
 								}
 							} else {
-								fNames, err = filepath.Glob(search)
+								fNames, err = filepath.Glob(globSearch)
 								if err != nil { // Non-fatal.
 									// TODO(waigani) log: no files for this tenet to review.
 								}
@@ -292,7 +289,7 @@ func reviewAction(ctx *cli.Context) {
 								}
 								if fi, err := file.Stat(); err == nil && !fi.IsDir() {
 									// fmt.Println("adding", f) // TODO: put behind a debug flag
-									fileMatches[search] = append(fileMatches[search], f)
+									fileMatches[globSearch] = append(fileMatches[globSearch], f)
 								} else {
 									// TODO(waigani) log here.
 								}
@@ -300,16 +297,15 @@ func reviewAction(ctx *cli.Context) {
 							}
 
 							// sort the order of files so the context set by the tenet will be correct.
-							sort.Strings(fileMatches[search])
+							sort.Strings(fileMatches[globSearch])
 						}
 
 						// Push files to be reviewed by this tenet onto the chan
 						// and close the chan once done.
-						for _, fName := range fileMatches[search] {
+						for _, fName := range fileMatches[globSearch] {
 							filesc <- fName
 						}
 						close(filesc)
-						grpclog.Print("all files sent")
 					}(s, filesc)
 
 					// If there was an error, the defer func above will register
@@ -409,7 +405,7 @@ func allResults(c *cli.Context, cfm *review.IssueConfirmer, resultsc chan *resul
 }
 
 // TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
-// from a flag to a sub command which pipes args to git diff.
+// from a flag to a sub command which pipes files to git diff.
 func rawDiff() string {
 	c := exec.Command("git", "reset")
 	c.Run()

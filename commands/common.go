@@ -232,12 +232,12 @@ func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 }
 
 // TODO(waigani) make this externally extendable.
-func fileExtFilterForLang(lang string) string {
+func fileExtFilterForLang(lang string) (regex, glob string) {
 	switch strings.ToLower(lang) {
 	case "go", "golang":
-		return "*.go"
+		return ".*\\.go", "*.go"
 	}
-	return "*"
+	return ".*", "*"
 }
 
 // reviewQueue returns a map of all tenets waiting to review, grouped by

@@ -132,7 +132,7 @@ func (t *tenetService) Language() (string, error) {
 
 // Review will block and close the issues chan once the review is complete. It
 // should be run in a gorountine.
-func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue) error {
+func (t *tenetService) Review(filesc <-chan string, issues chan<- *api.Issue) error {
 	stream, err := t.client.Review(context.Background())
 	if err != nil {
 		return err
@@ -154,7 +154,7 @@ func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue)
 		}
 	}()
 
-	for filename := range filenames {
+	for filename := range filesc {
 		file := &api.File{Name: t.editFilename(filename)}
 		if err := stream.Send(file); err != nil {
 			grpclog.Println("failed to send a file %q: %v", filename, err)
@@ -162,9 +162,9 @@ func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue)
 		grpclog.Printf("sent file %q", filename)
 	}
 
-	stream.CloseSend()
 	<-waitc
 	close(issues)
+	stream.CloseSend()
 	return nil
 }
 
