@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/lingo-reviews/dev/api"
+	"google.golang.org/grpc/grpclog"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
@@ -310,7 +311,7 @@ func reviewAction(ctx *cli.Context) {
 
 					// If there was an error, the defer func above will register
 					// that error and finish up for us.
-					if err != nil {
+					if err == nil {
 						// fan in our review result. result contains an issue chan
 						// which will be listened on until closed.
 						resultsc <- r
@@ -320,9 +321,9 @@ func reviewAction(ctx *cli.Context) {
 			}(tenetCfg, r)
 		}
 	}
-
+	grpclog.Println("colating results")
 	issues, errs := allResults(ctx, cfm, resultsc)
-
+	grpclog.Println("review done")
 	// Print the final output to the user.
 	if len(errs) > 0 {
 		fmt.Println("The following errors were encounted:")
