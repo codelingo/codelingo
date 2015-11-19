@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"code.google.com/p/go/src/pkg/text/template"
+	"text/template"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
