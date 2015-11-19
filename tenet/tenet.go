@@ -10,6 +10,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/dev/api"
 	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/lingo-reviews/lingo/tenet/driver"
@@ -98,6 +99,7 @@ func (t *tenet) Service() (TenetService, error) {
 type tenetService struct {
 	service.Service
 	client       api.TenetClient
+	conn         *grpc.ClientConn
 	cfg          *api.Config
 	editFilename func(string) string
 	editIssue    func(*api.Issue) *api.Issue
@@ -112,13 +114,24 @@ func (t *tenetService) Start() error {
 	if err := s.Start(); err != nil {
 		return errors.Trace(err)
 	}
-	conn, err := s.DialGRPC()
+	var err error
+	t.conn, err = s.DialGRPC()
 	if err != nil {
 		return errors.Trace(err)
 	}
-	c := api.NewTenetClient(conn)
+	c := api.NewTenetClient(t.conn)
 	t.client = c
 	return t.configure()
+}
+
+// Stop closes the connection, if local, stops the backing service.
+func (t *tenetService) Stop() error {
+	grpclog.Println("closing conn")
+	err := t.conn.Close()
+	if err1 := t.Service.Stop(); err1 != nil {
+		err = err1
+	}
+	return err
 }
 
 func (t *tenetService) Language() (string, error) {
@@ -132,7 +145,7 @@ func (t *tenetService) Language() (string, error) {
 
 // Review will block and close the issues chan once the review is complete. It
 // should be run in a gorountine.
-func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue) error {
+func (t *tenetService) Review(filesc <-chan string, issues chan<- *api.Issue) error {
 	stream, err := t.client.Review(context.Background())
 	if err != nil {
 		return err
@@ -154,7 +167,7 @@ func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue)
 		}
 	}()
 
-	for filename := range filenames {
+	for filename := range filesc {
 		file := &api.File{Name: t.editFilename(filename)}
 		if err := stream.Send(file); err != nil {
 			grpclog.Println("failed to send a file %q: %v", filename, err)
@@ -162,9 +175,9 @@ func (t *tenetService) Review(filenames <-chan string, issues chan<- *api.Issue)
 		grpclog.Printf("sent file %q", filename)
 	}
 
-	stream.CloseSend()
 	<-waitc
 	close(issues)
+	stream.CloseSend()
 	return nil
 }
 
