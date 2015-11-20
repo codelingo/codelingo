@@ -1,7 +1,6 @@
 package tenet
 
 import (
-	"sort"
 	"testing"
 	"time"
 
@@ -64,34 +63,29 @@ func (s *dryRunSuite) TestReview(c *C) {
 		files <- f
 	}
 
+	close(files)
+
 	seenFilenames := []string{}
 l:
 	for {
 		select {
 		case issue, ok := <-issues:
 			if !ok {
-				// TODO: This branch is never reached, what's the right way to terminate?
 				// issues closed, we're done.
 				break l
 			}
-			// Filenames could come back in arbitrary order, check them after
+			// Check all filenames seen and in correct order on completion
 			seenFilenames = append(seenFilenames, issue.Position.Start.Filename)
 			c.Assert(issue.Name, Equals, "dryrun")
 			c.Assert(issue.Comment, Equals, "Dry Run Issue")
 			c.Assert(issue.LineText, Equals, "Your code here")
 		case <-time.After(3 * time.Second):
-			// TODO: Raising fatal here stops filenames being checked
-			//c.Fatal("timed out waiting for issues")
+			c.Fatal("timed out waiting for issues")
 			break l
 		}
 	}
 
-	sort.Strings(filenames)
-	sort.Strings(seenFilenames)
-
 	c.Assert(filenames, DeepEquals, seenFilenames)
-
-	close(files)
 }
 
 func (s *dryRunSuite) TestInfo(c *C) {
@@ -100,9 +94,9 @@ func (s *dryRunSuite) TestInfo(c *C) {
 	c.Assert(info, DeepEquals, &api.Info{
 		Name:        "dryrun",
 		Usage:       "test lingo and configurations",
-		Description: "test lingo and configurations",
+		Description: "test lingo and configurations ... description",
 		Language:    "*",
-		Version:     "1.0",
+		Version:     "0.1.0",
 	})
 }
 

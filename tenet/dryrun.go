@@ -51,9 +51,9 @@ func (s *dryRunService) Info() (*api.Info, error) {
 	return &api.Info{
 		Name:        "dryrun",
 		Usage:       "test lingo and configurations",
-		Description: "test lingo and configurations",
+		Description: "test lingo and configurations ... description",
 		Language:    "*",
-		Version:     "1.0",
+		Version:     "0.1.0",
 	}, nil
 }
 
