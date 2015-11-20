@@ -30,13 +30,33 @@ func (s *dryRunService) Stop() error {
 }
 
 func (s *dryRunService) Review(filesc <-chan string, issuesc chan<- *api.Issue) error {
+	fmt.Println("Dry Run: Starting review...")
+
+	for filename := range filesc {
+		fmt.Printf("Dry Run: Reviewing: %s\n", filename)
+		issuesc <- &api.Issue{
+			Name:     "dryrun",
+			Comment:  "Dry Run Issue",
+			LineText: "Your code here",
+			Position: &api.IssueRange{&api.Position{filename, 0, 1, 1}, &api.Position{filename, 0, 1, 1}},
+		}
+	}
+	close(issuesc)
+
+	fmt.Println("Dry Run: Finishing review")
 	return nil
 }
 
 func (s *dryRunService) Info() (*api.Info, error) {
-	return &api.Info{Name: "dryrun"}, nil
+	return &api.Info{
+		Name:        "dryrun",
+		Usage:       "test lingo and configurations",
+		Description: "test lingo and configurations",
+		Language:    "*",
+		Version:     "1.0",
+	}, nil
 }
 
 func (s *dryRunService) Language() (string, error) {
-	return "", nil
+	return "*", nil
 }
