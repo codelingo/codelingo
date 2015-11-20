@@ -63,7 +63,7 @@ func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
 	case "docker", "": // Default driver
 		d = &driver.Docker{Base: b}
 	case "dryrun":
-		d = &driver.DryRun{b}
+		return &dryRun{}, nil
 	case "binary":
 		d = &driver.Binary{b}
 	default:
