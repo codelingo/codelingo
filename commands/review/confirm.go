@@ -2,6 +2,8 @@ package review
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -9,7 +11,6 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/api"
-	"github.com/skratchdot/open-golang/open"
 	"github.com/waigani/diffparser"
 )
 
@@ -91,12 +92,27 @@ func getDiffRootPath(filename string) string {
 	return filename
 }
 
-// TODO(waigani) make this configurable.
-// understandsLines is a list of apps that understand line number prepended to
-// a filename.
-var understandsLines = map[string]bool{
-	"subl":    true,
-	"sublime": true,
+func openFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
+	app, err := exec.LookPath(editor)
+	if err != nil {
+		return nil, err
+	}
+
+	switch editor {
+	case "subl", "sublime":
+		return exec.Command(app, fmt.Sprintf("%s:%d", filename, line)), nil
+		// TODO(waigani) other editors?
+		// TODO(waigani) make the format a config var
+	}
+
+	// Making this default as vi, vim, nano, emacs all do it this way. These
+	// are all terminal apps, so take over stdout etc.
+	cmd := exec.Command(app, fmt.Sprintf("+%d", line), filename)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd, nil
 }
 
 var editor string
@@ -132,33 +148,32 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 	switch options {
 	case "o":
 		var app string
-		defaultEditor := "optional"
+		defaultEditor := "vi" // TODO(waigani) is vi an okay default?
 		if editor != "" {
 			defaultEditor = editor
 		}
 		fmt.Printf("application (%s):", defaultEditor)
 		fmt.Scanln(&app)
 		filename := c.hostFilePath(issue.Position.Start.Filename)
-		if app != "" {
-			if _, ok := understandsLines[app]; ok {
-				filename += fmt.Sprintf(":%d", issue.Position.Start.Line)
-			}
-			err := open.StartWith(filename, app)
-			if err != nil {
-				fmt.Println(err)
-			}
-			editor = app
-		} else {
-			var err error
-			if defaultEditor == "optional" {
-				err = open.Start(filename)
-			} else {
-				err = open.StartWith(filename, defaultEditor)
-			}
-			if err != nil {
-				fmt.Println(err)
-			}
+		if app == "" {
+			app = defaultEditor
 		}
+		// c := issue.Position.Start.Column // TODO(waigani) use column
+		l := issue.Position.Start.Line
+		cmd, err := openFileCmd(app, filename, l)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		if err = cmd.Start(); err != nil {
+			log.Println(err)
+		}
+		if err = cmd.Wait(); err != nil {
+			log.Println(err)
+		}
+
+		editor = app
+
 		c.Confirm(attempt, issue)
 	case "d":
 		return false

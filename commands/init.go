@@ -63,7 +63,7 @@ func initLingo(c *cli.Context) {
 		return
 	}
 
-	if err = ioutil.WriteFile(cfgPath, buf.Bytes(), 0664); err != nil {
+	if err = ioutil.WriteFile(cfgPath, buf.Bytes(), 0644); err != nil {
 		oserrf(err.Error())
 		return
 	}

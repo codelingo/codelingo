@@ -53,7 +53,7 @@ func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) str
 		}
 	}
 
-	err := ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0775))
+	err := ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0644))
 	if err != nil {
 		panic(errors.Errorf("could not write to file %s: %s", outputPath, err.Error()))
 	}

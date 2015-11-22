@@ -2,14 +2,12 @@ package commands
 
 import (
 	jc "github.com/juju/testing/checkers"
-	"github.com/waigani/xxx"
 	gc "gopkg.in/check.v1"
 )
 
 func (*CMDTest) TestRemoveCMD(c *gc.C) {
 	cfgPath, closer := testCfg(c)
 	defer closer()
-	xxx.Print(cfgPath)
 	tenetToRemove := tenet{Author: "lingo-reviews", Name: "license"}
 	ctx := mockContext(tenetCfgFlg.longArg(), cfgPath, "remove", tenetToRemove.String())
 

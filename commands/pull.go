@@ -3,8 +3,6 @@ package commands
 import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/lingo/tenet"
-	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 var PullCMD = cli.Command{
@@ -92,7 +90,7 @@ func pullAll(c *cli.Context) error {
 }
 
 func pullOne(c *cli.Context, name, driverName, registry string) error {
-	t, err := tenet.New(c, &driver.Base{
+	t, err := newTenet(c, TenetConfig{
 		Name:     name,
 		Driver:   driverName,
 		Registry: registry,
