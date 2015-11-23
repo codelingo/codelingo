@@ -1,8 +1,9 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/codegangsta/cli"
-	"github.com/waigani/xxx"
 )
 
 var ImportCMD = cli.Command{
@@ -17,6 +18,6 @@ var ImportCMD = cli.Command{
 
 `[1:],
 	Action: func(c *cli.Context) {
-		xxx.Print("init")
+		fmt.Println("import not implemented")
 	},
 }

@@ -19,6 +19,8 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+
+	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver"
 )
@@ -67,6 +69,17 @@ type TenetConfig struct {
 
 	// Config options for tenet
 	Options map[string]interface{} `toml:"options"`
+}
+
+// newTenet returns a new tenet.Tenet built from a cfg.
+func newTenet(ctx *cli.Context, tenetCfg TenetConfig) (tenet.Tenet, error) {
+	return tenet.New(ctx, &driver.Base{
+		Name:          tenetCfg.Name,
+		Driver:        tenetCfg.Driver,
+		Registry:      tenetCfg.Registry,
+		Tag:           tenetCfg.Tag,
+		ConfigOptions: tenetCfg.Options,
+	})
 }
 
 func (c *config) AllTenets() []TenetConfig {
@@ -206,11 +219,6 @@ func lingoWeb(uri string) url.URL {
 	}
 }
 
-// TODO: Better solution for logging: optionally to file, -v flag etc.
-func log(format string, a ...interface{}) {
-	fmt.Fprintf(stderr, format+"\n", a...)
-}
-
 // Get a list of instantiated tenets from a config object.
 func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
@@ -281,7 +289,7 @@ func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, err
 		return readConfigFile(startCfgPath)
 	}
 
-	cfg := &config{buildRoot: startCfgPath}
+	cfg := &config{buildRoot: filepath.Dir(startCfgPath)}
 
 	switch cascadeDir {
 	case CascadeUp, CascadeDown:
@@ -340,7 +348,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 		}
 	} else if !os.IsNotExist(err) {
 		// Just leave the current state of cfg on encountering an error
-		log("error reading file: %s", cfgPath)
+		log.Println("error reading file: %s", cfgPath)
 		return
 	}
 
@@ -363,7 +371,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 		for _, f := range files {
 			file, err := os.Open(f)
 			if err != nil {
-				log("error reading file: %s", file)
+				log.Println("error reading file: %s", file)
 				return
 			}
 			if fi, err := file.Stat(); err == nil && fi.IsDir() {

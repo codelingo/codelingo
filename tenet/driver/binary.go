@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -51,4 +52,14 @@ func userHomeDir() string {
 		return home
 	}
 	return os.Getenv("HOME")
+}
+
+func (b *Binary) EditFilename(filename string) (editedFilename string) {
+	var absPath string
+	var err error
+	if absPath, err = filepath.Abs(filename); err == nil {
+		return absPath
+	}
+	log.Printf("could not get absolute path for %q:%v", filename, err)
+	return filename
 }

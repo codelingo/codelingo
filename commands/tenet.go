@@ -13,7 +13,6 @@ import (
 
 	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/tenet"
-	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 // TenetCMD is a fallthrough CMD which treats command as the tenet name and
@@ -28,109 +27,150 @@ func TenetCMD(ctx *cli.Context, command string) {
 			break
 		}
 	}
-
 	if !commandIsTenet {
 		fmt.Println("command not found")
 		return
 	}
 
-	if err := runTenetCMD(ctx, command, cfg); err != nil {
+	tnCMDs, err := newTenetCMDs(ctx, cfg)
+	if err != nil {
 		oserrf(err.Error())
+		return
+	}
+	defer tnCMDs.closeService()
+
+	if err := tnCMDs.run(); err != nil {
+		oserrf(err.Error())
+		return
 	}
 	return
 }
 
-func runTenetCMD(ctx *cli.Context, command string, cfg TenetConfig) error {
-	var method string
-	args := ctx.Args()
+func (c *tenetCMDs) run() error {
+	method := "help"
+	args := c.ctx.Args()
 	if len(args[1:]) > 0 {
 		method = args[1]
 	}
 
 	switch method {
-	case "help", "":
-		var text string
-		var err error
+	case "help":
+		args := c.ctx.Args()
 		if len(args) > 3 {
-			text, err = cmdHelp(args[2])
-		} else {
-			info, err := tenetInfo(ctx, cfg)
-			if err != nil {
-				return errors.Trace(err)
-			}
-			text, err = help(info)
+			return c.printCmdHelp(args[2])
 		}
-		if err != nil {
-			return errors.Annotatef(err, "error running method %q", method)
-		}
-
-		fmt.Println(text)
+		return c.printHelp()
 	case "info":
-		info, err := tenetInfo(ctx, cfg)
-		if err != nil {
-			return errors.Trace(err)
-		}
-
-		text, err := formatOutput(info, infoTemplate)
-		if err != nil {
-			return errors.Trace(err)
-		}
-
-		fmt.Println(text)
+		return c.printInfo()
 	case "description":
 
-		info, err := tenetInfo(ctx, cfg)
+		info, err := c.info()
 		if err != nil {
 			return errors.Trace(err)
 		}
-
 		fmt.Println(info.Description)
-	case "review":
 
-		// s, err := openService(ctx, cfg)
-		// if err != nil {
-		// 	return errors.Trace(err)
-		// }
-		// defer s.Stop()
-		// s.Review(filesc, issuesc)
-		fmt.Println("not implemented")
-	default:
-		return errors.Errorf("tenet does not have method %q", method)
+	case "review":
+		return c.review()
+	}
+
+	return errors.Errorf("tenet does not have method %q", method)
+}
+
+type tenetCMDs struct {
+	ctx     *cli.Context
+	cfg     TenetConfig
+	tn      tenet.Tenet
+	service tenet.TenetService
+}
+
+func newTenetCMDs(ctx *cli.Context, cfg TenetConfig) (*tenetCMDs, error) {
+	tn, err := newTenet(ctx, cfg)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+
+	return &tenetCMDs{
+		ctx: ctx,
+		cfg: cfg,
+		tn:  tn,
+	}, nil
+}
+
+func (c *tenetCMDs) openService() (tenet.TenetService, error) {
+	if c.service == nil {
+		s, err := c.tn.OpenService()
+		if err != nil {
+			return nil, errors.Trace(err)
+		}
+		c.service = s
+	}
+	return c.service, nil
+}
+
+func (c *tenetCMDs) closeService() error {
+	if s := c.service; s != nil {
+		return s.Close()
 	}
 	return nil
 }
 
-// openService returns a started tenet micro-service. It needs to be
-// explicitly stopped.
-func openService(ctx *cli.Context, tenetCfg TenetConfig) (tenet.TenetService, error) {
-	t, err := tenet.New(ctx, &driver.Base{
-		Name:          tenetCfg.Name,
-		Driver:        tenetCfg.Driver,
-		Registry:      tenetCfg.Registry,
-		Tag:           tenetCfg.Tag,
-		ConfigOptions: tenetCfg.Options,
-	})
+func (c *tenetCMDs) printInfo() error {
+	info, err := c.info()
 	if err != nil {
-		return nil, errors.Trace(err)
+		return errors.Trace(err)
 	}
-	s, err := t.Service()
+	text, err := formatOutput(info, infoTemplate)
 	if err != nil {
-		return nil, errors.Trace(err)
+		return errors.Trace(err)
 	}
-	err = s.Start()
-	return s, err
+
+	fmt.Println(text)
+	return nil
 }
 
-func tenetInfo(ctx *cli.Context, cfg TenetConfig) (*api.Info, error) {
-	s, err := openService(ctx, cfg)
+func (c *tenetCMDs) info() (*api.Info, error) {
+	s, err := c.openService()
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	defer s.Stop()
-	return s.Info()
+	info, err := s.Info()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	return info, nil
 }
 
-func help(info *api.Info) (string, error) {
+func (c *tenetCMDs) printHelp() error {
+	var text string
+	var err error
+
+	info, err := c.info()
+	if err != nil {
+		return errors.Trace(err)
+	}
+	text, err = fmtHelp(info)
+	if err != nil {
+		return errors.Trace(err)
+	}
+
+	fmt.Println(text)
+	return nil
+}
+
+func (c *tenetCMDs) review() error {
+
+	return errors.New("not implemented")
+
+	// s, err := c.openService()
+	// if err != nil {
+	// 	return errors.Trace(err)
+	// }
+
+	// s.Review(filesc, issuesc)
+}
+
+func fmtHelp(info *api.Info) (string, error) {
 	h := struct {
 		*api.Info
 		Commands []*tenetCommand
@@ -141,13 +181,20 @@ func help(info *api.Info) (string, error) {
 	return formatOutput(h, helpTemplate)
 }
 
-func cmdHelp(cmdName string) (string, error) {
+func (c *tenetCMDs) printCmdHelp(cmdName string) error {
 	for _, cmd := range tenetCommands() {
 		if cmd.Name == cmdName {
-			return formatOutput(cmd, cmdHelpTemplate)
+			out, err := formatOutput(cmd, cmdHelpTemplate)
+			if err != nil {
+				return errors.Trace(err)
+			}
+			fmt.Print(out)
+			return nil
 		}
 	}
-	return fmt.Sprintf("no help found for %q", cmdName), nil
+
+	fmt.Printf("no help found for %q", cmdName)
+	return nil
 }
 
 func formatOutput(in interface{}, tmplt string) (helpStr string, _ error) {

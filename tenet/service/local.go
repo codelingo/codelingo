@@ -2,7 +2,6 @@ package service
 
 import (
 	"bufio"
-	"errors"
 	"net"
 	"os"
 	"os/exec"
@@ -11,8 +10,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/juju/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
+
+	"github.com/lingo-reviews/dev/tenet/log"
 )
 
 type local struct {
@@ -22,9 +24,13 @@ type local struct {
 	process    *os.Process
 }
 
+func init() {
+	grpclog.SetLogger(log.GetLogger())
+}
+
 // NewLocal allows you to run a program on the localhost as a micro-service.
 func NewLocal(program string, args ...string) Service {
-	grpclog.Println("NewLocal service")
+	log.Println("NewLocal service")
 	return &local{
 		program: program,
 		args:    args,
@@ -33,35 +39,46 @@ func NewLocal(program string, args ...string) Service {
 
 // StartService starts up the program as a micro-service server.
 func (l *local) Start() error {
+
+	// set a fixed socket and manually start process to help with debugging.
+	// l.socketAddr = "@00208"
+	// return nil
+
 	// Start up the mirco-service
+	log.Println("starting process", l.program)
+	log.Println(l.args)
 	cmd := exec.Command(l.program, l.args...)
 	p, err := cmd.StdoutPipe()
 	if err != nil {
-		return err
+		return errors.Trace(err)
 	}
 	if err := cmd.Start(); err != nil {
-		return err
+		return errors.Trace(err)
 	}
 
 	// Get the socket address from the server.
 	b := bufio.NewReader(p)
 	line, _, err := b.ReadLine()
 	if err != nil {
+		log.Println("unable to get socket address from server, stopping tenet")
 		l.Stop()
-		return err
+		return errors.Trace(err)
 	}
+
 	l.socketAddr = strings.TrimSuffix(string(line), "\n")
 	l.process = cmd.Process
-	grpclog.Println("starting process")
+
 	return nil
 }
 
 // StopService stops the backing tenet server. If Common as a non-nil
 // connection to the server, that will be closed.
 func (l *local) Stop() (err error) {
-	grpclog.Println("killing process")
-	if err = l.process.Kill(); err != nil {
-		grpclog.Fatalf("did not stop %s: %v", l.program, err)
+	if l.process != nil {
+		log.Println("killing process")
+		if err = l.process.Kill(); err != nil {
+			log.Fatalf("did not stop %s: %v", l.program, err)
+		}
 	}
 	return
 }
@@ -74,7 +91,7 @@ func (l *local) DialGRPC() (*grpc.ClientConn, error) {
 	if l.socketAddr == "" {
 		return nil, errors.New("socket address is empty. Is the service started?")
 	}
-	grpclog.Println("dialing server")
+	log.Println("dialing server")
 	return grpc.Dial(l.socketAddr, grpc.WithDialer(dialer()), grpc.WithInsecure())
 }
 
