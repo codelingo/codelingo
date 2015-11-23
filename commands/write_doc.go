@@ -143,7 +143,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 					return
 				}
 
-				d, err := renderedDescription(info)
+				d, err := renderedDescription(info, tenetCfg)
 				if err != nil {
 					oserrf(err.Error())
 					return
@@ -230,19 +230,14 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	}
 }
 
-func renderedDescription(info *api.Info) (string, error) {
+func renderedDescription(info *api.Info, cfg TenetConfig) (string, error) {
 	tpl, err := template.New("desc template").Parse(info.Description)
 	if err != nil {
 		return "", err
 	}
 
-	opts := make(map[string]string)
-	for _, opt := range info.Options {
-		opts[opt.Name] = opt.Value
-	}
-
 	var rendered bytes.Buffer
-	if err = tpl.Execute(&rendered, opts); err != nil {
+	if err = tpl.Execute(&rendered, cfg.Options); err != nil {
 		return "", err
 	}
 
