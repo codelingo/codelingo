@@ -15,17 +15,19 @@ func (d *dryRun) Pull(bool) error {
 	return nil
 }
 
-func (d *dryRun) Service() (TenetService, error) {
-	return &dryRunService{}, nil
+func (d *dryRun) OpenService() (TenetService, error) {
+	s := &dryRunService{}
+	s.start()
+	return s, nil
 }
 
-func (s *dryRunService) Start() error {
+func (s *dryRunService) start() error {
 	fmt.Println("Dry Run: Starting service...")
 	return nil
 }
 
-func (s *dryRunService) Stop() error {
-	fmt.Println("Dry Run: Stopping service")
+func (s *dryRunService) Close() error {
+	fmt.Println("Dry Run: Closing service")
 	return nil
 }
 
@@ -55,8 +57,4 @@ func (s *dryRunService) Info() (*api.Info, error) {
 		Language:    "*",
 		Version:     "0.1.0",
 	}, nil
-}
-
-func (s *dryRunService) Language() (string, error) {
-	return "*", nil
 }

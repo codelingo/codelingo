@@ -27,7 +27,7 @@ func (s *dryRunSuite) SetUpTest(c *C) {
 	s.tenet, err = New(nil, &driver.Base{Driver: "dryrun"})
 	c.Assert(err, IsNil)
 
-	s.service, err = s.tenet.Service()
+	s.service, err = s.tenet.OpenService()
 	c.Assert(err, IsNil)
 }
 
@@ -39,13 +39,8 @@ func (s *dryRunSuite) TestPull(c *C) {
 	c.Assert(err, IsNil)
 }
 
-func (s *dryRunSuite) TestStart(c *C) {
-	err := s.service.Start()
-	c.Assert(err, IsNil)
-}
-
-func (s *dryRunSuite) TestStop(c *C) {
-	err := s.service.Stop()
+func (s *dryRunSuite) TestClose(c *C) {
+	err := s.service.Close()
 	c.Assert(err, IsNil)
 }
 
@@ -98,10 +93,4 @@ func (s *dryRunSuite) TestInfo(c *C) {
 		Language:    "*",
 		Version:     "0.1.0",
 	})
-}
-
-func (s *dryRunSuite) TestLanguage(c *C) {
-	lang, err := s.service.Language()
-	c.Assert(err, IsNil)
-	c.Assert(lang, Equals, "*")
 }
