@@ -222,12 +222,12 @@ func Any(ctx *cli.Context, name string, options map[string]interface{}) (Tenet, 
 	}
 
 	// Try drivers in order of failure speed
-	if t, err := New(ctx, b); err != nil {
+	if t, err := New(ctx, b); err == nil {
 		return t, nil
 	}
 
 	b.Driver = "docker"
-	if t, err := New(ctx, b); err != nil {
+	if t, err := New(ctx, b); err == nil {
 		return t, nil
 	}
 
