@@ -2,7 +2,6 @@ package service
 
 import (
 	"bufio"
-	"errors"
 	"net"
 	"os"
 	"os/exec"
@@ -11,9 +10,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/lingo-reviews/dev/tenet/log"
+	"github.com/juju/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
+
+	"github.com/lingo-reviews/dev/tenet/log"
 )
 
 type local struct {
@@ -44,14 +45,15 @@ func (l *local) Start() error {
 	// return nil
 
 	// Start up the mirco-service
-	log.Println("starting process")
+	log.Println("starting process", l.program)
+	log.Println(l.args)
 	cmd := exec.Command(l.program, l.args...)
 	p, err := cmd.StdoutPipe()
 	if err != nil {
-		return err
+		return errors.Trace(err)
 	}
 	if err := cmd.Start(); err != nil {
-		return err
+		return errors.Trace(err)
 	}
 
 	// Get the socket address from the server.
@@ -60,7 +62,7 @@ func (l *local) Start() error {
 	if err != nil {
 		log.Println("unable to get socket address from server, stopping tenet")
 		l.Stop()
-		return err
+		return errors.Trace(err)
 	}
 
 	l.socketAddr = strings.TrimSuffix(string(line), "\n")

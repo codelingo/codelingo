@@ -89,8 +89,12 @@ func (t *tenet) OpenService() (TenetService, error) {
 		editIssue:    t.Driver.EditIssue,
 	}
 
-	err = s.start()
-	return s, err
+	if err := s.start(); err != nil {
+		// TODO(waigani) add retry logic here. 1. Keep retrying until service
+		// is up. 2. Keep retrying until service is connected.
+		return nil, errors.Trace(err)
+	}
+	return s, nil
 }
 
 // tenetService implements TenetService.
