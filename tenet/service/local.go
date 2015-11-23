@@ -13,6 +13,7 @@ import (
 
 	"github.com/lingo-reviews/dev/tenet/log"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/grpclog"
 )
 
 type local struct {
@@ -20,6 +21,10 @@ type local struct {
 	args       []string
 	socketAddr string
 	process    *os.Process
+}
+
+func init() {
+	grpclog.SetLogger(log.GetLogger())
 }
 
 // NewLocal allows you to run a program on the localhost as a micro-service.
@@ -39,6 +44,7 @@ func (l *local) Start() error {
 	// return nil
 
 	// Start up the mirco-service
+	log.Println("starting process")
 	cmd := exec.Command(l.program, l.args...)
 	p, err := cmd.StdoutPipe()
 	if err != nil {
@@ -58,9 +64,8 @@ func (l *local) Start() error {
 	}
 
 	l.socketAddr = strings.TrimSuffix(string(line), "\n")
-
 	l.process = cmd.Process
-	log.Println("starting process")
+
 	return nil
 }
 

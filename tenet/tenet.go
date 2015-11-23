@@ -126,6 +126,7 @@ func (t *tenetService) start() error {
 func (t *tenetService) Close() error {
 	log.Println("closing conn")
 	err := t.conn.Close()
+	log.Println("stopping service")
 	if err1 := t.Service.Stop(); err1 != nil {
 		err = err1
 	}
