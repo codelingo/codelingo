@@ -237,8 +237,10 @@ func (rs *reviews) startTenetReview(reviewRoot string, tenetCfg TenetConfig) *re
 	}
 	s, err := tn.OpenService()
 	if r.addErrOnErr(err) {
+		log.Print("got err:" + errors.ErrorStack(err))
 		return r
 	}
+	log.Print("Service finished opening")
 	r.service = s
 
 	// Merge in options from command line.
@@ -342,6 +344,9 @@ type result struct {
 
 func (r *result) addErrOnErr(err error) bool {
 	if err != nil {
+		// TODO(waigani) logging here is quick hack. Where do we print out
+		// errs?
+		log.Println(err.Error())
 		r.err = err
 	}
 	return false

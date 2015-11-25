@@ -7,7 +7,7 @@ import (
 	"runtime"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/lingo/tenet/service"
+	"github.com/lingo-reviews/lingo/tenet/driver/binary"
 )
 
 // Binary is a tenet driver to execute binary tenets found in ~/.lingo/tenets/<repo>/<tenet>
@@ -17,7 +17,7 @@ type Binary struct {
 
 // Check that a file exists at the expected location and is executable. Setup
 // the service, but don't start it.
-func (b *Binary) Service() (service.Service, error) {
+func (b *Binary) Service() (Service, error) {
 	tenetPath := b.binPath()
 
 	file, err := os.Open(tenetPath)
@@ -33,7 +33,7 @@ func (b *Binary) Service() (service.Service, error) {
 	}
 
 	// Note: the service needs to be started and stopped.
-	return service.NewLocal(tenetPath), nil
+	return binary.NewService(tenetPath), nil
 }
 
 func (b *Binary) binPath() string {

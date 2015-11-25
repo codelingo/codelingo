@@ -2,7 +2,6 @@ package driver
 
 import (
 	"github.com/lingo-reviews/dev/api"
-	"github.com/lingo-reviews/lingo/tenet/service"
 )
 
 type Options map[string]interface{}
@@ -23,7 +22,7 @@ type Base struct {
 	ConfigOptions Options
 
 	// service supports operations on the backing micro-service tenet server.
-	service service.Service
+	service Service
 }
 
 func (b *Base) EditFilename(filename string) (editedFilename string) {
