@@ -106,7 +106,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		}
 	}
 	if attempt == 0 {
-		fmt.Println(FormatPlainText(issue))
+		fmt.Println(c.FormatPlainText(issue))
 	}
 
 	attempt++
@@ -171,15 +171,21 @@ func (c *IssueConfirmer) hostFilePath(file string) string {
 
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
 // representation of api.Issue.
-func FormatPlainText(issue *api.Issue) string {
+func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
 	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
-	c := color.New(color.FgCyan).SprintfFunc()
+	cy := color.New(color.FgCyan).SprintfFunc()
 
-	address := m("%s-%d:%d", issue.Position.Start.String(), issue.Position.End.Line, issue.Position.End.Column)
+	filename := strings.TrimPrefix(issue.Position.Start.Filename, c.hostAbsBasePath)
+
+	addrFmtStr := fmt.Sprintf("%s:%d", filename, issue.Position.End.Line)
+	if col := issue.Position.End.Column; col != 0 {
+		addrFmtStr += fmt.Sprintf(":%d", col)
+	}
+	address := m(addrFmtStr)
 	comment := strings.Trim(issue.Comment, "\n")
-	comment = c(indent("\n"+comment+"\n", false))
+	comment = cy(indent("\n"+comment+"\n", false))
 
 	ctxBefore := indent(yf("\n...\n%s", issue.CtxBefore), false)
 	issueLines := indent(y("\n%s", issue.LineText), true)

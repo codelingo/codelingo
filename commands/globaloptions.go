@@ -35,8 +35,8 @@ var (
 		"u",
 	}
 	repoPathFlg = flagName{
-		"repo-path",
-		"p",
+		"start-dir",
+		"s",
 	}
 	outputTemplateFlg = flagName{
 		"output-template",
@@ -84,48 +84,42 @@ func (f *flagName) String() string {
 
 var GlobalOptions = []cli.Flag{
 	cli.StringFlag{
-		Name:   tenetCfgFlg.String(),
-		Value:  defaultTenetCfgPath,
-		Usage:  "path to the toml config file that details the tenets used. Defaults to " + defaultTenetCfgPath + " in current directory",
-		EnvVar: "LINGO_TENET_CONFIG_NAME",
-	}, cli.StringFlag{
-		Name:   outputTypeFlg.String(),
-		Value:  "plain-text",
-		Usage:  "json, json-pretty, yaml, toml or plain-text. If an output-template is set, it takes precedence",
-		EnvVar: "LINGO_OUTPUT_TYPE",
-	}, cli.StringFlag{
-		Name:   outputFlg.String(),
-		Value:  "cli",
-		Usage:  "filepath to write output to. By default output will be printed to the CLI",
-		EnvVar: "LINGO_OUTPUT",
-	}, cli.StringFlag{
-		Name:   repoURLFlg.String(),
-		Value:  "",
-		Usage:  "remote repository URL, if not supplied a local repository will be looked for",
-		EnvVar: "LINGO_REPO_URL",
-	}, cli.StringFlag{
 		Name:   repoPathFlg.String(),
 		Value:  ".",
-		Usage:  "path to local repository, defaults to current directory",
+		Usage:  "the directory to operate in, defaults to current directory",
 		EnvVar: "LINGO_REPO_PATH",
-	}, cli.StringFlag{
-		Name:   outputTemplateFlg.String(),
-		Value:  "",
-		Usage:  "a template for the output format",
-		EnvVar: "LINGO_OUTPUT_TEMPLATE",
-	}, cli.StringFlag{
+	},
+
+	cli.StringFlag{
 		Name:   lingoHomeFlg.String(),
 		Value:  defaultLingoHome(),
-		Usage:  "a directory of files needed for Lingo to operate",
+		Usage:  "a directory of files needed for Lingo to operate e.g. logs and binary tenets are stored here",
 		EnvVar: "LINGO_HOME",
-	}, cli.BoolFlag{
-		Name:   diffFlg.String(),
-		Usage:  "only report issues found in unstaged, uncommited work",
-		EnvVar: "LINGO_DIFF",
-		// TODO(waigani) move dump flag to review cmd flag
-	}, cli.BoolFlag{
-		Name:   dumpFlg.String(),
-		Usage:  "By default, Lingo prompts the user to confirm each issue found. dump skips this phase, dumping out all issues found.",
-		EnvVar: "LINGO-DUMP",
 	},
+
+	// TODO(waigani) implement or drop
+	// cli.StringFlag{
+	// 	Name:   tenetCfgFlg.String(),
+	// 	Value:  defaultTenetCfgPath,
+	// 	Usage:  "path to a .lingo to use. Defaults to " + defaultTenetCfgPath + " in current directory",
+	// 	EnvVar: "LINGO_TENET_CONFIG_NAME",
+	// },
+	// cli.StringFlag{
+	// 	Name:   outputTemplateFlg.String(),
+	// 	Value:  "",
+	// 	Usage:  "a template for the output format",
+	// 	EnvVar: "LINGO_OUTPUT_TEMPLATE",
+	// },
+	// cli.StringFlag{
+	// 	Name:   repoURLFlg.String(),
+	// 	Value:  "",
+	// 	Usage:  "remote repository URL, if not supplied a local repository will be looked for",
+	// 	EnvVar: "LINGO_REPO_URL",
+	// },
+	// cli.StringFlag{
+	// 	Name:   outputFlg.String(),
+	// 	Value:  "cli",
+	// 	Usage:  "filepath to write output to. By default output will be printed to the CLI",
+	// 	EnvVar: "LINGO_OUTPUT",
+	// },
 }

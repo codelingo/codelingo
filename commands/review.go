@@ -48,16 +48,6 @@ Review all files found in pwd, with two speific tenets:
 			Name:  "options",
 			Usage: "serialized JSON options from tenet.toml",
 		},
-		cli.Float64Flag{
-			Name:  "min-confidence",
-			Value: 0,
-			Usage: "the minimum confidence an issue needs to be included",
-		},
-		cli.IntFlag{
-			Name:  "wait",
-			Value: 20,
-			Usage: "how long to wait, in seconds, for a tenet to finish.",
-		},
 		cli.StringFlag{
 			Name:   "output",
 			Value:  "cli",
@@ -65,17 +55,11 @@ Review all files found in pwd, with two speific tenets:
 			EnvVar: "LINGO-OUTPUT",
 		},
 		cli.StringFlag{
-			Name:   "output-fmt",
-			Value:  "none",
-			Usage:  "json, json-pretty, yaml, toml or plain-text. If an output-template is set, it takes precedence",
+			Name:  "output-fmt",
+			Value: "none",
+			// TODO(waigani) support yaml toml. Also: if an output-template is set, it takes precedence.
+			Usage:  "json or json-pretty",
 			EnvVar: "LINGO-OUTPUT-FMT",
-		},
-		cli.StringFlag{
-			// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
-			Name:   "output-template",
-			Value:  "",
-			Usage:  "a template for the output format",
-			EnvVar: "LINGO-OUTPUT-TEMPLATE",
 		},
 		cli.BoolFlag{
 			Name:   "diff",
@@ -87,6 +71,24 @@ Review all files found in pwd, with two speific tenets:
 			Usage:  "turns off the default behaviour of stepping through each issue found and asking the user to confirm that it is an issue.",
 			EnvVar: "LINGO-KEEP-ALL",
 		},
+		cli.BoolFlag{
+			Name:   "find-all",
+			Usage:  "raise every issue tenets find",
+			EnvVar: "LINGO-KEEP-ALL",
+		},
+		// TODO(waigani) implement
+		// cli.IntFlag{
+		// 	Name:  "wait",
+		// 	Value: 20,
+		// 	Usage: "how long to wait, in seconds, for a tenet to finish.",
+		// },
+		// cli.StringFlag{
+		// 	// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
+		// 	Name:   "output-template",
+		// 	Value:  "",
+		// 	Usage:  "a template for the output format",
+		// 	EnvVar: "LINGO-OUTPUT-TEMPLATE",
+		// },
 	},
 	Action: reviewAction,
 }
