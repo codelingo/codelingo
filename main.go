@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/app"
 )
 
@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		if errors.Cause(err).Error() == "ui" {
 			if e, ok := err.(*errors.Err); ok {
-				fmt.Println(e.Underlying())
+				log.Println(e.Underlying())
 				os.Exit(1)
 			}
 		}

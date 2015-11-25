@@ -203,7 +203,7 @@ var exiter = func(code int) {
 
 func oserrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
-	fmt.Fprintf(stderr, format, a...)
+	log.Printf(format, a...)
 	exiter(1)
 }
 
