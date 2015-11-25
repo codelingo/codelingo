@@ -14,8 +14,8 @@ import (
 func New() *cli.App {
 	setCommandHelpTemplate()
 	app := cli.NewApp()
-	app.Name = "lingo"
-	app.Usage = "A tool kit for golang projects"
+	app.Name = "LINGO"
+	app.Usage = "A DevOps Tool for Software Engineering"
 	app.Before = commands.BeforeCMD
 	app.Commands = globalCommands
 	app.Flags = commands.GlobalOptions
