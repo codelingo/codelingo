@@ -38,7 +38,7 @@ func listAction(c *cli.Context) {
 	}
 
 	for _, t := range listTenets(c) {
-		fmt.Println(t.Name)
+		fmt.Printf("%s (%s)\n", t.Name, t.Driver)
 	}
 
 }

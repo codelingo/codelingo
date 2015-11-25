@@ -3,7 +3,6 @@ package review
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/lingo/util"
 	"github.com/waigani/diffparser"
 )
 
@@ -92,29 +92,6 @@ func getDiffRootPath(filename string) string {
 	return filename
 }
 
-func openFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
-	app, err := exec.LookPath(editor)
-	if err != nil {
-		return nil, err
-	}
-
-	switch editor {
-	case "subl", "sublime":
-		return exec.Command(app, fmt.Sprintf("%s:%d", filename, line)), nil
-		// TODO(waigani) other editors?
-		// TODO(waigani) make the format a config var
-	}
-
-	// Making this default as vi, vim, nano, emacs all do it this way. These
-	// are all terminal apps, so take over stdout etc.
-	cmd := exec.Command(app, fmt.Sprintf("+%d", line), filename)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	return cmd, nil
-}
-
 var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
@@ -160,7 +137,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		}
 		// c := issue.Position.Start.Column // TODO(waigani) use column
 		l := issue.Position.Start.Line
-		cmd, err := openFileCmd(app, filename, l)
+		cmd, err := util.OpenFileCmd(app, filename, l)
 		if err != nil {
 			fmt.Println(err)
 		}
