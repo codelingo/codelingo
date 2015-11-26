@@ -186,7 +186,7 @@ func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) e
 				if err := stream.Send(file); err != nil {
 					log.Println("failed to send a file %q: %v", filename, err)
 				}
-				log.Printf("sent file %q", filename)
+				log.Printf("sent file %q\n", filename)
 			case <-time.After(10 * time.Second):
 				log.Fatal("timed out waiting for a filename")
 			}
