@@ -8,6 +8,8 @@ import (
 	"path"
 )
 
+// TODO(anyone): Change this back to '.lingo' after making config loader check if
+//               .lingo is file (not dir) before reading.
 const (
 	defaultHome = ".lingo_home"
 )
