@@ -257,41 +257,6 @@ func fileExtFilterForLang(lang string) (regex, glob string) {
 	return ".*", "*"
 }
 
-// reviewQueue returns a map of all tenets waiting to review, grouped by
-// config. int is the total number of tenets waiting to review.
-// func reviewQueue(dir string) (map[*config][]TenetConfig, int, error) {
-// 	totalTenets := 0
-// 	queue := make(map[*config][]TenetConfig)
-
-// 	// Starting with initial dir
-// 	// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
-// 	// - use found cfg.Include to find files in that dir
-// 	// - insert cfg->files into map
-// 	// - keep count of total files for channel buffer
-// 	err := filepath.Walk(dir, func(relPath string, info os.FileInfo, err error) error {
-// 		if info.IsDir() {
-// 			// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
-// 			// TODO(waigani) CONTINUE HERE. Add cfg.Root() string which
-// 			// returns root dir of cfg. Also use this for lingo which.
-// 			cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			for _, tenetCfg := range cfg.AllTenets() {
-// 				totalTenets++
-// 				queue[cfg] = append(queue[cfg], tenetCfg)
-// 			}
-// 		}
-// 		return nil
-// 	})
-// 	if err != nil {
-// 		return nil, 0, err
-// 	}
-
-// 	return queue, totalTenets, nil
-// }
-
 // Combine cascaded configuration files into a single config object.
 func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, error) {
 	if cascadeDir == CascadeNone {

@@ -127,6 +127,9 @@ type reviewStream struct {
 	issuesc    chan *api.Issue
 }
 
+// reviewQueue reads a channel of mappings and returns two output channels. The first receives new
+// review objects that are generated when a new unique tenet config is encountered, the second is
+// for each file/config pair to be reviewed and points back to a review object by hash.
 func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-chan reviewStream, <-chan pendingReview) {
 	reviews := make(map[string]reviewStream)
 
@@ -137,7 +140,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 		for m := range mappings {
 			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
 			for _, tc := range m.cfg.AllTenets() {
-				// Instantiate a tenet and run service from the config if we haven't seen it before
+				// Open the tenet service if we haven't seen this config before
 				configHash := tc.hash()
 				r, found := reviews[configHash]
 				if !found {
