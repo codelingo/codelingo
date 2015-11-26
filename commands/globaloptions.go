@@ -1,6 +1,9 @@
 package commands
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/util"
+)
 
 type flagName struct {
 	long  string
@@ -92,7 +95,7 @@ var GlobalOptions = []cli.Flag{
 
 	cli.StringFlag{
 		Name:   lingoHomeFlg.String(),
-		Value:  defaultLingoHome(),
+		Value:  util.MustLingoHome(),
 		Usage:  "a directory of files needed for Lingo to operate e.g. logs and binary tenets are stored here",
 		EnvVar: "LINGO_HOME",
 	},

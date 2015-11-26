@@ -3,17 +3,18 @@ package commands
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 var ListCMD = cli.Command{
 	Name:        "list",
+	Aliases:     []string{"ls"},
 	Usage:       "list tenets",
-	Description: "Lists all tenets added to tenet.toml run.",
+	Description: "Lists all tenets added to .lingo run.",
 	Flags: []cli.Flag{
 		cli.BoolFlag{
 			Name:  "installed",
@@ -28,7 +29,7 @@ func listAction(c *cli.Context) {
 	// TODO(waigani) DEMOWARE
 	if c.Bool("installed") {
 		var stdout bytes.Buffer
-		cmd := exec.Command("tree", path.Join(os.Getenv("HOME"), ".lingo/tenets/"))
+		cmd := exec.Command("tree", filepath.Join(util.MustLingoHome(), "tenets"))
 		cmd.Stdout = &stdout
 		// cmd.Stderr = &stderr
 		cmd.Run()

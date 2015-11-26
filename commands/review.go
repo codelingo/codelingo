@@ -28,7 +28,7 @@ import (
 
 var ReviewCMD = cli.Command{
 	Name:  "review",
-	Usage: "review code following tenets in tenet.toml",
+	Usage: "review code following tenets in .lingo",
 	Description: `
 
 Review all files found in pwd, following tenets in .lingo of pwd or parent directory:
@@ -39,14 +39,14 @@ Review all files found in pwd, with two speific tenets:
 	lingoreviews/space-after-forward-slash \
 	lingoreviews/unused-args"
 
-	This command ignores any tenets in any tenet.toml files.
+	This command ignores any tenets in any .lingo files.
 
 `[1:],
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			// TODO(waigani) interactively set options for tenet.
 			Name:  "options",
-			Usage: "serialized JSON options from tenet.toml",
+			Usage: "serialized JSON options from .lingo",
 		},
 		cli.StringFlag{
 			Name:   "output",
@@ -115,9 +115,9 @@ func reviewAction(ctx *cli.Context) {
 	// if no files are named and we are diffig, add all files in diff.
 	if len(files) == 0 && diff != nil {
 		for _, f := range diff.Files {
-			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
+			// TODO(waigani) DEMOWARE make ".lingo" a cfg var. We should
 			// support reviewing the cfg also, right now it errors out.
-			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
+			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, ".lingo") {
 				files = append(files, f.NewName)
 			}
 		}

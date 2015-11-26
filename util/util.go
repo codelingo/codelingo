@@ -4,6 +4,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
+	"path"
+)
+
+const (
+	defaultHome = ".lingo_home"
 )
 
 func OpenFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
@@ -27,4 +33,32 @@ func OpenFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
 	cmd.Stderr = os.Stderr
 
 	return cmd, nil
+}
+
+func MustLingoHome() string {
+	lHome, err := LingoHome()
+	if err != nil {
+		panic(err)
+	}
+	return lHome
+}
+
+func LingoHome() (string, error) {
+	if lHome := os.Getenv("LINGO_HOME"); lHome != "" {
+		return lHome, nil
+	}
+	home, err := UserHome()
+	if err != nil {
+		return "", err
+	}
+
+	return path.Join(home, defaultHome), nil
+}
+
+func UserHome() (string, error) {
+	usr, err := user.Current()
+	if err != nil {
+		return "", err
+	}
+	return usr.HomeDir, nil
 }

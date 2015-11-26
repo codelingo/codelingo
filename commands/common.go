@@ -19,14 +19,16 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
-
 	"github.com/lingo-reviews/dev/tenet/log"
+
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 const (
-	defaultTenetCfgPath = "tenet.toml"
+	// TODO(waigani) move this into util
+	defaultTenetCfgPath = ".lingo"
 )
 
 type CascadeDirection int
@@ -445,23 +447,6 @@ func parseOptions(c *cli.Context) (map[string]driver.Options, error) {
 	return commandOptions, nil
 }
 
-func userHome() (string, error) {
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-	return usr.HomeDir, nil
-}
-
-func defaultLingoHome() string {
-	home, err := userHome()
-	if err != nil {
-		oserrf(err.Error())
-		return ""
-	}
-	return path.Join(home, ".lingo")
-}
-
 // TODO: TECHDEBT Check if commented code will be needed and prune as appropriate
 // func tenetHome(c *cli.Context) string {
 // 	home := c.GlobalString(lingoHomeFlg.long)
@@ -497,13 +482,17 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 				if err != nil {
 					return "", err
 				}
-				defaultTenets := path.Join(usr.HomeDir, ".lingo", defaultTenetCfgPath)
+
+				lHome, err := util.LingoHome()
+				if err != nil {
+					return "", errors.Trace(err)
+				}
+				defaultTenets := path.Join(usr.HomeDir, lHome, defaultTenetCfgPath)
 				if _, err := os.Stat(defaultTenets); err != nil {
 					return "", err
 				}
 				return defaultTenets, nil
 			}
-
 			parent := path.Dir(path.Dir(dir))
 			return tenetCfgPathRecusive(parent + "/" + defaultTenetCfgPath)
 		}
