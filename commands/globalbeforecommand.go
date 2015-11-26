@@ -17,7 +17,7 @@ func BeforeCMD(c *cli.Context) error {
 		currentCMDName = args.First()
 	}
 
-	// ensure we have a tenet.toml file
+	// ensure we have a .lingo file
 	standalone := false
 	for _, c := range standaloneCommands {
 		if c == currentCMDName {
@@ -27,7 +27,7 @@ func BeforeCMD(c *cli.Context) error {
 	}
 	if !standalone {
 		if cfgPath, _ := tenetCfgPath(c); cfgPath == "" {
-			return errors.Wrap(errors.New("No tenet.toml configuration found. Run `lingo init` to create a tenet.toml file in the current directory"), errors.New("ui"))
+			return errors.Wrap(errors.New("No .lingo configuration found. Run `lingo init` to create a .lingo file in the current directory"), errors.New("ui"))
 		}
 	}
 

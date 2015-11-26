@@ -7,7 +7,6 @@ import (
 
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
-	"github.com/waigani/xxx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 
@@ -35,9 +34,6 @@ func NewService(tenetName string) (*service, error) {
 }
 
 func (s *service) Start() error {
-	o := xxx.CaptureStdOutAndErr()
-	xxx.Stack()
-	log.Print(o())
 	log.Print("docker.service.Start")
 	c, err := s.client()
 	log.Print("41")

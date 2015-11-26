@@ -3,4 +3,4 @@
 set -e -x
 
 pathname=`pwd`
-go build -o ~/.lingo/tenets/lingoreviews/$(basename $pathname)
+go build -o ~/.lingo_home/tenets/lingoreviews/$(basename $pathname)

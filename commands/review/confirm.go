@@ -3,7 +3,6 @@ package review
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/lingo/util"
 	"github.com/waigani/diffparser"
 )
 
@@ -92,29 +92,6 @@ func getDiffRootPath(filename string) string {
 	return filename
 }
 
-func openFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
-	app, err := exec.LookPath(editor)
-	if err != nil {
-		return nil, err
-	}
-
-	switch editor {
-	case "subl", "sublime":
-		return exec.Command(app, fmt.Sprintf("%s:%d", filename, line)), nil
-		// TODO(waigani) other editors?
-		// TODO(waigani) make the format a config var
-	}
-
-	// Making this default as vi, vim, nano, emacs all do it this way. These
-	// are all terminal apps, so take over stdout etc.
-	cmd := exec.Command(app, fmt.Sprintf("+%d", line), filename)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	return cmd, nil
-}
-
 var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
@@ -129,7 +106,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		}
 	}
 	if attempt == 0 {
-		fmt.Println(FormatPlainText(issue))
+		fmt.Println(c.FormatPlainText(issue))
 	}
 
 	attempt++
@@ -160,7 +137,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		}
 		// c := issue.Position.Start.Column // TODO(waigani) use column
 		l := issue.Position.Start.Line
-		cmd, err := openFileCmd(app, filename, l)
+		cmd, err := util.OpenFileCmd(app, filename, l)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -194,15 +171,21 @@ func (c *IssueConfirmer) hostFilePath(file string) string {
 
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
 // representation of api.Issue.
-func FormatPlainText(issue *api.Issue) string {
+func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
 	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
-	c := color.New(color.FgCyan).SprintfFunc()
+	cy := color.New(color.FgCyan).SprintfFunc()
 
-	address := m("%s-%d:%d", issue.Position.Start.String(), issue.Position.End.Line, issue.Position.End.Column)
+	filename := strings.TrimPrefix(issue.Position.Start.Filename, c.hostAbsBasePath)
+
+	addrFmtStr := fmt.Sprintf("%s:%d", filename, issue.Position.End.Line)
+	if col := issue.Position.End.Column; col != 0 {
+		addrFmtStr += fmt.Sprintf(":%d", col)
+	}
+	address := m(addrFmtStr)
 	comment := strings.Trim(issue.Comment, "\n")
-	comment = c(indent("\n"+comment+"\n", false))
+	comment = cy(indent("\n"+comment+"\n", false))
 
 	ctxBefore := indent(yf("\n...\n%s", issue.CtxBefore), false)
 	issueLines := indent(y("\n%s", issue.LineText), true)

@@ -63,14 +63,6 @@ func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) str
 func format(outputFmt OutputFormat, issues []*api.Issue) bytes.Buffer {
 	var b bytes.Buffer
 	switch outputFmt {
-	case plainText:
-		if len(issues) == 0 {
-			fmt.Fprintln(&b, "No issues found")
-			break
-		}
-		for _, issue := range issues {
-			fmt.Fprintln(&b, FormatPlainText(issue))
-		}
 	case jsonPretty:
 		formatted, err := json.MarshalIndent(issues, "", "\t")
 		if err != nil {

@@ -202,6 +202,10 @@ func (t *tenetService) Info() (*api.Info, error) {
 		if err != nil {
 			return nil, errors.Trace(err)
 		}
+
+		if i.Version == "" {
+			i.Version = "0.0.0"
+		}
 		t.info = i
 	}
 	return t.info, nil

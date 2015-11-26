@@ -27,7 +27,7 @@ func init() {
 	grpclog.SetLogger(log.GetLogger())
 }
 
-// NewLocal allows you to run a program on the servicehost as a micro-service.
+// NewService allows you to run a program on the localhost as a micro-service.
 func NewService(program string, args ...string) *service {
 	log.Println("NewLocal service")
 	return &service{

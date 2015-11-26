@@ -28,7 +28,7 @@ import (
 
 var ReviewCMD = cli.Command{
 	Name:  "review",
-	Usage: "review code following tenets in tenet.toml",
+	Usage: "review code following tenets in .lingo",
 	Description: `
 
 Review all files found in pwd, following tenets in .lingo of pwd or parent directory:
@@ -39,24 +39,14 @@ Review all files found in pwd, with two speific tenets:
 	lingoreviews/space-after-forward-slash \
 	lingoreviews/unused-args"
 
-	This command ignores any tenets in any tenet.toml files.
+	This command ignores any tenets in any .lingo files.
 
 `[1:],
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			// TODO(waigani) interactively set options for tenet.
 			Name:  "options",
-			Usage: "serialized JSON options from tenet.toml",
-		},
-		cli.Float64Flag{
-			Name:  "min-confidence",
-			Value: 0,
-			Usage: "the minimum confidence an issue needs to be included",
-		},
-		cli.IntFlag{
-			Name:  "wait",
-			Value: 20,
-			Usage: "how long to wait, in seconds, for a tenet to finish.",
+			Usage: "serialized JSON options from .lingo",
 		},
 		cli.StringFlag{
 			Name:   "output",
@@ -65,17 +55,11 @@ Review all files found in pwd, with two speific tenets:
 			EnvVar: "LINGO-OUTPUT",
 		},
 		cli.StringFlag{
-			Name:   "output-fmt",
-			Value:  "none",
-			Usage:  "json, json-pretty, yaml, toml or plain-text. If an output-template is set, it takes precedence",
+			Name:  "output-fmt",
+			Value: "none",
+			// TODO(waigani) support yaml toml. Also: if an output-template is set, it takes precedence.
+			Usage:  "json or json-pretty",
 			EnvVar: "LINGO-OUTPUT-FMT",
-		},
-		cli.StringFlag{
-			// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
-			Name:   "output-template",
-			Value:  "",
-			Usage:  "a template for the output format",
-			EnvVar: "LINGO-OUTPUT-TEMPLATE",
 		},
 		cli.BoolFlag{
 			Name:   "diff",
@@ -87,6 +71,24 @@ Review all files found in pwd, with two speific tenets:
 			Usage:  "turns off the default behaviour of stepping through each issue found and asking the user to confirm that it is an issue.",
 			EnvVar: "LINGO-KEEP-ALL",
 		},
+		cli.BoolFlag{
+			Name:   "find-all",
+			Usage:  "raise every issue tenets find",
+			EnvVar: "LINGO-KEEP-ALL",
+		},
+		// TODO(waigani) implement
+		// cli.IntFlag{
+		// 	Name:  "wait",
+		// 	Value: 20,
+		// 	Usage: "how long to wait, in seconds, for a tenet to finish.",
+		// },
+		// cli.StringFlag{
+		// 	// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
+		// 	Name:   "output-template",
+		// 	Value:  "",
+		// 	Usage:  "a template for the output format",
+		// 	EnvVar: "LINGO-OUTPUT-TEMPLATE",
+		// },
 	},
 	Action: reviewAction,
 }
@@ -113,9 +115,9 @@ func reviewAction(ctx *cli.Context) {
 	// if no files are named and we are diffig, add all files in diff.
 	if len(files) == 0 && diff != nil {
 		for _, f := range diff.Files {
-			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
+			// TODO(waigani) DEMOWARE make ".lingo" a cfg var. We should
 			// support reviewing the cfg also, right now it errors out.
-			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
+			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, ".lingo") {
 				files = append(files, f.NewName)
 			}
 		}

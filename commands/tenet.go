@@ -124,7 +124,6 @@ func (c *tenetCMDs) printInfo() error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-
 	fmt.Println(text)
 	return nil
 }
@@ -236,24 +235,24 @@ DESCRIPTION:
 `
 
 var infoTemplate = `NAME:
-   {{.Name}}
+	{{.Name}}
 LANGUAGE:
 	{{.Language}}
 USAGE:
 	{{.Usage}}
 VERSION:
-	{{.Version}}
-METRICS:
-	{{.Metrics}}
-TAGS:
-	{{.Tags}}
-{{if .Options}}OPTIONS:
-
+	{{.Version}}{{if .Options}}
+OPTIONS:
 	The following option(s) can be set in .lingo or with the --options flag when
 	running a review:
-
 {{range .Options}}
-	{{.Name}} ({{.Value}}) - {{.Usage}}
-	{{end}}
+	- {{.Name}} ("{{.Value}}"): {{.Usage}}
+{{end}}
+{{end}}{{if .Metrics}}
+METRICS:
+	{{.Metrics}}
+{{end}}{{if .Tags}}
+TAGS:
+	{{.Tags}}
 {{end}}
 `
