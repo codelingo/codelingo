@@ -9,7 +9,7 @@ import (
 
 var EditCMD = cli.Command{
 	Name:  "edit",
-	Usage: "edit the configuration file",
+	Usage: "edit the .lingo file",
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:   "editor, e",

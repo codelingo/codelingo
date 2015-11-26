@@ -14,7 +14,7 @@ import (
 
 var InitCMD = cli.Command{
 	Name:   "init",
-	Usage:  "create a " + defaultTenetCfgPath + " config file in current or specified directory",
+	Usage:  "create a " + defaultTenetCfgPath + " config file in the current directory",
 	Action: initLingo,
 }
 

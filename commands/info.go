@@ -4,7 +4,7 @@ import "github.com/codegangsta/cli"
 
 var InfoCMD = cli.Command{
 	Name:  "info",
-	Usage: "print information about a tenet",
+	Usage: "show information about a tenet",
 	Description: `
 	"lingo info <tenet-name>"
 `[1:],
