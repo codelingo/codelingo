@@ -36,7 +36,7 @@ import (
 	"github.com/codegangsta/cli"
 
 	"github.com/lingo-reviews/dev/api"
-	"github.com/lingo-reviews/dev/tenet/log"
+	// "github.com/lingo-reviews/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/tenet"
 )
@@ -128,19 +128,22 @@ type pendingReview struct {
 	filePath   string
 }
 
-type review struct {
-	service tenet.TenetService
-	filesc  chan string
-	issuesc chan *api.Issue
+type reviewStream struct {
+	configHash string
+	service    tenet.TenetService
+	filesc     chan string
+	issuesc    chan *api.Issue
 }
 
-var reviews = make(map[string]review)
+func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap) (<-chan reviewStream, <-chan pendingReview) {
+	reviews := make(map[string]reviewStream)
 
-func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap) <-chan pendingReview {
-	out := make(chan pendingReview)
+	reviewChannel := make(chan reviewStream)
+	pendingChannel := make(chan pendingReview)
+
 	go func() {
 		for m := range mappings {
-			// Glob all the files in the associated dirictories for this config, and assign to each tenet by hash
+			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
 			for _, tc := range m.cfg.AllTenets() {
 				// Instantiate a tenet and run service from the config if we haven't seen it before
 				configHash := tc.hash()
@@ -148,49 +151,37 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap) <-chan pendingReview 
 				if !found {
 					tn, _ := newTenet(ctx, tc)     // TODO: Handle error
 					service, _ := tn.OpenService() // TODO: Handle error
-					r = review{
-						service: service,
-						filesc:  make(chan string, 1),
-						issuesc: make(chan *api.Issue),
-						// TODO: go func that closes filesc somehow
+					r = reviewStream{
+						configHash: configHash,
+						service:    service,
+						filesc:     make(chan string),
+						issuesc:    make(chan *api.Issue),
 					}
 					service.Review(r.filesc, r.issuesc)
 					reviews[configHash] = r
-					fmt.Println("Started:", tc.Name) // TODO: Remove
-				} else {
-					fmt.Println("Found:", tc.Name) // TODO: Remove
+
+					reviewChannel <- r
 				}
 
+				// TODO: Can cache this on reviewStream instead of asking for each file
 				info, _ := r.service.Info() // TODO: Handle error
 
 				for _, d := range m.dirs {
 					_, globPattern := fileExtFilterForLang(info.Language)
 					files, _ := filepath.Glob(path.Join(d, globPattern)) // TODO: Handle error
 					for _, f := range files {
-						out <- pendingReview{configHash, f}
+						pendingChannel <- pendingReview{configHash, f}
 					}
 				}
 			}
 		}
-		close(out)
+		close(pendingChannel)
+		close(reviewChannel)
 	}()
-	return out
+	return reviewChannel, pendingChannel
 }
 
-// type result struct {
-// 	tenetName string
-// 	service   tenet.TenetService
-// 	issuesc   chan *api.Issue
-// 	err       error
-// }
-
-// func runReviews(queue <-chan pendingReview) <-chan result {
-
-// }
-
 func reviewAction(ctx *cli.Context) {
-	fmt.Println("Running review")
-
 	// TODO: file args input, as files and dirs
 
 	// Map of project config filenames -> directories they control
@@ -214,74 +205,42 @@ func reviewAction(ctx *cli.Context) {
 	configDirs := readCfgs(contextDirs)
 
 	// Explode cfg/dirs into service->filepath pairs
-	q := reviewQueue(ctx, configDirs)
+	rc, pc := reviewQueue(ctx, configDirs)
 
-	/*go func(q <-chan pendingReview) {
-		for p := range q {
-			r, _ := reviews[p.configHash] // TODO: Handle error
-			r.filesc <- p.filePath
+	reviews := make(map[string]reviewStream)
+
+	var issueWG sync.WaitGroup
+
+l:
+	for {
+		select {
+		case r, open := <-rc:
+			if !open {
+				continue
+			}
+			issueWG.Add(1)
+			reviews[r.configHash] = r
+			go func(r reviewStream) {
+				for i := range r.issuesc {
+					fmt.Println(i.Name, i.Comment) // TODO: Confirm, output format
+				}
+				r.service.Close()
+				issueWG.Done()
+			}(r)
+		case p, open := <-pc:
+			if !open {
+				for _, r := range reviews {
+					close(r.filesc)
+				}
+				break l
+			}
+			reviews[p.configHash].filesc <- p.filePath
 		}
-	}(q)*/
-
-	//go func(q <-chan pendingReview) {
-	for p := range q {
-		fmt.Println(p.configHash, p.filePath)
-		r, ok := reviews[p.configHash]
-		if !ok {
-			log.Fatalln("Queued review has no associated service, this should never happen")
-		}
-
-		fmt.Println("sending from review", p.filePath)
-		r.filesc <- p.filePath
-	}
-	//}(q)
-
-	fmt.Println("Queue Done")
-
-	//var issueChannels []chan *api.Issue
-	for _, r := range reviews {
-		// Since q is empty, it's now safe to close filesc's
-		// TODO: Move this to go func, make safely concurrent
-		close(r.filesc)
-		info, _ := r.service.Info()
-		fmt.Println("review", info.Name)
-		//issueChannels = append(issueChannels, r.issuesc)
 	}
 
-	for n := range merge() {
-		fmt.Println(n.Name, n.Comment) // Filename, issue comment
-	}
+	issueWG.Wait()
 
 	fmt.Println("Done")
-}
-
-func merge() <-chan *api.Issue {
-	var wg sync.WaitGroup
-	out := make(chan *api.Issue)
-
-	// Start an output goroutine for each input channel in cs.  output
-	// copies values from c to out until c is closed, then calls wg.Done.
-	output := func(r review) {
-		for n := range r.issuesc {
-			fmt.Println("fowarding issue")
-			out <- n
-		}
-		r.service.Close() // TODO: Handle error
-		wg.Done()
-	}
-	fmt.Println("waiting on", len(reviews))
-	wg.Add(len(reviews))
-	for _, r := range reviews {
-		go output(r)
-	}
-
-	// Start a goroutine to close out once all the output goroutines are
-	// done.  This must start after the wg.Add call.
-	go func() {
-		wg.Wait()
-		close(out)
-	}()
-	return out
 }
 
 /*
