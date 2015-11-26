@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/lingo-reviews/dev/tenet"
 
 	"github.com/juju/errors"
 )
@@ -32,13 +35,14 @@ func walk(path string, info os.FileInfo, err error) error {
 func cfg() string {
 	if toggle {
 		toggle = false
-		return a
+		return a()
 	}
 	toggle = true
-	return b
+	return b()
 }
 
-var a = `
+func a() string {
+	return fmt.Sprintf(`
 cascade = true
 include = "*"
 template = ""
@@ -53,6 +57,7 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
     name = "lingoreviews/imports"
@@ -60,6 +65,7 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
     name = "lingoreviews/license"
@@ -67,6 +73,7 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
     name = "lingoreviews/slasher"
@@ -74,10 +81,18 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
-`[1:]
+`[1:],
+		tenet.RandString(5),
+		tenet.RandString(5),
+		tenet.RandString(5),
+		tenet.RandString(5),
+	)
+}
 
-var b = `
+func b() string {
+	return fmt.Sprintf(`
 cascade = true
 include = "*"
 template = ""
@@ -92,6 +107,7 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
     name = "lingoreviews/imports"
@@ -99,6 +115,7 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
     name = "lingoreviews/simpleseed"
@@ -106,12 +123,20 @@ template = ""
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
   [[tenet_group.tenet]]
-    name = "lingoreviews/unused_args"
+    name = "lingoreviews/unused_arg"
     driver = "binary"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
+    	opt="%s"
 
-`[1:]
+`[1:],
+		tenet.RandString(5),
+		tenet.RandString(5),
+		tenet.RandString(5),
+		tenet.RandString(5),
+	)
+}
