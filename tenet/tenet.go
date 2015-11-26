@@ -174,16 +174,16 @@ func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) e
 			select {
 			case filename, ok := <-filesc:
 				if !ok && filename == "" {
-					log.Println("client filesc closed. Closing send stream.")
+					fmt.Println("client filesc closed. Closing send stream.")
 					// Close the file send stream.
 					stream.CloseSend()
 					return
 				}
 				file := &api.File{Name: t.editFilename(filename)}
 				if err := stream.Send(file); err != nil {
-					log.Println("failed to send a file %q: %v", filename, err)
+					fmt.Println("failed to send a file %q: %v", filename, err)
 				}
-				log.Printf("sent file %q", filename)
+				fmt.Printf("sent file %q\n", filename)
 			case <-time.After(10 * time.Second):
 				log.Fatal("timed out waiting for a filename")
 			}

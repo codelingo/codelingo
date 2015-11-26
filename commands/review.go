@@ -1,6 +1,6 @@
 package commands
 
-import (
+/*import (
 	"bytes"
 	"fmt"
 	"os"
@@ -24,6 +24,21 @@ import (
 	"github.com/lingo-reviews/lingo/tenet/driver"
 	// TODO: Avoid driver import
 	"github.com/lingo-reviews/dev/tenet/log"
+)*/
+
+import (
+	"fmt"
+	"os"
+	"path"
+	"path/filepath"
+	"sync"
+
+	"github.com/codegangsta/cli"
+
+	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/dev/tenet/log"
+
+	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var ReviewCMD = cli.Command{
@@ -91,35 +106,188 @@ Review all files found in pwd, with two speific tenets:
 	Action: reviewAction,
 }
 
-// TODO(waigani) this is ~300 line long func! Break it up.
-func reviewAction(ctx *cli.Context) {
-	var diff *diffparser.Diff
-	var err error
+type cfgMap struct {
+	cfg  *config
+	dirs []string
+}
 
-	// TODO(waigani) we only use config.reviewRoot. Don't store whole object, make map[string][]TenetConfig.
-	rQueue := make(map[*config][]TenetConfig)
-	totalTenets := 0
-	files := ctx.Args()
-
-	// create new diff to filter issues by.
-	if ctx.Bool("diff") {
-		diff, err = diffparser.Parse(rawDiff())
-		if err != nil {
-			oserrf(err.Error())
-			return
+func readCfgs(contextDirs map[string][]string) <-chan cfgMap {
+	out := make(chan cfgMap)
+	go func() {
+		for cfgPath, dirs := range contextDirs {
+			cfg, _ := buildConfig(cfgPath, CascadeUp) // TODO: Handle error
+			out <- cfgMap{cfg, dirs}
 		}
-	}
+		close(out)
+	}()
+	return out
+}
 
-	// if no files are named and we are diffig, add all files in diff.
-	if len(files) == 0 && diff != nil {
-		for _, f := range diff.Files {
-			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
-			// support reviewing the cfg also, right now it errors out.
-			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
-				files = append(files, f.NewName)
+type pendingReview struct {
+	configHash string
+	filePath   string
+}
+
+type review struct {
+	service tenet.TenetService
+	filesc  chan string
+	issuesc chan *api.Issue
+}
+
+var reviews = make(map[string]review)
+
+func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap) <-chan pendingReview {
+	out := make(chan pendingReview)
+	go func() {
+		for m := range mappings {
+			// Glob all the files in the associated dirictories for this config, and assign to each tenet by hash
+			for _, tc := range m.cfg.AllTenets() {
+				// Instantiate a tenet and run service from the config if we haven't seen it before
+				configHash := tc.hash()
+				r, found := reviews[configHash]
+				if !found {
+					tn, _ := newTenet(ctx, tc)     // TODO: Handle error
+					service, _ := tn.OpenService() // TODO: Handle error
+					r = review{
+						service: service,
+						filesc:  make(chan string, 1),
+						issuesc: make(chan *api.Issue),
+						// TODO: go func that closes filesc somehow
+					}
+					service.Review(r.filesc, r.issuesc)
+					reviews[configHash] = r
+					fmt.Println("Started:", tc.Name) // TODO: Remove
+				} else {
+					fmt.Println("Found:", tc.Name) // TODO: Remove
+				}
+
+				info, _ := r.service.Info() // TODO: Handle error
+
+				for _, d := range m.dirs {
+					_, globPattern := fileExtFilterForLang(info.Language)
+					files, _ := filepath.Glob(path.Join(d, globPattern)) // TODO: Handle error
+					for _, f := range files {
+						out <- pendingReview{configHash, f}
+					}
+				}
 			}
 		}
+		close(out)
+	}()
+	return out
+}
+
+// type result struct {
+// 	tenetName string
+// 	service   tenet.TenetService
+// 	issuesc   chan *api.Issue
+// 	err       error
+// }
+
+// func runReviews(queue <-chan pendingReview) <-chan result {
+
+// }
+
+func reviewAction(ctx *cli.Context) {
+	fmt.Println("Running review")
+
+	// TODO: file args input, as files and dirs
+
+	// Map of project config filenames -> directories they control
+	contextDirs := make(map[string][]string)
+	filepath.Walk(".", func(relPath string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			// Ignore folders beginning with '.', except search root
+			// TODO: Flag to turn this behaviour off
+			if len(relPath) > 1 && info.Name()[0] == '.' {
+				return filepath.SkipDir
+			}
+			// TODO: Faster technique for finding cfgPath taking advantage of Walk's depth-first search
+			//       This implementation recurses upwards for each found dir
+			cfgPath, _ := tenetCfgPathRecusive(path.Join(relPath, defaultTenetCfgPath))
+			contextDirs[cfgPath] = append(contextDirs[cfgPath], relPath)
+		}
+		return nil
+	})
+
+	// Use a channel to read configs with directory mapping
+	configDirs := readCfgs(contextDirs)
+
+	// Explode cfg/dirs into service->filepath pairs
+	q := reviewQueue(ctx, configDirs)
+
+	/*go func(q <-chan pendingReview) {
+		for p := range q {
+			r, _ := reviews[p.configHash] // TODO: Handle error
+			r.filesc <- p.filePath
+		}
+	}(q)*/
+
+	//go func(q <-chan pendingReview) {
+	for p := range q {
+		fmt.Println(p.configHash, p.filePath)
+		r, ok := reviews[p.configHash]
+		if !ok {
+			log.Fatalln("Queued review has no associated service, this should never happen")
+		}
+
+		fmt.Println("sending from review", p.filePath)
+		r.filesc <- p.filePath
 	}
+	//}(q)
+
+	fmt.Println("Queue Done")
+
+	//var issueChannels []chan *api.Issue
+	for _, r := range reviews {
+		// Since q is empty, it's now safe to close filesc's
+		// TODO: Move this to go func, make safely concurrent
+		close(r.filesc)
+		info, _ := r.service.Info()
+		fmt.Println("review", info.Name)
+		//issueChannels = append(issueChannels, r.issuesc)
+	}
+
+	for n := range merge() {
+		fmt.Println(n.Name, n.Comment) // Filename, issue comment
+	}
+
+	fmt.Println("Done")
+}
+
+func merge() <-chan *api.Issue {
+	var wg sync.WaitGroup
+	out := make(chan *api.Issue)
+
+	// Start an output goroutine for each input channel in cs.  output
+	// copies values from c to out until c is closed, then calls wg.Done.
+	output := func(r review) {
+		for n := range r.issuesc {
+			fmt.Println("fowarding issue")
+			out <- n
+		}
+		r.service.Close() // TODO: Handle error
+		wg.Done()
+	}
+	fmt.Println("waiting on", len(reviews))
+	wg.Add(len(reviews))
+	for _, r := range reviews {
+		go output(r)
+	}
+
+	// Start a goroutine to close out once all the output goroutines are
+	// done.  This must start after the wg.Add call.
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+	return out
+}
+
+/*
+// TODO(waigani) this is ~300 line long func! Break it up.
+func reviewAction(ctx *cli.Context) {
+	var err error
 
 	// Get this first as it might fail, we want to avoid all other work in that case.
 	cfm, err := review.NewConfirmer(ctx, diff)
@@ -128,50 +296,12 @@ func reviewAction(ctx *cli.Context) {
 		return
 	}
 
-	if len(files) > 0 {
-		for _, file := range files {
-			cfgPath := path.Join(path.Dir(file), defaultTenetCfgPath)
-			cfg, err := buildConfig(cfgPath, CascadeUp)
-			if err != nil {
-				oserrf(err.Error())
-				return
-			}
-
-			for _, tenetCfg := range cfg.AllTenets() {
-				totalTenets++
-				rQueue[cfg] = append(rQueue[cfg], tenetCfg)
-			}
-		}
-	} else {
-		// TODO: Check for dirs amongst files
-		rQueue, totalTenets, err = reviewQueue(".")
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-	}
-
 	// setup a chan of results.
 	resultsc := make(chan *result, totalTenets)
-	var wg sync.WaitGroup
-	wg.Add(totalTenets)
-	log.Println("totalTenets", totalTenets)
-	// wait for all results to come in before closing the chan.
-	go func() {
-		wg.Wait()
-		log.Println("all tenets finished setting up, closing resultsc")
-		close(resultsc)
-	}()
 
-	cmdOptions, err := parseOptions(ctx)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
 	r := &reviews{
 		fileMatches: map[string][]string{},
 		ctx:         ctx,
-		cmdOptions:  cmdOptions,
 		files:       files,
 	}
 
@@ -217,7 +347,6 @@ type reviews struct {
 	// A map of all matching files for dir and extension.
 	fileMatches map[string][]string
 	ctx         *cli.Context
-	cmdOptions  map[string]driver.Options
 	files       []string
 }
 
@@ -240,11 +369,6 @@ func (rs *reviews) startTenetReview(reviewRoot string, tenetCfg TenetConfig) *re
 		return r
 	}
 	r.service = s
-
-	// Merge in options from command line.
-	for k, v := range rs.cmdOptions[tenetCfg.Name] {
-		tenetCfg.Options[k] = v
-	}
 
 	// setup our chans to send / receive from the service.
 	filesc := make(chan string)
@@ -456,3 +580,4 @@ func rawDiff() string {
 
 	return diff
 }
+*/
