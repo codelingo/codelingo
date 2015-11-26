@@ -13,7 +13,6 @@ import (
 
 	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/tenet/driver"
-	"github.com/lingo-reviews/lingo/tenet/service"
 )
 
 type Tenet interface {
@@ -70,6 +69,7 @@ func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
 func (t *tenet) OpenService() (TenetService, error) {
 	ds, err := t.Driver.Service()
 	if err != nil {
+		log.Print(err.Error()) // TODO(waigani) this logs are quick hacks. Work out the error paths and log them all at the root.
 		return nil, errors.Trace(err)
 	}
 
@@ -90,16 +90,19 @@ func (t *tenet) OpenService() (TenetService, error) {
 	}
 
 	if err := s.start(); err != nil {
+		log.Print("got err opening service")
 		// TODO(waigani) add retry logic here. 1. Keep retrying until service
 		// is up. 2. Keep retrying until service is connected.
+		log.Printf("err: %#v", errors.ErrorStack(err))
 		return nil, errors.Trace(err)
 	}
+	log.Print("opened service, no issue")
 	return s, nil
 }
 
 // tenetService implements TenetService.
 type tenetService struct {
-	service.Service
+	driver.Service
 	client       api.TenetClient
 	conn         *grpc.ClientConn
 	cfg          *api.Config
@@ -198,6 +201,10 @@ func (t *tenetService) Info() (*api.Info, error) {
 		i, err := t.client.GetInfo(context.Background(), &api.Nil{})
 		if err != nil {
 			return nil, errors.Trace(err)
+		}
+
+		if i.Version == "" {
+			i.Version = "0.0.0"
 		}
 		t.info = i
 	}

@@ -7,7 +7,8 @@ import (
 	"runtime"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/lingo/tenet/service"
+	"github.com/lingo-reviews/lingo/tenet/driver/binary"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 // Binary is a tenet driver to execute binary tenets found in ~/.lingo/tenets/<repo>/<tenet>
@@ -17,8 +18,11 @@ type Binary struct {
 
 // Check that a file exists at the expected location and is executable. Setup
 // the service, but don't start it.
-func (b *Binary) Service() (service.Service, error) {
-	tenetPath := b.binPath()
+func (b *Binary) Service() (Service, error) {
+	tenetPath, err := b.binPath()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
 
 	file, err := os.Open(tenetPath)
 	if err != nil {
@@ -33,14 +37,18 @@ func (b *Binary) Service() (service.Service, error) {
 	}
 
 	// Note: the service needs to be started and stopped.
-	return service.NewLocal(tenetPath), nil
+	return binary.NewService(tenetPath), nil
 }
 
-func (b *Binary) binPath() string {
+func (b *Binary) binPath() (string, error) {
 	if dir := os.Getenv("LINGO_BIN"); dir != "" {
-		return filepath.Join(dir, b.Name)
+		return filepath.Join(dir, b.Name), nil
 	}
-	return filepath.Join(userHomeDir(), ".lingo", "tenets", b.Name)
+	lHome, err := util.LingoHome()
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+	return filepath.Join(lHome, "tenets", b.Name), nil
 }
 
 func userHomeDir() string {
