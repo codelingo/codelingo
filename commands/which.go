@@ -8,8 +8,8 @@ import (
 
 var WhichCMD = cli.Command{
 	Name:        "which",
-	Usage:       "prints path to tenet.toml",
-	Description: "prints path to tenet.toml",
+	Usage:       "prints path to .lingo",
+	Description: "prints path to .lingo",
 	Action:      which,
 }
 

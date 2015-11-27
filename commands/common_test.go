@@ -135,14 +135,14 @@ func (*CMDTest) TestGetCfgPath(c *gc.C) {
 	// TODO(waigani) improve regex match - should be matching user's home dir. Also, paths will break on windows.
 	defaultPathRegex := `^/home/.*\.lingo/tenet\.toml`
 	for cfgPath, expected := range map[string]string{
-		"test/mockpkg/tenet.toml":         `^/.*test/mockpkg/tenet\.toml`,
-		"test/mockpkg/mockpk2/tenet.toml": `^/.*test/mockpkg/tenet\.toml`,
+		"test/mockpkg/.lingo":         `^/.*test/mockpkg/\.lingo`,
+		"test/mockpkg/mockpk2/.lingo": `^/.*test/mockpkg/\.lingo`,
 		"test/lingotestcfg":               `^/.*test/lingotestcfg`,
-		// the following cfg files are not found, so the default ~/.lingo/tenet.toml is returned.
-		"rand/path/no/file/tenet.toml": defaultPathRegex,
-		"./tenet.toml":                 defaultPathRegex,
-		"tenet.toml":                   defaultPathRegex,
-		"/tenet.toml":                  defaultPathRegex,
+		// the following cfg files are not found, so the default ~/.lingo/.lingo is returned.
+		"rand/path/no/file/.lingo": defaultPathRegex,
+		"./.lingo":                 defaultPathRegex,
+		".lingo":                   defaultPathRegex,
+		"/.lingo":                  defaultPathRegex,
 	} {
 		ctx := mockContext("", tenetCfgFlg.longArg(), cfgPath)
 		cPath, err := tenetCfgPath(ctx)

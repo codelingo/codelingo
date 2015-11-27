@@ -2,18 +2,18 @@ package commands
 
 import (
 	"fmt"
-	"os/exec"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 var EditCMD = cli.Command{
 	Name:  "edit",
-	Usage: "edit the configuration file",
+	Usage: "edit the .lingo file",
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:   "editor, e",
-			Value:  "subl", // TODO(waigani) DEMOWARE
+			Value:  "vi",
 			Usage:  "editor to open config with",
 			EnvVar: "LINGO_EDITOR",
 		},
@@ -28,9 +28,11 @@ func edit(c *cli.Context) {
 		return
 	}
 
-	// TODO(waigani) DEMOWARE
-	cmd := exec.Command(c.String("editor"), cfg)
-	// cmd.Stdout = &stdout
-	// cmd.Stderr = &stderr
+	cmd, err := util.OpenFileCmd(c.String("editor"), cfg, 0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	cmd.Run()
 }

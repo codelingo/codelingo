@@ -6,10 +6,12 @@ import (
 	"os"
 	"path"
 	"strings"
+	"sync"
 	"text/template"
 
 	"github.com/codegangsta/cli"
 
+	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/tenet"
 )
 
@@ -72,6 +74,7 @@ func makeTemplate(src string, fallback string) (*template.Template, error) {
 	return tpl, nil
 }
 
+// MATT funcs should always return errors. Only use the oserrf in the top cmd funcs.
 func writeTenetDoc(c *cli.Context, src string, output string) {
 	// Find every applicable tenet for this project
 	cfgPath, err := tenetCfgPath(c)
@@ -104,41 +107,57 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	// Add the description of every tenet to the var map and special All array
 	// Add keys for each tenet group name
 	// DEMOWARE: This structure could be a lot simpler
+
+	var wg sync.WaitGroup
 	var ts []TenetMeta
 	gs := make(map[string]string)
 	for _, group := range cfg.TenetGroups {
-		for _, tenetData := range group.Tenets {
-			// Try to get any installed tenet with matching name
-			t, err := tenet.Any(c, tenetData.Name, tenetData.Options)
-			if err != nil {
-				// Otherwise try the driver specified in config
-				t, err := tenet.New(c, tenetData)
+		for _, tenetCfg := range group.Tenets {
+			wg.Add(1)
+			go func(group TenetGroup, tenetCfg TenetConfig) {
+				defer wg.Done()
+				// Try to get any installed tenet with matching name
+				t, err := tenet.Any(c, tenetCfg.Name, tenetCfg.Options)
+				if err != nil {
+					// Otherwise try the driver specified in config
+					t, err := newTenet(c, tenetCfg)
+					if err != nil {
+						oserrf(err.Error())
+						return
+					}
+					if err = t.Pull(false); err != nil {
+						oserrf(err.Error())
+						return
+					}
+				}
+
+				s, err := t.OpenService()
 				if err != nil {
 					oserrf(err.Error())
 					return
 				}
-				if err = t.InitDriver(); err != nil {
+				defer s.Close()
+				info, err := s.Info()
+				if err != nil {
 					oserrf(err.Error())
 					return
 				}
-				if err = t.Pull(); err != nil {
+
+				d, err := renderedDescription(info, tenetCfg)
+				if err != nil {
 					oserrf(err.Error())
 					return
 				}
-			}
-			d, err := tenet.RenderedDescription(t)
-			if err != nil {
-				oserrf(err.Error())
-				return
-			}
-			ts = append(ts, TenetMeta{
-				VarName:     r.Replace(tenetData.Name),
-				GroupName:   r.Replace(group.Name),
-				Description: d,
-			})
-			gs[r.Replace(group.Name)] = group.Template
+				ts = append(ts, TenetMeta{
+					VarName:     r.Replace(tenetCfg.Name),
+					GroupName:   r.Replace(group.Name),
+					Description: d,
+				})
+				gs[r.Replace(group.Name)] = group.Template
+			}(group, tenetCfg)
 		}
 	}
+	wg.Wait()
 
 	// Make the description available in multiple places:
 	// Top level template
@@ -209,4 +228,18 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	if err = tpl.Execute(file, v); err != nil {
 		oserrf(err.Error())
 	}
+}
+
+func renderedDescription(info *api.Info, cfg TenetConfig) (string, error) {
+	tpl, err := template.New("desc template").Parse(info.Description)
+	if err != nil {
+		return "", err
+	}
+
+	var rendered bytes.Buffer
+	if err = tpl.Execute(&rendered, cfg.Options); err != nil {
+		return "", err
+	}
+
+	return rendered.String(), nil
 }

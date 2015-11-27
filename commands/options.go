@@ -1,8 +1,9 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/codegangsta/cli"
-	"github.com/waigani/xxx"
 )
 
 var OptionsCMD = cli.Command{
@@ -13,5 +14,5 @@ var OptionsCMD = cli.Command{
 }
 
 func options(c *cli.Context) {
-	xxx.Print("cfg options")
+	fmt.Print("cfg options not implemented")
 }

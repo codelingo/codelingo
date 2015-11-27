@@ -3,7 +3,6 @@ package commands
 import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var PullCMD = cli.Command{
@@ -12,16 +11,26 @@ var PullCMD = cli.Command{
 	Flags: []cli.Flag{
 		cli.BoolFlag{
 			Name:  allFlg.String(),
-			Usage: "pull all tenets in tenet.toml",
+			Usage: "pull all tenets in .lingo",
 		}, cli.BoolFlag{
 			Name:  updateFlg.String(),
-			Usage: "look for a newer image on docker hub",
+			Usage: "look to pull a newer version",
+		},
+		cli.StringFlag{
+			Name:  registryFlg.String(),
+			Value: "hub.docker.com",
+			Usage: "the registry to pull from",
+		},
+		cli.StringFlag{
+			Name:  driverFlg.String(),
+			Value: "docker",
+			Usage: "the driver used to pull and run the tenet",
 		},
 	},
 	Description: `
 
   pull takes one argument, the name of the docker image or a --all flag. If
-  the flag is provided, 0 arguments are expected and all tenets in tenet.toml
+  the flag is provided, 0 arguments are expected and all tenets in .lingo
   are pulled.
 
 `[1:],
@@ -45,7 +54,11 @@ func pull(c *cli.Context) {
 		}
 		return
 	}
-	if err := pullOne(c, c.Args().First()); err != nil {
+
+	reg := c.String("registry")
+	driver := c.String("driver")
+
+	if err := pullOne(c, c.Args().First(), driver, reg); err != nil {
 		oserrf(err.Error())
 	}
 }
@@ -68,11 +81,7 @@ func pullAll(c *cli.Context) error {
 
 	for _, t := range ts {
 		// TODO(waigani) don't return on err, collect errs and report at end
-		err = t.InitDriver()
-		if err != nil {
-			return err
-		}
-		err = t.Pull()
+		err = t.Pull(c.Bool("update"))
 		if err != nil {
 			return err
 		}
@@ -80,84 +89,15 @@ func pullAll(c *cli.Context) error {
 	return nil
 }
 
-// Pull a tenet by name, assuming docker driver and default registry.
-func pullOne(c *cli.Context, name string) error {
-	// TODO: Add --driver, --registry flags for more info
-	t, err := tenet.New(c, tenet.Config{Name: name})
+func pullOne(c *cli.Context, name, driverName, registry string) error {
+	t, err := newTenet(c, TenetConfig{
+		Name:     name,
+		Driver:   driverName,
+		Registry: registry,
+	})
 	if err != nil {
 		return errors.Trace(err)
 	}
 
-	err = t.InitDriver()
-	if err != nil {
-		return err
-	}
-
-	return t.Pull()
+	return t.Pull(c.Bool("update"))
 }
-
-// // pullTenetImage attempts to pull the docker image <author>/<tenetName> from docker hub
-// func pullTenetImage(c *cli.Context, imageName string) error {
-// 	// // create new container from image
-// 	// dockerArgs := []string{"run", "-i", "--name", containerName, imageName}
-// 	// if haveContainer(containerName) {
-// 	// 	if c.GlobalString(updateFlg.long) {
-
-// 	// 	}
-// 	// 	// start existing container
-// 	// 	dockerArgs = []string{"start", "-i", containerName}
-// 	// }
-
-// 	client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, "docker", dockerArgs...)
-// 	if err != nil {
-// 		log.Fatalf("Error running plugin: %s", err)
-// 	}
-// 	defer client.Close()
-
-// 	// TODO(waigani) continue here, this is where we validate tenet. Write
-// 	// validate as it's own command and pull it in here.
-
-// 	// TODO(waigani) change plug to tenet. put in own package so it can be
-// 	// imported by tenetseed also.
-// 	p := plug{client}
-// 	res, err := p.SayHi("master")
-// 	if err != nil {
-// 		log.Fatalf("error calling SayHi: %s", err)
-// 	}
-// 	log.Printf("Response from plugin: %q", res)
-
-// 	res, err = p.SayBye("master")
-// 	if err != nil {
-// 		log.Fatalf("error calling SayBye: %s", err)
-// 	}
-// 	log.Printf("Response from plugin2: %q", res)
-// 	return nil
-// }
-
-// legacy code for downloading a raw executable file.
-// func downloadTenet(c *cli.Context, author, tenetName, container string) error {
-// 	tenetPath := path.Join(tenetHome(c), author, tenetName)
-// 	// TODO(waigani) check if file exists.
-// 	// TODO(waigani) versioning.
-
-// 	dir := path.Dir(tenetPath)
-// 	if err := os.MkdirAll(dir, 0777); err != nil {
-// 		return err
-// 	}
-// 	out, err := os.Create(tenetPath)
-// 	defer out.Close()
-// 	if err != nil {
-// 		return errors.Trace(err)
-// 	}
-
-// 	// TODO(waigani) use container arg to optionally download tenet in docker container.
-// 	url := lingoWeb("/tenets/" + author + "/" + tenetName + "/download")
-// 	resp, err := http.Get(url.String())
-// 	if err != nil {
-// 		return errors.Trace(err)
-// 	}
-// 	defer resp.Body.Close()
-
-// 	_, err = io.Copy(out, resp.Body)
-// 	return err
-// }

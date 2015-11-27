@@ -3,18 +3,18 @@ package commands
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/tenet"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 var ListCMD = cli.Command{
 	Name:        "list",
+	Aliases:     []string{"ls"},
 	Usage:       "list tenets",
-	Description: "Lists all tenets added to tenet.toml run.",
+	Description: "Lists all tenets added to .lingo run.",
 	Flags: []cli.Flag{
 		cli.BoolFlag{
 			Name:  "installed",
@@ -29,7 +29,7 @@ func listAction(c *cli.Context) {
 	// TODO(waigani) DEMOWARE
 	if c.Bool("installed") {
 		var stdout bytes.Buffer
-		cmd := exec.Command("tree", path.Join(os.Getenv("HOME"), ".lingo/tenets/"))
+		cmd := exec.Command("tree", filepath.Join(util.MustLingoHome(), "tenets"))
 		cmd.Stdout = &stdout
 		// cmd.Stderr = &stderr
 		cmd.Run()
@@ -39,12 +39,12 @@ func listAction(c *cli.Context) {
 	}
 
 	for _, t := range listTenets(c) {
-		fmt.Println(t.Name)
+		fmt.Printf("%s (%s)\n", t.Name, t.Driver)
 	}
 
 }
 
-func listTenets(c *cli.Context) []tenet.Config {
+func listTenets(c *cli.Context) []TenetConfig {
 	cfgPath, err := tenetCfgPath(c)
 	if err != nil {
 		oserrf("could not read configuration: %s", err.Error())

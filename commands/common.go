@@ -14,16 +14,21 @@ import (
 	"os/user"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/dev/tenet/log"
+
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 const (
-	defaultTenetCfgPath = "tenet.toml"
+	// TODO(waigani) move this into util
+	defaultTenetCfgPath = ".lingo"
 )
 
 type CascadeDirection int
@@ -37,26 +42,64 @@ const (
 )
 
 type config struct {
-	Cascade     bool           `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
-	Include     string         `toml:"include"`
-	Template    string         `toml:"template"`
-	TenetGroups []TenetGroup   `toml:"tenet_group"`
-	allTenets   []tenet.Config // TODO(waigani) see comment in AllTenets
+	Cascade     bool          `toml:"cascade"` // TODO: When switching from toml to viper, set this True by default
+	Include     string        `toml:"include"`
+	Template    string        `toml:"template"`
+	TenetGroups []TenetGroup  `toml:"tenet_group"`
+	allTenets   []TenetConfig // TODO(waigani) see comment in AllTenets
+	// the root dir from which the config was build.
+	buildRoot string
 }
 
 type TenetGroup struct {
-	Name     string         `toml:"name"`
-	Template string         `toml:"template"`
-	Tenets   []tenet.Config `toml:"tenet"`
+	Name     string        `toml:"name"`
+	Template string        `toml:"template"`
+	Tenets   []TenetConfig `toml:"tenet"`
 }
 
-func (c *config) AllTenets() []tenet.Config {
+type TenetConfig struct {
+	Name string `toml:"name"`
+
+	// Name of the driver in use
+	Driver string `toml:"driver"`
+
+	// Registry server to pull the image from
+	Registry string `toml:"registry"`
+
+	// Tag server to pull the image from
+	Tag string `toml:"tag"` // TODO(waigani) if we don't need this to pull, get rid of it.
+
+	// Config options for tenet
+	Options map[string]interface{} `toml:"options"`
+}
+
+// Provide a means to compare TenetConfig for equality as maps aren't inherently comparable.
+func (c *TenetConfig) hash() string {
+	hash := strings.Join([]string{c.Name, c.Driver, c.Registry, c.Tag}, ",")
+	for k, v := range c.Options {
+		hash += k + v.(string)
+	}
+	return hash
+}
+
+// newTenet returns a new tenet.Tenet built from a cfg.
+func newTenet(ctx *cli.Context, tenetCfg TenetConfig) (tenet.Tenet, error) {
+	return tenet.New(ctx, &driver.Base{
+		Name:          tenetCfg.Name,
+		Driver:        tenetCfg.Driver,
+		Registry:      tenetCfg.Registry,
+		Tag:           tenetCfg.Tag,
+		ConfigOptions: tenetCfg.Options,
+	})
+}
+
+func (c *config) AllTenets() []TenetConfig {
 	// TODO(waigani) quick work around. allTenets are the tenets built up
 	// after a cascade read of cfgs. Rework things so it's clear that we are
 	// either getting all tenets for one cfg or all tenets for all cfgs.
 	// We may need a new struct AllCfg or something?
 	s := seer{seen: map[string]bool{}}
-	var tenets []tenet.Config
+	var tenets []TenetConfig
 	for _, t := range c.allTenets {
 		if !s.Seen(t.Name) {
 			tenets = append(tenets, t)
@@ -107,7 +150,7 @@ func (c *config) RemoveTenetGroup(name string) {
 	c.TenetGroups = groups
 }
 
-func (c *config) AddTenet(t tenet.Config, group string) error {
+func (c *config) AddTenet(t TenetConfig, group string) error {
 	if !c.HasTenetGroup(group) {
 		c.AddTenetGroup(group)
 	}
@@ -147,7 +190,7 @@ func (c *config) RemoveTenet(name string, group string) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	var tenets []tenet.Config
+	var tenets []TenetConfig
 	for _, t := range c.AllTenets() {
 		if t.Name != name {
 			tenets = append(tenets, t)
@@ -171,7 +214,8 @@ var exiter = func(code int) {
 
 func oserrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
-	fmt.Fprintf(stderr, format, a...)
+	log.Printf(format, a...)
+	fmt.Printf(format, a...)
 	exiter(1)
 }
 
@@ -187,18 +231,18 @@ func lingoWeb(uri string) url.URL {
 	}
 }
 
-// TODO: Better solution for logging: optionally to file, -v flag etc.
-func log(format string, a ...interface{}) {
-	fmt.Fprintf(stderr, format+"\n", a...)
-}
-
 // Get a list of instantiated tenets from a config object.
 func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
-	for _, tenetData := range cfg.AllTenets() {
-		tenet, err := tenet.New(ctx, tenetData)
+	for _, tenetCfg := range cfg.AllTenets() {
+		tenet, err := tenet.New(ctx, &driver.Base{
+			Name:          tenetCfg.Name,
+			Driver:        tenetCfg.Driver,
+			Registry:      tenetCfg.Registry,
+			ConfigOptions: tenetCfg.Options,
+		})
 		if err != nil {
-			message := fmt.Sprintf("could not create tenet '%s': %s", tenetData.Name, err.Error())
+			message := fmt.Sprintf("could not create tenet '%s': %s", tenetCfg.Name, err.Error())
 			return nil, errors.Annotate(err, message)
 		}
 		ts = append(ts, tenet)
@@ -207,54 +251,13 @@ func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	return ts, nil
 }
 
-func allConfigs(dir string) (map[*config][]string, int, error) {
-	totalTenets := 0
-	queue := make(map[*config][]string)
-
-	// Starting with initial dir
-	// - read config for that dir with CascadeUp (buildConfig will handle cascade=false)
-	// - use found cfg.Include to find files in that dir
-	// - insert cfg->files into map
-	// - keep count of total files for channel buffer
-	err := filepath.Walk(dir, func(relPath string, info os.FileInfo, err error) error {
-		if info.IsDir() {
-			// fmt.Println("dir:", relPath) // TODO: put behind a debug flag
-			cfg, err := buildConfig(path.Join(relPath, defaultTenetCfgPath), CascadeUp)
-			if err != nil {
-				return err
-			}
-
-			// TODO: Use cfg.Include glob/regex?
-			files, err := filepath.Glob(path.Join(relPath, "*.go"))
-			if err != nil { // Non-fatal
-				return nil
-			}
-
-			fileList := []string{}
-			for _, f := range files {
-				file, err := os.Open(f)
-				if err != nil { // Non-fatal
-					break
-				}
-				if fi, err := file.Stat(); err == nil && !fi.IsDir() {
-					// fmt.Println("adding", f) // TODO: put behind a debug flag
-					fileList = append(fileList, f)
-				}
-			}
-
-			if len(fileList) > 0 {
-				totalTenets += len(cfg.AllTenets())
-
-				queue[cfg] = fileList
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, 0, err
+// TODO(waigani) make this externally extendable.
+func fileExtFilterForLang(lang string) (regex, glob string) {
+	switch strings.ToLower(lang) {
+	case "go", "golang":
+		return ".*\\.go", "*.go"
 	}
-
-	return queue, totalTenets, nil
+	return ".*", "*"
 }
 
 // Combine cascaded configuration files into a single config object.
@@ -263,7 +266,7 @@ func buildConfig(startCfgPath string, cascadeDir CascadeDirection) (*config, err
 		return readConfigFile(startCfgPath)
 	}
 
-	cfg := &config{}
+	cfg := &config{buildRoot: filepath.Dir(startCfgPath)}
 
 	switch cascadeDir {
 	case CascadeUp, CascadeDown:
@@ -322,7 +325,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 		}
 	} else if !os.IsNotExist(err) {
 		// Just leave the current state of cfg on encountering an error
-		log("error reading file: %s", cfgPath)
+		log.Println("error reading file: %s", cfgPath)
 		return
 	}
 
@@ -345,7 +348,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 		for _, f := range files {
 			file, err := os.Open(f)
 			if err != nil {
-				log("error reading file: %s", file)
+				log.Println("error reading file: %s", file)
 				return
 			}
 			if fi, err := file.Stat(); err == nil && fi.IsDir() {
@@ -419,23 +422,6 @@ func parseOptions(c *cli.Context) (map[string]driver.Options, error) {
 	return commandOptions, nil
 }
 
-func userHome() (string, error) {
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-	return usr.HomeDir, nil
-}
-
-func defaultLingoHome() string {
-	home, err := userHome()
-	if err != nil {
-		oserrf(err.Error())
-		return ""
-	}
-	return path.Join(home, ".lingo")
-}
-
 // TODO: TECHDEBT Check if commented code will be needed and prune as appropriate
 // func tenetHome(c *cli.Context) string {
 // 	home := c.GlobalString(lingoHomeFlg.long)
@@ -471,13 +457,17 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 				if err != nil {
 					return "", err
 				}
-				defaultTenets := path.Join(usr.HomeDir, ".lingo", defaultTenetCfgPath)
+
+				lHome, err := util.LingoHome()
+				if err != nil {
+					return "", errors.Trace(err)
+				}
+				defaultTenets := path.Join(usr.HomeDir, lHome, defaultTenetCfgPath)
 				if _, err := os.Stat(defaultTenets); err != nil {
 					return "", err
 				}
 				return defaultTenets, nil
 			}
-
 			parent := path.Dir(path.Dir(dir))
 			return tenetCfgPathRecusive(parent + "/" + defaultTenetCfgPath)
 		}
@@ -486,7 +476,7 @@ func tenetCfgPathRecusive(cfgPath string) (string, error) {
 	return cfgPath, nil
 }
 
-func hasTenet(tenets []tenet.Config, imageName string) bool {
+func hasTenet(tenets []TenetConfig, imageName string) bool {
 	for _, t := range tenets {
 		if t.Name == imageName {
 			return true

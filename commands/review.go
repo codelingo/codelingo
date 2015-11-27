@@ -2,27 +2,27 @@ package commands
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
-	"strings"
+	"path"
+	"path/filepath"
+	"regexp"
 	"sync"
-	"time"
 
 	"github.com/codegangsta/cli"
-	"github.com/juju/errors"
 	"github.com/waigani/diffparser"
 
-	t "github.com/lingo-reviews/dev/tenet"
+	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/dev/tenet/log"
+
 	"github.com/lingo-reviews/lingo/commands/review"
 	"github.com/lingo-reviews/lingo/tenet"
-	// TODO: Avoid driver import
-	"github.com/lingo-reviews/lingo/tenet/driver"
 )
 
 var ReviewCMD = cli.Command{
 	Name:  "review",
-	Usage: "review code following tenets in tenet.toml",
+	Usage: "review code following tenets in .lingo",
 	Description: `
 
 Review all files found in pwd, following tenets in .lingo of pwd or parent directory:
@@ -33,24 +33,14 @@ Review all files found in pwd, with two speific tenets:
 	lingoreviews/space-after-forward-slash \
 	lingoreviews/unused-args"
 
-	This command ignores any tenets in any tenet.toml files.
+	This command ignores any tenets in any .lingo files.
 
 `[1:],
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			// TODO(waigani) interactively set options for tenet.
 			Name:  "options",
-			Usage: "serialized JSON options from tenet.toml",
-		},
-		cli.Float64Flag{
-			Name:  "min-confidence",
-			Value: 0,
-			Usage: "the minimum confidence an issue needs to be included",
-		},
-		cli.IntFlag{
-			Name:  "wait",
-			Value: 20,
-			Usage: "how long to wait, in seconds, for a tenet to finish.",
+			Usage: "serialized JSON options from .lingo",
 		},
 		cli.StringFlag{
 			Name:   "output",
@@ -59,17 +49,11 @@ Review all files found in pwd, with two speific tenets:
 			EnvVar: "LINGO-OUTPUT",
 		},
 		cli.StringFlag{
-			Name:   "output-fmt",
-			Value:  "none",
-			Usage:  "json, json-pretty, yaml, toml or plain-text. If an output-template is set, it takes precedence",
+			Name:  "output-fmt",
+			Value: "none",
+			// TODO(waigani) support yaml toml. Also: if an output-template is set, it takes precedence.
+			Usage:  "json or json-pretty",
 			EnvVar: "LINGO-OUTPUT-FMT",
-		},
-		cli.StringFlag{
-			// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
-			Name:   "output-template",
-			Value:  "",
-			Usage:  "a template for the output format",
-			EnvVar: "LINGO-OUTPUT-TEMPLATE",
 		},
 		cli.BoolFlag{
 			Name:   "diff",
@@ -81,264 +65,315 @@ Review all files found in pwd, with two speific tenets:
 			Usage:  "turns off the default behaviour of stepping through each issue found and asking the user to confirm that it is an issue.",
 			EnvVar: "LINGO-KEEP-ALL",
 		},
+		cli.BoolFlag{
+			Name:   "find-all",
+			Usage:  "raise every issue tenets find",
+			EnvVar: "LINGO-KEEP-ALL",
+		},
+		// TODO(waigani) implement
+		// cli.IntFlag{
+		// 	Name:  "wait",
+		// 	Value: 20,
+		// 	Usage: "how long to wait, in seconds, for a tenet to finish.",
+		// },
+		// cli.StringFlag{
+		// 	// TODO(waigani) implement. We could make output-fmt fall-through to check for custom template?
+		// 	Name:   "output-template",
+		// 	Value:  "",
+		// 	Usage:  "a template for the output format",
+		// 	EnvVar: "LINGO-OUTPUT-TEMPLATE",
+		// },
+		// TODO(waigani) implement
+		// cli.BoolFlag{
+		// 	Name:  "watch",
+		// 	Usage: "watch for changes and review any changed files",
+		// },
 	},
 	Action: reviewAction,
 }
 
-func reviewAction(c *cli.Context) {
-	var diff *diffparser.Diff
+type cfgMap struct {
+	path  string
+	cfg   *config
+	dirs  []string
+	files []string
+}
+
+// readCfgs converts work done up front (finding configs) into a concurrent pipeline
+// stage (reading configs).
+func readCfgs(cfgList []cfgMap, errc chan error) <-chan cfgMap {
 	var err error
-	reviewQueue := make(map[*config][]string)
-	totalTenets := 0
+	out := make(chan cfgMap)
+	go func() {
+		for _, m := range cfgList {
+			m.cfg, err = buildConfig(m.path, CascadeUp)
+			if err != nil {
+				errc <- err
+				continue
+			}
+			out <- m
+		}
+		close(out)
+	}()
+	return out
+}
 
-	args := c.Args()
+type pendingReview struct {
+	configHash string
+	filePath   string
+}
 
-	// Add only files in diff.
-	if len(args) == 0 && c.Bool("diff") {
+type reviewStream struct {
+	configHash string
+	service    tenet.TenetService
+	filesc     chan string
+	issuesc    chan *api.Issue
+}
+
+// reviewQueue reads a channel of mappings and returns two output channels. The first receives new
+// review objects that are generated when a new unique tenet config is encountered, the second is
+// for each file/config pair to be reviewed and points back to a review object by hash.
+func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-chan reviewStream, <-chan pendingReview) {
+	reviews := make(map[string]reviewStream)
+
+	reviewChannel := make(chan reviewStream)
+	pendingChannel := make(chan pendingReview)
+
+	go func() {
+		for m := range mappings {
+			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
+			for _, tc := range m.cfg.AllTenets() {
+				// Open the tenet service if we haven't seen this config before
+				configHash := tc.hash()
+				r, found := reviews[configHash]
+				if !found {
+					tn, err := newTenet(ctx, tc)
+					if err != nil {
+						errc <- err
+						continue
+					}
+					service, err := tn.OpenService()
+					if err != nil {
+						errc <- err
+						continue
+					}
+					r = reviewStream{
+						configHash: configHash,
+						service:    service,
+						filesc:     make(chan string),
+						issuesc:    make(chan *api.Issue, 5),
+					}
+					service.Review(r.filesc, r.issuesc)
+					reviews[configHash] = r
+
+					reviewChannel <- r
+				}
+
+				// TODO: Can cache this on reviewStream instead of asking for each file
+				info, err := r.service.Info()
+				if err != nil {
+					errc <- err
+					continue
+				}
+				regexPattern, globPattern := fileExtFilterForLang(info.Language)
+
+				for _, d := range m.dirs {
+					files, err := filepath.Glob(path.Join(d, globPattern))
+					if err != nil {
+						// Non-fatal
+						log.Printf("Error reading files in %s: %v\n", d, err)
+					}
+					for _, f := range files {
+						pendingChannel <- pendingReview{configHash, f}
+					}
+				}
+
+				for _, f := range m.files {
+					if matches, err := regexp.MatchString(regexPattern, f); !matches {
+						if err != nil {
+							log.Println("error in regex: ", regexPattern)
+						}
+						continue
+					}
+					pendingChannel <- pendingReview{configHash, f}
+				}
+			}
+		}
+		close(pendingChannel)
+		close(reviewChannel)
+	}()
+	return reviewChannel, pendingChannel
+}
+
+func reviewAction(ctx *cli.Context) {
+	// TODO: file args input, as files and dirs
+	var err error
+	var diff *diffparser.Diff
+
+	// create new diff to filter issues by
+	if ctx.Bool("diff") {
 		diff, err = diffparser.Parse(rawDiff())
 		if err != nil {
 			oserrf(err.Error())
 			return
 		}
+	}
 
+	// Get this first as it might fail, we want to avoid all other work in that case
+	cfm, err := review.NewConfirmer(ctx, diff)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+
+	fileArgs := ctx.Args()
+	if diff != nil {
+		// if we are diffing, add all files in diff
 		for _, f := range diff.Files {
-			// TODO(waigani) DEMOWARE make "tenet.toml" a cfg var. We should
-			// support reviewing the cfg also, right now it errors out.
-			if f.Mode != diffparser.DELETED && !strings.Contains(f.NewName, "tenet.toml") {
-				args = append(args, f.NewName)
+			if f.Mode != diffparser.DELETED {
+				fileArgs = append(fileArgs, f.NewName)
+			}
+		}
+	} else if len(fileArgs) == 0 {
+		fileArgs = []string{"."}
+	}
+
+	// Receiver for errors that can occur during pipeline stages
+	errc := make(chan error)
+	errors := []error{}
+	// Just collect errors during review - show them to the user at the end
+	go func() {
+		for err := range errc {
+			errors = append(errors, err)
+		}
+	}()
+
+	// Map of project config filenames -> directories they control
+	cfgList := []cfgMap{}
+	// TODO: This loop is now pipelinable too, if we need to further reduce time-to-first-review
+	for _, f := range fileArgs {
+		// Specifically asking for a file that can't be found/read is fatal
+		file, err := os.Open(f)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+		fi, err := file.Stat()
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+
+		if fi.IsDir() {
+			filepath.Walk(f, func(relPath string, info os.FileInfo, err error) error {
+				if info.IsDir() {
+					// Ignore folders beginning with '.', except search root
+					// TODO: Flag to turn this behaviour off
+					if len(relPath) > 1 && info.Name()[0] == '.' {
+						return filepath.SkipDir
+					}
+					// TODO: Faster technique for finding cfgPath taking advantage of Walk's depth-first search
+					//       This implementation recurses upwards for each found dir
+					cfgPath, _ := tenetCfgPathRecusive(path.Join(relPath, defaultTenetCfgPath))
+					cfgList = append(cfgList, cfgMap{
+						path:  cfgPath,
+						cfg:   nil,
+						dirs:  []string{relPath},
+						files: []string{},
+					})
+				}
+				return nil
+			})
+		} else {
+			cfgPath, _ := tenetCfgPathRecusive(path.Join(filepath.Dir(f), defaultTenetCfgPath))
+			cfgList = append(cfgList, cfgMap{
+				path:  cfgPath,
+				cfg:   nil,
+				dirs:  []string{},
+				files: []string{f},
+			})
+		}
+	}
+
+	// Use a channel to read configs with directory mapping
+	configDirs := readCfgs(cfgList, errc)
+
+	// Explode cfg/dirs into service->filepath pairs
+	rc, pc := reviewQueue(ctx, configDirs, errc)
+
+	reviews := make(map[string]reviewStream)
+
+	var issueWG sync.WaitGroup
+	issueMutex := &sync.Mutex{}
+
+	issues := []*api.Issue{}
+
+l:
+	for {
+		select {
+		case r, open := <-rc:
+			if !open {
+				continue
+			}
+			issueWG.Add(1)
+			reviews[r.configHash] = r
+			go func(r reviewStream) {
+				for i := range r.issuesc {
+					issueMutex.Lock()
+					if cfm.Confirm(0, i) {
+						issues = append(issues, i)
+					}
+					issueMutex.Unlock()
+				}
+				r.service.Close()
+				issueWG.Done()
+			}(r)
+		case p, open := <-pc:
+			if !open {
+				for _, r := range reviews {
+					close(r.filesc)
+				}
+				break l
+			}
+			reviews[p.configHash].filesc <- p.filePath
+		}
+	}
+
+	issueWG.Wait()
+
+	close(errc)
+
+	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
+
+	// Print errors if any occured
+	if len(errors) > 0 {
+		fmt.Println("The following errors were encounted:")
+		for _, err := range errors {
+			fmt.Printf("%v\n", err)
+		}
+
+		if outputFmt != "none" {
+			var options string
+			fmt.Println("Do you still wish to output the found issues? [y]es [N]o")
+			fmt.Scanln(&options)
+
+			switch options {
+			case "y", "Y", "yes":
+			default:
+				return
 			}
 		}
 	}
 
-	// Get this first as it might fail, we want to avoid all other work in that case.
-	cfm, err := review.NewConfirmer(c, diff)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
-
-	if len(args) > 0 {
-		cfgPath, err := tenetCfgPath(c)
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-		cfg, err := buildConfig(cfgPath, CascadeUp)
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-
-		totalTenets = len(cfg.AllTenets())
-
-		reviewQueue[cfg] = args
-	} else {
-		// TODO: Check for dirs amongst args
-		reviewQueue, totalTenets, err = allConfigs(".")
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-	}
-
-	// setup a chan of results.
-	results := make(chan *driver.ReviewResult, totalTenets)
-	var wg sync.WaitGroup
-	wg.Add(totalTenets)
-	// wait for all results to come in before closing the chan.
-	go func() {
-		wg.Wait()
-		close(results)
-	}()
-
-	commandOptions, err := parseOptions(c)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
-
-	for cfg, files := range reviewQueue {
-		// TODO(waigani) SCALE we need to support looots of files and tenets. Start using chans.
-		ts, err := tenets(c, cfg)
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-		for _, tn := range ts {
-			// fmt.Println(tn.String(), files) // TODO: put behind a debug flag
-			go func(tn tenet.Tenet, files []string) {
-				defer wg.Done()
-
-				// Initialise the tenet driver
-				err := tn.InitDriver()
-				if err != nil {
-					oserrf(err.Error())
-					return
-				}
-
-				// Start with options specified in config
-				opts := driver.Options{}
-				if tn.GetOptions() != nil {
-					opts = tn.GetOptions()
-				}
-				// Merge in options from command line
-				for k, v := range commandOptions[tn.String()] {
-					opts[k] = v
-				}
-
-				if len(opts) != 0 {
-					jsonOpts, err := json.Marshal(opts)
-					if err != nil {
-						oserrf(err.Error())
-						return
-					}
-					files = append([]string{"--options", string(jsonOpts)}, files...)
-				}
-				// TODO(waigani) SCALE how many filenames can we handle?
-				reviewResult, err := tn.Review(files...)
-				if err != nil {
-					oserrf("error running review %s", err.Error())
-					return
-				}
-				// TODO(waigani) we can be smarter here. Pipe individual issues
-				// from tenet to chan. Use fan-in pattern:
-				// https://blog.golang.org/pipelines
-				results <- reviewResult
-			}(tn, files)
-		}
-	}
-
-	r := allResults(c, cfm, results)
-
-	if len(r.errors) > 0 {
-		fmt.Println("The following errors were encounted:")
-		for _, err := range r.errors {
-			fmt.Printf("%v\n", err)
-		}
-
-		fmt.Println("Do you still wish to output the found issues? [y]es [N]o")
-
-		var options string
-		fmt.Print("\n[o]pen [d]iscard [K]eep:")
-		fmt.Scanln(&options)
-
-		switch options {
-		case "y", "Y", "yes":
-		default:
-			return
-		}
-	}
-
-	// Even if there are no issues, we still might need to show output.
-	outputFmt := review.OutputFormat(c.String("output-fmt"))
+	// Print formatted output, even if there are no issues (eg empty json {})
 	if outputFmt != "none" {
-		output := review.Output(outputFmt, c.String("output"), r.issues)
+		output := review.Output(outputFmt, ctx.String("output"), issues)
 		fmt.Print(output)
 	}
 }
 
-type result struct {
-	issues []*t.Issue
-	errors []error
-}
-
-// TODO(waigani) TECHDEBT if diff is true, we only report the issues found
-// within the diff, even though results contains all issues in the target
-// file(s). Yes, this is just stupid. We need to pass the file diff boundaries
-// to the tenets, it is then the tenet's responsibility to only analyse those
-// nodes/lines within the diff.
-
-// allResults returns all the issues all the tenets found.
-func allResults(c *cli.Context, cfm *review.IssueConfirmer, results chan *driver.ReviewResult) result {
-	issues := make(chan *t.Issue)
-	tenetErrs := make(chan string)
-
-	var wg sync.WaitGroup
-
-	wait := time.Duration(int64(c.Int("wait"))) * time.Second
-	var errs []error
-l:
-	for {
-		select {
-		case r, ok := <-results:
-			if !ok {
-				break l
-			}
-			wg.Add(len(r.Issues))
-			wg.Add(len(r.Errs))
-			go func() {
-				for _, i := range r.Issues {
-					defer wg.Done()
-
-					// TODO(waigani) this can all be internal to the issue
-					// now. As it has both the comments and the context.
-					comm, err := review.Comment(i)
-					if err != nil {
-						tenetErrs <- err.Error()
-						return
-					}
-					i.Comment = comm
-					issues <- i
-				}
-			}()
-
-			go func() {
-				for _, e := range r.Errs {
-					tenetErrs <- e
-					wg.Done()
-				}
-			}()
-		case <-time.After(wait):
-			msg := "timed out, the following tenet(s) did not run:"
-			select {
-			case r := <-results:
-				msg += " " + r.TenetName
-			default:
-				errs = append(errs, errors.New(msg))
-			}
-		}
-	}
-
-	go func() {
-		wg.Wait()
-		close(issues)
-		close(tenetErrs)
-	}()
-
-	var confirmedIssues []*t.Issue
-	issuesClosed, errsClosed := false, false
-
-	for {
-		if issuesClosed && errsClosed {
-			break
-		}
-		select {
-		case issue, ok := <-issues:
-			if !ok {
-				issuesClosed = true
-				continue
-			}
-
-			if cfm.Confirm(0, issue) {
-				confirmedIssues = append(confirmedIssues, issue)
-			}
-		case errMsg, ok := <-tenetErrs:
-			if !ok {
-				errsClosed = true
-				continue
-			}
-			errs = append(errs, errors.New(errMsg))
-		case <-time.After(wait):
-			msg := "timed out"
-			errs = append(errs, errors.Errorf(msg))
-		}
-	}
-
-	return result{confirmedIssues, errs}
-}
-
 // TODO(waigani) this just reads unstaged changes from git in pwd. Change diff
-// from a flag to a sub command which pipes args to git diff.
+// from a flag to a sub command which pipes files to git diff.
 func rawDiff() string {
 	c := exec.Command("git", "reset")
 	c.Run()
@@ -346,7 +381,9 @@ func rawDiff() string {
 	c.Run()
 
 	var stdout bytes.Buffer
-	c = exec.Command("git", "diff")
+	// TODO: Whilst --relative does get the correct files reviewed, corfirm/diffparser.Changed()
+	//       is not receiving the correct paths and throws all diffs out
+	c = exec.Command("git", "diff", "--relative")
 	c.Stdout = &stdout
 	// c.Stderr = &stderr
 	c.Run()

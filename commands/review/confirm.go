@@ -2,22 +2,22 @@ package review
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
-	"github.com/lingo-reviews/dev/tenet"
-	"github.com/skratchdot/open-golang/open"
+	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/lingo/util"
 	"github.com/waigani/diffparser"
 )
 
 type IssueConfirmer struct {
-	confidence  tenet.Confidence
 	userConfirm bool
 	output      bool
-	inDiff      func(*tenet.Issue) bool
+	inDiff      func(*api.Issue) bool
 	// TODO(waigani) make this a func var instead
 	hostAbsBasePath string
 }
@@ -29,7 +29,6 @@ func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
 	}
 
 	cfm := IssueConfirmer{
-		confidence:      tenet.Confidence(c.Float64("confidence")),
 		userConfirm:     !c.Bool("keep-all"),
 		output:          c.String("output-fmt") != "none",
 		hostAbsBasePath: basePath,
@@ -58,21 +57,17 @@ func hostAbsBasePath(c *cli.Context) (string, error) {
 }
 
 // TODO(waigani) screen diff tenet side - see other diff comment.
-func newInDiffFunc(diff *diffparser.Diff) (func(*tenet.Issue) bool, error) {
+func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
 	diffChanges := diff.Changed()
 
-	// for _, f := range diff.Files {
-	// 	xxx.Dump(f.Mode) //== diffparser.NEW
-	// }
-
-	return func(issue *tenet.Issue) bool {
-		start := issue.Position.Start.Line
+	return func(issue *api.Issue) bool {
+		start := int(issue.Position.Start.Line)
 		end := start
-		if endLine := issue.Position.End.Line; endLine != 0 {
+		if endLine := int(issue.Position.End.Line); endLine != 0 {
 			end = endLine
 		}
 
-		filename := getDiffRootPath(issue.Filename())
+		filename := getDiffRootPath(issue.Position.Start.Filename)
 		if newLines, ok := diffChanges[filename]; ok {
 			for _, lineNo := range newLines {
 				if lineNo >= start && lineNo <= end {
@@ -97,22 +92,13 @@ func getDiffRootPath(filename string) string {
 	return filename
 }
 
-// TODO(waigani) make this configurable.
-// understandsLines is a list of apps that understand line number prepended to
-// a filename.
-var understandsLines = map[string]bool{
-	"subl":    true,
-	"sublime": true,
-}
-
 var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
-func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
+func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 	if attempt == 0 {
-		if issue.Confidence < c.confidence ||
-			(c.inDiff != nil && !c.inDiff(issue)) {
+		if c.inDiff != nil && !c.inDiff(issue) {
 			return false
 		}
 		if !c.userConfirm {
@@ -120,7 +106,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 		}
 	}
 	if attempt == 0 {
-		fmt.Println(FormatPlainText(issue))
+		fmt.Println(c.FormatPlainText(issue))
 	}
 
 	attempt++
@@ -139,33 +125,32 @@ func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 	switch options {
 	case "o":
 		var app string
-		defaultEditor := "optional"
+		defaultEditor := "vi" // TODO(waigani) is vi an okay default?
 		if editor != "" {
 			defaultEditor = editor
 		}
 		fmt.Printf("application (%s):", defaultEditor)
 		fmt.Scanln(&app)
-		filename := c.hostFilePath(issue.Filename())
-		if app != "" {
-			if _, ok := understandsLines[app]; ok {
-				filename += fmt.Sprintf(":%d", issue.Position.Start.Line)
-			}
-			err := open.StartWith(filename, app)
-			if err != nil {
-				fmt.Println(err)
-			}
-			editor = app
-		} else {
-			var err error
-			if defaultEditor == "optional" {
-				err = open.Start(filename)
-			} else {
-				err = open.StartWith(filename, defaultEditor)
-			}
-			if err != nil {
-				fmt.Println(err)
-			}
+		filename := c.hostFilePath(issue.Position.Start.Filename)
+		if app == "" {
+			app = defaultEditor
 		}
+		// c := issue.Position.Start.Column // TODO(waigani) use column
+		l := issue.Position.Start.Line
+		cmd, err := util.OpenFileCmd(app, filename, l)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		if err = cmd.Start(); err != nil {
+			log.Println(err)
+		}
+		if err = cmd.Wait(); err != nil {
+			log.Println(err)
+		}
+
+		editor = app
+
 		c.Confirm(attempt, issue)
 	case "d":
 		return false
@@ -185,16 +170,22 @@ func (c *IssueConfirmer) hostFilePath(file string) string {
 }
 
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
-// representation of tenet.Issue.
-func FormatPlainText(issue *tenet.Issue) string {
+// representation of api.Issue.
+func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
 	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
-	c := color.New(color.FgCyan).SprintfFunc()
+	cy := color.New(color.FgCyan).SprintfFunc()
 
-	address := m("%s-%d:%d", issue.Position.Start.String(), issue.Position.End.Line, issue.Position.End.Column)
+	filename := strings.TrimPrefix(issue.Position.Start.Filename, c.hostAbsBasePath)
+
+	addrFmtStr := fmt.Sprintf("%s:%d", filename, issue.Position.End.Line)
+	if col := issue.Position.End.Column; col != 0 {
+		addrFmtStr += fmt.Sprintf(":%d", col)
+	}
+	address := m(addrFmtStr)
 	comment := strings.Trim(issue.Comment, "\n")
-	comment = c(indent("\n"+comment+"\n", false))
+	comment = cy(indent("\n"+comment+"\n", false))
 
 	ctxBefore := indent(yf("\n...\n%s", issue.CtxBefore), false)
 	issueLines := indent(y("\n%s", issue.LineText), true)

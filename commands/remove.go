@@ -2,8 +2,10 @@ package commands
 
 import "github.com/codegangsta/cli"
 
-var RemoveCMD = cli.Command{Name: "remove",
-	Usage: "remove a tenet from lingo",
+var RemoveCMD = cli.Command{
+	Name:    "remove",
+	Aliases: []string{"rm"},
+	Usage:   "remove a tenet from lingo",
 	Description: `
 
   "lingo remove github.com/lingo-reviews/unused-args"

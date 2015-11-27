@@ -9,10 +9,8 @@ import (
 	"os/user"
 	"strings"
 
-	"text/template"
-
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/tenet"
+	"github.com/lingo-reviews/dev/api"
 )
 
 type OutputFormat string
@@ -39,7 +37,7 @@ const (
 
 // finalOutput writes the output to a file at outputFile, unless outputFile ==
 // "cli", in which case it returns the output.
-func Output(outputType OutputFormat, outputPath string, issues []*tenet.Issue) string {
+func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) string {
 	b := format(outputType, issues)
 	if outputPath == "cli" {
 		return b.String()
@@ -55,24 +53,16 @@ func Output(outputType OutputFormat, outputPath string, issues []*tenet.Issue) s
 		}
 	}
 
-	err := ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0775))
+	err := ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0644))
 	if err != nil {
 		panic(errors.Errorf("could not write to file %s: %s", outputPath, err.Error()))
 	}
 	return fmt.Sprintf("output written to %s", outputPath)
 }
 
-func format(outputFmt OutputFormat, issues []*tenet.Issue) bytes.Buffer {
+func format(outputFmt OutputFormat, issues []*api.Issue) bytes.Buffer {
 	var b bytes.Buffer
 	switch outputFmt {
-	case plainText:
-		if len(issues) == 0 {
-			fmt.Fprintln(&b, "No issues found")
-			break
-		}
-		for _, issue := range issues {
-			fmt.Fprintln(&b, FormatPlainText(issue))
-		}
 	case jsonPretty:
 		formatted, err := json.MarshalIndent(issues, "", "\t")
 		if err != nil {
@@ -89,32 +79,4 @@ func format(outputFmt OutputFormat, issues []*tenet.Issue) bytes.Buffer {
 		panic(errors.Errorf("Unrecognised output format %q", outputFmt))
 	}
 	return b
-}
-
-// Comment returns the comment for the issue, depending on the context of the issue.
-func Comment(issue *tenet.Issue) (string, error) {
-	commSet := issue.Comments()
-	comments := commSet.CommentsForContext(issue.Context)
-	if len(comments) == 0 {
-		comments = commSet.CommentsForContext(tenet.AllComments)
-	}
-
-	// build comments with template args
-	t := template.New("comment template")
-	// default message if no comment set
-	commentTemplate := "Issue Found"
-	if len(comments) > 0 {
-		commentTemplate = comments[0].Template
-	}
-	ct, err := t.Parse(commentTemplate) // TODO(waigani) This only returns the first comment for each context.
-	if err != nil {
-		return "", err
-	}
-	var b bytes.Buffer
-	err = ct.Execute(&b, issue.CommVars)
-	if err != nil {
-		return "", err
-	}
-
-	return b.String(), nil
 }

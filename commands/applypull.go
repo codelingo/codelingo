@@ -1,8 +1,9 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/codegangsta/cli"
-	"github.com/waigani/xxx"
 )
 
 var ApplyPullCMD = cli.Command{
@@ -14,5 +15,5 @@ var ApplyPullCMD = cli.Command{
 }
 
 func applyPull(c *cli.Context) {
-	xxx.Print("applyPull called")
+	fmt.Println("apply-pull not implemented")
 }
