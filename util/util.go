@@ -11,7 +11,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"code.google.com/p/go/src/pkg/text/template"
+	"text/template"
 
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
