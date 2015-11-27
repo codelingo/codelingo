@@ -8,6 +8,7 @@ import (
 
 	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 // Docker is a tenet driver which runs tenets inside a docker container.
@@ -32,12 +33,9 @@ func (d *Docker) Pull(update bool) error {
 
 func (d *Docker) getDockerClient() (*goDocker.Client, error) {
 	if d.dockerClient == nil {
-		// TODO(waigani) get endpoint from ~/.lingo/config.toml
-		endpoint := "unix:///var/run/docker.sock"
-
-		dClient, err := goDocker.NewClient(endpoint)
+		dClient, err := util.DockerClient()
 		if err != nil {
-			return nil, err
+			return nil, errors.Trace(err)
 		}
 		d.dockerClient = dClient
 	}
