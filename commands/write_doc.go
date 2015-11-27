@@ -27,7 +27,7 @@ const defaultGroupTemplate = `## {{.GroupName}}
 
 var WriteDocCMD = cli.Command{
 	Name:  "write-docs",
-	Usage: "write output documentation generated from tenets to a file",
+	Usage: "write documentation generated from tenets to a file",
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:   "template, t",
@@ -82,7 +82,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 		oserrf(err.Error())
 		return
 	}
-	cfg, err := buildConfig(cfgPath, CascadeBoth)
+	cfg, err := buildConfig(cfgPath, CascadeUp)
 	if err != nil {
 		oserrf(err.Error())
 		return
