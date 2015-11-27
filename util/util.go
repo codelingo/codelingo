@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -8,6 +9,9 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"text/tabwriter"
+
+	"code.google.com/p/go/src/pkg/text/template"
 
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
@@ -103,6 +107,36 @@ func BinTenets() ([]string, error) {
 	return tenets, nil
 }
 
+// TODO(waigani) this is duping the logger in dev. Sort out one solution to
+// logging and printing messages and errors.
+func Printf(format string, args ...interface{}) (int, error) {
+	return Printer.Printf(format, args)
+}
+
+func Println(line string) {
+	Printer.Println(line)
+}
+func init() {
+	Printer = &FmtPrinter{}
+}
+
+var Printer printer
+
+type printer interface {
+	Printf(string, ...interface{}) (int, error)
+	Println(...interface{}) (int, error)
+}
+
+type FmtPrinter struct{}
+
+func (*FmtPrinter) Printf(format string, args ...interface{}) (int, error) {
+	return fmt.Printf(format, args...)
+}
+
+func (*FmtPrinter) Println(args ...interface{}) (int, error) {
+	return fmt.Println(args...)
+}
+
 func DockerTenets() ([]string, error) {
 	// TODO(waigani) each image needs to be build with reviews.lingo.name for
 	// this to work. We are using the label because it seems the client can't
@@ -132,4 +166,21 @@ func DockerClient() (*goDocker.Client, error) {
 	// TODO(waigani) get endpoint from ~/.lingo/config.toml
 	endpoint := "unix:///var/run/docker.sock"
 	return goDocker.NewClient(endpoint)
+}
+
+func FormatOutput(in interface{}, tmplt string) (string, error) {
+	out := new(bytes.Buffer)
+	funcMap := template.FuncMap{
+		"join": strings.Join,
+	}
+
+	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)
+	t := template.Must(template.New("tmpl").Funcs(funcMap).Parse(tmplt))
+	err := t.Execute(w, in)
+	if err != nil {
+		return "", err
+	}
+	w.Flush()
+
+	return out.String(), nil
 }

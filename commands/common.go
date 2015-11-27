@@ -215,6 +215,7 @@ var exiter = func(code int) {
 func oserrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
 	log.Printf(format, a...)
+	fmt.Printf(format, a...)
 	exiter(1)
 }
 
