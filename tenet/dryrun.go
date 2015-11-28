@@ -4,11 +4,14 @@ import (
 	"fmt"
 
 	"github.com/lingo-reviews/dev/api"
+	"gopkg.in/tomb.v1"
 )
 
 type dryRun struct{}
 
-type dryRunService struct{}
+type dryRunService struct {
+	tenetService
+}
 
 func (d *dryRun) Pull(bool) error {
 	fmt.Println("Dry Run: Pulling tenets")
@@ -24,6 +27,10 @@ func (d *dryRun) OpenService() (TenetService, error) {
 func (s *dryRunService) start() error {
 	fmt.Println("Dry Run: Starting service...")
 	return nil
+}
+
+func (d *dryRunService) Tomb() *tomb.Tomb {
+	return d.tomb
 }
 
 func (s *dryRunService) Close() error {

@@ -3,6 +3,7 @@ package docker
 import (
 	"net"
 	"os"
+	"os/exec"
 	"time"
 
 	goDocker "github.com/fsouza/go-dockerclient"
@@ -36,7 +37,6 @@ func NewService(tenetName string) (*service, error) {
 func (s *service) Start() error {
 	log.Print("docker.service.Start")
 	c, err := s.client()
-	log.Print("41")
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -45,7 +45,6 @@ func (s *service) Start() error {
 	// TODO(waigani) check that pwd is correct when a tenet is started for a
 	// subdir.
 	pwd, err := os.Getwd()
-	log.Print("50")
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -55,8 +54,10 @@ func (s *service) Start() error {
 	// start a new container
 	opts := goDocker.CreateContainerOptions{
 		Config: &goDocker.Config{
-			Image:     s.image,
-			PortSpecs: []string{"8000/tcp"},
+			Image:       s.image,
+			PortSpecs:   []string{"8000/tcp"},
+			AttachStdin: true,
+			Tty:         true,
 		},
 		HostConfig: &goDocker.HostConfig{
 			Binds: []string{pwd + ":/source:ro"},
@@ -70,7 +71,6 @@ func (s *service) Start() error {
 	}
 
 	container, err := c.CreateContainer(opts)
-	log.Print("71")
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -81,7 +81,6 @@ func (s *service) Start() error {
 		return errors.Annotatef(err, "error starting container %s", container.Name)
 	}
 
-	log.Printf("%#v", container)
 	for container.NetworkSettings == nil {
 		time.Sleep(1 * time.Microsecond)
 		container, err = c.InspectContainer(container.ID)
@@ -89,13 +88,6 @@ func (s *service) Start() error {
 			return errors.Trace(err)
 		}
 	}
-
-	log.Print(c.Endpoint())
-
-	log.Print("got network")
-	log.Printf("%#v", container)
-	log.Printf("%#v", container.NetworkSettings)
-	log.Printf("%#v", container.HostConfig)
 
 	log.Printf("waiting for ports to bind")
 	for container.NetworkSettings.Ports["8000/tcp"] == nil {
@@ -132,23 +124,14 @@ func (s *service) client() (*goDocker.Client, error) {
 }
 
 func (s *service) Stop() error {
-	c, err := s.client()
-	if err != nil {
-		return errors.Trace(err)
-	}
 
-	err = c.StopContainer(s.containerID, 5)
-	if err != nil {
-		log.Printf("error stopping container: %s", err.Error())
-	}
+	// Use exec so it's quick
+	log.Println("stopped called")
+	cmd := exec.Command("docker", "rm", "-f", s.containerID)
+	cmd.Start()
+	cmd.Process.Release()
 
-	// TODO(waigani) once one tenet services more than one review, don't
-	// remove container at end.
-	opts := goDocker.RemoveContainerOptions{
-		Force: true,
-		ID:    s.containerID,
-	}
-	return c.RemoveContainer(opts)
+	return nil
 }
 
 // func (s *service) IsRunning() bool {
