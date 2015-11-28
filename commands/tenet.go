@@ -1,18 +1,14 @@
 package commands
 
 import (
-	"bytes"
 	"fmt"
-	"strings"
-	"text/tabwriter"
-
-	"text/template"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 
 	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/tenet"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 // TenetCMD is a fallthrough CMD which treats command as the tenet name and
@@ -120,7 +116,7 @@ func (c *tenetCMDs) printInfo() error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	text, err := formatOutput(info, infoTemplate)
+	text, err := util.FormatOutput(info, infoTemplate)
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -177,13 +173,13 @@ func fmtHelp(info *api.Info) (string, error) {
 		Info:     info,
 		Commands: tenetCommands(),
 	}
-	return formatOutput(h, helpTemplate)
+	return util.FormatOutput(h, helpTemplate)
 }
 
 func (c *tenetCMDs) printCmdHelp(cmdName string) error {
 	for _, cmd := range tenetCommands() {
 		if cmd.Name == cmdName {
-			out, err := formatOutput(cmd, cmdHelpTemplate)
+			out, err := util.FormatOutput(cmd, cmdHelpTemplate)
 			if err != nil {
 				return errors.Trace(err)
 			}
@@ -194,23 +190,6 @@ func (c *tenetCMDs) printCmdHelp(cmdName string) error {
 
 	fmt.Printf("no help found for %q", cmdName)
 	return nil
-}
-
-func formatOutput(in interface{}, tmplt string) (helpStr string, _ error) {
-	out := new(bytes.Buffer)
-	funcMap := template.FuncMap{
-		"join": strings.Join,
-	}
-
-	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)
-	t := template.Must(template.New("help").Funcs(funcMap).Parse(tmplt))
-	err := t.Execute(w, in)
-	if err != nil {
-		return "", err
-	}
-	w.Flush()
-
-	return out.String(), nil
 }
 
 // TODO(waigani) list commands under help

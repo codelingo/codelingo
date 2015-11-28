@@ -17,6 +17,7 @@ var globalCommands = []cli.Command{
 	commands.DocsCMD,
 	commands.EditCMD,
 	commands.InfoCMD,
+	commands.BuildCMD,
 
 	// commands.OptionsCMD,
 	// commands.ImportCMD,

@@ -92,6 +92,11 @@ Review all files found in pwd, with two speific tenets:
 		// 	Usage:  "a template for the output format",
 		// 	EnvVar: "LINGO-OUTPUT-TEMPLATE",
 		// },
+		// TODO(waigani) implement
+		// cli.BoolFlag{
+		// 	Name:  "watch",
+		// 	Usage: "watch for changes and review any changed files",
+		// },
 	},
 	Action: reviewAction,
 }

@@ -1,9 +1,12 @@
 package commands
 
 import (
+	"fmt"
+	"log"
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 var AddCMD = cli.Command{
@@ -32,6 +35,23 @@ var AddCMD = cli.Command{
 		},
 	},
 	Action: add,
+	BashComplete: func(c *cli.Context) {
+		// This will complete if no args are passed
+		if len(c.Args()) > 0 {
+			return
+		}
+
+		tenets, err := util.BinTenets()
+		if err != nil {
+			log.Printf("auto complete error %v", err)
+			return
+		}
+
+		for _, t := range tenets {
+			fmt.Println(t)
+		}
+
+	},
 }
 
 func add(c *cli.Context) {

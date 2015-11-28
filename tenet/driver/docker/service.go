@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/lingo-reviews/dev/tenet/log"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 type service struct {
@@ -110,14 +111,11 @@ func (s *service) Start() error {
 
 func (s *service) client() (*goDocker.Client, error) {
 	if s.dockerClient == nil {
-		// TODO(waigani) get endpoint from ~/.lingo/config.toml
-		endpoint := "unix:///var/run/docker.sock"
-
-		dClient, err := goDocker.NewClient(endpoint)
+		var err error
+		s.dockerClient, err = util.DockerClient()
 		if err != nil {
-			return nil, err
+			return nil, errors.Trace(err)
 		}
-		s.dockerClient = dClient
 	}
 
 	return s.dockerClient, nil
