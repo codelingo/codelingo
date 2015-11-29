@@ -121,14 +121,44 @@ func (s *service) client() (*goDocker.Client, error) {
 	return s.dockerClient, nil
 }
 
+func (s *service) stop() {
+	// Use exec so it's quick
+	cmd := exec.Command("docker", "rm", "-f", s.containerID)
+	if err := cmd.Start(); err != nil {
+		log.Println("ERROR stopping tenet:", err)
+		time.Sleep(1 * time.Microsecond)
+		log.Println("trying to stop tenet again")
+		s.stop()
+		return
+	}
+	s.release(cmd)
+}
+
+func (s *service) release(cmd *exec.Cmd) {
+	if err := cmd.Process.Release(); err != nil {
+		log.Println("ERROR releasing process:", err)
+		time.Sleep(1 * time.Microsecond)
+		log.Println("trying to release process again")
+		s.release(cmd)
+		return
+	}
+}
+
 func (s *service) Stop() error {
 
-	// Use exec so it's quick
 	log.Println("stopped called")
-	cmd := exec.Command("docker", "rm", "-f", s.containerID)
-	cmd.Start()
-	cmd.Process.Release()
 
+	wc := make(chan struct{})
+	go func() {
+		s.stop()
+		wc <- struct{}{}
+	}()
+
+	select {
+	case <-wc:
+	case <-time.After(10 * time.Second):
+		return errors.Errorf("timed out trying to stop docker tenet with id: %s", s.containerID)
+	}
 	return nil
 }
 

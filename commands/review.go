@@ -12,12 +12,15 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path"
 	"path/filepath"
 	"sync"
+	"syscall"
 
 	"github.com/codegangsta/cli"
 	"github.com/waigani/diffparser"
@@ -27,6 +30,7 @@ import (
 	"github.com/lingo-reviews/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/commands/review"
+	"github.com/lingo-reviews/lingo/util"
 )
 
 var ReviewCMD = cli.Command{
@@ -128,33 +132,98 @@ type tenetReview struct {
 	issuesc    chan *api.Issue
 	info       *api.Info
 	issuesWG   *sync.WaitGroup
-	tomb       *tomb.Tomb
+	filesTM    *tomb.Tomb
 }
 
 // TODO(waigani) use configHash for docker containers. Only remove the container at the end of review.
 // TODO(waigani) add a buffer. We want lingo to be ahead of the user, but not to review the world in the background.
 // If the user has one issue up on their screen, very little cpu / mem should be being used.
 
-// returns a chan of tenet reviews.
-func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) <-chan *tenetReview {
+var bufferFullERR = errors.New("buffer full")
+
+// returns a chan of tenet reviews and a cancel chan that blocks until the user cancels.
+func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-chan *tenetReview, chan struct{}) {
 	reviews := make(map[string]*tenetReview)
 	reviewChannel := make(chan *tenetReview)
 	cleanupWG := &sync.WaitGroup{}
 
+	// setup a cancel exit path.
+	cancelc := make(chan os.Signal, 1)
+	signal.Notify(cancelc, os.Interrupt)
+	signal.Notify(cancelc, syscall.SIGTERM)
+	cancelledc := make(chan struct{})
+	cancelled := func() bool {
+		select {
+		case _, ok := <-cancelledc:
+			if ok {
+				close(cancelc)
+			}
+			return true
+		default:
+			return false
+		}
+	}
+
+	// Kill all open tenets on cancel.
+	go func() {
+		var i int
+		for {
+			<-cancelc
+			if i > 0 {
+				// on the second exit, just do it.
+				os.Exit(1)
+			}
+			i++
+			go func() {
+				// TODO(waigani) add progress bar here
+				fmt.Print("\ncleaning up tenets ... ")
+
+				// Anything waiting on the cancelled chan will now fire.
+				close(cancelledc)
+
+				// Wait for all tenets to be cleaned up.
+				cleanupWG.Wait()
+
+				// say bye.
+				fmt.Println("done.")
+				os.Exit(1)
+			}()
+		}
+	}()
+
+	// buffer the number of running tenets.
+	// TODO(waigani) make cfg vars
+	buffLimit := 3
+	if ctx.Bool("keep-all") {
+		buffLimit = 100
+	}
+	buff := util.NewBuffer(buffLimit, cancelledc)
+
 	go func() {
 		for m := range mappings {
 			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
-			for _, tc := range m.cfg.AllTenets() {
-				// Open the tenet service if we haven't seen this config before
+			for i, tc := range m.cfg.AllTenets() {
+
+				// Don't build another tenet until there is room in the buffer.
+				// WaitRoom will not block if we get a cancel signal
+				buff.WaitRoom()
+
+				if cancelled() {
+					// empty dirs to stop feeding tenet reviews in progress.
+					m.dirs = []string{}
+					return
+				}
+
+				// Open the tenet service if we haven't seen this config before.
 				configHash := tc.hash()
 				r, found := reviews[configHash]
 				if !found {
+
 					tn, err := newTenet(ctx, tc)
 					if err != nil {
 						errc <- err
 						continue
 					}
-
 					// Note: service should not be called outside this if block.
 					service, err := tn.OpenService()
 					if err != nil {
@@ -171,46 +240,56 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) <-ch
 					r = &tenetReview{
 						configHash: configHash,
 						filesc:     make(chan string),
-						issuesc:    make(chan *api.Issue, 5),
+						issuesc:    make(chan *api.Issue),
 						info:       info,
 						issuesWG:   &sync.WaitGroup{},
-						tomb:       service.Tomb(),
+						filesTM:    &tomb.Tomb{},
 					}
 					reviews[configHash] = r
 
 					// Setup the takedown of this review.
 					r.issuesWG.Add(1)
 					cleanupWG.Add(1)
-					go func() {
-						// The following fires either:
-						// 1. when the tenet doesn't get any files for 5sec (it may be the last instance of this tenet)
-						// or
-						// 2. when all tenets have completed
-						<-r.tomb.Dying()
+					buff.Add(1)
 
-						// make sure that any configHash's matching this one
-						// will have to start a new tenet instance.
+					go func(r *tenetReview) {
+						// The following fires when:
+						select {
+						// 1. all files have been sent or timed out
+						// 2. the tenet buffer is full
+						case <-r.filesTM.Dying():
+							// 3. lingo has been stopped
+						case <-cancelledc:
+						}
+
+						// make room for another tenet to start and ensure
+						// that any configHash's matching this one will have
+						// to start a new tenet instance.
 						delete(reviews, configHash)
+						buff.Add(-1)
 
 						// signal to the tenet that no more files are coming.
+
 						close(r.filesc)
 
 						// wait for the tenet to signal to us that it's finished it's review.
 						r.issuesWG.Wait()
 
 						// we can now safely close the backing service.
-						service.Close()
+						if err := service.Close(); err != nil {
+							log.Println("ERROR closing sevice:", err)
+						}
 
 						log.Println("cleanup done")
 						cleanupWG.Done()
-					}()
+					}(r)
 
 					// Make sure we're ready to handle results before we start
 					// the review.
 					reviewChannel <- r
 
 					// Start this tenet's review.
-					service.Review(r.filesc, r.issuesc)
+					service.Review(r.filesc, r.issuesc, r.filesTM)
 				}
 
 				for _, d := range m.dirs {
@@ -224,33 +303,49 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) <-ch
 				l:
 					for i, f := range files {
 						select {
-						case <-r.tomb.Dying():
+						case <-cancelledc:
+							log.Println("user cancelled, dropping files.")
+						case <-r.filesTM.Dying():
 							dropped := len(files) - i
-							log.Print("WARNING this review closed before all files sent. %d files dropped", dropped)
+							log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
 							break l
 						case r.filesc <- f:
 						}
 					}
 				}
+
+				go func(r *tenetReview) {
+					buff.WaitFull()
+
+					// Don't take on any more files, this is the start of the
+					// end for this tenet review.
+					r.filesTM.Kill(bufferFullERR)
+				}(r)
+
 			}
 		}
 
 		for _, r := range reviews {
-			// Done should only ever be called once per tenet.
-			r.tomb.Done()
+			// this says all files have been sent.
+
+			// TODO(waigani) This circumvents the map as a tenet will die
+			// after one directory of files. It is needed to free up the
+			// buffer size.
+			r.filesTM.Done()
 		}
 
-		// wait for all tenets to be cleaned up
+		// wait for all tenets to be cleaned up.
 		cleanupWG.Wait()
 
 		// Closing this chan will end the lingo process.
 		close(reviewChannel)
 	}()
 
-	return reviewChannel
+	return reviewChannel, cancelledc
 }
 
 func reviewAction(ctx *cli.Context) {
+
 	// TODO: file args input, as files and dirs
 	var err error
 	var diff *diffparser.Diff
@@ -317,13 +412,36 @@ func reviewAction(ctx *cli.Context) {
 	// Use a channel to read configs with directory mapping
 	configDirs := readCfgs(contextDirs, errc)
 
-	rc := reviewQueue(ctx, configDirs, errc)
-	reviews := make(map[string]*tenetReview)
+	rc, cancelledc := reviewQueue(ctx, configDirs, errc)
 	var count int
 
-	allIssuesc := make(chan *api.Issue)
+	keptIssuesc := make(chan *api.Issue)
+
+	// collectedIssues has a huge buffer so we can store all the found issues,
+	// allowing the tenet instances to be stopped. If this buffer is filled,
+	// tenets will not be stopped. They will hang around until there is room
+	// to offload their issues.
+	collectedIssuesc := make(chan *api.Issue, 1000000)
 	allIssuesWG := &sync.WaitGroup{}
-	mutex := &sync.Mutex{}
+
+	// wait until we have all kept issues.
+	keptIssuesWG := &sync.WaitGroup{}
+	keptIssuesWG.Add(1)
+	go func() {
+		for i := range collectedIssuesc {
+			if cfm.Confirm(0, i) {
+				// Don't block on send. In the case of --keep-all
+				// with no output, we just show count and have no
+				// need for issues.
+				select {
+				case keptIssuesc <- i:
+				default:
+				}
+			}
+		}
+		close(keptIssuesc)
+		keptIssuesWG.Done()
+	}()
 
 z:
 	for {
@@ -333,8 +451,9 @@ z:
 				break z
 			}
 			allIssuesWG.Add(1)
-			reviews[r.configHash] = r
 			go func(r *tenetReview) {
+				defer r.issuesWG.Done()
+
 			l:
 				for {
 					select {
@@ -343,30 +462,28 @@ z:
 							allIssuesWG.Done()
 							break l
 						}
-
 						count++
-						mutex.Lock()
-						if cfm.Confirm(0, i) {
-							// Don't block on send. In the case of --keep-all
-							// with no output, we just show count and have no
-							// need for issues.
-							select {
-							case allIssuesc <- i:
-							default:
-							}
+						select {
+						case <-cancelledc:
+						case collectedIssuesc <- i:
 						}
-						mutex.Unlock()
 
 					}
 				}
-				r.issuesWG.Done()
+
 			}(r)
 		}
 	}
 
 	// Wait for all issues to be read.
 	allIssuesWG.Wait()
-	close(allIssuesc)
+
+	// then close our collection chan.
+	close(collectedIssuesc)
+
+	// then wait for the user to confirm what issues are kept.
+	keptIssuesWG.Wait()
+
 	close(errc)
 
 	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
@@ -393,9 +510,8 @@ z:
 
 	// Print formatted output, even if there are no issues (eg empty json {})
 	if outputFmt != "none" {
-
 		var issues []*api.Issue
-		for i := range allIssuesc {
+		for i := range keptIssuesc {
 			issues = append(issues, i)
 		}
 

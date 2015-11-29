@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/lingo-reviews/dev/api"
-	"gopkg.in/tomb.v1"
+	tomb "gopkg.in/tomb.v1"
 )
 
 type dryRun struct{}
@@ -29,16 +29,12 @@ func (s *dryRunService) start() error {
 	return nil
 }
 
-func (d *dryRunService) Tomb() *tomb.Tomb {
-	return d.tomb
-}
-
 func (s *dryRunService) Close() error {
 	fmt.Println("Dry Run: Closing service")
 	return nil
 }
 
-func (s *dryRunService) Review(filesc <-chan string, issuesc chan<- *api.Issue) error {
+func (s *dryRunService) Review(filesc <-chan string, issuesc chan<- *api.Issue, t *tomb.Tomb) error {
 	fmt.Println("Dry Run: Starting review...")
 
 	for filename := range filesc {

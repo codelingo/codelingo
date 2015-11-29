@@ -37,15 +37,13 @@ type TenetService interface {
 	// Review reads from filesc and writes to issuesc. It is the
 	// responsibility of the caller to close filesc. The stream to the service
 	// will stay open until filesc is closed.
-	Review(filesc <-chan string, issuesc chan<- *api.Issue) error
+	Review(filesc <-chan string, issuesc chan<- *api.Issue, t *tomb.Tomb) error
 
 	// Info returns all metadata about this tenet.
 	Info() (*api.Info, error)
 
 	// start the backing service process
 	start() error
-
-	Tomb() *tomb.Tomb
 }
 
 // tenet implenets Tenet.
@@ -92,7 +90,6 @@ func (t *tenet) OpenService() (TenetService, error) {
 		cfg:          cfg,
 		editFilename: t.Driver.EditFilename,
 		editIssue:    t.Driver.EditIssue,
-		tomb:         &tomb.Tomb{},
 		mutex:        &sync.Mutex{},
 	}
 
@@ -116,12 +113,7 @@ type tenetService struct {
 	editFilename func(string) string
 	editIssue    func(*api.Issue) *api.Issue
 	info         *api.Info
-	tomb         *tomb.Tomb
 	mutex        *sync.Mutex
-}
-
-func (t *tenetService) Tomb() *tomb.Tomb {
-	return t.tomb
 }
 
 func (t *tenetService) start() error {
@@ -172,9 +164,11 @@ func (t *tenetService) Close() error {
 // 	}
 // }
 
-// Review sets up two goroutines 1. to send files to the service from filesc,
+var KillAllTenetsErr = errors.New("kill all tenets")
+
+// Review sets up two goroutines. One to send files to the service from filesc,
 // the other to recieve issues from the service on issuesc.
-func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) error {
+func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue, filesTM *tomb.Tomb) error {
 	stream, err := t.client.Review(context.Background())
 	if err != nil {
 		return err
@@ -186,23 +180,21 @@ func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) e
 			log.Println("waiting for issues")
 			issue, err := stream.Recv()
 			if err != nil {
-				if err == io.EOF {
-					log.Println("no more issues from tenet")
+				if err == io.EOF ||
+					grpc.ErrorDesc(err) == "transport is closing" ||
+					err.Error() == "timed out waiting for issues" { // TODO(waigani) error type
+					log.Println("closing issuesc")
 					// Close our local issues channel.
-					t.Tomb().Kill(errors.New("tenet closed issuesc"))
 					close(issuesc)
 					return
 				}
 
-				// If we can't get an issue, we keep calm and carry on. The
-				// error we expect is "transport is closing", if it's
-				// something else, we log it.
-				if err != grpc.ErrClientConnClosing {
-					log.Println("ERROR receiving an issue : %s", err.Error())
-				}
+				// TODO(waigani) in what error cases should we close issuesc?
+				// Any other err we keep calm and carry on.
+				log.Println("ERROR receiving an issue : %s", err.Error())
 				continue
 			}
-			log.Println("got an issue")
+
 			issuesc <- t.editIssue(issue)
 		}
 	}(issuesc)
@@ -222,13 +214,6 @@ func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) e
 					return
 				}
 
-				// If tenet is not returning issues, don't send it any more files. Just empty
-				// the chan.
-
-				if err := t.Tomb().Err(); err != nil && err.Error() == "tenet closed issuesc" {
-					return
-				}
-
 				file := &api.File{Name: t.editFilename(filename)}
 				if err := stream.Send(file); err != nil {
 					log.Println("failed to send a file %q: %v", filename, err)
@@ -239,7 +224,7 @@ func (t *tenetService) Review(filesc <-chan string, issuesc chan<- *api.Issue) e
 				// files to send it in that time, we close this tenet down.
 			case <-time.After(5 * time.Second):
 				// this will close this instance of the tenet.
-				t.Tomb().Kill(errors.New("timed out waiting for a filename"))
+				filesTM.Kill(errors.New("timed out waiting for a filename"))
 
 				return
 			}
