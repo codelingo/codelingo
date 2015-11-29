@@ -92,7 +92,6 @@ func (s *service) Start() error {
 
 	log.Printf("waiting for ports to bind for docker container", container.ID)
 	var breakLoop bool
-	var err error
 	go func() {
 		<-time.After(5 * time.Second)
 		breakLoop = true
