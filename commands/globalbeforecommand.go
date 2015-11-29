@@ -85,7 +85,7 @@ func ensureLingoHome() {
 	// create lingo home if it doesn't exist
 	lHome := util.MustLingoHome()
 	if _, err := os.Stat(lHome); os.IsNotExist(err) {
-		err := os.MkdirAll(lHome, 0777)
+		err := os.MkdirAll(lHome, 0775)
 		if err != nil {
 			panic(err)
 		}
@@ -93,7 +93,7 @@ func ensureLingoHome() {
 
 	tenetsHome := filepath.Join(lHome, "tenets")
 	if _, err := os.Stat(tenetsHome); os.IsNotExist(err) {
-		err := os.MkdirAll(tenetsHome, 0755)
+		err := os.MkdirAll(tenetsHome, 0775)
 		if err != nil {
 			panic(err)
 		}
@@ -101,11 +101,9 @@ func ensureLingoHome() {
 
 	logsHome := filepath.Join(lHome, "logs")
 	if _, err := os.Stat(logsHome); os.IsNotExist(err) {
-		err := os.MkdirAll(logsHome, 0755)
+		err := os.MkdirAll(logsHome, 0775)
 		if err != nil {
 			panic(err)
 		}
 	}
-
-	os.Chmod(lHome, 0644)
 }
