@@ -171,6 +171,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 			<-cancelc
 			if i > 0 {
 				// on the second exit, just do it.
+				fmt.Print("failed.\nSome docker containers may still be running.")
 				os.Exit(1)
 			}
 			i++
