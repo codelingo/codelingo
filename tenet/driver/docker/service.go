@@ -90,13 +90,22 @@ func (s *service) Start() error {
 		}
 	}
 
-	log.Printf("waiting for ports to bind")
-	for container.NetworkSettings.Ports["8000/tcp"] == nil {
+	log.Printf("waiting for ports to bind for docker container", container.ID)
+	var breakLoop bool
+	var err error
+	go func() {
+		<-time.After(5 * time.Second)
+		breakLoop = true
+	}()
+	for container.NetworkSettings.Ports["8000/tcp"] == nil && !breakLoop {
 		time.Sleep(1 * time.Microsecond)
 		container, err = c.InspectContainer(container.ID)
 		if err != nil {
 			return errors.Trace(err)
 		}
+	}
+	if breakLoop {
+		return errors.New("timed out waiting for docker ports to bind")
 	}
 
 	log.Printf("%#v", container.NetworkSettings.Ports["8000/tcp"])
