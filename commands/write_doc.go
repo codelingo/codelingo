@@ -101,6 +101,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 		oserrf(err.Error())
 		return
 	}
+	defer file.Close()
 
 	r := strings.NewReplacer("/", "_")
 

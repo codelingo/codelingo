@@ -203,7 +203,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 	go func() {
 		for m := range mappings {
 			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
-			for i, tc := range m.cfg.AllTenets() {
+			for _, tc := range m.cfg.AllTenets() {
 
 				// Don't build another tenet until there is room in the buffer.
 				// WaitRoom will not block if we get a cancel signal
