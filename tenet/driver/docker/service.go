@@ -52,18 +52,23 @@ func (s *service) Start() error {
 
 	// Start up the mirco-service
 
+	internalPort := "8000/tcp"
+	dockerPort := goDocker.Port(internalPort)
+
 	// start a new container
 	opts := goDocker.CreateContainerOptions{
 		Config: &goDocker.Config{
-			Image:       s.image,
-			PortSpecs:   []string{"8000/tcp"},
+			Image: s.image,
+			ExposedPorts: map[goDocker.Port]struct{}{
+				dockerPort: {}},
 			AttachStdin: true,
 			Tty:         true,
 		},
 		HostConfig: &goDocker.HostConfig{
-			Binds: []string{pwd + ":/source:ro"},
+			PublishAllPorts: true,
+			Binds:           []string{pwd + ":/source:ro"},
 			PortBindings: map[goDocker.Port][]goDocker.PortBinding{
-				"8000/tcp": []goDocker.PortBinding{{
+				dockerPort: []goDocker.PortBinding{{
 					HostIP:   "127.0.0.1",
 					HostPort: "0",
 				}},
@@ -96,7 +101,7 @@ func (s *service) Start() error {
 		<-time.After(5 * time.Second)
 		breakLoop = true
 	}()
-	for container.NetworkSettings.Ports["8000/tcp"] == nil && !breakLoop {
+	for container.NetworkSettings.Ports[dockerPort] == nil && !breakLoop {
 		time.Sleep(1 * time.Microsecond)
 		container, err = c.InspectContainer(container.ID)
 		if err != nil {
@@ -107,9 +112,9 @@ func (s *service) Start() error {
 		return errors.New("timed out waiting for docker ports to bind")
 	}
 
-	log.Printf("%#v", container.NetworkSettings.Ports["8000/tcp"])
+	log.Printf("%#v", container.NetworkSettings.Ports[dockerPort])
 
-	ports := container.NetworkSettings.Ports["8000/tcp"]
+	ports := container.NetworkSettings.Ports[dockerPort]
 	s.ip = ports[0].HostIP
 	s.port = ports[0].HostPort
 
