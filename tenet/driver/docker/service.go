@@ -78,6 +78,9 @@ func (s *service) Start() error {
 
 	container, err := c.CreateContainer(opts)
 	if err != nil {
+		if err.Error() == "no such image" {
+			return errors.Errorf("The tenet %q could not be found. Has it been installed?", s.image)
+		}
 		return errors.Trace(err)
 	}
 	s.containerID = container.ID
