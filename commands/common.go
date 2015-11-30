@@ -351,6 +351,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *conf
 				log.Println("error reading file: %s", file)
 				return
 			}
+			defer file.Close()
 			if fi, err := file.Stat(); err == nil && fi.IsDir() {
 				buildConfigRecursive(path.Join(f, filename), cascadeDir, cfg)
 			}
