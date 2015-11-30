@@ -459,23 +459,14 @@ func reviewAction(ctx *cli.Context) {
 	collectedIssuesc := make(chan *api.Issue, 1000000)
 	allIssuesWG := &sync.WaitGroup{}
 
-	// Confirm found issues
-	waitToConfirmc := make(chan struct{})
-	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
-	if outputFmt == "none" {
-		close(waitToConfirmc)
-	}
-
 	go func() {
 		for i := range collectedIssuesc {
 			if cfm.Confirm(0, i) {
 				// Don't block on send. In the case of --keep-all
 				// with no output, we just show count and have no
 				// need for issues.
-				select {
-				case <-waitToConfirmc:
-				case keptIssuesc <- i:
-				}
+				keptIssuesc <- i
+
 			}
 		}
 		close(keptIssuesc)
@@ -524,6 +515,7 @@ z:
 		issues = append(issues, i)
 	}
 
+	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
 	if outputFmt != "none" {
 		output := review.Output(outputFmt, ctx.String("output"), issues)
 		fmt.Print(output)
