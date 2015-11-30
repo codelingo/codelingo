@@ -17,7 +17,6 @@ type binaryBuildCfg struct {
 // the we are in the root of the tenet package.
 func (cfg *binaryBuildCfg) BuildGo() error {
 	cfg.dw.start.Done()
-	defer cfg.dw.end.Done()
 	defer cfg.dw.bar.Increment()
 
 	bin, err := util.LingoBin()
