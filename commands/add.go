@@ -24,6 +24,11 @@ var AddCMD = cli.Command{
 			Usage: "driver to use for this tenet",
 		},
 		cli.StringFlag{
+			Name:  "registry",
+			Value: "hub.docker.com",
+			Usage: "the registry this tenet should be pulled from",
+		},
+		cli.StringFlag{
 			Name:  "group",
 			Value: "default",
 			Usage: "group to add tenet to",
@@ -91,10 +96,17 @@ func add(c *cli.Context) {
 		//}
 	}
 
+	var registry string
+	driver := c.String("driver")
+	if driver == "docker" {
+		registry = c.String("registry")
+	}
+
 	cfg.AddTenet(TenetConfig{
-		Name:    imageName,
-		Driver:  c.String("driver"),
-		Options: opts,
+		Name:     imageName,
+		Driver:   driver,
+		Registry: registry,
+		Options:  opts,
 	}, groupName)
 
 	if err := writeConfigFile(c, cfg); err != nil {

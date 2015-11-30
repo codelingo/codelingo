@@ -26,6 +26,9 @@ func (b *Binary) Service() (Service, error) {
 
 	file, err := os.Open(tenetPath)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, errors.Errorf("The tenet %q could not be found. Has it been installed?", b.Name)
+		}
 		return nil, errors.Trace(err)
 	}
 	fi, err := file.Stat()

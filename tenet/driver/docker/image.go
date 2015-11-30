@@ -1,7 +1,9 @@
 package docker
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
@@ -24,14 +26,16 @@ func apiAuth() (docker.AuthConfiguration, error) {
 
 func PullImage(client *docker.Client, name string, registry string, tag string) error {
 	opts := docker.PullImageOptions{
-		Repository: name,
-		Registry:   registry,
-		Tag:        tag,
+		Repository:   name,
+		Registry:     registry,
+		Tag:          tag,
+		OutputStream: os.Stdout,
 	}
 	auth, err := apiAuth()
 	if err != nil {
 		// just log err. We should be able to pull without auth.
 		log.Printf("could not get auth config: %s. We'll try pulling image without auth", err.Error())
+		fmt.Printf("could not get auth config: %s. We'll try pulling image without auth", err.Error())
 	}
 	return client.PullImage(opts, auth)
 }

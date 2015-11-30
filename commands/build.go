@@ -221,8 +221,8 @@ func buildTenet(lingofilePath string, waits map[string]*driverWait) []error {
 			cfg.Binary.dw = binaryW
 			if err := cfg.buildBinary(); err != nil {
 				errsc <- err
-
 			}
+			binaryW.end.Done()
 		}
 	}()
 
@@ -234,6 +234,7 @@ func buildTenet(lingofilePath string, waits map[string]*driverWait) []error {
 			if err := cfg.buildDocker(); err != nil {
 				errsc <- err
 			}
+			dockerW.end.Done()
 		}
 	}()
 
@@ -245,6 +246,7 @@ func buildTenet(lingofilePath string, waits map[string]*driverWait) []error {
 			if err := cfg.buildRemote(); err != nil {
 				errsc <- err
 			}
+			remoteW.end.Done()
 		}
 	}()
 
@@ -256,10 +258,12 @@ func buildTenet(lingofilePath string, waits map[string]*driverWait) []error {
 	return errs
 }
 
+// TODO(waigani) move this into lingofile
 type lingofileCfg struct {
 	Language string         `toml:"language"`
 	Owner    string         `toml:"owner"`
 	Name     string         `toml:"name"`
+	Registry string         `toml:"registry"`
 	Binary   binaryBuildCfg `toml:"binary"`
 	Docker   dockerBuildCfg `toml:"docker"`
 	Remote   remoteBuildCfg `toml:"remote"`

@@ -20,7 +20,6 @@ type dockerBuildCfg struct {
 // BuildGo builds and installs a binary tenet. It assumes go is installed.
 func (cfg *dockerBuildCfg) BuildGo() error {
 	cfg.dw.start.Done()
-	defer cfg.dw.end.Done()
 	defer cfg.dw.bar.Increment()
 
 	dockerfile := filepath.Join(cfg.dir, "Dockerfile")
@@ -115,7 +114,8 @@ func (cfg *dockerBuildCfg) writeDockerFile(dockerfilePath string) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	dockerfilePath = "Dockerfile"
+
+	dockerfilePath = filepath.Join(cfg.dir, "Dockerfile")
 	return ioutil.WriteFile(dockerfilePath, []byte(out), 0644)
 }
 

@@ -228,6 +228,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 					service, err := tn.OpenService()
 					if err != nil {
 						errc <- err
+
 						continue
 					}
 
@@ -393,16 +394,6 @@ func reviewAction(ctx *cli.Context) {
 		fileArgs = []string{"."}
 	}
 
-	// Receiver for errors that can occur during pipeline stages
-	errc := make(chan error)
-	errors := []error{}
-	// Just collect errors during review - show them to the user at the end
-	go func() {
-		for err := range errc {
-			errors = append(errors, err)
-		}
-	}()
-
 	// Get this first as it might fail, we want to avoid all other work in that case
 	cfm, err := review.NewConfirmer(ctx, diff)
 	if err != nil {
@@ -457,6 +448,9 @@ func reviewAction(ctx *cli.Context) {
 		}
 	}
 
+	// Receiver for errors that can occur during pipeline stages
+	errc := make(chan error, 100000)
+
 	// Use a channel to read configs with directory mapping
 	configDirs := readCfgs(cfgList, errc)
 
@@ -469,7 +463,7 @@ func reviewAction(ctx *cli.Context) {
 	// allowing the tenet instances to be stopped. If this buffer is filled,
 	// tenets will not be stopped. They will hang around until there is room
 	// to offload their issues.
-	collectedIssuesc := make(chan *api.Issue, 1000000)
+	collectedIssuesc := make(chan *api.Issue, 100000)
 	allIssuesWG := &sync.WaitGroup{}
 
 	go func() {
@@ -480,6 +474,7 @@ func reviewAction(ctx *cli.Context) {
 			}
 		}
 		close(keptIssuesc)
+		close(errc)
 	}()
 
 z:
@@ -525,19 +520,12 @@ z:
 		issues = append(issues, i)
 	}
 
-	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
-	if outputFmt != "none" {
-		output := review.Output(outputFmt, ctx.String("output"), issues)
-		fmt.Print(output)
-	} else {
-
-		// TODO(waigani) make more informative
-		// TODO(waigani) if !ctx.String("quiet")
-		fmt.Printf("Done! Found %d issues \n", count)
+	errors := []error{}
+	for err := range errc {
+		errors = append(errors, err)
 	}
 
-	close(errc)
-
+	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
 	// Print errors if any occured
 	if len(errors) > 0 {
 		fmt.Println("The following errors were encounted:")
@@ -556,6 +544,16 @@ z:
 				return
 			}
 		}
+	}
+
+	if outputFmt != "none" {
+		output := review.Output(outputFmt, ctx.String("output"), issues)
+		fmt.Print(output)
+	} else {
+
+		// TODO(waigani) make more informative
+		// TODO(waigani) if !ctx.String("quiet")
+		fmt.Printf("Done! Found %d issues \n", count)
 	}
 }
 

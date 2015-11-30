@@ -98,6 +98,7 @@ func (t *tenet) OpenService() (TenetService, error) {
 		// TODO(waigani) add retry logic here. 1. Keep retrying until service
 		// is up. 2. Keep retrying until service is connected.
 		log.Printf("err: %#v", errors.ErrorStack(err))
+
 		return nil, errors.Trace(err)
 	}
 	log.Print("opened service, no issue")
