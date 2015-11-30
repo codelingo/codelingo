@@ -461,7 +461,8 @@ func reviewAction(ctx *cli.Context) {
 
 	// Confirm found issues
 	waitToConfirmc := make(chan struct{})
-	if ctx.Bool("keep-all") {
+	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
+	if outputFmt == "none" {
 		close(waitToConfirmc)
 	}
 
@@ -523,7 +524,6 @@ z:
 		issues = append(issues, i)
 	}
 
-	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
 	if outputFmt != "none" {
 		output := review.Output(outputFmt, ctx.String("output"), issues)
 		fmt.Print(output)
