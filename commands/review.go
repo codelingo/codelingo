@@ -459,23 +459,14 @@ func reviewAction(ctx *cli.Context) {
 	collectedIssuesc := make(chan *api.Issue, 1000000)
 	allIssuesWG := &sync.WaitGroup{}
 
-	// wait until we have all kept issues.
-	keptIssuesWG := &sync.WaitGroup{}
-	keptIssuesWG.Add(1)
 	go func() {
 		for i := range collectedIssuesc {
 			if cfm.Confirm(0, i) {
-				// Don't block on send. In the case of --keep-all
-				// with no output, we just show count and have no
-				// need for issues.
-				select {
-				case keptIssuesc <- i:
-				default:
-				}
+				keptIssuesc <- i
+
 			}
 		}
 		close(keptIssuesc)
-		keptIssuesWG.Done()
 	}()
 
 z:
@@ -516,12 +507,23 @@ z:
 	// then close our collection chan.
 	close(collectedIssuesc)
 
-	// then wait for the user to confirm what issues are kept.
-	keptIssuesWG.Wait()
-
-	close(errc)
+	var issues []*api.Issue
+	for i := range keptIssuesc {
+		issues = append(issues, i)
+	}
 
 	outputFmt := review.OutputFormat(ctx.String("output-fmt"))
+	if outputFmt != "none" {
+		output := review.Output(outputFmt, ctx.String("output"), issues)
+		fmt.Print(output)
+	} else {
+
+		// TODO(waigani) make more informative
+		// TODO(waigani) if !ctx.String("quiet")
+		fmt.Printf("Done! Found %d issues \n", count)
+	}
+
+	close(errc)
 
 	// Print errors if any occured
 	if len(errors) > 0 {
@@ -541,21 +543,6 @@ z:
 				return
 			}
 		}
-	}
-
-	// Print formatted output, even if there are no issues (eg empty json {})
-	if outputFmt != "none" {
-		var issues []*api.Issue
-		for i := range keptIssuesc {
-			issues = append(issues, i)
-		}
-
-		output := review.Output(outputFmt, ctx.String("output"), issues)
-		fmt.Print(output)
-	} else if ctx.Bool("keep-all") {
-		// TODO(waigani) make more informative
-		// TODO(waigani) if !ctx.String("quiet")
-		fmt.Printf("Done! Found %d issues \n", count)
 	}
 }
 
