@@ -14,8 +14,8 @@ import (
 func New() *cli.App {
 	setCommandHelpTemplate()
 	app := cli.NewApp()
-	app.Name = "LINGO"
-	app.Usage = "A DevOps Tool for Software Engineering"
+	app.Name = "lingo"
+	app.Usage = "A DevOps Tool for Software Engineering. This an ALPHA release (here be BUGS)."
 	app.Before = commands.BeforeCMD
 	app.Commands = globalCommands
 	app.Flags = commands.GlobalOptions
@@ -33,7 +33,6 @@ func setCommandHelpTemplate(args ...string) {
 		argStr = "<" + strings.Join(args, "> <") + ">"
 	}
 	cli.CommandHelpTemplate = fmt.Sprintf(`
-		
 NAME:
    {{.Name}} - {{.Usage}}
 

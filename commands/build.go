@@ -119,6 +119,7 @@ func build(ctx *cli.Context) {
 		go func(wg *sync.WaitGroup, errc chan error) {
 			wg.Wait()
 			bar.FinishPrint("Success! All " + driver + " tenets built.")
+
 			close(errsc)
 			allWaits.Done()
 

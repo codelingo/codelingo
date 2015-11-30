@@ -9,7 +9,6 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/lingo/util"
 )
 
 var InitCMD = cli.Command{
@@ -31,23 +30,6 @@ func initLingo(c *cli.Context) {
 	if err := maxArgs(c, 1); err != nil {
 		oserrf(err.Error())
 		return
-	}
-
-	// create lingo home if it doesn't exist
-	lHome := util.MustLingoHome()
-	if _, err := os.Stat(lHome); os.IsNotExist(err) {
-		err := os.MkdirAll(lHome, 0644)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	tenetsHome := filepath.Join(lHome, "tenets")
-	if _, err := os.Stat(tenetsHome); os.IsNotExist(err) {
-		err := os.MkdirAll(tenetsHome, 0644)
-		if err != nil {
-			panic(err)
-		}
 	}
 
 	// Create a new tenet config file at either the provided directory or

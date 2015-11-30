@@ -141,7 +141,7 @@ ENV LINGO_CONTAINER true
 # The following is only needed while lingo libs are privately hosted on
 # bitbucket. Once they are published, 'FROM golang:onbuild' is all we need
 # here. But for now we need to manually checkout the repos into the paths
-# copied below. Build the image as follows:
+# copied below.
 
 COPY . /go/src/github.com/lingo-reviews
 COPY {{.TenetRoot}} /go/src/app
