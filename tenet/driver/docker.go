@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"fmt"
 	"path"
 
 	goDocker "github.com/fsouza/go-dockerclient"
@@ -25,9 +26,20 @@ func (d *Docker) Pull(update bool) error {
 		return errors.Trace(err)
 	}
 
-	if update || !docker.HaveImage(dClient, d.Name) {
-		return docker.PullImage(dClient, d.Name, d.Registry, d.Tag)
+	haveImage := docker.HaveImage(dClient, d.Name)
+
+	fmt.Printf("\npulling %s ... ", d.Name)
+	if haveImage && !update {
+		fmt.Printf("%s has already been pulled. Use --update to update.\n", d.Name)
+		return nil
 	}
+
+	if update || !haveImage {
+		if err := docker.PullImage(dClient, d.Name, d.Registry, d.Tag); err != nil {
+			return err
+		}
+	}
+	fmt.Printf("done.\n")
 	return nil
 }
 
@@ -46,6 +58,21 @@ func (d *Docker) getDockerClient() (*goDocker.Client, error) {
 // Init the service.
 func (d *Docker) Service() (Service, error) {
 	log.Print("Docker Service called")
+
+	// Ensure we have an image.
+	c, err := d.getDockerClient()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	if !docker.HaveImage(c, d.Name) {
+
+		// TODO(waigani) I think we should ask for user confirmation.
+		fmt.Printf("\nno local image found for %s. Pulling new image from %s", d.Name, d.Registry)
+		if err := d.Pull(false); err != nil {
+			return nil, err
+		}
+	}
+
 	return docker.NewService(d.Name)
 }
 
