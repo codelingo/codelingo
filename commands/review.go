@@ -203,7 +203,8 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 			for _, tc := range m.cfg.AllTenets() {
 
 				if cancelled() {
-					// empty dirs to stop feeding tenet reviews in progress.
+					// empty files and dirs to stop feeding tenet reviews in progress.
+					m.files = []string{}
 					m.dirs = []string{}
 					return
 				}
@@ -311,28 +312,27 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 						case r.filesc <- f:
 						}
 					}
-				z:
-					for i, f := range m.files {
-						if matches, err := regexp.MatchString(regexPattern, f); !matches {
-							if err != nil {
-								log.Println("error in regex: ", regexPattern)
-							}
-							continue
+				}
+			z:
+				for i, f := range m.files {
+					if matches, err := regexp.MatchString(regexPattern, f); !matches {
+						if err != nil {
+							log.Println("error in regex: ", regexPattern)
 						}
-
-						select {
-						case <-cancelledc:
-							log.Println("user cancelled, dropping files.")
-						case <-r.filesTM.Dying():
-							dropped := len(m.files) - i
-							log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
-							break z
-						case r.filesc <- f:
-						}
+						continue
 					}
 
+					// TODO: Refactor so as not to have copy/pasted code with above dir handler
+					select {
+					case <-cancelledc:
+						log.Println("user cancelled, dropping files.")
+					case <-r.filesTM.Dying():
+						dropped := len(m.files) - i
+						log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
+						break z
+					case r.filesc <- f:
+					}
 				}
-
 			}
 		}
 
