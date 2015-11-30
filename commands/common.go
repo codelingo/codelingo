@@ -19,7 +19,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/tenet/log"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/tenet/driver"

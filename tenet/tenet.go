@@ -8,13 +8,13 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	tomb "gopkg.in/tomb.v1"
 
-	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/tenet/driver"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 type Tenet interface {

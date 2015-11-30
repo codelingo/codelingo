@@ -6,9 +6,9 @@ import (
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
 
-	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
 	"github.com/lingo-reviews/lingo/util"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 // Docker is a tenet driver which runs tenets inside a docker container.
