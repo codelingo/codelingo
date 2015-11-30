@@ -21,7 +21,6 @@ import (
 	"github.com/lingo-reviews/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/commands/review"
-	"github.com/lingo-reviews/lingo/util"
 )
 
 var ReviewCMD = cli.Command{
@@ -188,22 +187,20 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 		}
 	}()
 
-	// buffer the number of running tenets.
+	// TODO(waigani) reenable buffering to:
+	// 1. Allow found tenets to keep running.
+	// 2. Stop building new tenets until there is room in the buffer.
 	// TODO(waigani) make cfg vars
-	buffLimit := 3
-	if ctx.Bool("keep-all") {
-		buffLimit = 100
-	}
-	buff := util.NewBuffer(buffLimit, cancelledc)
+	// buffLimit := 3
+	// if ctx.Bool("keep-all") {
+	// 	buffLimit = 100
+	// }
+	// buff := util.NewBuffer(buffLimit, cancelledc)
 
 	go func() {
 		for m := range mappings {
 			// Glob all the files in the associated directories for this config, and assign to each tenet by hash
 			for _, tc := range m.cfg.AllTenets() {
-
-				// Don't build another tenet until there is room in the buffer.
-				// WaitRoom will not block if we get a cancel signal
-				buff.WaitRoom()
 
 				if cancelled() {
 					// empty dirs to stop feeding tenet reviews in progress.
@@ -215,6 +212,11 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 				configHash := tc.hash()
 				r, found := reviews[configHash]
 				if !found {
+
+					// Don't build a new tenet until there is room in the buffer.
+					// Found tenets will keep running until they are not fed files for 5 seconds.
+					// WaitRoom will not block if we get a cancel signal.
+					// buff.WaitRoom()
 
 					tn, err := newTenet(ctx, tc)
 					if err != nil {
@@ -247,7 +249,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 					// Setup the takedown of this review.
 					r.issuesWG.Add(1)
 					cleanupWG.Add(1)
-					buff.Add(1)
+					// buff.Add(1)
 
 					go func(r *tenetReview) {
 						// The following fires when:
@@ -263,7 +265,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 						// that any configHash's matching this one will have
 						// to start a new tenet instance.
 						delete(reviews, configHash)
-						buff.Add(-1)
+						// buff.Add(-1)
 
 						// signal to the tenet that no more files are coming.
 
@@ -288,8 +290,8 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 					// Start this tenet's review.
 					service.Review(r.filesc, r.issuesc, r.filesTM)
 				}
-				regexPattern, globPattern := fileExtFilterForLang(info.Language)
 
+				regexPattern, globPattern := fileExtFilterForLang(r.info.Language)
 				for _, d := range m.dirs {
 					files, err := filepath.Glob(path.Join(d, globPattern))
 					if err != nil {
@@ -309,34 +311,28 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 						case r.filesc <- f:
 						}
 					}
-				}
-
-				for _, f := range m.files {
-					if matches, err := regexp.MatchString(regexPattern, f); !matches {
-						if err != nil {
-							log.Println("error in regex: ", regexPattern)
+				z:
+					for i, f := range m.files {
+						if matches, err := regexp.MatchString(regexPattern, f); !matches {
+							if err != nil {
+								log.Println("error in regex: ", regexPattern)
+							}
+							continue
 						}
-						continue
+
+						select {
+						case <-cancelledc:
+							log.Println("user cancelled, dropping files.")
+						case <-r.filesTM.Dying():
+							dropped := len(m.files) - i
+							log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
+							break z
+						case r.filesc <- f:
+						}
 					}
 
-					select {
-					case <-cancelledc:
-						log.Println("user cancelled, dropping files.")
-					case <-r.filesTM.Dying():
-						dropped := len(files) - i
-						log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
-						break l
-					case r.filesc <- f:
-					}
 				}
 
-				go func(r *tenetReview) {
-					buff.WaitFull()
-
-					// Don't take on any more files, this is the start of the
-					// end for this tenet review.
-					r.filesTM.Kill(bufferFullERR)
-				}(r)
 			}
 		}
 
