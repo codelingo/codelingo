@@ -9,8 +9,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
-	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/util"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	"github.com/waigani/diffparser"
 )
 

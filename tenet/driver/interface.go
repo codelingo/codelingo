@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	"google.golang.org/grpc"
 )
 

@@ -6,9 +6,9 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 
-	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/util"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 )
 
 // TenetCMD is a fallthrough CMD which treats command as the tenet name and

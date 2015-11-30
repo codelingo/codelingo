@@ -6,8 +6,8 @@ import (
 
 	. "gopkg.in/check.v1"
 
-	"github.com/lingo-reviews/dev/api"
 	"github.com/lingo-reviews/lingo/tenet/driver"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 )
 
 func Test(t *testing.T) {
