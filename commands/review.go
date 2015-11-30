@@ -369,13 +369,6 @@ func reviewAction(ctx *cli.Context) {
 		}
 	}
 
-	// Get this first as it might fail, we want to avoid all other work in that case
-	cfm, err := review.NewConfirmer(ctx, diff)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
-
 	fileArgs := ctx.Args()
 	if diff != nil {
 		// if we are diffing, add all files in diff
@@ -384,8 +377,28 @@ func reviewAction(ctx *cli.Context) {
 				fileArgs = append(fileArgs, f.NewName)
 			}
 		}
+
+		// TODO(waigani) find a better place for this to live.
+		changed := diff.Changed()
+		for i, f := range diff.Files {
+			newDiffRootPath := review.GetDiffRootPath(f.NewName)
+			origDiffRootPath := review.GetDiffRootPath(f.OrigName)
+			diff.Files[i].NewName = newDiffRootPath
+			f.OrigName = origDiffRootPath
+			changed[origDiffRootPath] = changed[f.NewName]
+
+			delete(changed, f.NewName)
+		}
+
 	} else if len(fileArgs) == 0 {
 		fileArgs = []string{"."}
+	}
+
+	// Get this first as it might fail, we want to avoid all other work in that case
+	cfm, err := review.NewConfirmer(ctx, diff)
+	if err != nil {
+		oserrf(err.Error())
+		return
 	}
 
 	// Map of project config filenames -> directories they control
