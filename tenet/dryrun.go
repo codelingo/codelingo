@@ -3,7 +3,7 @@ package tenet
 import (
 	"fmt"
 
-	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	tomb "gopkg.in/tomb.v1"
 )
 

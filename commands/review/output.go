@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 )
 
 type OutputFormat string

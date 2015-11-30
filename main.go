@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/dev/tenet/log"
 	"github.com/lingo-reviews/lingo/app"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 func main() {

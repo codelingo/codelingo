@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/lingo-reviews/dev/tenet"
+	"github.com/lingo-reviews/tenets/go/dev/tenet"
 
 	"github.com/juju/errors"
 )
