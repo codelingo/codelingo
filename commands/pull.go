@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 )
@@ -49,6 +51,7 @@ func pull(c *cli.Context) {
 	}
 
 	if all {
+		fmt.Println("pulling all tenets found in .lingo ...")
 		if err := pullAll(c); err != nil {
 			oserrf(err.Error())
 		}
