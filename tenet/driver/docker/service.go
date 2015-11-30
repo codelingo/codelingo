@@ -3,6 +3,7 @@ package docker
 import (
 	"net"
 	"os"
+	"os/exec"
 	"time"
 
 	goDocker "github.com/fsouza/go-dockerclient"
@@ -37,7 +38,6 @@ func NewService(tenetName string) (*service, error) {
 func (s *service) Start() error {
 	log.Print("docker.service.Start")
 	c, err := s.client()
-	log.Print("41")
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -46,23 +46,29 @@ func (s *service) Start() error {
 	// TODO(waigani) check that pwd is correct when a tenet is started for a
 	// subdir.
 	pwd, err := os.Getwd()
-	log.Print("50")
 	if err != nil {
 		return errors.Trace(err)
 	}
 
 	// Start up the mirco-service
 
+	internalPort := "8000/tcp"
+	dockerPort := goDocker.Port(internalPort)
+
 	// start a new container
 	opts := goDocker.CreateContainerOptions{
 		Config: &goDocker.Config{
-			Image:     s.image,
-			PortSpecs: []string{"8000/tcp"},
+			Image: s.image,
+			ExposedPorts: map[goDocker.Port]struct{}{
+				dockerPort: {}},
+			AttachStdin: true,
+			Tty:         true,
 		},
 		HostConfig: &goDocker.HostConfig{
-			Binds: []string{pwd + ":/source:ro"},
+			PublishAllPorts: true,
+			Binds:           []string{pwd + ":/source:ro"},
 			PortBindings: map[goDocker.Port][]goDocker.PortBinding{
-				"8000/tcp": []goDocker.PortBinding{{
+				dockerPort: []goDocker.PortBinding{{
 					HostIP:   "127.0.0.1",
 					HostPort: "0",
 				}},
@@ -71,7 +77,6 @@ func (s *service) Start() error {
 	}
 
 	container, err := c.CreateContainer(opts)
-	log.Print("71")
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -82,7 +87,6 @@ func (s *service) Start() error {
 		return errors.Annotatef(err, "error starting container %s", container.Name)
 	}
 
-	log.Printf("%#v", container)
 	for container.NetworkSettings == nil {
 		time.Sleep(1 * time.Microsecond)
 		container, err = c.InspectContainer(container.ID)
@@ -91,25 +95,26 @@ func (s *service) Start() error {
 		}
 	}
 
-	log.Print(c.Endpoint())
-
-	log.Print("got network")
-	log.Printf("%#v", container)
-	log.Printf("%#v", container.NetworkSettings)
-	log.Printf("%#v", container.HostConfig)
-
-	log.Printf("waiting for ports to bind")
-	for container.NetworkSettings.Ports["8000/tcp"] == nil {
+	log.Printf("waiting for ports to bind for docker container", container.ID)
+	var breakLoop bool
+	go func() {
+		<-time.After(5 * time.Second)
+		breakLoop = true
+	}()
+	for container.NetworkSettings.Ports[dockerPort] == nil && !breakLoop {
 		time.Sleep(1 * time.Microsecond)
 		container, err = c.InspectContainer(container.ID)
 		if err != nil {
 			return errors.Trace(err)
 		}
 	}
+	if breakLoop {
+		return errors.New("timed out waiting for docker ports to bind")
+	}
 
-	log.Printf("%#v", container.NetworkSettings.Ports["8000/tcp"])
+	log.Printf("%#v", container.NetworkSettings.Ports[dockerPort])
 
-	ports := container.NetworkSettings.Ports["8000/tcp"]
+	ports := container.NetworkSettings.Ports[dockerPort]
 	s.ip = ports[0].HostIP
 	s.port = ports[0].HostPort
 
@@ -129,24 +134,45 @@ func (s *service) client() (*goDocker.Client, error) {
 	return s.dockerClient, nil
 }
 
+func (s *service) stop() {
+	// Use exec so it's quick
+	cmd := exec.Command("docker", "rm", "-f", s.containerID)
+	if err := cmd.Start(); err != nil {
+		log.Println("ERROR stopping tenet:", err)
+		time.Sleep(1 * time.Microsecond)
+		log.Println("trying to stop tenet again")
+		s.stop()
+		return
+	}
+	s.release(cmd)
+}
+
+func (s *service) release(cmd *exec.Cmd) {
+	if err := cmd.Process.Release(); err != nil {
+		log.Println("ERROR releasing process:", err)
+		time.Sleep(1 * time.Microsecond)
+		log.Println("trying to release process again")
+		s.release(cmd)
+		return
+	}
+}
+
 func (s *service) Stop() error {
-	c, err := s.client()
-	if err != nil {
-		return errors.Trace(err)
-	}
 
-	err = c.StopContainer(s.containerID, 5)
-	if err != nil {
-		log.Printf("error stopping container: %s", err.Error())
-	}
+	log.Println("stopped called")
 
-	// TODO(waigani) once one tenet services more than one review, don't
-	// remove container at end.
-	opts := goDocker.RemoveContainerOptions{
-		Force: true,
-		ID:    s.containerID,
+	wc := make(chan struct{})
+	go func() {
+		s.stop()
+		wc <- struct{}{}
+	}()
+
+	select {
+	case <-wc:
+	case <-time.After(10 * time.Second):
+		return errors.Errorf("timed out trying to stop docker tenet with id: %s", s.containerID)
 	}
-	return c.RemoveContainer(opts)
+	return nil
 }
 
 // func (s *service) IsRunning() bool {

@@ -11,7 +11,7 @@ import (
 	"github.com/juju/errors"
 )
 
-const cfgName = "tenet.toml"
+const cfgName = ".lingo"
 
 var toggle bool
 
@@ -53,7 +53,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/juju_worker_nostate"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -61,7 +61,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/imports"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -69,7 +69,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/license"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -77,7 +77,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/slasher"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -103,7 +103,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/juju_worker_nostate"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -111,7 +111,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/imports"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -119,7 +119,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/simpleseed"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
@@ -127,7 +127,7 @@ template = ""
 
   [[tenet_group.tenet]]
     name = "lingoreviews/unused_arg"
-    driver = "binary"
+    driver = "docker"
     registry = ""
     tag = ""
     [tenet_group.tenet.options]
