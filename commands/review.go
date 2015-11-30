@@ -462,9 +462,6 @@ func reviewAction(ctx *cli.Context) {
 	go func() {
 		for i := range collectedIssuesc {
 			if cfm.Confirm(0, i) {
-				// Don't block on send. In the case of --keep-all
-				// with no output, we just show count and have no
-				// need for issues.
 				keptIssuesc <- i
 
 			}
