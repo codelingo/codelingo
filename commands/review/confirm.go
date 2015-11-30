@@ -59,7 +59,6 @@ func hostAbsBasePath(c *cli.Context) (string, error) {
 // TODO(waigani) screen diff tenet side - see other diff comment.
 func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
 	diffChanges := diff.Changed()
-
 	return func(issue *api.Issue) bool {
 		start := int(issue.Position.Start.Line)
 		end := start
@@ -67,7 +66,7 @@ func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
 			end = endLine
 		}
 
-		filename := getDiffRootPath(issue.Position.Start.Filename)
+		filename := GetDiffRootPath(issue.Position.Start.Filename)
 		if newLines, ok := diffChanges[filename]; ok {
 			for _, lineNo := range newLines {
 				if lineNo >= start && lineNo <= end {
@@ -80,7 +79,7 @@ func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
 	}, nil
 }
 
-func getDiffRootPath(filename string) string {
+func GetDiffRootPath(filename string) string {
 	// Get filename relative to git root folder
 	// TODO: Handle error in case of git not being installed
 	out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", filename).Output()
