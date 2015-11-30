@@ -51,7 +51,7 @@ func pull(c *cli.Context) {
 	}
 
 	if all {
-		fmt.Println("installing all tenets found in .lingo ...")
+		fmt.Println("pulling all tenets found in .lingo ...")
 		if err := pullAll(c); err != nil {
 			oserrf(err.Error())
 		}
