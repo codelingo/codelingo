@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/user"
 	"strings"
@@ -38,6 +39,24 @@ const (
 // finalOutput writes the output to a file at outputFile, unless outputFile ==
 // "cli", in which case it returns the output.
 func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) string {
+
+	// // TODO(waigani) provide a flag to control filepath formatting
+	// make paths relative to lingo
+	pwd, err := os.Getwd()
+	if err == nil {
+		for _, i := range issues {
+			absStart := i.Position.Start.Filename
+			absEnd := i.Position.End.Filename
+			prefix := pwd + "/"
+			i.Position.Start.Filename = strings.TrimPrefix(absStart, prefix)
+			i.Position.End.Filename = strings.TrimPrefix(absEnd, prefix)
+
+			i.Name = i.Position.Start.Filename
+		}
+	} else {
+		log.Printf("could not make output filepaths relative to pwd: %v", err)
+	}
+
 	b := format(outputType, issues)
 	if outputPath == "cli" {
 		return b.String()
@@ -53,7 +72,7 @@ func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) str
 		}
 	}
 
-	err := ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0644))
+	err = ioutil.WriteFile(outputPath, b.Bytes(), os.FileMode(0644))
 	if err != nil {
 		panic(errors.Errorf("could not write to file %s: %s", outputPath, err.Error()))
 	}
