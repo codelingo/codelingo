@@ -6,6 +6,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/lingo/util"
 
+	"os"
 	"os/exec"
 )
 
@@ -27,5 +28,8 @@ func (cfg *binaryBuildCfg) BuildGo() error {
 	util.Printf("Building Go binary: %s\n", tenetPath)
 	cmd := exec.Command("go", "build", "-o", tenetPath)
 	cmd.Dir = cfg.dir
+
+	// TODO(waigani) capture this return as build error at end.
+	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
