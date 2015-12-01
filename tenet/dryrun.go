@@ -34,16 +34,16 @@ func (s *dryRunService) Close() error {
 	return nil
 }
 
-func (s *dryRunService) Review(filesc <-chan string, issuesc chan<- *api.Issue, t *tomb.Tomb) error {
+func (s *dryRunService) Review(filesc <-chan *api.File, issuesc chan<- *api.Issue, t *tomb.Tomb) error {
 	fmt.Println("Dry Run: Starting review...")
 
-	for filename := range filesc {
-		fmt.Printf("Dry Run: Reviewing: %s\n", filename)
+	for file := range filesc {
+		fmt.Printf("Dry Run: Reviewing: %s\n", file.Name)
 		issuesc <- &api.Issue{
 			Name:     "dryrun",
 			Comment:  "Dry Run Issue",
 			LineText: "Your code here",
-			Position: &api.IssueRange{&api.Position{filename, 0, 1, 1}, &api.Position{filename, 0, 1, 1}},
+			Position: &api.IssueRange{&api.Position{file.Name, 0, 1, 1}, &api.Position{file.Name, 0, 1, 1}},
 		}
 	}
 	close(issuesc)

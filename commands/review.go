@@ -123,7 +123,7 @@ func readCfgs(cfgList []cfgMap, errc chan error) <-chan cfgMap {
 
 type tenetReview struct {
 	configHash string
-	filesc     chan string
+	filesc     chan *api.File
 	issuesc    chan *api.Issue
 	info       *api.Info
 	issuesWG   *sync.WaitGroup
@@ -137,7 +137,7 @@ type tenetReview struct {
 var bufferFullERR = errors.New("buffer full")
 
 // returns a chan of tenet reviews and a cancel chan that blocks until the user cancels.
-func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-chan *tenetReview, chan struct{}) {
+func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, changed *map[string][]int, errc chan error) (<-chan *tenetReview, chan struct{}) {
 	reviews := make(map[string]*tenetReview)
 	reviewChannel := make(chan *tenetReview)
 	cleanupWG := &sync.WaitGroup{}
@@ -240,7 +240,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 
 					r = &tenetReview{
 						configHash: configHash,
-						filesc:     make(chan string),
+						filesc:     make(chan *api.File),
 						issuesc:    make(chan *api.Issue),
 						info:       info,
 						issuesWG:   &sync.WaitGroup{},
@@ -310,7 +310,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 							dropped := len(files) - i
 							log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
 							break l
-						case r.filesc <- f:
+						case r.filesc <- &api.File{Name: f}:
 						}
 					}
 				}
@@ -323,6 +323,14 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 						continue
 					}
 
+					fileinfo := &api.File{Name: f}
+					if changed != nil {
+						if diffLines, ok := (*changed)[f]; ok { // This can be false if --diff and fileargs are specified
+							for _, l := range diffLines {
+								fileinfo.Lines = append(fileinfo.Lines, int64(l))
+							}
+						}
+					}
 					// TODO: Refactor so as not to have copy/pasted code with above dir handler
 					select {
 					case <-cancelledc:
@@ -331,7 +339,7 @@ func reviewQueue(ctx *cli.Context, mappings <-chan cfgMap, errc chan error) (<-c
 						dropped := len(m.files) - i
 						log.Print("WARNING a tenet review timed out waiting for files to be sent. %d files dropped", dropped)
 						break z
-					case r.filesc <- f:
+					case r.filesc <- fileinfo:
 					}
 				}
 			}
@@ -370,6 +378,7 @@ func reviewAction(ctx *cli.Context) {
 	}
 
 	fileArgs := ctx.Args()
+	var changed *map[string][]int = nil
 	if diff != nil {
 		// if we are diffing, add all files in diff
 		for _, f := range diff.Files {
@@ -379,16 +388,19 @@ func reviewAction(ctx *cli.Context) {
 		}
 
 		// TODO(waigani) find a better place for this to live.
-		changed := diff.Changed()
+		c := diff.Changed()
 		for i, f := range diff.Files {
 			newDiffRootPath := review.GetDiffRootPath(f.NewName)
 			origDiffRootPath := review.GetDiffRootPath(f.OrigName)
 			diff.Files[i].NewName = newDiffRootPath
 			f.OrigName = origDiffRootPath
-			changed[origDiffRootPath] = changed[f.NewName]
-
-			delete(changed, f.NewName)
+			// Need untransformed names to stay in changeset to use diff information in reviewQueue
+			if origDiffRootPath != f.NewName {
+				c[origDiffRootPath] = c[f.NewName]
+				delete(c, f.NewName)
+			}
 		}
+		changed = &c
 
 	} else if len(fileArgs) == 0 {
 		fileArgs = []string{"."}
@@ -454,7 +466,7 @@ func reviewAction(ctx *cli.Context) {
 	// Use a channel to read configs with directory mapping
 	configDirs := readCfgs(cfgList, errc)
 
-	rc, cancelledc := reviewQueue(ctx, configDirs, errc)
+	rc, cancelledc := reviewQueue(ctx, configDirs, changed, errc)
 	var count int
 
 	keptIssuesc := make(chan *api.Issue)
