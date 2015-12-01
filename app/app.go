@@ -15,7 +15,7 @@ func New() *cli.App {
 	setCommandHelpTemplate()
 	app := cli.NewApp()
 	app.Name = "lingo"
-	app.Usage = "A DevOps Tool for Software Engineering. This an ALPHA release (here be BUGS)."
+	app.Usage = "A DevOps Tool for Software Engineering. This is an ALPHA release (here be BUGS)."
 	app.Before = commands.BeforeCMD
 	app.Commands = globalCommands
 	app.Flags = commands.GlobalOptions
