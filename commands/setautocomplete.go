@@ -35,7 +35,9 @@ func sourceAutoComplete(c *cli.Context) {
 	autoCompScriptPath := filepath.Join(uHome, ".lingo_home/scripts/bash_autocomplete.sh")
 	err = ioutil.WriteFile(autoCompScriptPath, []byte(bash_autocomplete), 0775)
 	if err != nil {
-		fmt.Printf("WARNING: could not write script: %v \n", err)
+		fmt.Println("WARNING: could not write script:")
+		oserrf(err.Error())
+		return
 	}
 
 	// TODO(waigani) this just works for linux
@@ -47,7 +49,7 @@ func sourceAutoComplete(c *cli.Context) {
 	}
 	defer f.Close()
 
-	if _, err = f.WriteString("PROG=lingo source " + autoCompScriptPath); err != nil {
+	if _, err = f.WriteString("\nPROG=lingo source " + autoCompScriptPath); err != nil {
 		oserrf(err.Error())
 		return
 	}

@@ -41,6 +41,7 @@ var cmdNeedsLingoHome = []string{
 	"write-docs",
 	"docs",
 	"edit",
+	"setup-auto-complete",
 }
 
 func needsLingoHome(cmd string) bool {

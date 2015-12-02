@@ -28,12 +28,16 @@ func (cfg *binaryBuildCfg) BuildGo() error {
 	util.Printf("Building Go binary: %s\n", tenetPath)
 
 	cmd := exec.Command("go", "get", "-v")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	cmd.Dir = cfg.dir
 	if err := cmd.Run(); err != nil {
 		return errors.Trace(err)
 	}
 
 	cmd2 := exec.Command("go", "build", "-o", tenetPath)
+	cmd2.Stdout = os.Stdout
+	cmd2.Stderr = os.Stderr
 	cmd2.Dir = cfg.dir
 
 	// TODO(waigani) capture this return as build error at end.
