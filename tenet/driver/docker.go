@@ -6,6 +6,7 @@ import (
 
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
+	"github.com/waigani/xxx"
 
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
 	"github.com/lingo-reviews/lingo/util"
@@ -30,6 +31,7 @@ func (d *Docker) Pull(update bool) error {
 
 	fmt.Printf("\npulling %s ... ", d.Name)
 	if haveImage && !update {
+		xxx.Stack()
 		fmt.Printf("%s has already been pulled. Use --update to update.\n", d.Name)
 		return nil
 	}

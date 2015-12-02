@@ -258,24 +258,3 @@ func (t *tenetService) configure() error {
 	_, err := t.client.Configure(context.Background(), t.cfg)
 	return err
 }
-
-// Any returns an initialised tenet using any driver that is locally available.
-func Any(ctx *cli.Context, name string, options map[string]interface{}) (Tenet, error) {
-	b := &driver.Base{
-		Name:          name,
-		ConfigOptions: options,
-		Driver:        "binary",
-	}
-
-	// Try drivers in order of failure speed
-	if t, err := New(ctx, b); err == nil {
-		return t, nil
-	}
-
-	b.Driver = "docker"
-	if t, err := New(ctx, b); err == nil {
-		return t, nil
-	}
-
-	return nil, errors.Errorf("No driver available for %s", name)
-}

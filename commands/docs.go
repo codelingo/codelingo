@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"os/exec"
 
 	"github.com/codegangsta/cli"
@@ -14,6 +15,7 @@ var DocsCMD = cli.Command{
 
 func docs(c *cli.Context) {
 
+	fmt.Println("Opening tenet documentation in a new browser window ...")
 	// TODO(waigani) DEMOWARE
 	writeTenetDoc(c, "", "/tmp/tenets.md")
 	cmd := exec.Command("chromium-browser", "/tmp/tenets.md")
