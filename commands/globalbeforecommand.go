@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -106,4 +107,13 @@ func ensureLingoHome() {
 			panic(err)
 		}
 	}
+
+	scriptsHome := filepath.Join(lHome, "scripts")
+	if _, err := os.Stat(scriptsHome); os.IsNotExist(err) {
+		err := os.MkdirAll(scriptsHome, 0775)
+		if err != nil {
+			fmt.Printf("WARNING: could not create scripts directory: %v \n", err)
+		}
+	}
+
 }

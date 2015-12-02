@@ -19,6 +19,7 @@ var globalCommands = []cli.Command{
 	commands.InfoCMD,
 	commands.BuildCMD,
 	commands.PushCMD,
+	commands.SetupAutoCompleteCMD,
 
 	// commands.OptionsCMD,
 	// commands.ImportCMD,

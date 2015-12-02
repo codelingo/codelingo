@@ -11,7 +11,6 @@ import (
 
 	"github.com/codegangsta/cli"
 
-	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/tenets/go/dev/api"
 )
 
@@ -124,19 +123,11 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 			wg.Add(1)
 			go func(group TenetGroup, tenetCfg TenetConfig) {
 				defer wg.Done()
-				// Try to get any installed tenet with matching name
-				t, err := tenet.Any(c, tenetCfg.Name, tenetCfg.Options)
+
+				t, err := newTenet(c, tenetCfg)
 				if err != nil {
-					// Otherwise try the driver specified in config
-					t, err := newTenet(c, tenetCfg)
-					if err != nil {
-						oserrf(err.Error())
-						return
-					}
-					if err = t.Pull(false); err != nil {
-						oserrf(err.Error())
-						return
-					}
+					oserrf(err.Error())
+					return
 				}
 
 				s, err := t.OpenService()
@@ -156,6 +147,7 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 					oserrf(err.Error())
 					return
 				}
+
 				ts = append(ts, TenetMeta{
 					VarName:     r.Replace(tenetCfg.Name),
 					GroupName:   r.Replace(group.Name),

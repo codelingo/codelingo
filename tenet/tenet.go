@@ -258,38 +258,3 @@ func (t *tenetService) configure() error {
 	_, err := t.client.Configure(context.Background(), t.cfg)
 	return err
 }
-
-// TODO(waigani) We need to get rid of the Any function for two reasons:
-//
-// 1. It is better to be explicit (it will be very confusing when you expect a
-// binary tenet of one version to run, yet you get a docker tenet of another).
-
-// 2. It does not work. It will always return a binary driver, regardless of
-// whether or not there is a binary installed. We can only know if a tenet has
-// a backing service when that tenet opens its service. We should *only
-// ever* be initiating tenet drivers that have been asked for. If it is
-// missing, we need to make that clear to the user (back to point 1. be
-// explicit, it will help them debug).
-
-// Any returns an initialised tenet using any driver that is locally available.
-func Any(ctx *cli.Context, name string, options map[string]interface{}) (Tenet, error) {
-	b := &driver.Base{
-		Name:          name,
-		ConfigOptions: options,
-		Driver:        "binary",
-	}
-
-	// Try drivers in order of failure speed
-	if t, err := New(ctx, b); err == nil {
-		return t, nil
-	}
-
-	// this will never be reached
-
-	b.Driver = "docker"
-	if t, err := New(ctx, b); err == nil {
-		return t, nil
-	}
-
-	return nil, errors.Errorf("No driver available for %s", name)
-}
