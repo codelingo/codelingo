@@ -95,5 +95,31 @@ func (s *reviewSuite) TestAll(c *C) {
 func (s *reviewSuite) TestDiff(c *C) {
 	fmt.Println("Running: diff review")
 
-	// TODO: Copy new files in place
+	// Copy new files in place
+	err := exec.Command("cp", "project/fif/file1.new", "project/fif/file1.go").Run()
+	c.Assert(err, IsNil)
+	err = exec.Command("cp", "project/fif/file2.new", "project/fif/file2.go").Run()
+	c.Assert(err, IsNil)
+
+	cmd := exec.Command("lingo", "review", "--diff", "--keep-all", "--output-fmt", "plain-text")
+	cmd.Dir = "project"
+	out, err := cmd.Output()
+	c.Assert(err, IsNil)
+
+	expected, err := ioutil.ReadFile("project/expected_diff.txt")
+	c.Assert(err, IsNil)
+
+	// Reported issues are order independent - sort before comparing
+	o := regexp.MustCompile(" *\\d+. ").Split(string(out), -1)
+	sort.Strings(o)
+	e := regexp.MustCompile(" *\\d+. ").Split(string(expected), -1)
+	sort.Strings(e)
+
+	// Clean up changes
+	err = exec.Command("cp", "project/fif/file1.original", "project/fif/file1.go").Run()
+	c.Assert(err, IsNil)
+	err = exec.Command("cp", "project/fif/file2.original", "project/fif/file2.go").Run()
+	c.Assert(err, IsNil)
+
+	c.Assert(o, DeepEquals, e)
 }

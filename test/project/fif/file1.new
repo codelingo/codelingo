@@ -5,7 +5,7 @@ func f1() {
 
 }
 
-// file 1 - comment 2
+// file 1 - comment 2 changed
 func f2() {
 
 }
