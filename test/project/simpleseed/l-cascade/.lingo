@@ -1,0 +1,15 @@
+cascade = true
+include = "*"
+template = ""
+
+[[tenet_group]]
+  name = "default"
+  template = ""
+
+  [[tenet_group.tenet]]
+    name = "lingoreviews/license"
+    driver = "docker"
+    registry = "hub.docker.com"
+    tag = ""
+    [tenet_group.tenet.options]
+      header = "// L-Cascade"

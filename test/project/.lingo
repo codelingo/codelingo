@@ -1,0 +1,5 @@
+# Empty root to allow subfolders to drive themselves
+
+cascade = false
+include = "*"
+template = ""
