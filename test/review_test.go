@@ -68,8 +68,8 @@ func buildTenets(c *C) {
 }
 
 func (s *reviewSuite) SetUpSuite(c *C) {
-	//installLingo(c)
-	//buildTenets(c)
+	installLingo(c)
+	buildTenets(c)
 }
 
 func (s *reviewSuite) TestAll(c *C) {
