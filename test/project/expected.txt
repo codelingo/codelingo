@@ -1,0 +1,30 @@
+ 1. fif/file1.go:3
+    first comment - line
+ 2. fif/file2.go:3
+    first comment - line
+ 3. fif/file1.go:3
+    first comment - node
+ 4. fif/file2.go:3
+    first comment - node
+ 5. simpleseed/l-cascade/file1.go:1
+    this comment could be more awesome
+ 6. simpleseed/l-cascade/file1.go:4
+    this comment could be more awesome
+ 7. simpleseed/l-cascade/file1.go:7
+    this comment could be more awesome
+ 8. simpleseed/l-cascade/file2.go:1
+    this comment could be more awesome
+ 9. simpleseed/l-cascade/file2.go:4
+    this comment could be more awesome
+10. /source/simpleseed/l-cascade/file1.go:1
+    Each file should start with a license header of the following format:
+
+// L-Cascade
+11. /source/simpleseed/l-nocascade/file2.go:1
+    Each file should start with a license header of the following format:
+
+// L-No Cascade
+12. /source/simpleseed/l-nocascade/file3.go:1
+    This file also needs the correctly formatted license header.
+13. /source/simpleseed/l-nocascade/file4.go:1
+    And so on, license header again.

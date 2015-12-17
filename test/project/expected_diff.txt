@@ -1,0 +1,8 @@
+ 1. fif/file1.go:8
+    first comment - line
+ 2. fif/file2.go:13
+    first comment - line
+ 3. fif/file1.go:3
+    first comment - node
+ 4. fif/file2.go:3
+    first comment - node
