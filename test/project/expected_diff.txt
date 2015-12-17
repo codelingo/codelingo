@@ -2,7 +2,7 @@
     first comment - line
  2. fif/file2.go:13
     first comment - line
- 3. fif/file1.go:3
+ 3. fif/file1.go:8
     first comment - node
- 4. fif/file2.go:3
+ 4. fif/file2.go:13
     first comment - node
