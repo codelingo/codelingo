@@ -36,6 +36,14 @@ Run `lingo` to see the avaliable commands.
 
 Run `lingo setup-auto-completion` to enable command auto-completion.
 
+Or, if you have checked out the source code and prefer to do it by hand:
+
+```bash
+echo 'PROG=lingo source ~/go/src/github.com/lingo-reviews/lingo/scripts/bash_autocomplete.sh' >> ~/.bashrc
+. ~/.bashrc
+lingo --generate-bash-completion
+```
+
 ## Tenets
 
 Lingo uses tenets to manage the quality of code. [github.com/lingo-reviews/tenets](github.com/lingo-reviews/tenets) contains some tenets and example code for each language to get you started. The following examples will use Go tenets. 
