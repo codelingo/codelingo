@@ -1,6 +1,6 @@
 # Lingo: Scaling Code Quality
 
-## House keeping
+## Housekeeping
 
 See [here](https://medium.com/@jessemeek/not-learning-the-lingo-how-a-bad-performance-review-gave-birth-to-a-new-start-up-45e36dd997b9#.shv55pite) for the story behind Lingo. Please add an issue for any bugs or feature requests.
 
@@ -72,9 +72,9 @@ lingo docs
 
 ```
 
-When lingo reviews, it looks for a .lingo file in the current or parent
+When Lingo reviews, it looks for a .lingo file in the current or parent
 directories. If those tenets use a docker driver (default) and no local docker
-image is found, lingo goes and gets it. The first time you pull a docker
+image is found, Lingo goes and gets it. The first time you pull a docker
 tenet, it will pull the tenet base images. This means future tenet pulls will
 be much quicker.
 
