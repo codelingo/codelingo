@@ -16,7 +16,9 @@ var WhichCMD = cli.Command{
 func which(c *cli.Context) {
 	path, err := tenetCfgPath(c)
 	if err != nil {
-		oserrf(err.Error())
+		// TODO(waigani) check for error not found. Throw unexpected errors.
+		fmt.Println(errMissingDotLingo.Error())
+		return
 	}
 	fmt.Println(path)
 }

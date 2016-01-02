@@ -3,13 +3,14 @@ package driver
 import (
 	"fmt"
 	"path"
+	"strings"
 
 	goDocker "github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
-	"github.com/waigani/xxx"
 
 	"github.com/lingo-reviews/lingo/tenet/driver/docker"
 	"github.com/lingo-reviews/lingo/util"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
@@ -31,7 +32,6 @@ func (d *Docker) Pull(update bool) error {
 
 	fmt.Printf("\npulling %s ... ", d.Name)
 	if haveImage && !update {
-		xxx.Stack()
 		fmt.Printf("%s has already been pulled. Use --update to update.\n", d.Name)
 		return nil
 	}
@@ -82,4 +82,14 @@ func (d *Docker) Service() (Service, error) {
 // file names.
 func (d *Docker) EditFilename(f string) string {
 	return path.Join("/source/", f)
+}
+
+func (d *Docker) EditIssue(issue *api.Issue) (editedIssue *api.Issue) {
+	start := issue.Position.Start.Filename
+	end := issue.Position.End.Filename
+
+	issue.Position.Start.Filename = strings.TrimPrefix(start, "/source/")
+	issue.Position.End.Filename = strings.TrimPrefix(end, "/source/")
+
+	return issue
 }

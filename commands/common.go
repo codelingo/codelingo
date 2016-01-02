@@ -31,6 +31,9 @@ const (
 	defaultTenetCfgPath = ".lingo"
 )
 
+// TODO(waigani) The do server relies on this error message to know when to make a pull request.
+var errMissingDotLingo = errors.New("No .lingo configuration found. Run `lingo init` to create a .lingo file in the current directory")
+
 type CascadeDirection int
 
 // Down and Both are intended to be used only with specific commands, and not exposed to the CLI user
