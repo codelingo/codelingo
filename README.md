@@ -1,4 +1,4 @@
-# LINGO (www.lingo.reviews): Scaling Code Quality
+# Lingo: Scaling Code Quality
 
 ## House keeping
 
