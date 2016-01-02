@@ -2,7 +2,7 @@
 
 ## House keeping
 
-See [here](https://medium.com/@jessemeek/not-learning-the-lingo-how-a-bad-performance-review-gave-birth-to-a-new-start-up-45e36dd997b9#.shv55pite) for the story behind Lingo. Please add an issue for any bugs or feature requests. Okay, with that out of the way, let's get started.
+See [here](https://medium.com/@jessemeek/not-learning-the-lingo-how-a-bad-performance-review-gave-birth-to-a-new-start-up-45e36dd997b9#.shv55pite) for the story behind Lingo. Please add an issue for any bugs or feature requests.
 
 ## The Lingo Tool
 
