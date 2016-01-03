@@ -164,14 +164,4 @@ lingo add lingoreviews/imports --options blacklist_regex=".*/State"
 
 ## Writing a Tenet
 
-### Go
-
-Start [here](https://github.com/lingo-reviews/tenets/tree/master/go/dev). The
-`go/tenets` directory also has a variety of examples of tenets in Go which you
-can copy to get started.
-
-### Other languages
-
-The api.proto file in the root of this repoistory can be used to generate the
-tenet API libs in C, C++, Java, Go, Node.js, Python, Ruby, Objective-C, PHP
-and C#. Visit grpc.io to learn more.
+To begin writing tenets, start here: [lingo-reviews/tenets](https://github.com/lingo-reviews/tenets).
