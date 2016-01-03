@@ -46,7 +46,7 @@ lingo --generate-bash-completion
 
 ## Tenets
 
-Lingo uses tenets to manage the quality of code. [github.com/lingo-reviews/tenets](github.com/lingo-reviews/tenets) contains some tenets and example code for each language to get you started. The following examples will use Go tenets. 
+Lingo uses tenets to manage the quality of code. [github.com/lingo-reviews/tenets](https://github.com/lingo-reviews/tenets) contains some tenets and example code for each language to get you started. The following examples will use Go tenets. 
 
 ```bash
 go get github.com/lingo-reviews/tenets/go
