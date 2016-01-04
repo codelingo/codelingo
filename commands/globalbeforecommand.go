@@ -76,7 +76,7 @@ func BeforeCMD(c *cli.Context) error {
 	// ensure we have a .lingo file
 	if needsDotLingo(currentCMDName) {
 		if cfgPath, _ := tenetCfgPath(c); cfgPath == "" {
-			return errors.Wrap(errors.New("No .lingo configuration found. Run `lingo init` to create a .lingo file in the current directory"), errors.New("ui"))
+			return errors.Wrap(errMissingDotLingo, errors.New("ui"))
 		}
 	}
 

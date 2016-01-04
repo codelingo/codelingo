@@ -65,6 +65,5 @@ func initLingo(c *cli.Context) {
 		oserrf(err.Error())
 		return
 	}
-
 	fmt.Printf("Successfully initialised. Lingo config file written to %q\n", cfgPath)
 }

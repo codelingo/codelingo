@@ -31,6 +31,9 @@ const (
 	defaultTenetCfgPath = ".lingo"
 )
 
+// TODO(waigani) The do server relies on this error message to know when to make a pull request.
+var errMissingDotLingo = errors.New("No .lingo configuration found. Run `lingo init` to create a .lingo file in the current directory")
+
 type CascadeDirection int
 
 // Down and Both are intended to be used only with specific commands, and not exposed to the CLI user
@@ -214,8 +217,9 @@ var exiter = func(code int) {
 
 func oserrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
-	log.Printf(format, a...)
-	fmt.Printf(format, a...)
+	errStr := fmt.Sprintf(format, a...)
+	log.Print(errStr)
+	stderr.Write([]byte(errStr))
 	exiter(1)
 }
 
@@ -385,7 +389,6 @@ func writeConfigFile(c *cli.Context, cfg *config) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-
 	return ioutil.WriteFile(fPath, buf.Bytes(), 0644)
 }
 

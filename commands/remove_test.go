@@ -5,17 +5,18 @@ import (
 	gc "gopkg.in/check.v1"
 )
 
-func (*CMDTest) TestRemoveCMD(c *gc.C) {
+func (s *CMDTest) TestRemoveCMD(c *gc.C) {
 	cfgPath, closer := testCfg(c)
 	defer closer()
-	tenetToRemove := tenet{Author: "lingo-reviews", Name: "license"}
-	ctx := mockContext(tenetCfgFlg.longArg(), cfgPath, "remove", tenetToRemove.String())
+
+	tenetToRemove := TenetConfig{Name: "lingo-reviews/license"}
+	ctx := mockContext(c, tenetCfgFlg.longArg(), cfgPath, "remove", tenetToRemove.Name)
 
 	c.Assert(RemoveCMD.Run(ctx), jc.ErrorIsNil)
 
-	obtained, err := readConfigFile(ctx)
+	obtained, err := readConfigFile(cfgPath)
 	c.Assert(err, jc.ErrorIsNil)
-	for _, t := range obtained.Tenets {
-		c.Assert(t.String(), gc.Not(gc.Equals), tenetToRemove.String())
+	for _, t := range obtained.AllTenets() {
+		c.Assert(t.Name, gc.Not(gc.Equals), tenetToRemove.Name)
 	}
 }

@@ -9,17 +9,22 @@ func (*CMDTest) TestAddCMD(c *gc.C) {
 	fName, closer := testCfg(c)
 	defer closer()
 
-	newTenet := tenet{Author: "waigani", Name: "test"}
-	ctx := mockContext(tenetCfgFlg.longArg(), fName, "add", newTenet.String())
+	newTenet := TenetConfig{
+		Name:     "waigani/test",
+		Driver:   "docker",
+		Registry: "hub.docker.com",
+		Options:  make(map[string]interface{}),
+	}
+	ctx := mockContext(c, tenetCfgFlg.longArg(), fName, "add", newTenet.Name)
 
-	orig, err := readConfigFile(ctx)
+	orig, err := readConfigFile(fName)
 	c.Assert(err, jc.ErrorIsNil)
 	c.Assert(AddCMD.Run(ctx), jc.ErrorIsNil)
 
-	obtained, err := readConfigFile(ctx)
+	obtained, err := readConfigFile(fName)
 	c.Assert(err, jc.ErrorIsNil)
-	expected := append(orig.Tenets, newTenet)
-	c.Assert(obtained.Tenets, gc.DeepEquals, expected)
+	expected := append(orig.AllTenets(), newTenet)
+	c.Assert(obtained.AllTenets(), gc.DeepEquals, expected)
 }
 
 func (*CMDTest) TestAddCMDDoubleFails(c *gc.C) {
@@ -27,10 +32,10 @@ func (*CMDTest) TestAddCMDDoubleFails(c *gc.C) {
 }
 
 func (s *CMDTest) TestAddCMDNoURLFails(c *gc.C) {
-	ctx := mockContext("add")
+	ctx := mockContext(c, "add")
 
 	c.Assert(AddCMD.Run(ctx), jc.ErrorIsNil)
-	c.Assert(s.stdErr.String(), gc.Equals, "error: expected 1 argument, got 0")
+	c.Assert(s.stdErr.String(), gc.Equals, "error: expected 1 argument, got 0\n")
 }
 
 func (*CMDTest) TestAddCMDBadURLFails(c *gc.C) {
