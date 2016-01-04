@@ -53,10 +53,6 @@ var (
 		"diff",
 		"d",
 	}
-	dumpFlg = flagName{
-		"dump",
-		"m",
-	}
 
 	//local flags
 	allFlg = flagName{
@@ -101,12 +97,12 @@ var GlobalOptions = []cli.Flag{
 	},
 
 	// TODO(waigani) implement or drop
-	// cli.StringFlag{
-	// 	Name:   tenetCfgFlg.String(),
-	// 	Value:  defaultTenetCfgPath,
-	// 	Usage:  "path to a .lingo to use. Defaults to " + defaultTenetCfgPath + " in current directory",
-	// 	EnvVar: "LINGO_TENET_CONFIG_NAME",
-	// },
+	cli.StringFlag{
+		Name:   tenetCfgFlg.String(),
+		Value:  defaultTenetCfgPath,
+		Usage:  "path to a .lingo to use. Defaults to " + defaultTenetCfgPath + " in current directory",
+		EnvVar: "LINGO_TENET_CONFIG_NAME",
+	},
 	// cli.StringFlag{
 	// 	Name:   outputTemplateFlg.String(),
 	// 	Value:  "",

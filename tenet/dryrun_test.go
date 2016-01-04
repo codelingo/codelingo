@@ -5,7 +5,9 @@ import (
 	"time"
 
 	. "gopkg.in/check.v1"
+	"gopkg.in/tomb.v1"
 
+	jc "github.com/juju/testing/checkers"
 	"github.com/lingo-reviews/lingo/tenet/driver"
 	"github.com/lingo-reviews/tenets/go/dev/api"
 )
@@ -46,16 +48,16 @@ func (s *dryRunSuite) TestClose(c *C) {
 
 func (s *dryRunSuite) TestReview(c *C) {
 	filenames := []string{"f1.go", "f2.go", "f3.go"}
-	files := make(chan string)
+	files := make(chan *api.File)
 	issues := make(chan *api.Issue, 5)
-
+	t := &tomb.Tomb{}
 	go func() {
-		err := s.service.Review(files, issues)
-		c.Assert(err, IsNil)
+		err := s.service.Review(files, issues, t)
+		c.Check(err, IsNil)
 	}()
 
 	for _, f := range filenames {
-		files <- f
+		files <- &api.File{Name: f}
 	}
 
 	close(files)
@@ -75,6 +77,8 @@ l:
 			c.Assert(issue.Comment, Equals, "Dry Run Issue")
 			c.Assert(issue.LineText, Equals, "Your code here")
 		case <-time.After(3 * time.Second):
+			t.Kill(nil)
+			c.Assert(t.Wait(), jc.ErrorIsNil)
 			c.Fatal("timed out waiting for issues")
 			break l
 		}
