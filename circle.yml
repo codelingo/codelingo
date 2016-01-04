@@ -1,3 +1,7 @@
 machine:
   environment:
     GOBIN: /home/ubuntu/.go_workspace/bin
+
+dependencies:
+  pre:
+    - go get -d github.com/lingo-reviews/tenets

@@ -16,15 +16,15 @@
     this comment could be more awesome
  9. simpleseed/l-cascade/file2.go:4
     this comment could be more awesome
-10. /source/simpleseed/l-cascade/file1.go:1
+10. simpleseed/l-cascade/file1.go:1
     Each file should start with a license header of the following format:
 
 // L-Cascade
-11. /source/simpleseed/l-nocascade/file2.go:1
+11. simpleseed/l-nocascade/file2.go:1
     Each file should start with a license header of the following format:
 
 // L-No Cascade
-12. /source/simpleseed/l-nocascade/file3.go:1
+12. simpleseed/l-nocascade/file3.go:1
     This file also needs the correctly formatted license header.
-13. /source/simpleseed/l-nocascade/file4.go:1
+13. simpleseed/l-nocascade/file4.go:1
     And so on, license header again.
