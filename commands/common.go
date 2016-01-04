@@ -217,8 +217,9 @@ var exiter = func(code int) {
 
 func oserrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
-	log.Printf(format, a...)
-	fmt.Printf(format, a...)
+	errStr := fmt.Sprintf(format, a...)
+	log.Print(errStr)
+	stderr.Write([]byte(errStr))
 	exiter(1)
 }
 
@@ -388,7 +389,6 @@ func writeConfigFile(c *cli.Context, cfg *config) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-
 	return ioutil.WriteFile(fPath, buf.Bytes(), 0644)
 }
 

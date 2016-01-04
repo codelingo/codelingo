@@ -9,7 +9,7 @@ func (*CMDTest) TestWhichCMD(c *gc.C) {
 	cfgPath, closer := testCfg(c)
 	defer closer()
 
-	ctx := mockContext(tenetCfgFlg.longArg(), cfgPath, "which")
+	ctx := mockContext(c, tenetCfgFlg.longArg(), cfgPath, "which")
 	c.Assert(WhichCMD.Run(ctx), jc.ErrorIsNil)
 
 	// TODO(waigani) test stdout, regex match: ^/home/[^/]*/\.lingo/tenet\.toml

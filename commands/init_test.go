@@ -9,7 +9,8 @@ import (
 )
 
 func (s *CMDTest) TestInitCMD(c *gc.C) {
-
+	// TODO(waigani) Do what the skip says.
+	c.Skip("This test writes out a .lingo file in pwd. Test needs to write file to tmpdir and cleanup after.")
 	app := cli.NewApp()
 	set := flag.NewFlagSet("test", 0)
 	test := []string{"pwd"}
