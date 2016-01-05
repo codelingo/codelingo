@@ -2,9 +2,10 @@ package commands
 
 import (
 	"fmt"
-	"os/exec"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
+	"github.com/pkg/browser"
 )
 
 var DocsCMD = cli.Command{
@@ -18,8 +19,8 @@ func docs(c *cli.Context) {
 	fmt.Println("Opening tenet documentation in a new browser window ...")
 	// TODO(waigani) DEMOWARE
 	writeTenetDoc(c, "", "/tmp/tenets.md")
-	cmd := exec.Command("chromium-browser", "/tmp/tenets.md")
-	// cmd.Stdout = &stdout
-	// cmd.Stderr = &stderr
-	cmd.Run()
+	err := browser.OpenFile("/tmp/tenets.md")
+	if err != nil {
+		log.Printf("ERROR opening docs in browser: %v", err)
+	}
 }
