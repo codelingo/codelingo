@@ -109,7 +109,11 @@ func dialer() dialerFunc {
 type dialerFunc func(addr string, timeout time.Duration) (net.Conn, error)
 
 func serviceTcpDialer(addr string, timeout time.Duration) (net.Conn, error) {
-	raddr := net.ResolveTCPAddr("tcp", raddr)
+	raddr, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		return nil, err
+	}
+
 	return net.DialTCP("tcp", nil, raddr)
 }
 
