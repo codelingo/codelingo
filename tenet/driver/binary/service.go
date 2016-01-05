@@ -98,13 +98,20 @@ func dialer() dialerFunc {
 	switch runtime.GOOS {
 	case "windows":
 		return serviceWindowsDialer
-	case "linux", "darwin", "freebsd":
+	case "linux", "freebsd":
 		return serviceUnixDialer
+	case "darwin":
+		return serviceTcpDialer
 	}
 	return serviceUnixDialer
 }
 
 type dialerFunc func(addr string, timeout time.Duration) (net.Conn, error)
+
+func serviceTcpDialer(addr string, timeout time.Duration) (net.Conn, error) {
+	raddr := net.ResolveTCPAddr("tcp", raddr)
+	return net.DialTCP("tcp", nil, raddr)
+}
 
 func serviceUnixDialer(addr string, timeout time.Duration) (net.Conn, error) {
 	typ := "unix"
