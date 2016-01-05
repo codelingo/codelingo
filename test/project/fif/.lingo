@@ -1,0 +1,21 @@
+cascade = true
+include = "*"
+template = ""
+
+[[tenet_group]]
+  name = "default"
+  template = ""
+
+  [[tenet_group.tenet]]
+    name = "lingoreviews/fif_line"
+    driver = "binary"
+    registry = ""
+    tag = ""
+    [tenet_group.tenet.options]
+
+  [[tenet_group.tenet]]
+    name = "lingoreviews/fif_node"
+    driver = "binary"
+    registry = ""
+    tag = ""
+    [tenet_group.tenet.options]

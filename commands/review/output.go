@@ -82,6 +82,8 @@ func Output(outputType OutputFormat, outputPath string, issues []*api.Issue) str
 func format(outputFmt OutputFormat, issues []*api.Issue) bytes.Buffer {
 	var b bytes.Buffer
 	switch outputFmt {
+	case plainText:
+		b = plainFormat(issues)
 	case jsonPretty:
 		formatted, err := json.MarshalIndent(issues, "", "\t")
 		if err != nil {
@@ -98,4 +100,13 @@ func format(outputFmt OutputFormat, issues []*api.Issue) bytes.Buffer {
 		panic(errors.Errorf("Unrecognised output format %q", outputFmt))
 	}
 	return b
+}
+
+func plainFormat(issues []*api.Issue) bytes.Buffer {
+	var out bytes.Buffer
+	digits := len(fmt.Sprintf("%d", len(issues)))
+	for n, i := range issues {
+		out.WriteString(fmt.Sprintf("%*d. %s:%d\n    %s\n", digits, n+1, i.Name, i.Position.Start.Line, strings.TrimSpace(i.Comment)))
+	}
+	return out
 }

@@ -1,0 +1,14 @@
+cascade = true
+include = "*"
+template = ""
+
+[[tenet_group]]
+  name = "default"
+  template = ""
+
+  [[tenet_group.tenet]]
+    name = "lingoreviews/simpleseed"
+    driver = "binary"
+    registry = ""
+    tag = ""
+    [tenet_group.tenet.options]
