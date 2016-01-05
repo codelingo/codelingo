@@ -52,8 +52,8 @@ type tenet struct {
 	options map[string]interface{}
 }
 
-// NewTenet takes a base tenet and builds and returns a Tenet with a backing
-// driver and service.
+// New takes a base tenet config and builds and returns a Tenet with a backing
+// driver.
 func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
 	var d driver.Driver
 	switch b.Driver {
@@ -62,7 +62,7 @@ func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
 	case "dryrun":
 		return &dryRun{}, nil
 	case "binary":
-		d = &driver.Binary{b}
+		d = &driver.Binary{Base: b}
 	default:
 		return nil, fmt.Errorf("Unknown driver specified: %q", b.Driver)
 	}
@@ -165,7 +165,8 @@ func (t *tenetService) Close() error {
 // 	}
 // }
 
-var KillAllTenetsErr = errors.New("kill all tenets")
+// TODO: Is this meant for production?
+// var ErrKillAllTenets = errors.New("kill all tenets")
 
 // Review sets up two goroutines. One to send files to the service from filesc,
 // the other to recieve issues from the service on issuesc.
@@ -249,8 +250,6 @@ func (t *tenetService) Info() (*api.Info, error) {
 	}
 	return t.info, nil
 }
-
-type Options map[string]interface{}
 
 // Configure configures the tenet with options set in .lingo or on the
 // CLI. Any options not specified will fallback to their default value.
