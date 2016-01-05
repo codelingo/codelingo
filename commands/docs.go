@@ -2,9 +2,9 @@ package commands
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 	"github.com/pkg/browser"
 )
 
