@@ -4,6 +4,9 @@
 
 See [here](https://medium.com/@jessemeek/not-learning-the-lingo-how-a-bad-performance-review-gave-birth-to-a-new-start-up-45e36dd997b9#.shv55pite) for the story behind Lingo. Please add an issue for any bugs or feature requests.
 
+##### [Backlog](https://trello.com/b/q9furE82)
+##### [Current Sprint](https://trello.com/b/4nxD8DHU)
+
 ## The Lingo Tool
 
 ### Install Lingo
