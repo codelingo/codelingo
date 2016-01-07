@@ -165,9 +165,6 @@ func (t *tenetService) Close() error {
 // 	}
 // }
 
-// TODO: Is this meant for production?
-// var ErrKillAllTenets = errors.New("kill all tenets")
-
 // Review sets up two goroutines. One to send files to the service from filesc,
 // the other to recieve issues from the service on issuesc.
 func (t *tenetService) Review(filesc <-chan *api.File, issuesc chan<- *api.Issue, filesTM *tomb.Tomb) error {
