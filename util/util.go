@@ -80,7 +80,7 @@ func UserHome() (string, error) {
 	return usr.HomeDir, nil
 }
 
-// LingoBin returns to path where binary tenets are stored.
+// LingoBin returns the path to where binary tenets are stored.
 func LingoBin() (string, error) {
 	if bin := os.Getenv("LINGO_HOME"); bin != "" {
 		return bin, nil
