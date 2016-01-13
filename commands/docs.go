@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"bytes"
 	"fmt"
 
 	"github.com/codegangsta/cli"
-	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/pkg/browser"
+	"github.com/russross/blackfriday"
 )
 
 var DocsCMD = cli.Command{
@@ -17,10 +19,20 @@ var DocsCMD = cli.Command{
 func docs(c *cli.Context) {
 
 	fmt.Println("Opening tenet documentation in a new browser window ...")
-	// TODO(waigani) DEMOWARE
-	writeTenetDoc(c, "", "/tmp/tenets.md")
-	err := browser.OpenFile("/tmp/tenets.md")
-	if err != nil {
-		log.Printf("ERROR opening docs in browser: %v", err)
+
+	var mdBuf bytes.Buffer
+	if err := writeTenetDoc(c, "", &mdBuf); err != nil {
+		oserrf("%v", err)
+		return
+	}
+
+	// Render markdown to HTML, and sanitise it to protect from
+	// malicious tenets.
+	htmlUnsafe := blackfriday.MarkdownBasic(mdBuf.Bytes())
+	html := bluemonday.UGCPolicy().SanitizeBytes(htmlUnsafe)
+
+	if err := browser.OpenReader(bytes.NewReader(html)); err != nil {
+		oserrf("opening docs in browser: %v", err)
+		return
 	}
 }

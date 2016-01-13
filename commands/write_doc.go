@@ -2,7 +2,9 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"strings"
@@ -50,9 +52,26 @@ type TenetMeta struct {
 }
 
 func writeDoc(c *cli.Context) {
-	output := c.String("output")
-	writeTenetDoc(c, c.String("template"), output)
-	fmt.Printf("Tenet documentation written to %s\n", output)
+	outputPath := c.String("output")
+	if dir, _ := path.Split(outputPath); dir != "" {
+		err := os.MkdirAll(dir, 0775)
+		if err != nil {
+			oserrf(err.Error())
+			return
+		}
+	}
+	outputFile, err := os.Create(outputPath)
+	if err != nil {
+		oserrf(err.Error())
+		return
+	}
+	defer outputFile.Close()
+
+	if err := writeTenetDoc(c, c.String("template"), outputFile); err != nil {
+		oserrf(err.Error())
+		return
+	}
+	fmt.Printf("Tenet documentation written to %s\n", outputFile.Name())
 }
 
 func makeTemplate(src string, fallback string) (*template.Template, error) {
@@ -80,34 +99,16 @@ func makeTemplate(src string, fallback string) (*template.Template, error) {
 	return tpl, nil
 }
 
-// MATT funcs should always return errors. Only use the oserrf in the top cmd funcs.
-func writeTenetDoc(c *cli.Context, src string, output string) {
+func writeTenetDoc(c *cli.Context, src string, w io.Writer) error {
 	// Find every applicable tenet for this project
 	cfgPath, err := tenetCfgPath(c)
 	if err != nil {
-		oserrf(err.Error())
-		return
+		return err
 	}
 	cfg, err := buildConfig(cfgPath, CascadeUp)
 	if err != nil {
-		oserrf(err.Error())
-		return
+		return err
 	}
-
-	if dir, _ := path.Split(output); dir != "" {
-		err := os.MkdirAll(dir, 0775)
-		if err != nil {
-			oserrf(err.Error())
-			return
-		}
-	}
-
-	file, err := os.Create(output)
-	if err != nil {
-		oserrf(err.Error())
-		return
-	}
-	defer file.Close()
 
 	r := strings.NewReplacer("/", "_")
 
@@ -115,36 +116,50 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	// Add keys for each tenet group name
 	// DEMOWARE: This structure could be a lot simpler
 
+	type result struct {
+		name     string
+		template string
+		err      error
+	}
+
 	var wg sync.WaitGroup
 	var ts []TenetMeta
-	gs := make(map[string]string)
+	var results []result
+	for _, group := range cfg.TenetGroups {
+		for range group.Tenets {
+			results = append(results, result{
+				name: r.Replace(group.Name),
+			})
+		}
+	}
+	var i int
 	for _, group := range cfg.TenetGroups {
 		for _, tenetCfg := range group.Tenets {
 			wg.Add(1)
-			go func(group TenetGroup, tenetCfg TenetConfig) {
+			go func(group TenetGroup, tenetCfg TenetConfig, result *result) {
 				defer wg.Done()
 
 				t, err := newTenet(c, tenetCfg)
 				if err != nil {
-					oserrf(err.Error())
+					result.err = err
 					return
 				}
 
 				s, err := t.OpenService()
 				if err != nil {
-					oserrf(err.Error())
+					result.err = err
 					return
 				}
 				defer s.Close()
 				info, err := s.Info()
 				if err != nil {
-					oserrf(err.Error())
+					result.err = err
 					return
 				}
 
 				d, err := renderedDescription(info, tenetCfg)
 				if err != nil {
-					oserrf(err.Error())
+					result.err = err
 					return
 				}
 
@@ -153,11 +168,31 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 					GroupName:   r.Replace(group.Name),
 					Description: d,
 				})
-				gs[r.Replace(group.Name)] = group.Template
-			}(group, tenetCfg)
+				result.template = group.Template
+			}(group, tenetCfg, &results[i])
+			i++
 		}
 	}
 	wg.Wait()
+
+	// If any of the tenets could not be rendered, return an error now.
+	var errs []error
+	for _, result := range results {
+		if result.err != nil {
+			errs = append(errs, result.err)
+		}
+	}
+	switch len(errs) {
+	case 0:
+	case 1:
+		return errs[0]
+	default:
+		errorStrings := make([]string, len(errs))
+		for i, err := range errs {
+			errorStrings[i] = err.Error()
+		}
+		return errors.New(strings.Join(errorStrings, "\n"))
+	}
 
 	// Make the description available in multiple places:
 	// Top level template
@@ -180,29 +215,27 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 
 	// Render groups first
 	renderedGroups := make(map[string]string)
-	for n, tmpl := range gs {
+	for _, result := range results {
 		g := make(map[string]interface{})
 		g["All"] = []string{}
-		g["GroupName"] = n
+		g["GroupName"] = result.name
 		for _, tm := range ts {
-			if tm.GroupName == n {
+			if tm.GroupName == result.name {
 				g["All"] = append(g["All"].([]string), tm.Description)
 				g[tm.VarName] = tm.Description
 			}
 		}
 
-		tpl, err := makeTemplate(tmpl, defaultGroupTemplate)
+		tpl, err := makeTemplate(result.template, defaultGroupTemplate)
 		if err != nil {
-			oserrf(err.Error())
-			return
+			return err
 		}
 
 		var rg bytes.Buffer
 		if err = tpl.Execute(&rg, g); err != nil {
-			oserrf(err.Error())
-			return
+			return err
 		}
-		renderedGroups[n] = rg.String()
+		renderedGroups[result.name] = rg.String()
 	}
 
 	v := make(map[string]interface{})
@@ -211,8 +244,8 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	for _, tm := range ts {
 		v["All"] = append(v["All"].([]string), tm.Description)
 		v[tm.VarName] = tm.Description
-		for n := range gs {
-			v[n] = renderedGroups[n]
+		for _, result := range results {
+			v[result.name] = renderedGroups[result.name]
 		}
 	}
 
@@ -221,13 +254,10 @@ func writeTenetDoc(c *cli.Context, src string, output string) {
 	}
 	tpl, err := makeTemplate(src, defaultTemplate)
 	if err != nil {
-		oserrf(err.Error())
-		return
+		return err
 	}
 
-	if err = tpl.Execute(file, v); err != nil {
-		oserrf(err.Error())
-	}
+	return tpl.Execute(w, v)
 }
 
 func renderedDescription(info *api.Info, cfg TenetConfig) (string, error) {
