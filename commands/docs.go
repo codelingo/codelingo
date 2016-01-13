@@ -28,7 +28,7 @@ func docs(c *cli.Context) {
 
 	// Render markdown to HTML, and sanitise it to protect from
 	// malicious tenets.
-	htmlUnsafe := blackfriday.MarkdownCommon(mdBuf.Bytes())
+	htmlUnsafe := blackfriday.MarkdownBasic(mdBuf.Bytes())
 	html := bluemonday.UGCPolicy().SanitizeBytes(htmlUnsafe)
 
 	if err := browser.OpenReader(bytes.NewReader(html)); err != nil {
