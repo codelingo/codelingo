@@ -23,6 +23,8 @@ const (
 	defaultHome = ".lingo_home"
 )
 
+// OpenFileCmd launches the specified editor at the given filename and line
+// number.
 func OpenFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
 	app, err := exec.LookPath(editor)
 	if err != nil {
@@ -46,6 +48,8 @@ func OpenFileCmd(editor, filename string, line int64) (*exec.Cmd, error) {
 	return cmd, nil
 }
 
+// MustLingoHome returns the path to the user's lingo config directory or
+// panics on failure.
 func MustLingoHome() string {
 	lHome, err := LingoHome()
 	if err != nil {
@@ -54,6 +58,7 @@ func MustLingoHome() string {
 	return lHome
 }
 
+// LingoHome returns the path to the user's lingo config directory.
 func LingoHome() (string, error) {
 	if lHome := os.Getenv("LINGO_HOME"); lHome != "" {
 		return lHome, nil
@@ -66,6 +71,7 @@ func LingoHome() (string, error) {
 	return path.Join(home, defaultHome), nil
 }
 
+// UserHome returns the user's OS home directory.
 func UserHome() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
@@ -74,6 +80,7 @@ func UserHome() (string, error) {
 	return usr.HomeDir, nil
 }
 
+// LingoBin returns the path to where binary tenets are stored.
 func LingoBin() (string, error) {
 	if bin := os.Getenv("LINGO_HOME"); bin != "" {
 		return bin, nil
@@ -88,6 +95,7 @@ func LingoBin() (string, error) {
 
 }
 
+// BinTenets returns a list of all installed binary tenets as pathnames.
 func BinTenets() ([]string, error) {
 	binDir, err := LingoBin()
 	if err != nil {
@@ -109,17 +117,26 @@ func BinTenets() ([]string, error) {
 
 // TODO(waigani) this is duping the logger in dev. Sort out one solution to
 // logging and printing messages and errors.
+
+// Printf provides indirection around the standard fmt.Printf function so that
+// the output stream can be globally configured. WARNING: util.Printf is
+// deprecated. Prefer tenets/go/dev/tenet/log.Printf.
 func Printf(format string, args ...interface{}) (int, error) {
 	return Printer.Printf(format, args)
 }
 
+// Println provides indirection around the standard fmt.Println function so
+// that the output stream can be globally configured. WARNING: util.Println is
+// deprecated. Prefer tenets/go/dev/tenet/log.Println.
 func Println(line string) {
 	Printer.Println(line)
 }
+
 func init() {
-	Printer = &FmtPrinter{}
+	Printer = &fmtPrinter{}
 }
 
+// Printer is deprecated. Prefer tenets/go/dev/tenet/log.Logger.
 var Printer printer
 
 type printer interface {
@@ -127,47 +144,26 @@ type printer interface {
 	Println(...interface{}) (int, error)
 }
 
-type FmtPrinter struct{}
+type fmtPrinter struct{}
 
-func (*FmtPrinter) Printf(format string, args ...interface{}) (int, error) {
+func (*fmtPrinter) Printf(format string, args ...interface{}) (int, error) {
 	return fmt.Printf(format, args...)
 }
 
-func (*FmtPrinter) Println(args ...interface{}) (int, error) {
+func (*fmtPrinter) Println(args ...interface{}) (int, error) {
 	return fmt.Println(args...)
 }
 
-func DockerTenets() ([]string, error) {
-	// TODO(waigani) each image needs to be build with reviews.lingo.name for
-	// this to work. We are using the label because it seems the client can't
-	// find the image name.
-
-	// c, err := DockerClient()
-	// if err != nil {
-	// 	return nil, errors.Trace(err)
-	// }
-
-	// images, err := c.ListImages(goDocker.ListImagesOptions{})
-	// if err != nil {
-	// 	return nil, errors.Trace(err)
-	// }
-
-	// tenets
-	// for _, i := range images {
-	// 	if l, ok := i.Labels["reviews.lingo.name"]; ok {
-	// 		xxx.Print(l)
-	// 	}
-	// }
-
-	return nil, nil
-}
-
+// DockerClient returns a new goDocker client initialised with an endpoint
+// specified by the current config.
 func DockerClient() (*goDocker.Client, error) {
 	// TODO(waigani) get endpoint from ~/.lingo/config.toml
 	endpoint := "unix:///var/run/docker.sock"
 	return goDocker.NewClient(endpoint)
 }
 
+// FormatOutput converts arbitrary data into a string using Go's standard
+// template format.
 func FormatOutput(in interface{}, tmplt string) (string, error) {
 	out := new(bytes.Buffer)
 	funcMap := template.FuncMap{
@@ -180,7 +176,10 @@ func FormatOutput(in interface{}, tmplt string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	w.Flush()
+	err = w.Flush()
+	if err != nil {
+		return "", err
+	}
 
 	return out.String(), nil
 }
