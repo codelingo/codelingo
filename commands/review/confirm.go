@@ -17,7 +17,6 @@ import (
 type IssueConfirmer struct {
 	userConfirm bool
 	output      bool
-	inDiff      func(*api.Issue) bool
 	// TODO(waigani) make this a func var instead
 	hostAbsBasePath string
 }
@@ -34,15 +33,6 @@ func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
 		hostAbsBasePath: basePath,
 	}
 
-	if c.Bool("diff") {
-		diffFunc, err := newInDiffFunc(d)
-		if err != nil {
-			return nil, err
-		}
-
-		cfm.inDiff = diffFunc
-	}
-
 	return &cfm, nil
 }
 
@@ -54,29 +44,6 @@ func hostAbsBasePath(c *cli.Context) (string, error) {
 	}
 
 	return basePath, nil
-}
-
-// TODO(waigani) screen diff tenet side - see other diff comment.
-func newInDiffFunc(diff *diffparser.Diff) (func(*api.Issue) bool, error) {
-	diffChanges := diff.Changed()
-	return func(issue *api.Issue) bool {
-		start := int(issue.Position.Start.Line)
-		end := start
-		if endLine := int(issue.Position.End.Line); endLine != 0 {
-			end = endLine
-		}
-
-		filename := GetDiffRootPath(issue.Position.Start.Filename)
-		if newLines, ok := diffChanges[filename]; ok {
-			for _, lineNo := range newLines {
-				if lineNo >= start && lineNo <= end {
-					return true
-				}
-			}
-		}
-
-		return false
-	}, nil
 }
 
 func GetDiffRootPath(filename string) string {
@@ -96,18 +63,12 @@ var editor string
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
 func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
-	if attempt == 0 {
-		if c.inDiff != nil && !c.inDiff(issue) {
-			return false
-		}
-		if !c.userConfirm {
-			return true
-		}
+	if !c.userConfirm {
+		return true
 	}
 	if attempt == 0 {
 		fmt.Println(c.FormatPlainText(issue))
 	}
-
 	attempt++
 	var options string
 	fmt.Print("\n[o]pen")
