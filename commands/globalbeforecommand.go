@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
@@ -44,7 +45,17 @@ var cmdNeedsLingoHome = []string{
 	"setup-auto-complete",
 }
 
-func needsLingoHome(cmd string) bool {
+// isHelpAlias returns true when a command's arguments are equivalent to the
+// help command. For example, `lingo review --help` == `lingo help review`.
+func isHelpAlias(flags []string) bool {
+	helpFlags := strings.Split(cli.HelpFlag.Name, ", ")
+	return len(flags) == 1 && (flags[0] == "--"+helpFlags[0] || flags[0] == "-"+helpFlags[1])
+}
+
+func needsLingoHome(cmd string, flags []string) bool {
+	if isHelpAlias(flags) {
+		return false
+	}
 	for _, c := range cmdNeedsLingoHome {
 		if c == cmd {
 			return true
@@ -53,7 +64,10 @@ func needsLingoHome(cmd string) bool {
 	return false
 }
 
-func needsDotLingo(cmd string) bool {
+func needsDotLingo(cmd string, flags []string) bool {
+	if isHelpAlias(flags) {
+		return false
+	}
 	for _, c := range cmdNeedsDotLingo {
 		if c == cmd {
 			return true
@@ -64,17 +78,19 @@ func needsDotLingo(cmd string) bool {
 
 func BeforeCMD(c *cli.Context) error {
 	var currentCMDName string
+	var flags []string
 	args := c.Args()
 	if args.Present() {
 		currentCMDName = args.First()
+		flags = args.Tail()
 	}
 
-	if needsLingoHome(currentCMDName) {
+	if needsLingoHome(currentCMDName, flags) {
 		ensureLingoHome()
 	}
 
 	// ensure we have a .lingo file
-	if needsDotLingo(currentCMDName) {
+	if needsDotLingo(currentCMDName, flags) {
 		if cfgPath, _ := tenetCfgPath(c); cfgPath == "" {
 			return errors.Wrap(errMissingDotLingo, errors.New("ui"))
 		}
