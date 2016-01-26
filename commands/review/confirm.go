@@ -100,6 +100,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		cmd, err := util.OpenFileCmd(app, filename, l)
 		if err != nil {
 			fmt.Println(err)
+			return c.Confirm(attempt, issue)
 		}
 
 		if err = cmd.Start(); err != nil {
