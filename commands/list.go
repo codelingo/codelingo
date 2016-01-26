@@ -3,6 +3,7 @@ package commands
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -47,6 +48,11 @@ func listAction(c *cli.Context) {
 func listTenets(c *cli.Context) []TenetConfig {
 	cfgPath, err := tenetCfgPath(c)
 	if err != nil {
+		if _, ok := err.(*os.PathError); ok {
+			// For missing config files, there are just no tenets
+			return nil
+		}
+		// For malformed config show the error to the user
 		oserrf("could not read configuration: %s", err.Error())
 		return nil
 	}
