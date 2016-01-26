@@ -139,7 +139,9 @@ func (c *config) HasTenetGroup(name string) bool {
 }
 
 func (c *config) AddTenetGroup(name string) {
-	c.TenetGroups = append(c.TenetGroups, TenetGroup{Name: name})
+	if !c.HasTenetGroup(name) {
+		c.TenetGroups = append(c.TenetGroups, TenetGroup{Name: name})
+	}
 }
 
 func (c *config) RemoveTenetGroup(name string) {
@@ -147,45 +149,38 @@ func (c *config) RemoveTenetGroup(name string) {
 	for _, g := range c.TenetGroups {
 		if g.Name != name {
 			groups = append(groups, g)
-			break
 		}
 	}
 	c.TenetGroups = groups
 }
 
 func (c *config) AddTenet(t TenetConfig, group string) error {
-	if !c.HasTenetGroup(group) {
-		c.AddTenetGroup(group)
-	}
+	c.AddTenetGroup(group)
 	g, err := c.FindTenetGroup(group)
 	if err != nil {
 		return errors.Trace(err)
 	}
-	// TODO(waigani) use pointers to avoid all this update crap
+
+	// Return an error if a tenet of this name already exists in group
+	for _, e := range g.Tenets {
+		if e.Name == t.Name {
+			return errors.Errorf("tenet %q already exists in group %q", t.Name, group)
+		}
+	}
+
 	g.Tenets = append(g.Tenets, t)
-	c.UpdateTenetGroup(g)
+
 	return nil
 }
 
-// TODO(waigani) This shouldn't be needed, move to pointers
-func (c *config) UpdateTenetGroup(group TenetGroup) {
-	var groups []TenetGroup
-	for _, g := range c.TenetGroups {
-		if g.Name != group.Name {
-			groups = append(groups, g)
+// FindTenetGroup returns a direct reference to the named group.
+func (c *config) FindTenetGroup(name string) (*TenetGroup, error) {
+	for i := range c.TenetGroups {
+		if c.TenetGroups[i].Name == name {
+			return &c.TenetGroups[i], nil
 		}
 	}
-	groups = append(groups, group)
-	c.TenetGroups = groups
-}
-
-func (c *config) FindTenetGroup(name string) (TenetGroup, error) {
-	for _, g := range c.TenetGroups {
-		if g.Name == name {
-			return g, nil
-		}
-	}
-	return TenetGroup{}, errors.Errorf("tenet group %q not found", name)
+	return nil, errors.Errorf("tenet group %q not found", name)
 }
 
 func (c *config) RemoveTenet(name string, group string) error {
@@ -194,15 +189,18 @@ func (c *config) RemoveTenet(name string, group string) error {
 		return errors.Trace(err)
 	}
 	var tenets []TenetConfig
-	for _, t := range c.AllTenets() {
+	err = errors.Errorf("tenet %q not found", name)
+	for _, t := range g.Tenets {
 		if t.Name != name {
 			tenets = append(tenets, t)
+		} else {
+			err = nil
 		}
 	}
 
 	g.Tenets = tenets
-	c.UpdateTenetGroup(g)
-	return nil
+
+	return err
 }
 
 // stderr is a var for mocking in tests
