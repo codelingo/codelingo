@@ -2,6 +2,7 @@ package commands
 
 import (
 	jc "github.com/juju/testing/checkers"
+	"github.com/lingo-reviews/lingo/commands/common"
 	gc "gopkg.in/check.v1"
 )
 
@@ -15,7 +16,7 @@ func (*CMDTest) TestAddCMD(c *gc.C) {
 		Registry: "hub.docker.com",
 		Options:  make(map[string]interface{}),
 	}
-	ctx := mockContext(c, tenetCfgFlg.longArg(), fName, "add", newTenet.Name)
+	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), fName, "add", newTenet.Name)
 
 	orig, err := readConfigFile(fName)
 	c.Assert(err, jc.ErrorIsNil)

@@ -1,4 +1,4 @@
-package commands
+package common
 
 import (
 	"github.com/codegangsta/cli"
@@ -6,91 +6,91 @@ import (
 )
 
 type flagName struct {
-	long  string
-	short string
+	Long  string
+	Short string
 }
 
 func (f *flagName) longArg() string {
-	return "--" + f.long
+	return "--" + f.Long
 }
 
 func (f *flagName) shortArg() string {
-	return "-" + f.short
+	return "-" + f.Short
 }
 
 var (
 
 	// global flags
-	tenetCfgFlg = flagName{
+	TenetCfgFlg = flagName{
 		"tenet-config",
 		"c",
 	}
-	outputTypeFlg = flagName{
+	OutputTypeFlg = flagName{
 		"output-type",
 		"t",
 	}
-	outputFlg = flagName{
+	OutputFlg = flagName{
 		"output",
 		"o",
 	}
-	repoURLFlg = flagName{
+	RepoURLFlg = flagName{
 		"repo-url",
 		"u",
 	}
-	repoPathFlg = flagName{
+	RepoPathFlg = flagName{
 		"start-dir",
 		"s",
 	}
-	outputTemplateFlg = flagName{
+	OutputTemplateFlg = flagName{
 		"output-template",
 		"e",
 	}
-	lingoHomeFlg = flagName{
+	LingoHomeFlg = flagName{
 		"lingo-home",
 		"l",
 	}
-	diffFlg = flagName{
+	DiffFlg = flagName{
 		"diff",
 		"d",
 	}
 
 	//local flags
-	allFlg = flagName{
+	AllFlg = flagName{
 		"all",
 		"a",
 	}
-	updateFlg = flagName{
+	UpdateFlg = flagName{
 		"update",
 		"u",
 	}
-	tagsFlg = flagName{
+	TagsFlg = flagName{
 		"tags",
 		"g",
 	}
-	registryFlg = flagName{
+	RegistryFlg = flagName{
 		"registry",
 		"r",
 	}
-	driverFlg = flagName{
+	DriverFlg = flagName{
 		"driver",
 		"i",
 	}
 )
 
 func (f *flagName) String() string {
-	return f.long + ", " + f.short
+	return f.Long + ", " + f.Short
 }
 
 var GlobalOptions = []cli.Flag{
 	cli.StringFlag{
-		Name:   repoPathFlg.String(),
+		Name:   RepoPathFlg.String(),
 		Value:  ".",
 		Usage:  "the directory to operate in, defaults to current directory",
 		EnvVar: "LINGO_REPO_PATH",
 	},
 
 	cli.StringFlag{
-		Name:   lingoHomeFlg.String(),
+		Name:   LingoHomeFlg.String(),
 		Value:  util.MustLingoHome(),
 		Usage:  "a directory of files needed for Lingo to operate e.g. logs and binary tenets are stored here",
 		EnvVar: "LINGO_HOME",
@@ -98,9 +98,9 @@ var GlobalOptions = []cli.Flag{
 
 	// TODO(waigani) implement or drop
 	cli.StringFlag{
-		Name:   tenetCfgFlg.String(),
-		Value:  defaultTenetCfgPath,
-		Usage:  "path to a .lingo to use. Defaults to " + defaultTenetCfgPath + " in current directory",
+		Name:   TenetCfgFlg.String(),
+		Value:  DefaultTenetCfgPath,
+		Usage:  "path to a .lingo to use. Defaults to " + DefaultTenetCfgPath + " in current directory",
 		EnvVar: "LINGO_TENET_CONFIG_NAME",
 	},
 	// cli.StringFlag{

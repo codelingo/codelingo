@@ -2,12 +2,15 @@ package commands
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -43,6 +46,7 @@ var cmdNeedsLingoHome = []string{
 	"docs",
 	"edit",
 	"setup-auto-complete",
+	"update",
 }
 
 // isHelpAlias returns true when a command's arguments are equivalent to the
@@ -91,21 +95,21 @@ func BeforeCMD(c *cli.Context) error {
 
 	// ensure we have a .lingo file
 	if needsDotLingo(currentCMDName, flags) {
-		if cfgPath, _ := tenetCfgPath(c); cfgPath == "" {
-			return errors.Wrap(errMissingDotLingo, errors.New("ui"))
+		if cfgPath, _ := common.TenetCfgPath(c); cfgPath == "" {
+			return errors.Wrap(common.ErrMissingDotLingo, errors.New("ui"))
 		}
 	}
 
 	return nil
 }
 
-func ensureLingoHome() {
+func ensureLingoHome() error {
 	// create lingo home if it doesn't exist
 	lHome := util.MustLingoHome()
 	if _, err := os.Stat(lHome); os.IsNotExist(err) {
 		err := os.MkdirAll(lHome, 0775)
 		if err != nil {
-			panic(err)
+			return errors.Trace(err)
 		}
 	}
 
@@ -113,7 +117,7 @@ func ensureLingoHome() {
 	if _, err := os.Stat(tenetsHome); os.IsNotExist(err) {
 		err := os.MkdirAll(tenetsHome, 0775)
 		if err != nil {
-			panic(err)
+			return errors.Trace(err)
 		}
 	}
 
@@ -121,7 +125,7 @@ func ensureLingoHome() {
 	if _, err := os.Stat(logsHome); os.IsNotExist(err) {
 		err := os.MkdirAll(logsHome, 0775)
 		if err != nil {
-			panic(err)
+			return errors.Trace(err)
 		}
 	}
 
@@ -133,4 +137,32 @@ func ensureLingoHome() {
 		}
 	}
 
+	servicesCfg := filepath.Join(lHome, "services.yaml")
+	if _, err := os.Stat(servicesCfg); os.IsNotExist(err) {
+		err := ioutil.WriteFile(servicesCfg, []byte(servicesCfgTmpl), 0644)
+		if err != nil {
+			fmt.Printf("WARNING: could not create services config: %v \n", err)
+		}
+	}
+	return nil
 }
+
+var servicesCfgTmpl = `
+services:
+    github:
+
+        # A Github API authentication token to allow Lingo to post reviews on
+        # your behalf.
+        # token: your-token
+
+        # Domain of the service.
+        # domain: http://github.com
+
+    reviewboard:
+        # Domain of the service.
+        # domain: http://reviews.vapour.ws
+
+        # A Reviewboard API authentication token to allow Lingo to post
+        # reviews on your behalf.
+        # token: your-token
+`[1:]

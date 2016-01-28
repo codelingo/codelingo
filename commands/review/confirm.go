@@ -2,48 +2,28 @@ package review
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/fatih/color"
 	"github.com/lingo-reviews/lingo/util"
 	"github.com/lingo-reviews/tenets/go/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 	"github.com/waigani/diffparser"
 )
 
 type IssueConfirmer struct {
-	userConfirm bool
-	output      bool
-	// TODO(waigani) make this a func var instead
-	hostAbsBasePath string
+	keepAll bool
+	output  bool
 }
 
-func NewConfirmer(c *cli.Context, d *diffparser.Diff) (*IssueConfirmer, error) {
-	basePath, err := hostAbsBasePath(c)
-	if err != nil {
-		return nil, err
-	}
-
+func NewConfirmer(output, keepAll bool, d *diffparser.Diff) (*IssueConfirmer, error) {
 	cfm := IssueConfirmer{
-		userConfirm:     !c.Bool("keep-all"),
-		output:          c.String("output-fmt") != "none",
-		hostAbsBasePath: basePath,
+		keepAll: keepAll,
+		output:  output,
 	}
 
 	return &cfm, nil
-}
-
-func hostAbsBasePath(c *cli.Context) (string, error) {
-	p := c.GlobalString("repo-path")
-	basePath, err := filepath.Abs(p)
-	if err != nil {
-		return "", err
-	}
-
-	return basePath, nil
 }
 
 func GetDiffRootPath(filename string) string {
@@ -63,7 +43,7 @@ var editor string
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
 func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
-	if !c.userConfirm {
+	if c.keepAll {
 		return true
 	}
 	if attempt == 0 {
@@ -82,6 +62,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 	// 	// TODO(waigani)  handle invalid input
 	// 	fmt.Println("invalid input", n, err)
 	// }
+
 	switch options {
 	case "o":
 		var app string
@@ -91,7 +72,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 		}
 		fmt.Printf("application (%s):", defaultEditor)
 		fmt.Scanln(&app)
-		filename := c.hostFilePath(issue.Position.Start.Filename)
+		filename := issue.Position.Start.Filename
 		if app == "" {
 			app = defaultEditor
 		}
@@ -126,10 +107,6 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 	return true
 }
 
-func (c *IssueConfirmer) hostFilePath(file string) string {
-	return strings.Replace(file, "/source", c.hostAbsBasePath, 1)
-}
-
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
 // representation of api.Issue.
 func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
@@ -137,8 +114,7 @@ func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
 	cy := color.New(color.FgCyan).SprintfFunc()
-
-	filename := strings.TrimPrefix(issue.Position.Start.Filename, c.hostAbsBasePath)
+	filename := issue.Position.Start.Filename
 
 	addrFmtStr := fmt.Sprintf("%s:%d", filename, issue.Position.End.Line)
 	if col := issue.Position.End.Column; col != 0 {

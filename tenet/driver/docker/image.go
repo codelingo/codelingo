@@ -2,11 +2,11 @@ package docker
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/fsouza/go-dockerclient"
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 func apiAuth() (docker.AuthConfiguration, error) {

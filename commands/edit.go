@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/codegangsta/cli"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -22,7 +24,7 @@ var EditCMD = cli.Command{
 }
 
 func edit(c *cli.Context) {
-	cfg, err := tenetCfgPath(c)
+	cfg, err := common.TenetCfgPath(c)
 	if err != nil {
 		fmt.Println(err)
 		return

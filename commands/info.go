@@ -2,9 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -36,9 +38,9 @@ var InfoCMD = cli.Command{
 
 func infoAction(ctx *cli.Context) {
 	var commandIsTenet bool
-	var cfg TenetConfig
+	var cfg common.TenetConfig
 	if a := ctx.Args(); len(a) != 1 {
-		oserrf(" info expects one argument, the tenet name")
+		common.OSErrf(" info expects one argument, the tenet name")
 		return
 	} else {
 		// Does the command match an installed tenet?
@@ -49,20 +51,20 @@ func infoAction(ctx *cli.Context) {
 			}
 		}
 		if !commandIsTenet {
-			oserrf("tenet not found")
+			common.OSErrf("tenet not found")
 			return
 		}
 	}
 
 	tnCMDs, err := newTenetCMDs(ctx, cfg)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	defer tnCMDs.closeService()
 
 	if err := tnCMDs.printInfo(); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 }

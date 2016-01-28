@@ -1,4 +1,4 @@
-package commands
+package common
 
 import (
 	"bytes"
@@ -62,8 +62,8 @@ var mockTenetCfg = &config{
 func testCfg(c *gc.C) (cfgPath string, closer func()) {
 	f, err := ioutil.TempFile("", "mockTenetCfg")
 	c.Assert(err, jc.ErrorIsNil)
-	ctx := mockContext(c, tenetCfgFlg.longArg(), f.Name(), "noop")
-	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
+	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), f.Name(), "noop")
+	c.Assert(common.WriteConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
 	return f.Name(), func() {
 		os.Remove(f.Name())
 		f.Close()
@@ -126,8 +126,8 @@ func (*CMDTest) TestWriteAndReadTenetCfg(c *gc.C) {
 		f.Close()
 	}()
 	c.Assert(err, jc.ErrorIsNil)
-	ctx := mockContext(c, tenetCfgFlg.longArg(), fName)
-	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
+	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), fName)
+	c.Assert(common.WriteConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
 
 	obtained, err := readConfigFile(fName)
 	c.Assert(err, jc.ErrorIsNil)
@@ -135,12 +135,12 @@ func (*CMDTest) TestWriteAndReadTenetCfg(c *gc.C) {
 	c.Assert(obtained, gc.DeepEquals, mockTenetCfg)
 }
 
-func (*CMDTest) TestDesiredTenetCfgPath(c *gc.C) {
-	ctx := mockContext(c, tenetCfgFlg.longArg(), "custom/cfg/path")
-	c.Assert(desiredTenetCfgPath(ctx), gc.Equals, "custom/cfg/path")
+func (*CMDTest) Testcommon.DesiredTenetCfgPath(c *gc.C) {
+	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), "custom/cfg/path")
+	c.Assert(common.DesiredTenetCfgPath(ctx), gc.Equals, "custom/cfg/path")
 }
 
-func (*CMDTest) TestTenetCfgPath(c *gc.C) {
+func (*CMDTest) Testcommon.TenetCfgPath(c *gc.C) {
 	// TODO(waigani) Do what skip says. init .lingo in tmp dir, set default to it.
 	c.Skip("Errors if default .lingo cannot be found.")
 	defaultPathRegex := `^/home/.*\.lingo_home/\.lingo`
@@ -151,16 +151,16 @@ func (*CMDTest) TestTenetCfgPath(c *gc.C) {
 		".lingo":                   defaultPathRegex,
 		"/.lingo":                  defaultPathRegex,
 	} {
-		ctx := mockContext(c, tenetCfgFlg.longArg(), cfgPath)
-		cPath, err := tenetCfgPath(ctx)
+		ctx := mockContext(c, common.TenetCfgFlg.LongArg(), cfgPath)
+		cPath, err := common.TenetCfgPath(ctx)
 		c.Assert(err, jc.ErrorIsNil)
 		c.Assert(cPath, gc.Matches, expected)
 	}
 }
 
 func (*CMDTest) TestMockContext(c *gc.C) {
-	ctx := mockContext(c, tenetCfgFlg.longArg(), "custom/cfg/path", "add")
+	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), "custom/cfg/path", "add")
 	c.Assert(ctx.Args(), gc.DeepEquals, cli.Args{"add"})
-	c.Assert(ctx.GlobalString(tenetCfgFlg.long), gc.Equals, "custom/cfg/path")
+	c.Assert(ctx.GlobalString(common.TenetCfgFlg.Long), gc.Equals, "custom/cfg/path")
 	c.Assert(ctx.Command.Name, gc.Equals, "add")
 }

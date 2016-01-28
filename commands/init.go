@@ -9,11 +9,12 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/commands/common"
 )
 
 var InitCMD = cli.Command{
 	Name:   "init",
-	Usage:  "create a " + defaultTenetCfgPath + " config file in the current directory",
+	Usage:  "create a " + common.DefaultTenetCfgPath + " config file in the current directory",
 	Action: initLingo,
 }
 
@@ -27,42 +28,42 @@ var configSeed = `
 // TODO(waigani) set lingo-home flag and test init creates correct home dir.
 
 func initLingo(c *cli.Context) {
-	if err := maxArgs(c, 1); err != nil {
-		oserrf(err.Error())
+	if err := common.MaxArgs(c, 1); err != nil {
+		common.OSErrf(err.Error())
 		return
 	}
 
 	// Create a new tenet config file at either the provided directory or
 	// a location from flags or environment, or the current directory
-	cfgPath, _ := filepath.Abs(desiredTenetCfgPath(c))
+	cfgPath, _ := filepath.Abs(common.DesiredTenetCfgPath(c))
 	if len(c.Args()) > 0 {
 		cfgPath, _ = filepath.Abs(c.Args()[0])
 
 		// Check that it exists and is a directory
 		if pathInfo, err := os.Stat(cfgPath); os.IsNotExist(err) {
-			oserrf("directory %q not found", cfgPath)
+			common.OSErrf("directory %q not found", cfgPath)
 		} else if !pathInfo.IsDir() {
-			oserrf("%q is not a directory", cfgPath)
+			common.OSErrf("%q is not a directory", cfgPath)
 		}
 
 		// Use default config filename
-		cfgPath = filepath.Join(cfgPath, defaultTenetCfgPath)
+		cfgPath = filepath.Join(cfgPath, common.DefaultTenetCfgPath)
 	}
 
 	if _, err := os.Stat(cfgPath); err == nil {
-		oserrf("Already initialised using tenet config file %q", cfgPath)
+		common.OSErrf("Already initialised using tenet config file %q", cfgPath)
 	}
 
 	var buf bytes.Buffer
 	enc := toml.NewEncoder(&buf)
-	err := enc.Encode(&config{Include: "*", Cascade: true})
+	err := enc.Encode(&common.Config{Include: "*", Cascade: true})
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 
 	if err = ioutil.WriteFile(cfgPath, buf.Bytes(), 0644); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	fmt.Printf("Successfully initialised. Lingo config file written to %q\n", cfgPath)

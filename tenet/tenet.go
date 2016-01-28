@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/tenets/go/dev/api"
 	"golang.org/x/net/context"
@@ -52,9 +51,9 @@ type tenet struct {
 	options map[string]interface{}
 }
 
-// New takes a base tenet config and builds and returns a Tenet with a backing
-// driver.
-func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
+// NewTenet takes a base tenet and builds and returns a Tenet with a backing
+// driver and service.
+func New(b *driver.Base) (Tenet, error) {
 	var d driver.Driver
 	switch b.Driver {
 	case "docker", "": // Default driver

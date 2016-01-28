@@ -13,6 +13,7 @@ import (
 
 	"github.com/codegangsta/cli"
 
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/tenets/go/dev/api"
 )
 
@@ -56,19 +57,19 @@ func writeDoc(c *cli.Context) {
 	if dir, _ := path.Split(outputPath); dir != "" {
 		err := os.MkdirAll(dir, 0775)
 		if err != nil {
-			oserrf(err.Error())
+			common.OSErrf(err.Error())
 			return
 		}
 	}
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	defer outputFile.Close()
 
 	if err := writeTenetDoc(c, c.String("template"), outputFile); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	fmt.Printf("Tenet documentation written to %s\n", outputFile.Name())
@@ -101,11 +102,11 @@ func makeTemplate(src string, fallback string) (*template.Template, error) {
 
 func writeTenetDoc(c *cli.Context, src string, w io.Writer) error {
 	// Find every applicable tenet for this project
-	cfgPath, err := tenetCfgPath(c)
+	cfgPath, err := common.TenetCfgPath(c)
 	if err != nil {
 		return err
 	}
-	cfg, err := buildConfig(cfgPath, CascadeUp)
+	cfg, err := common.BuildConfig(cfgPath, common.CascadeUp)
 	if err != nil {
 		return err
 	}
@@ -136,10 +137,10 @@ func writeTenetDoc(c *cli.Context, src string, w io.Writer) error {
 	for _, group := range cfg.TenetGroups {
 		for _, tenetCfg := range group.Tenets {
 			wg.Add(1)
-			go func(group TenetGroup, tenetCfg TenetConfig, result *result) {
+			go func(group common.TenetGroup, tenetCfg common.TenetConfig, result *result) {
 				defer wg.Done()
 
-				t, err := newTenet(c, tenetCfg)
+				t, err := common.NewTenet(tenetCfg)
 				if err != nil {
 					result.err = err
 					return
@@ -260,7 +261,7 @@ func writeTenetDoc(c *cli.Context, src string, w io.Writer) error {
 	return tpl.Execute(w, v)
 }
 
-func renderedDescription(info *api.Info, cfg TenetConfig) (string, error) {
+func renderedDescription(info *api.Info, cfg common.TenetConfig) (string, error) {
 	tpl, err := template.New("desc template").Parse(info.Description)
 	if err != nil {
 		return "", err

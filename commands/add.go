@@ -2,10 +2,12 @@ package commands
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -61,18 +63,18 @@ var AddCMD = cli.Command{
 
 func add(c *cli.Context) {
 	if l := len(c.Args()); l != 1 {
-		oserrf("expected 1 argument, got %d", l)
+		common.OSErrf("expected 1 argument, got %d", l)
 		return
 	}
 
-	cfgPath, err := tenetCfgPath(c)
+	cfgPath, err := common.TenetCfgPath(c)
 	if err != nil {
-		oserrf("reading config file: %s", err.Error())
+		common.OSErrf("reading config file: %s", err.Error())
 		return
 	}
-	cfg, err := buildConfig(cfgPath, CascadeNone)
+	cfg, err := common.BuildConfig(cfgPath, common.CascadeNone)
 	if err != nil {
-		oserrf("reading config file: %s", err.Error())
+		common.OSErrf("reading config file: %s", err.Error())
 		return
 	}
 
@@ -80,8 +82,8 @@ func add(c *cli.Context) {
 
 	groupName := c.String("group")
 	g, err := cfg.FindTenetGroup(groupName)
-	if err == nil && hasTenet(g.Tenets, imageName) {
-		oserrf(`error: tenet "%s" already added`, imageName)
+	if err == nil && common.HasTenet(g.Tenets, imageName) {
+		common.OSErrf(`error: tenet "%s" already added`, imageName)
 		return
 	}
 
@@ -102,15 +104,15 @@ func add(c *cli.Context) {
 		registry = c.String("registry")
 	}
 
-	cfg.AddTenet(TenetConfig{
+	cfg.AddTenet(common.TenetConfig{
 		Name:     imageName,
 		Driver:   driver,
 		Registry: registry,
 		Options:  opts,
 	}, groupName)
 
-	if err := writeConfigFile(c, cfg); err != nil {
-		oserrf(err.Error())
+	if err := common.WriteConfigFile(c, cfg); err != nil {
+		common.OSErrf(err.Error())
 		return
 	}
 

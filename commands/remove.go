@@ -2,9 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -46,35 +48,35 @@ var RemoveCMD = cli.Command{
 
 func remove(c *cli.Context) {
 	if l := len(c.Args()); l != 1 {
-		oserrf("error: expected 1 argument, got %d", l)
+		common.OSErrf("error: expected 1 argument, got %d", l)
 		return
 	}
 
-	cfgPath, err := tenetCfgPath(c)
+	cfgPath, err := common.TenetCfgPath(c)
 	if err != nil {
-		oserrf("reading config file: %s", err.Error())
+		common.OSErrf("reading config file: %s", err.Error())
 		return
 	}
-	cfg, err := buildConfig(cfgPath, CascadeNone)
+	cfg, err := common.BuildConfig(cfgPath, common.CascadeNone)
 	if err != nil {
-		oserrf("reading config file: %s", err.Error())
+		common.OSErrf("reading config file: %s", err.Error())
 		return
 	}
 
 	imageName := c.Args().First()
 
 	if !cfg.HasTenet(imageName) {
-		oserrf(`error: tenet "%s" not found in %q`, imageName, c.GlobalString(tenetCfgFlg.long))
+		common.OSErrf(`error: tenet "%s" not found in %q`, imageName, c.GlobalString(common.TenetCfgFlg.Long))
 		return
 	}
 
 	if err := cfg.RemoveTenet(imageName, c.String("group")); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 
-	if err := writeConfigFile(c, cfg); err != nil {
-		oserrf(err.Error())
+	if err := common.WriteConfigFile(c, cfg); err != nil {
+		common.OSErrf(err.Error())
 		return
 	}
 }
