@@ -6,7 +6,6 @@ package common
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -138,7 +137,9 @@ func (c *Config) HasTenetGroup(name string) bool {
 }
 
 func (c *Config) AddTenetGroup(name string) {
-	c.TenetGroups = append(c.TenetGroups, TenetGroup{Name: name})
+	if !c.HasTenetGroup(name) {
+		c.TenetGroups = append(c.TenetGroups, TenetGroup{Name: name})
+	}
 }
 
 func (c *Config) RemoveTenetGroup(name string) {
@@ -146,45 +147,38 @@ func (c *Config) RemoveTenetGroup(name string) {
 	for _, g := range c.TenetGroups {
 		if g.Name != name {
 			groups = append(groups, g)
-			break
 		}
 	}
 	c.TenetGroups = groups
 }
 
 func (c *Config) AddTenet(t TenetConfig, group string) error {
-	if !c.HasTenetGroup(group) {
-		c.AddTenetGroup(group)
-	}
+	c.AddTenetGroup(group)
 	g, err := c.FindTenetGroup(group)
 	if err != nil {
 		return errors.Trace(err)
 	}
-	// TODO(waigani) use pointers to avoid all this update crap
+
+	// Return an error if a tenet of this name already exists in group
+	for _, e := range g.Tenets {
+		if e.Name == t.Name {
+			return errors.Errorf("tenet %q already exists in group %q", t.Name, group)
+		}
+	}
+
 	g.Tenets = append(g.Tenets, t)
-	c.UpdateTenetGroup(g)
+
 	return nil
 }
 
-// TODO(waigani) This shouldn't be needed, move to pointers
-func (c *Config) UpdateTenetGroup(group TenetGroup) {
-	var groups []TenetGroup
-	for _, g := range c.TenetGroups {
-		if g.Name != group.Name {
-			groups = append(groups, g)
+// FindTenetGroup returns a direct reference to the named group.
+func (c *Config) FindTenetGroup(name string) (*TenetGroup, error) {
+	for i := range c.TenetGroups {
+		if c.TenetGroups[i].Name == name {
+			return &c.TenetGroups[i], nil
 		}
 	}
-	groups = append(groups, group)
-	c.TenetGroups = groups
-}
-
-func (c *Config) FindTenetGroup(name string) (TenetGroup, error) {
-	for _, g := range c.TenetGroups {
-		if g.Name == name {
-			return g, nil
-		}
-	}
-	return TenetGroup{}, errors.Errorf("tenet group %q not found", name)
+	return nil, errors.Errorf("tenet group %q not found", name)
 }
 
 func (c *Config) RemoveTenet(name string, group string) error {
@@ -193,23 +187,18 @@ func (c *Config) RemoveTenet(name string, group string) error {
 		return errors.Trace(err)
 	}
 	var tenets []TenetConfig
-	for _, t := range c.AllTenets() {
+	err = errors.Errorf("tenet %q not found", name)
+	for _, t := range g.Tenets {
 		if t.Name != name {
 			tenets = append(tenets, t)
+		} else {
+			err = nil
 		}
 	}
 
 	g.Tenets = tenets
-	c.UpdateTenetGroup(g)
-	return nil
-}
 
-// stderr is a var for mocking in tests
-var stderr io.Writer = os.Stderr
-
-// exiter is a var for mocking in tests
-var exiter = func(code int) {
-	os.Exit(code)
+	return err
 }
 
 // TODO(waigani) write osoutf, replace all fmt.Print
@@ -218,8 +207,8 @@ func OSErrf(format string, a ...interface{}) {
 	format = fmt.Sprintf("error: %s\n", format)
 	errStr := fmt.Sprintf(format, a...)
 	log.Print(errStr)
-	stderr.Write([]byte(errStr))
-	exiter(1)
+	Stderr.Write([]byte(errStr))
+	Exiter(1)
 }
 
 func lingoWeb(uri string) url.URL {
@@ -266,7 +255,7 @@ func FileExtFilterForLang(lang string) (regex, glob string) {
 // Combine cascaded configuration files into a single config object.
 func BuildConfig(startCfgPath string, cascadeDir CascadeDirection) (*Config, error) {
 	if cascadeDir == CascadeNone {
-		return readConfigFile(startCfgPath)
+		return ReadConfigFile(startCfgPath)
 	}
 
 	cfg := &Config{buildRoot: filepath.Dir(startCfgPath)}
@@ -297,7 +286,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *Conf
 		return nil
 	}
 
-	currentCfg, err := readConfigFile(cfgPath)
+	currentCfg, err := ReadConfigFile(cfgPath)
 	if err == nil {
 		// Add the non-tenet properties - always when cascading down, otherwise
 		// only if not already specified
@@ -376,7 +365,7 @@ func buildConfigRecursive(cfgPath string, cascadeDir CascadeDirection, cfg *Conf
 }
 
 // Read a single config file into a config object.
-func readConfigFile(cfgPath string) (*Config, error) {
+func ReadConfigFile(cfgPath string) (*Config, error) {
 	cfg := &Config{}
 
 	// TODO(waigani) also support yaml and json

@@ -7,16 +7,16 @@ import (
 	"github.com/lingo-reviews/lingo/commands/common"
 )
 
-func (s *CMDTest) TestRemoveCMD(c *gc.C) {
-	cfgPath, closer := testCfg(c)
+func (s *cmdSuite) TestRemoveCMD(c *gc.C) {
+	cfgPath, closer := common.TestCfg(c)
 	defer closer()
 
-	tenetToRemove := TenetConfig{Name: "lingo-reviews/license"}
-	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), cfgPath, "remove", tenetToRemove.Name)
+	tenetToRemove := common.TenetConfig{Name: "lingo-reviews/license"}
+	ctx := common.MockContext(c, common.TenetCfgFlg.LongArg(), cfgPath, "remove", tenetToRemove.Name)
 
 	c.Assert(RemoveCMD.Run(ctx), jc.ErrorIsNil)
 
-	obtained, err := readConfigFile(cfgPath)
+	obtained, err := common.ReadConfigFile(cfgPath)
 	c.Assert(err, jc.ErrorIsNil)
 	for _, t := range obtained.AllTenets() {
 		c.Assert(t.Name, gc.Not(gc.Equals), tenetToRemove.Name)

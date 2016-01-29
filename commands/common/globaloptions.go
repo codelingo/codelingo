@@ -10,11 +10,11 @@ type flagName struct {
 	Short string
 }
 
-func (f *flagName) longArg() string {
+func (f *flagName) LongArg() string {
 	return "--" + f.Long
 }
 
-func (f *flagName) shortArg() string {
+func (f *flagName) ShortArg() string {
 	return "-" + f.Short
 }
 

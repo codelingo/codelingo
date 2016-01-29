@@ -26,7 +26,7 @@ var _ = Suite(&dryRunSuite{})
 func (s *dryRunSuite) SetUpTest(c *C) {
 	var err error
 
-	s.tenet, err = New(nil, &driver.Base{Driver: "dryrun"})
+	s.tenet, err = New(&driver.Base{Driver: "dryrun"})
 	c.Assert(err, IsNil)
 
 	s.service, err = s.tenet.OpenService()

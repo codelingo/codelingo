@@ -42,8 +42,8 @@ commits back to the point the branch forked from base.
 			Usage: "The remote service hosting the git repository",
 		},
 		cli.BoolFlag{
-			Name:  "fetch-all,f",
-			Usage: "Fetch all remotes before checking out pull request. This will ensure the correct fork point can be found.",
+			Name:  "skip-fetch-all,s",
+			Usage: "By default, all remotes are fetched before checking out the pull request, so the correct fork point can be found. Use this flag to skip the fetch.",
 		},
 	},
 	Action: copr,
@@ -51,8 +51,8 @@ commits back to the point the branch forked from base.
 
 func copr(c *cli.Context) {
 	cliArgs := c.Args()
-	if l := len(cliArgs); l != 1 {
-		common.OSErrf("expected one arguments, got %d", l)
+	if err := common.ExactArgs(c, 1); err != nil {
+		common.OSErrf(err.Error())
 		return
 	}
 
@@ -63,7 +63,7 @@ func copr(c *cli.Context) {
 	}
 	repo := path.Base(strings.Trim(string(repoPath), "\n"))
 	var fetchAll string
-	if c.Bool("fetch-all") {
+	if !c.Bool("skip-fetch-all") {
 		fetchAll = "git fetch --all"
 	}
 
