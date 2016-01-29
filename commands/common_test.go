@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/codegangsta/cli"
-	"github.com/mohae/utilitybelt/deepcopy"
 
 	jt "github.com/juju/testing"
 	jc "github.com/juju/testing/checkers"
@@ -166,56 +165,58 @@ func (*CMDTest) TestMockContext(c *gc.C) {
 	c.Assert(ctx.Command.Name, gc.Equals, "add")
 }
 
-var complexConfig = &config{
-	Cascade:  true,
-	Include:  "*",
-	Template: "template.md",
-	TenetGroups: []TenetGroup{
-		{
-			Name: "default",
-			Tenets: []TenetConfig{
-				{
-					Name:    "lingoreviews/tenetseed:latest",
-					Options: map[string]interface{}{"opt1": true, "opt2": "an option"},
+func complexConfig() *config {
+	return &config{
+		Cascade:  true,
+		Include:  "*",
+		Template: "template.md",
+		TenetGroups: []TenetGroup{
+			{
+				Name: "default",
+				Tenets: []TenetConfig{
+					{
+						Name:    "lingoreviews/tenetseed:latest",
+						Options: map[string]interface{}{"opt1": true, "opt2": "an option"},
+					},
+				},
+			},
+			{
+				Name:     "Group1",
+				Template: "g1template.md",
+				Tenets: []TenetConfig{
+					{
+						Name:    "lingo-reviews/license",
+						Options: map[string]interface{}{"header": "// Copyright 2016\n"},
+					},
+					{
+						// Note this is in Group1 and Group2
+						Name:    "lingo-reviews/unused_function_args",
+						Options: map[string]interface{}{},
+					},
+				},
+			},
+			{
+				Name:     "Group2",
+				Template: "g2template.md",
+				Tenets: []TenetConfig{
+					{
+						Name:    "lingoreviews/space_after_forward_slash",
+						Options: map[string]interface{}{},
+					},
+					{
+						// Note this is in Group1 and Group2
+						Name:    "lingo-reviews/unused_function_args",
+						Options: map[string]interface{}{},
+					},
 				},
 			},
 		},
-		{
-			Name:     "Group1",
-			Template: "g1template.md",
-			Tenets: []TenetConfig{
-				{
-					Name:    "lingo-reviews/license",
-					Options: map[string]interface{}{"header": "// Copyright 2016\n"},
-				},
-				{
-					// Note this is in Group1 and Group2
-					Name:    "lingo-reviews/unused_function_args",
-					Options: map[string]interface{}{},
-				},
-			},
-		},
-		{
-			Name:     "Group2",
-			Template: "g2template.md",
-			Tenets: []TenetConfig{
-				{
-					Name:    "lingoreviews/space_after_forward_slash",
-					Options: map[string]interface{}{},
-				},
-				{
-					// Note this is in Group1 and Group2
-					Name:    "lingo-reviews/unused_function_args",
-					Options: map[string]interface{}{},
-				},
-			},
-		},
-	},
+	}
 }
 
 func (*CMDTest) TestAllTenets(c *gc.C) {
 	// AllTenets Should provide a list of all tenets flattened from groups and without duplicates
-	output := complexConfig.AllTenets()
+	output := complexConfig().AllTenets()
 
 	expected := []TenetConfig{
 		{
@@ -241,20 +242,21 @@ func (*CMDTest) TestAllTenets(c *gc.C) {
 
 func (*CMDTest) TestHasTenetGroup(c *gc.C) {
 	// HasTenetGroup should return true only for existing group names, case sensitive
-	c.Assert(complexConfig.HasTenetGroup("default"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenetGroup("Group1"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenetGroup("Group2"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenetGroup("invalid"), gc.Equals, false)
-	c.Assert(complexConfig.HasTenetGroup("group1"), gc.Equals, false)
+	testConfig := complexConfig()
+	c.Assert(testConfig.HasTenetGroup("default"), gc.Equals, true)
+	c.Assert(testConfig.HasTenetGroup("Group1"), gc.Equals, true)
+	c.Assert(testConfig.HasTenetGroup("Group2"), gc.Equals, true)
+	c.Assert(testConfig.HasTenetGroup("invalid"), gc.Equals, false)
+	c.Assert(testConfig.HasTenetGroup("group1"), gc.Equals, false)
 }
 
 func (*CMDTest) TestAddTenetGroup(c *gc.C) {
 	// AddTenetGroup should add a new empty group to the config if that group doesn't already exist
-	testConfig := deepcopy.Iface(complexConfig).(*config)
+	testConfig := complexConfig()
 
 	// Test duplicate
 	testConfig.AddTenetGroup("Group1")
-	c.Assert(testConfig, gc.DeepEquals, complexConfig)
+	c.Assert(testConfig, gc.DeepEquals, complexConfig())
 
 	// Test new
 	expected := &config{
@@ -315,11 +317,11 @@ func (*CMDTest) TestAddTenetGroup(c *gc.C) {
 
 func (*CMDTest) TestRemoveTenetGroup(c *gc.C) {
 	// RemoveTenetGroup should remove a group and all contained tenets, and have no effect for missing groups
-	testConfig := deepcopy.Iface(complexConfig).(*config)
+	testConfig := complexConfig()
 
 	// Test nonexistent
 	testConfig.RemoveTenetGroup("invalid")
-	c.Assert(testConfig, gc.DeepEquals, complexConfig)
+	c.Assert(testConfig, gc.DeepEquals, complexConfig())
 
 	// Test existing
 	expected := &config{
@@ -361,9 +363,9 @@ func (*CMDTest) TestRemoveTenetGroup(c *gc.C) {
 func (*CMDTest) TestAddTenet(c *gc.C) {
 	// AddTenet should add a tenet by config to an existing group, create a group if the requested does not exist, and return error
 	// for duplicate names/group combos
-	testConfig1 := deepcopy.Iface(complexConfig).(*config)
-	testConfig2 := deepcopy.Iface(complexConfig).(*config)
-	testConfig3 := deepcopy.Iface(complexConfig).(*config)
+	testConfig1 := complexConfig()
+	testConfig2 := complexConfig()
+	testConfig3 := complexConfig()
 
 	// Add tenet to existing group
 	expected1 := &config{
@@ -504,8 +506,8 @@ func (*CMDTest) TestAddTenet(c *gc.C) {
 
 func (*CMDTest) TestRemoveTenet(c *gc.C) {
 	// RemoveTenet should remove a tenet only from the named group, and return an error if either the group or tenet is not found
-	testConfig1 := deepcopy.Iface(complexConfig).(*config)
-	testConfig2 := deepcopy.Iface(complexConfig).(*config)
+	testConfig1 := complexConfig()
+	testConfig2 := complexConfig()
 
 	// Test existing
 	expected1 := &config{
@@ -564,13 +566,14 @@ func (*CMDTest) TestRemoveTenet(c *gc.C) {
 }
 
 func (*CMDTest) TestHasTenet(c *gc.C) {
+	testConfig := complexConfig()
 	// Test all existing
-	c.Assert(complexConfig.HasTenet("lingoreviews/tenetseed:latest"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenet("lingo-reviews/license"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenet("lingo-reviews/unused_function_args"), gc.Equals, true)
-	c.Assert(complexConfig.HasTenet("lingoreviews/space_after_forward_slash"), gc.Equals, true)
+	c.Assert(testConfig.HasTenet("lingoreviews/tenetseed:latest"), gc.Equals, true)
+	c.Assert(testConfig.HasTenet("lingo-reviews/license"), gc.Equals, true)
+	c.Assert(testConfig.HasTenet("lingo-reviews/unused_function_args"), gc.Equals, true)
+	c.Assert(testConfig.HasTenet("lingoreviews/space_after_forward_slash"), gc.Equals, true)
 	// Test some missing
-	c.Assert(complexConfig.HasTenet("lingoreviews/tenetseed"), gc.Equals, false)
-	c.Assert(complexConfig.HasTenet("lingoreviews/license"), gc.Equals, false)
-	c.Assert(complexConfig.HasTenet("nonamespace/notenet"), gc.Equals, false)
+	c.Assert(testConfig.HasTenet("lingoreviews/tenetseed"), gc.Equals, false)
+	c.Assert(testConfig.HasTenet("lingoreviews/license"), gc.Equals, false)
+	c.Assert(testConfig.HasTenet("nonamespace/notenet"), gc.Equals, false)
 }
