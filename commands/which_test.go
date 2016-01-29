@@ -6,11 +6,11 @@ import (
 	gc "gopkg.in/check.v1"
 )
 
-func (*CMDTest) TestWhichCMD(c *gc.C) {
-	cfgPath, closer := testCfg(c)
+func (*cmdSuite) TestWhichCMD(c *gc.C) {
+	cfgPath, closer := common.TestCfg(c)
 	defer closer()
 
-	ctx := mockContext(c, common.TenetCfgFlg.LongArg(), cfgPath, "which")
+	ctx := common.MockContext(c, common.TenetCfgFlg.LongArg(), cfgPath, "which")
 	c.Assert(WhichCMD.Run(ctx), jc.ErrorIsNil)
 
 	// TODO(waigani) test stdout, regex match: ^/home/[^/]*/\.lingo/tenet\.toml
