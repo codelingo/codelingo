@@ -49,7 +49,7 @@ func (s *dryRunSuite) TestClose(c *C) {
 func (s *dryRunSuite) TestReview(c *C) {
 	filenames := []string{"f1.go", "f2.go", "f3.go"}
 	files := make(chan *api.File)
-	issues := make(chan *api.Issue, 5)
+	issues := make(chan *Issue, 5)
 	t := &tomb.Tomb{}
 	go func() {
 		err := s.service.Review(files, issues, t)
@@ -76,6 +76,7 @@ l:
 			c.Assert(issue.Name, Equals, "dryrun")
 			c.Assert(issue.Comment, Equals, "Dry Run Issue")
 			c.Assert(issue.LineText, Equals, "Your code here")
+			c.Assert(issue.TenetName, Equals, "dryrun/tenet")
 		case <-time.After(3 * time.Second):
 			t.Kill(nil)
 			c.Assert(t.Wait(), jc.ErrorIsNil)

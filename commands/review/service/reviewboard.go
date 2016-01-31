@@ -11,7 +11,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/commands/review"
-	"github.com/lingo-reviews/tenets/go/dev/api"
+	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var reviewboard = cli.Command{
@@ -65,7 +65,7 @@ func rb(ctx *cli.Context) {
 	fmt.Println("Done! Review sent to Review Board.")
 }
 
-func postToRB(reviewID, cfgBlock string, issues []*api.Issue) error {
+func postToRB(reviewID, cfgBlock string, issues []*tenet.Issue) error {
 
 	rbCfg, err := Config(cfgBlock)
 	if err != nil {
@@ -112,8 +112,8 @@ func postToRB(reviewID, cfgBlock string, issues []*api.Issue) error {
 }
 
 type rbResult struct {
-	Config serviceConfig `json:"config"`
-	Issues []*api.Issue  `json:"issues"`
+	Config serviceConfig  `json:"config"`
+	Issues []*tenet.Issue `json:"issues"`
 }
 
 func validateRbCfg(rbCfg serviceConfig) error {

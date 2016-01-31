@@ -1,13 +1,15 @@
 package review
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/util"
-	"github.com/lingo-reviews/tenets/go/dev/api"
 	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 	"github.com/waigani/diffparser"
 )
@@ -42,7 +44,7 @@ var editor string
 
 // confirm returns true if the issue should be kept or false if it should be
 // dropped.
-func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
+func (c IssueConfirmer) Confirm(attempt int, issue *tenet.Issue) bool {
 	if c.keepAll {
 		return true
 	}
@@ -95,7 +97,17 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 
 		c.Confirm(attempt, issue)
 	case "d":
-		return false
+		issue.Discard = true
+
+		// TODO(waigani) only prompt for reason if we're sending to a service.
+		fmt.Print("reason: ")
+		in := bufio.NewReader(os.Stdin)
+		issue.DiscardReason, _ = in.ReadString('\n')
+
+		// TODO(waigani) we are now always returning true. Returning a bool at
+		// all doesn't make sense and KeptIssues in commands/common.go should
+		// be renamed to "AllIssues" or the like.
+		return true
 	case "", "k", "K", "\n":
 		return true
 	default:
@@ -109,7 +121,7 @@ func (c IssueConfirmer) Confirm(attempt int, issue *api.Issue) bool {
 
 // TODO(waigani) remove dependency on dev/tenet. Use a simpler internal
 // representation of api.Issue.
-func (c *IssueConfirmer) FormatPlainText(issue *api.Issue) string {
+func (c *IssueConfirmer) FormatPlainText(issue *tenet.Issue) string {
 	m := color.New(color.FgWhite, color.Faint).SprintfFunc()
 	y := color.New(color.FgYellow).SprintfFunc()
 	yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
