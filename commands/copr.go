@@ -17,13 +17,16 @@ var CoprCMD = cli.Command{
 	Name:  "copr",
 	Usage: "Checkout a git pull request",
 	Description: `
+"copr" stands for Checkout Pull Request.
 
-cd into a local git repository the pull request targets. The run:
+From the root of a git repository run the following:
 
 $ lingo copr <user>:<branch>
 
-This will: create a new branch; checkout the pull request; and reset any
-commits back to the point the branch forked from base.
+Where <user> is the owner of the pull request and <branch> is the branch name
+of the pull request. The pull request will be pulled into a new local branch
+of --base with the name <user>-<branch>. Any commits back to the fork point
+from base will be reset, leaving any changes in the working tree.
 
 `[1:],
 	Flags: []cli.Flag{
