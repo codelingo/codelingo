@@ -184,12 +184,6 @@ func FormatOutput(in interface{}, tmplt string) (string, error) {
 	return out.String(), nil
 }
 
-func CheckoutPR() {
-
-	exec.Command("bash", "-c", coprcmd)
-
-}
-
 var coprcmd = `
 #!/bin/bash
 
