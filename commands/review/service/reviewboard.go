@@ -57,6 +57,8 @@ func rb(ctx *cli.Context) {
 
 	reviewID := ctx.Args()[0]
 
+	fmt.Println("Posting review to reviewboard ...")
+
 	if err := postToRB(reviewID, ctx.String("config"), issues); err != nil {
 		common.OSErrf(err.Error())
 		return
