@@ -10,6 +10,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/lingo/commands/common"
+	"github.com/lingo-reviews/lingo/commands/common/config"
 	"github.com/lingo-reviews/lingo/commands/review"
 	"github.com/lingo-reviews/tenets/go/dev/api"
 )
@@ -32,14 +33,49 @@ The default the config under "reviewboard" will be read. To read another config 
 			Usage: "the name of the config block in services.yaml to use. It must be for a reviewboard service.",
 		},
 	),
-	Action: rb,
+	Action: rbAction,
 }
 
-func rb(ctx *cli.Context) {
+func rbAction(ctx *cli.Context) {
+	if err := rb(ctx); err != nil {
+		common.OSErrf(err.Error())
+		return
+	}
+	fmt.Println("Done! Review sent to Review Board.")
+}
+
+func rb(ctx *cli.Context) error {
 
 	if len(ctx.Args()) == 0 {
-		fmt.Println("The ReviewBoard service requires at least one arguement, the review ID")
-		return
+		return errors.Errorf("The ReviewBoard service requires at least one arguement, the review ID")
+	}
+
+	// Make sure we have a config before posting
+	serviceName := ctx.String("config")
+	var cfgNeedsEdit bool
+	rbCfg, err := config.Service(serviceName)
+	if err != nil {
+		fmt.Printf("no configuration found for %q\n", serviceName)
+		cfgNeedsEdit = true
+	} else if err := validateRbCfg(rbCfg); err != nil {
+		fmt.Printf("%q configuration file is not valid: %v\n", serviceName, err)
+		cfgNeedsEdit = true
+	}
+	if cfgNeedsEdit {
+		// TODO(waigani) send and check a typed error
+		var edit string
+		fmt.Printf("Would you like to configure %s now? n/Y: ", serviceName)
+		fmt.Scanln(&edit)
+
+		switch edit {
+		case "n", "N":
+			return errors.New("aborted")
+		case "y", "Y", "":
+			return config.Edit(config.ServicesCfgFile, "vi") // TODO(waigani) use default editor
+		default:
+			return errors.Trace(err)
+		}
+		return nil
 	}
 
 	opts := review.Options{
@@ -51,30 +87,15 @@ func rb(ctx *cli.Context) {
 
 	issues, err := review.Review(opts)
 	if err != nil {
-		common.OSErrf(err.Error())
-		return
+		return errors.Trace(err)
 	}
-
 	reviewID := ctx.Args()[0]
 
-	if err := postToRB(reviewID, ctx.String("config"), issues); err != nil {
-		common.OSErrf(err.Error())
-		return
-	}
-
-	fmt.Println("Done! Review sent to Review Board.")
+	return errors.Trace(postToRB(reviewID, rbCfg, issues))
 }
 
-func postToRB(reviewID, cfgBlock string, issues []*api.Issue) error {
+func postToRB(reviewID string, rbCfg config.ServiceConfig, issues []*api.Issue) error {
 
-	rbCfg, err := Config(cfgBlock)
-	if err != nil {
-		return errors.Trace(err)
-	}
-
-	if err := validateRbCfg(rbCfg); err != nil {
-		return errors.Trace(err)
-	}
 	rbCfg["review-id"] = reviewID
 
 	res := rbResult{
@@ -112,11 +133,11 @@ func postToRB(reviewID, cfgBlock string, issues []*api.Issue) error {
 }
 
 type rbResult struct {
-	Config serviceConfig `json:"config"`
-	Issues []*api.Issue  `json:"issues"`
+	Config config.ServiceConfig `json:"config"`
+	Issues []*api.Issue         `json:"issues"`
 }
 
-func validateRbCfg(rbCfg serviceConfig) error {
+func validateRbCfg(rbCfg config.ServiceConfig) error {
 	if _, ok := rbCfg["domain"].(string); !ok {
 		return errors.New("reviewboard domain not set in config")
 	}

@@ -8,6 +8,7 @@ import (
 	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/commands/common"
+	"github.com/lingo-reviews/lingo/commands/common/config"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -22,7 +23,7 @@ var AddCMD = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:  "driver",
-			Value: "docker",
+			Value: defaultDriver(),
 			Usage: "driver to use for this tenet",
 		},
 		cli.StringFlag{
@@ -59,6 +60,19 @@ var AddCMD = cli.Command{
 		}
 
 	},
+}
+
+func defaultDriver() string {
+	cfg, err := config.Defaults()
+	if err != nil {
+		return "binary"
+	}
+
+	driver := cfg.Tenet.Driver
+	if driver != "binary" && driver != "docker" {
+		common.OSErrf("invalid driver default: %q", driver)
+	}
+	return driver
 }
 
 func add(c *cli.Context) {

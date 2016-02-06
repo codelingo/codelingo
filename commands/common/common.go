@@ -26,7 +26,6 @@ import (
 
 const (
 	DefaultTenetCfgPath = ".lingo"
-	ConfigFile          = "services.yaml"
 )
 
 // TODO(waigani) The do server relies on this error message to know when to make a pull request.

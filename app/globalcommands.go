@@ -21,7 +21,6 @@ var globalCommands = []cli.Command{
 	commands.PushCMD,
 	commands.SetupAutoCompleteCMD,
 	commands.CoprCMD,
-	commands.UpdateCMD,
 	commands.ConfigCMD,
 
 	// commands.OptionsCMD,

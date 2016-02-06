@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"path"
 	"path/filepath"
 	"strings"
 	"text/tabwriter"
@@ -58,7 +57,7 @@ func MustLingoHome() string {
 	return lHome
 }
 
-// LingoHome returns the path to the user's lingo config directory.
+// LingoHome returns the path to the user's lingo home directory.
 func LingoHome() (string, error) {
 	if lHome := os.Getenv("LINGO_HOME"); lHome != "" {
 		return lHome, nil
@@ -68,7 +67,20 @@ func LingoHome() (string, error) {
 		return "", err
 	}
 
-	return path.Join(home, defaultHome), nil
+	return filepath.Join(home, defaultHome), nil
+}
+
+// ConfigHome returns the path to the user's lingo config directory.
+func ConfigHome() (string, error) {
+	if lHome := os.Getenv("LINGO_HOME"); lHome != "" {
+		return lHome, nil
+	}
+	home, err := UserHome()
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(home, defaultHome, "configs"), nil
 }
 
 // UserHome returns the user's OS home directory.
