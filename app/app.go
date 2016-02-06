@@ -6,6 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/lingo-reviews/lingo/commands"
+	"github.com/lingo-reviews/lingo/commands/common"
 )
 
 // TODO(waigani) have a global state that tenets can share. An issue may be
@@ -18,7 +19,7 @@ func New() *cli.App {
 	app.Usage = "A DevOps Tool for Software Engineering. This is an ALPHA release (here be BUGS)."
 	app.Before = commands.BeforeCMD
 	app.Commands = globalCommands
-	app.Flags = commands.GlobalOptions
+	app.Flags = common.GlobalOptions
 	app.CommandNotFound = commands.TenetCMD
 	app.EnableBashCompletion = true
 

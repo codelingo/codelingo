@@ -6,6 +6,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/lingo-reviews/lingo/commands/common"
+
 	"github.com/BurntSushi/toml"
 	"github.com/cheggaaa/pb"
 	"github.com/codegangsta/cli"
@@ -85,7 +87,7 @@ func build(ctx *cli.Context) {
 
 	lingofiles, err := getLingofiles(ctx)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	fn := len(lingofiles)

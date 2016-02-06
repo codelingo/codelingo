@@ -8,6 +8,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/lingo-reviews/lingo/util"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 )
 
 var SetupAutoCompleteCMD = cli.Command{
@@ -29,14 +31,14 @@ lingo --generate-bash-completion
 func sourceAutoComplete(c *cli.Context) {
 	uHome, err := util.UserHome()
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	autoCompScriptPath := filepath.Join(uHome, ".lingo_home/scripts/bash_autocomplete.sh")
 	err = ioutil.WriteFile(autoCompScriptPath, []byte(bash_autocomplete), 0775)
 	if err != nil {
 		fmt.Println("WARNING: could not write script:")
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 
@@ -44,13 +46,13 @@ func sourceAutoComplete(c *cli.Context) {
 	bashrcPath := filepath.Join(uHome, ".bashrc")
 	f, err := os.OpenFile(bashrcPath, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	defer f.Close()
 
 	if _, err = f.WriteString("\nPROG=lingo source " + autoCompScriptPath); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 

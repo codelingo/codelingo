@@ -5,6 +5,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 )
 
 var PullCMD = cli.Command{
@@ -12,19 +14,19 @@ var PullCMD = cli.Command{
 	Usage: "pull tenet image(s) from docker hub",
 	Flags: []cli.Flag{
 		cli.BoolFlag{
-			Name:  allFlg.String(),
+			Name:  common.AllFlg.String(),
 			Usage: "pull all tenets in .lingo",
 		}, cli.BoolFlag{
-			Name:  updateFlg.String(),
+			Name:  common.UpdateFlg.String(),
 			Usage: "look to pull a newer version",
 		},
 		cli.StringFlag{
-			Name:  registryFlg.String(),
+			Name:  common.RegistryFlg.String(),
 			Value: "hub.docker.com",
 			Usage: "the registry to pull from",
 		},
 		cli.StringFlag{
-			Name:  driverFlg.String(),
+			Name:  common.DriverFlg.String(),
 			Value: "docker",
 			Usage: "the driver used to pull and run the tenet",
 		},
@@ -46,14 +48,14 @@ func pull(c *cli.Context) {
 		expectedArgs = 0
 	}
 	if l := len(c.Args()); l != expectedArgs {
-		oserrf("expected %d argument(s), got %d", expectedArgs, l)
+		common.OSErrf("expected %d argument(s), got %d", expectedArgs, l)
 		return
 	}
 
 	if all {
 		fmt.Println("pulling all tenets found in .lingo ...")
 		if err := pullAll(c); err != nil {
-			oserrf(err.Error())
+			common.OSErrf(err.Error())
 		}
 		return
 	}
@@ -62,22 +64,22 @@ func pull(c *cli.Context) {
 	driver := c.String("driver")
 
 	if err := pullOne(c, c.Args().First(), driver, reg); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 	}
 }
 
 // Pull all tenets from config using assigned drivers.
 func pullAll(c *cli.Context) error {
-	cfgPath, err := tenetCfgPath(c)
+	cfgPath, err := common.TenetCfgPath(c)
 	if err != nil {
 		return err
 	}
-	cfg, err := buildConfig(cfgPath, CascadeBoth)
+	cfg, err := common.BuildConfig(cfgPath, common.CascadeBoth)
 	if err != nil {
 		return err
 	}
 
-	ts, err := tenets(c, cfg)
+	ts, err := common.Tenets(c, cfg)
 	if err != nil {
 		return err
 	}
@@ -93,7 +95,7 @@ func pullAll(c *cli.Context) error {
 }
 
 func pullOne(c *cli.Context, name, driverName, registry string) error {
-	t, err := newTenet(c, TenetConfig{
+	t, err := common.NewTenet(common.TenetConfig{
 		Name:     name,
 		Driver:   driverName,
 		Registry: registry,

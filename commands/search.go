@@ -1,13 +1,16 @@
 package commands
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/commands/common"
+)
 
 var SearchCMD = cli.Command{
 	Name:  "search",
 	Usage: "search tenet image(s)",
 	Flags: []cli.Flag{
 		cli.BoolFlag{
-			Name: tagsFlg.String(),
+			Name: common.TagsFlg.String(),
 		},
 	},
 	Description: `

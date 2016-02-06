@@ -1,6 +1,10 @@
 package commands
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/lingo-reviews/lingo/commands/common"
+
+	"github.com/codegangsta/cli"
+)
 
 var ValidateCMD = cli.Command{
 	Name:  "validate",
@@ -17,8 +21,8 @@ var ValidateCMD = cli.Command{
 // images should have key: reviews.lingo.tenet
 
 func validate(c *cli.Context) {
-	if err := exactArgs(c, 1); err != nil {
-		oserrf(err.Error())
+	if err := common.ExactArgs(c, 1); err != nil {
+		common.OSErrf(err.Error())
 		return
 	}
 

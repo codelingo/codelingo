@@ -183,3 +183,45 @@ func FormatOutput(in interface{}, tmplt string) (string, error) {
 
 	return out.String(), nil
 }
+
+var coprcmd = `
+#!/bin/bash
+
+# copr: Checkout Pull Request
+#
+# cd into the repository the pull request targets. The run:
+# $ copr <user>/<repo> <branch> [base]
+# 
+#
+# This will: create a new branch; checkout the pull request; and reset any
+# commits back to the point the branch forked from base. If base is not set,
+# it defaults to master.
+
+set -e
+
+status=` + "`git status -s`" + `
+echo $status
+if [ -n "$status" ]; then
+	echo "aborting: working directory not clean"
+	exit
+fi
+
+userAndRepo=$1
+branch=$2
+base="master"
+
+if [ -n "$3" ]; then
+	echo "setting base"
+	base=$3
+fi
+
+name="${userAndRepo/\//-}"
+
+set -x
+git co -b $name-$branch master
+git pull https://github.com/$userAndRepo.git $branch
+
+sha=` + "`git merge-base --fork-point HEAD $base`" + `
+
+git reset $sha
+`[1:]

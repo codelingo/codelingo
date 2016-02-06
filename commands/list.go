@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/codegangsta/cli"
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -45,20 +46,20 @@ func listAction(c *cli.Context) {
 
 }
 
-func listTenets(c *cli.Context) []TenetConfig {
-	cfgPath, err := tenetCfgPath(c)
+func listTenets(c *cli.Context) []common.TenetConfig {
+	cfgPath, err := common.TenetCfgPath(c)
 	if err != nil {
 		if _, ok := err.(*os.PathError); ok {
 			// For missing config files, there are just no tenets
 			return nil
 		}
 		// For malformed config show the error to the user
-		oserrf("could not read configuration: %s", err.Error())
+		common.OSErrf("could not read configuration: %s", err.Error())
 		return nil
 	}
-	cfg, err := buildConfig(cfgPath, CascadeNone)
+	cfg, err := common.BuildConfig(cfgPath, common.CascadeNone)
 	if err != nil {
-		oserrf("could not read configuration: %s", err.Error())
+		common.OSErrf("could not read configuration: %s", err.Error())
 		return nil
 	}
 	return cfg.AllTenets()

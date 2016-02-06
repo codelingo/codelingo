@@ -8,12 +8,14 @@ import (
 	"github.com/cheggaaa/pb"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 )
 
 var PushCMD = cli.Command{
 	Name:  "push",
-	Usage: "push a tenet to it's registry",
+	Usage: "push a tenet to its registry",
 	Description: `
 	
 Call "lingo push" in the root directory of the source code of a tenet.
@@ -52,7 +54,7 @@ func push(ctx *cli.Context) {
 	// code to docker for now.
 
 	if len(ctx.Args()) > 0 {
-		oserrf("push takes no arguments")
+		common.OSErrf("push takes no arguments")
 	}
 
 	// drivers := ctx.Args()
@@ -63,7 +65,7 @@ func push(ctx *cli.Context) {
 
 	lingofiles, err := getLingofiles(ctx)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	fn := len(lingofiles)

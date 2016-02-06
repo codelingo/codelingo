@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
 
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/lingo/util"
 	"github.com/lingo-reviews/tenets/go/dev/api"
@@ -15,7 +16,7 @@ import (
 // passes through any arguments to the tenet.
 func TenetCMD(ctx *cli.Context, command string) {
 	var commandIsTenet bool
-	var cfg TenetConfig
+	var cfg common.TenetConfig
 	// Does the command match an installed tenet?
 	for _, cfg = range listTenets(ctx) {
 		if command == cfg.Name {
@@ -30,13 +31,13 @@ func TenetCMD(ctx *cli.Context, command string) {
 
 	tnCMDs, err := newTenetCMDs(ctx, cfg)
 	if err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	defer tnCMDs.closeService()
 
 	if err := tnCMDs.run(); err != nil {
-		oserrf(err.Error())
+		common.OSErrf(err.Error())
 		return
 	}
 	return
@@ -75,13 +76,13 @@ func (c *tenetCMDs) run() error {
 
 type tenetCMDs struct {
 	ctx     *cli.Context
-	cfg     TenetConfig
+	cfg     common.TenetConfig
 	tn      tenet.Tenet
 	service tenet.TenetService
 }
 
-func newTenetCMDs(ctx *cli.Context, cfg TenetConfig) (*tenetCMDs, error) {
-	tn, err := newTenet(ctx, cfg)
+func newTenetCMDs(ctx *cli.Context, cfg common.TenetConfig) (*tenetCMDs, error) {
+	tn, err := common.NewTenet(cfg)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}

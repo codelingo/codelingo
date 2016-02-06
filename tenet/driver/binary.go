@@ -1,7 +1,6 @@
 package driver
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,6 +8,8 @@ import (
 	"github.com/juju/errors"
 	"github.com/lingo-reviews/lingo/tenet/driver/binary"
 	"github.com/lingo-reviews/lingo/util"
+	"github.com/lingo-reviews/tenets/go/dev/api"
+	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 // Binary is a tenet driver to execute binary tenets found in ~/.lingo/tenets/<repo>/<tenet>
@@ -65,7 +66,7 @@ func userHomeDir() string {
 	return os.Getenv("HOME")
 }
 
-func (b *Binary) EditFilename(filename string) (editedFilename string) {
+func (*Binary) EditFilename(filename string) (editedFilename string) {
 	var absPath string
 	var err error
 	if absPath, err = filepath.Abs(filename); err == nil {
@@ -73,4 +74,26 @@ func (b *Binary) EditFilename(filename string) (editedFilename string) {
 	}
 	log.Printf("could not get absolute path for %q:%v", filename, err)
 	return filename
+}
+
+func (*Binary) EditIssue(issue *api.Issue) (editedIssue *api.Issue) {
+	start := issue.Position.Start.Filename
+	end := issue.Position.End.Filename
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Printf("could not get relative path for %q:%v", start, err)
+	}
+
+	issue.Position.Start.Filename, err = filepath.Rel(pwd, start)
+	if err != nil {
+		log.Printf("could not get relative path for %q:%v", start, err)
+	}
+
+	issue.Position.End.Filename, err = filepath.Rel(pwd, end)
+	if err != nil {
+		log.Printf("could not get relative path for %q:%v", end, err)
+	}
+
+	return issue
 }

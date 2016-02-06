@@ -1,12 +1,11 @@
 package driver
 
-import (
-	"github.com/lingo-reviews/tenets/go/dev/api"
-)
+import "github.com/lingo-reviews/tenets/go/dev/api"
 
 type Options map[string]interface{}
 
 type Base struct {
+
 	// Name of the tenet
 	Name string
 

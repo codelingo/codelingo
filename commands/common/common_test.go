@@ -1,11 +1,9 @@
-package commands
+package common
 
 import (
 	"bytes"
-	"flag"
 	"io/ioutil"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/codegangsta/cli"
@@ -19,128 +17,56 @@ func Test(t *testing.T) {
 	gc.TestingT(t)
 }
 
-type CMDTest struct {
+type commonSuite struct {
 	jt.CleanupSuite
 	// jt.FakeHomeSuite
 	Context *cli.Context
 	stdErr  bytes.Buffer
 }
 
-var _ = gc.Suite(&CMDTest{})
+var _ = gc.Suite(&commonSuite{})
 
-// 	c.Context = &cli.Context{
-// 			App            *App
-// 	Command        Command
-// 	flagSet        *flag.FlagSet
-// 	globalSet      *flag.FlagSet
-// 	setFlags       map[string]bool
-// 	globalSetFlags map[string]bool
-// 	}
-// }
-
-var mockTenetCfg = &config{
-	TenetGroups: []TenetGroup{
-		{Name: "default",
-			Tenets: []TenetConfig{
-				{
-					Name: "lingoreviews/tenetseed:latest",
-				}, {
-					Name: "lingoreviews/space_after_forward_slash",
-				}, {
-					Name: "lingo-reviews/unused_function_args",
-				}, {
-					Name: "lingo-reviews/license",
-					Options: map[string]interface{}{
-						"header": "// MIT\n",
-					},
-				},
-			},
-		},
-	},
-}
-
-func testCfg(c *gc.C) (cfgPath string, closer func()) {
-	f, err := ioutil.TempFile("", "mockTenetCfg")
-	c.Assert(err, jc.ErrorIsNil)
-	ctx := mockContext(c, tenetCfgFlg.longArg(), f.Name(), "noop")
-	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
-	return f.Name(), func() {
-		os.Remove(f.Name())
-		f.Close()
-	}
-}
-
-func longName(f cli.Flag) string {
-	parts := strings.Split(f.String(), ",")
-	return strings.TrimLeft(parts[0], "-")
-}
-
-func addGlobalOpts(set *flag.FlagSet) {
-	for _, flg := range GlobalOptions {
-		lName := longName(flg)
-		switch f := flg.(type) {
-		case cli.BoolFlag:
-			set.Bool(lName, false, f.Usage)
-		case cli.StringFlag:
-			set.String(lName, f.Value, f.Usage)
-		}
-	}
-}
-
-// mockContext is a test helper for testing commands. Flags should only be set
-// with their long name.
-func mockContext(c *gc.C, args ...string) *cli.Context {
-	set := flag.NewFlagSet("test", 0)
-	addGlobalOpts(set)
-
-	c.Assert(set.Parse(args), jc.ErrorIsNil)
-
-	ctx := cli.NewContext(cli.NewApp(), set, nil)
-	ctx.Command = cli.Command{Name: ctx.Args().First()}
-	return ctx
-}
-
-func (s *CMDTest) SetUpSuite(c *gc.C) {
-	origExiter := exiter
-	exiter = func(code int) {
+func (s *commonSuite) SetUpSuite(c *gc.C) {
+	origExiter := Exiter
+	Exiter = func(code int) {
 		//noOp func
 	}
-	stderr = &s.stdErr
+	Stderr = &s.stdErr
 
 	s.AddSuiteCleanup(func(c *gc.C) {
-		exiter = origExiter
-		stderr = os.Stderr
+		Exiter = origExiter
+		Stderr = os.Stderr
 	})
 }
 
-func (s *CMDTest) SetUpTest(c *gc.C) {
+func (s *commonSuite) SetUpTest(c *gc.C) {
 	// cleanout err buffer
 	s.stdErr = bytes.Buffer{}
 }
 
-func (*CMDTest) TestWriteAndReadTenetCfg(c *gc.C) {
-	f, err := ioutil.TempFile("", "mockTenetCfg")
+func (*commonSuite) TestWriteAndReadTenetCfg(c *gc.C) {
+	f, err := ioutil.TempFile("", "MockTenetCfg()")
 	fName := f.Name()
 	defer func() {
 		os.Remove(fName)
 		f.Close()
 	}()
 	c.Assert(err, jc.ErrorIsNil)
-	ctx := mockContext(c, tenetCfgFlg.longArg(), fName)
-	c.Assert(writeConfigFile(ctx, mockTenetCfg), jc.ErrorIsNil)
+	ctx := MockContext(c, TenetCfgFlg.LongArg(), fName)
+	c.Assert(WriteConfigFile(ctx, MockTenetCfg()), jc.ErrorIsNil)
 
-	obtained, err := readConfigFile(fName)
+	obtained, err := ReadConfigFile(fName)
 	c.Assert(err, jc.ErrorIsNil)
 
-	c.Assert(obtained, gc.DeepEquals, mockTenetCfg)
+	c.Assert(obtained, gc.DeepEquals, MockTenetCfg())
 }
 
-func (*CMDTest) TestDesiredTenetCfgPath(c *gc.C) {
-	ctx := mockContext(c, tenetCfgFlg.longArg(), "custom/cfg/path")
-	c.Assert(desiredTenetCfgPath(ctx), gc.Equals, "custom/cfg/path")
+func (*commonSuite) TestDesiredTenetCfgPath(c *gc.C) {
+	ctx := MockContext(c, TenetCfgFlg.LongArg(), "custom/cfg/path")
+	c.Assert(DesiredTenetCfgPath(ctx), gc.Equals, "custom/cfg/path")
 }
 
-func (*CMDTest) TestTenetCfgPath(c *gc.C) {
+func (*commonSuite) TestTenetCfgPath(c *gc.C) {
 	// TODO(waigani) Do what skip says. init .lingo in tmp dir, set default to it.
 	c.Skip("Errors if default .lingo cannot be found.")
 	defaultPathRegex := `^/home/.*\.lingo_home/\.lingo`
@@ -151,22 +77,22 @@ func (*CMDTest) TestTenetCfgPath(c *gc.C) {
 		".lingo":                   defaultPathRegex,
 		"/.lingo":                  defaultPathRegex,
 	} {
-		ctx := mockContext(c, tenetCfgFlg.longArg(), cfgPath)
-		cPath, err := tenetCfgPath(ctx)
+		ctx := MockContext(c, TenetCfgFlg.LongArg(), cfgPath)
+		cPath, err := TenetCfgPath(ctx)
 		c.Assert(err, jc.ErrorIsNil)
 		c.Assert(cPath, gc.Matches, expected)
 	}
 }
 
-func (*CMDTest) TestMockContext(c *gc.C) {
-	ctx := mockContext(c, tenetCfgFlg.longArg(), "custom/cfg/path", "add")
+func (*commonSuite) TestMockContext(c *gc.C) {
+	ctx := MockContext(c, TenetCfgFlg.LongArg(), "custom/cfg/path", "add")
 	c.Assert(ctx.Args(), gc.DeepEquals, cli.Args{"add"})
-	c.Assert(ctx.GlobalString(tenetCfgFlg.long), gc.Equals, "custom/cfg/path")
+	c.Assert(ctx.GlobalString(TenetCfgFlg.Long), gc.Equals, "custom/cfg/path")
 	c.Assert(ctx.Command.Name, gc.Equals, "add")
 }
 
-func complexConfig() *config {
-	return &config{
+func complexConfig() *Config {
+	return &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -214,7 +140,7 @@ func complexConfig() *config {
 	}
 }
 
-func (*CMDTest) TestAllTenets(c *gc.C) {
+func (*commonSuite) TestAllTenets(c *gc.C) {
 	// AllTenets Should provide a list of all tenets flattened from groups and without duplicates
 	output := complexConfig().AllTenets()
 
@@ -240,7 +166,7 @@ func (*CMDTest) TestAllTenets(c *gc.C) {
 	c.Assert(output, gc.DeepEquals, expected)
 }
 
-func (*CMDTest) TestHasTenetGroup(c *gc.C) {
+func (*commonSuite) TestHasTenetGroup(c *gc.C) {
 	// HasTenetGroup should return true only for existing group names, case sensitive
 	testConfig := complexConfig()
 	c.Assert(testConfig.HasTenetGroup("default"), gc.Equals, true)
@@ -250,7 +176,7 @@ func (*CMDTest) TestHasTenetGroup(c *gc.C) {
 	c.Assert(testConfig.HasTenetGroup("group1"), gc.Equals, false)
 }
 
-func (*CMDTest) TestAddTenetGroup(c *gc.C) {
+func (*commonSuite) TestAddTenetGroup(c *gc.C) {
 	// AddTenetGroup should add a new empty group to the config if that group doesn't already exist
 	testConfig := complexConfig()
 
@@ -259,7 +185,7 @@ func (*CMDTest) TestAddTenetGroup(c *gc.C) {
 	c.Assert(testConfig, gc.DeepEquals, complexConfig())
 
 	// Test new
-	expected := &config{
+	expected := &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -315,7 +241,7 @@ func (*CMDTest) TestAddTenetGroup(c *gc.C) {
 	c.Assert(testConfig, gc.DeepEquals, expected)
 }
 
-func (*CMDTest) TestRemoveTenetGroup(c *gc.C) {
+func (*commonSuite) TestRemoveTenetGroup(c *gc.C) {
 	// RemoveTenetGroup should remove a group and all contained tenets, and have no effect for missing groups
 	testConfig := complexConfig()
 
@@ -324,7 +250,7 @@ func (*CMDTest) TestRemoveTenetGroup(c *gc.C) {
 	c.Assert(testConfig, gc.DeepEquals, complexConfig())
 
 	// Test existing
-	expected := &config{
+	expected := &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -360,7 +286,7 @@ func (*CMDTest) TestRemoveTenetGroup(c *gc.C) {
 	c.Assert(testConfig, gc.DeepEquals, expected)
 }
 
-func (*CMDTest) TestAddTenet(c *gc.C) {
+func (*commonSuite) TestAddTenet(c *gc.C) {
 	// AddTenet should add a tenet by config to an existing group, create a group if the requested does not exist, and return error
 	// for duplicate names/group combos
 	testConfig1 := complexConfig()
@@ -368,7 +294,7 @@ func (*CMDTest) TestAddTenet(c *gc.C) {
 	testConfig3 := complexConfig()
 
 	// Add tenet to existing group
-	expected1 := &config{
+	expected1 := &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -427,7 +353,7 @@ func (*CMDTest) TestAddTenet(c *gc.C) {
 	c.Assert(err, gc.IsNil)
 
 	// Add tenet to new group
-	expected2 := &config{
+	expected2 := &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -504,13 +430,13 @@ func (*CMDTest) TestAddTenet(c *gc.C) {
 	c.Assert(err, gc.NotNil)
 }
 
-func (*CMDTest) TestRemoveTenet(c *gc.C) {
+func (*commonSuite) TestRemoveTenet(c *gc.C) {
 	// RemoveTenet should remove a tenet only from the named group, and return an error if either the group or tenet is not found
 	testConfig1 := complexConfig()
 	testConfig2 := complexConfig()
 
 	// Test existing
-	expected1 := &config{
+	expected1 := &Config{
 		Cascade:  true,
 		Include:  "*",
 		Template: "template.md",
@@ -565,7 +491,7 @@ func (*CMDTest) TestRemoveTenet(c *gc.C) {
 	c.Assert(err, gc.NotNil)
 }
 
-func (*CMDTest) TestHasTenet(c *gc.C) {
+func (*commonSuite) TestHasTenet(c *gc.C) {
 	testConfig := complexConfig()
 	// Test all existing
 	c.Assert(testConfig.HasTenet("lingoreviews/tenetseed:latest"), gc.Equals, true)

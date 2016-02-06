@@ -8,6 +8,8 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/pkg/browser"
 	"github.com/russross/blackfriday"
+
+	"github.com/lingo-reviews/lingo/commands/common"
 )
 
 var DocsCMD = cli.Command{
@@ -22,7 +24,7 @@ func docs(c *cli.Context) {
 
 	var mdBuf bytes.Buffer
 	if err := writeTenetDoc(c, "", &mdBuf); err != nil {
-		oserrf("%v", err)
+		common.OSErrf("%v", err)
 		return
 	}
 
@@ -32,7 +34,7 @@ func docs(c *cli.Context) {
 	html := bluemonday.UGCPolicy().SanitizeBytes(htmlUnsafe)
 
 	if err := browser.OpenReader(bytes.NewReader(html)); err != nil {
-		oserrf("opening docs in browser: %v", err)
+		common.OSErrf("opening docs in browser: %v", err)
 		return
 	}
 }
