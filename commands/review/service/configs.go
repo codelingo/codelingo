@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/util"
 	"gopkg.in/yaml.v2"
 )
@@ -31,7 +32,7 @@ func Config(serviceName string) (serviceConfig, error) {
 		return nil, errors.Trace(err)
 	}
 
-	cfgPath := filepath.Join(lHome, "services.yaml")
+	cfgPath := filepath.Join(lHome, common.ConfigFile)
 	data, err := ioutil.ReadFile(cfgPath)
 	if err != nil {
 		return nil, errors.Errorf("problem reading service config: %v", err)

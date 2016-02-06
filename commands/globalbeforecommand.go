@@ -47,6 +47,7 @@ var cmdNeedsLingoHome = []string{
 	"edit",
 	"setup-auto-complete",
 	"update",
+	"config",
 }
 
 // isHelpAlias returns true when a command's arguments are equivalent to the
@@ -137,7 +138,7 @@ func ensureLingoHome() error {
 		}
 	}
 
-	servicesCfg := filepath.Join(lHome, "services.yaml")
+	servicesCfg := filepath.Join(lHome, common.ConfigFile)
 	if _, err := os.Stat(servicesCfg); os.IsNotExist(err) {
 		err := ioutil.WriteFile(servicesCfg, []byte(servicesCfgTmpl), 0644)
 		if err != nil {
