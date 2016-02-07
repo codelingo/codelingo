@@ -50,6 +50,7 @@ type TenetService interface {
 type tenet struct {
 	driver.Driver
 	options map[string]interface{}
+	globals api.GlobalOptions
 }
 
 // New takes a base tenet config and builds and returns a Tenet with a backing
@@ -66,7 +67,7 @@ func New(ctx *cli.Context, b *driver.Base) (Tenet, error) {
 	default:
 		return nil, fmt.Errorf("Unknown driver specified: %q", b.Driver)
 	}
-	return &tenet{Driver: d, options: b.ConfigOptions}, nil
+	return &tenet{Driver: d, options: b.ConfigOptions, globals: b.GlobalOptions}, nil
 }
 
 func (t *tenet) OpenService() (TenetService, error) {
@@ -88,6 +89,7 @@ func (t *tenet) OpenService() (TenetService, error) {
 	s := &tenetService{
 		Service:      ds,
 		cfg:          cfg,
+		globals:      &t.globals,
 		editFilename: t.Driver.EditFilename,
 		editIssue:    t.Driver.EditIssue,
 		mutex:        &sync.Mutex{},
@@ -111,6 +113,7 @@ type tenetService struct {
 	client       api.TenetClient
 	conn         *grpc.ClientConn
 	cfg          *api.Config
+	globals      *api.GlobalOptions
 	editFilename func(string) string
 	editIssue    func(*api.Issue) *api.Issue
 	info         *api.Info
@@ -251,6 +254,7 @@ func (t *tenetService) Info() (*api.Info, error) {
 // Configure configures the tenet with options set in .lingo or on the
 // CLI. Any options not specified will fallback to their default value.
 func (t *tenetService) configure() error {
+	t.client.SetGlobals(context.Background(), t.globals)
 	_, err := t.client.Configure(context.Background(), t.cfg)
 	return err
 }

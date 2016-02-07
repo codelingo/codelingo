@@ -18,6 +18,9 @@ type Base struct {
 	// ConfigOptions? Or do we have driverOptions?
 	Tag string
 
+	// Options that are shared for all tenets
+	GlobalOptions api.GlobalOptions
+
 	// Config options for tenet
 	ConfigOptions Options
 

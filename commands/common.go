@@ -19,6 +19,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/tenets/go/dev/api"
 	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 
 	"github.com/lingo-reviews/lingo/tenet"
@@ -93,6 +94,7 @@ func newTenet(ctx *cli.Context, tenetCfg TenetConfig) (tenet.Tenet, error) {
 		Registry:      tenetCfg.Registry,
 		Tag:           tenetCfg.Tag,
 		ConfigOptions: tenetCfg.Options,
+		GlobalOptions: TenetGlobals(ctx),
 	})
 }
 
@@ -237,12 +239,7 @@ func lingoWeb(uri string) url.URL {
 func tenets(ctx *cli.Context, cfg *config) ([]tenet.Tenet, error) {
 	var ts []tenet.Tenet
 	for _, tenetCfg := range cfg.AllTenets() {
-		tenet, err := tenet.New(ctx, &driver.Base{
-			Name:          tenetCfg.Name,
-			Driver:        tenetCfg.Driver,
-			Registry:      tenetCfg.Registry,
-			ConfigOptions: tenetCfg.Options,
-		})
+		tenet, err := newTenet(ctx, tenetCfg)
 		if err != nil {
 			message := fmt.Sprintf("could not create tenet '%s': %s", tenetCfg.Name, err.Error())
 			return nil, errors.Annotate(err, message)
@@ -422,6 +419,14 @@ func parseOptions(c *cli.Context) (map[string]driver.Options, error) {
 		}
 	}
 	return commandOptions, nil
+}
+
+// TenetGlobals returns the set of options that need to be passed to all tenets
+// based on the current cli context.
+func TenetGlobals(c *cli.Context) api.GlobalOptions {
+	return api.GlobalOptions{
+		FindAll: c.Bool("find-all"),
+	}
 }
 
 // TODO: TECHDEBT Check if commented code will be needed and prune as appropriate
