@@ -11,6 +11,7 @@ import (
 	"github.com/juju/errors"
 
 	"github.com/lingo-reviews/lingo/commands/common"
+	"github.com/lingo-reviews/lingo/commands/common/config"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -47,6 +48,7 @@ var cmdNeedsLingoHome = []string{
 	"edit",
 	"setup-auto-complete",
 	"update",
+	"config",
 }
 
 // isHelpAlias returns true when a command's arguments are equivalent to the
@@ -137,32 +139,34 @@ func ensureLingoHome() error {
 		}
 	}
 
-	servicesCfg := filepath.Join(lHome, "services.yaml")
+	ensureConfigs(lHome)
+
+	return nil
+}
+
+func ensureConfigs(lHome string) {
+
+	configsHome := filepath.Join(lHome, "configs")
+	if _, err := os.Stat(configsHome); os.IsNotExist(err) {
+		err := os.MkdirAll(configsHome, 0775)
+		if err != nil {
+			fmt.Printf("WARNING: could not create configs directory: %v \n", err)
+		}
+	}
+
+	servicesCfg := filepath.Join(configsHome, config.ServicesCfgFile)
 	if _, err := os.Stat(servicesCfg); os.IsNotExist(err) {
-		err := ioutil.WriteFile(servicesCfg, []byte(servicesCfgTmpl), 0644)
+		err := ioutil.WriteFile(servicesCfg, []byte(config.ServicesTmpl), 0644)
 		if err != nil {
 			fmt.Printf("WARNING: could not create services config: %v \n", err)
 		}
 	}
-	return nil
+
+	defaultsCfg := filepath.Join(configsHome, config.DefaultsCfgFile)
+	if _, err := os.Stat(defaultsCfg); os.IsNotExist(err) {
+		err := ioutil.WriteFile(defaultsCfg, []byte(config.DefaultsTmpl), 0644)
+		if err != nil {
+			fmt.Printf("WARNING: could not create services config: %v \n", err)
+		}
+	}
 }
-
-var servicesCfgTmpl = `
-services:
-    github:
-
-        # A Github API authentication token to allow Lingo to post reviews on
-        # your behalf.
-        # token: your-token
-
-        # Domain of the service.
-        # domain: http://github.com
-
-    reviewboard:
-        # Domain of the service.
-        # domain: http://reviews.vapour.ws
-
-        # A Reviewboard API authentication token to allow Lingo to post
-        # reviews on your behalf.
-        # token: your-token
-`[1:]

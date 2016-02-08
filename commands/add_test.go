@@ -10,11 +10,13 @@ func (*cmdSuite) TestAddCMD(c *gc.C) {
 	fName, closer := common.TestCfg(c)
 	defer closer()
 
+	// TODO(waigani) test all defaults and explicitly setting the driver.
+	driver := "binary"
+	c.Assert(defaultDriver(), gc.Equals, driver)
 	newTenet := common.TenetConfig{
-		Name:     "waigani/test",
-		Driver:   "docker",
-		Registry: "hub.docker.com",
-		Options:  make(map[string]interface{}),
+		Name:    "waigani/test",
+		Driver:  driver,
+		Options: make(map[string]interface{}),
 	}
 	ctx := common.MockContext(c, common.TenetCfgFlg.LongArg(), fName, "add", newTenet.Name)
 

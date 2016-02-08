@@ -25,7 +25,6 @@ import (
 )
 
 const (
-	// TODO(waigani) move this into util
 	DefaultTenetCfgPath = ".lingo"
 )
 
