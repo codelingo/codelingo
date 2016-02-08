@@ -12,7 +12,7 @@ import (
 	"github.com/lingo-reviews/lingo/commands/common"
 	"github.com/lingo-reviews/lingo/commands/common/config"
 	"github.com/lingo-reviews/lingo/commands/review"
-	"github.com/lingo-reviews/tenets/go/dev/api"
+	"github.com/lingo-reviews/lingo/tenet"
 )
 
 var reviewboard = cli.Command{
@@ -96,7 +96,7 @@ func rb(ctx *cli.Context) error {
 	return errors.Trace(postToRB(reviewID, rbCfg, issues))
 }
 
-func postToRB(reviewID string, rbCfg config.ServiceConfig, issues []*api.Issue) error {
+func postToRB(reviewID string, rbCfg config.ServiceConfig, issues []*tenet.Issue) error {
 
 	rbCfg["review-id"] = reviewID
 
@@ -136,7 +136,7 @@ func postToRB(reviewID string, rbCfg config.ServiceConfig, issues []*api.Issue) 
 
 type rbResult struct {
 	Config config.ServiceConfig `json:"config"`
-	Issues []*api.Issue         `json:"issues"`
+	Issues []*tenet.Issue `json:"issues"`
 }
 
 func validateRbCfg(rbCfg config.ServiceConfig) error {

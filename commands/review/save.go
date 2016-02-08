@@ -8,12 +8,12 @@ import (
 	"strings"
 
 	"github.com/juju/errors"
-	"github.com/lingo-reviews/tenets/go/dev/api"
+	"github.com/lingo-reviews/lingo/tenet"
 	"github.com/lingo-reviews/tenets/go/dev/tenet/log"
 )
 
 // Save writes the output to a file at filePath.
-func Save(filePath string, issues []*api.Issue) error {
+func Save(filePath string, issues []*tenet.Issue) error {
 
 	// // TODO(waigani) provide a flag to control filepath formatting
 	// make paths relative to lingo

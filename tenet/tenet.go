@@ -36,7 +36,7 @@ type TenetService interface {
 	// Review reads from filesc and writes to issuesc. It is the
 	// responsibility of the caller to close filesc. The stream to the service
 	// will stay open until filesc is closed.
-	Review(filesc <-chan *api.File, issuesc chan<- *api.Issue, t *tomb.Tomb) error
+	Review(filesc <-chan *api.File, issuesc chan<- *Issue, t *tomb.Tomb) error
 
 	// Info returns all metadata about this tenet.
 	Info() (*api.Info, error)
@@ -166,14 +166,14 @@ func (t *tenetService) Close() error {
 
 // Review sets up two goroutines. One to send files to the service from filesc,
 // the other to recieve issues from the service on issuesc.
-func (t *tenetService) Review(filesc <-chan *api.File, issuesc chan<- *api.Issue, filesTM *tomb.Tomb) error {
+func (t *tenetService) Review(filesc <-chan *api.File, issuesc chan<- *Issue, filesTM *tomb.Tomb) error {
 	stream, err := t.client.Review(context.Background())
 	if err != nil {
 		return err
 	}
 
 	// first setup our issues chan to read from the service.
-	go func(issuesc chan<- *api.Issue) {
+	go func(issuesc chan<- *Issue) {
 		for {
 			log.Println("waiting for issues")
 			issue, err := stream.Recv()
@@ -193,7 +193,11 @@ func (t *tenetService) Review(filesc <-chan *api.File, issuesc chan<- *api.Issue
 				continue
 			}
 
-			issuesc <- t.editIssue(issue)
+			issuesc <- &Issue{
+				Issue:     *t.editIssue(issue),
+				TenetName: t.info.Name,
+			}
+
 		}
 	}(issuesc)
 

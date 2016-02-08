@@ -20,6 +20,7 @@ import (
 	"gopkg.in/tomb.v1"
 
 	"github.com/lingo-reviews/lingo/commands/common"
+	"github.com/lingo-reviews/lingo/tenet"
 )
 
 // Flags are common to review and its sub commands.
@@ -54,7 +55,7 @@ type Options struct {
 	KeepAll    bool     // ctx.Bool("keep-all")
 }
 
-func Review(opts Options) ([]*api.Issue, error) {
+func Review(opts Options) ([]*tenet.Issue, error) {
 
 	// TODO: file args input, as files and dirs
 	var err error
@@ -158,13 +159,14 @@ func Review(opts Options) ([]*api.Issue, error) {
 	rc, cancelledc := reviewQueue(configDirs, changed, errc)
 	var count int
 
-	keptIssuesc := make(chan *api.Issue)
+	// Note: all issues are now kept. A discarded issue has issue.Discard set to true.
+	keptIssuesc := make(chan *tenet.Issue)
 
 	// collectedIssues has a huge buffer so we can store all the found issues,
 	// allowing the tenet instances to be stopped. If this buffer is filled,
 	// tenets will not be stopped. They will hang around until there is room
 	// to offload their issues.
-	collectedIssuesc := make(chan *api.Issue, 100000)
+	collectedIssuesc := make(chan *tenet.Issue, 100000)
 	allIssuesWG := &sync.WaitGroup{}
 
 	go func() {
@@ -216,7 +218,7 @@ z:
 	// then close our collection chan.
 	close(collectedIssuesc)
 
-	var issues []*api.Issue
+	var issues []*tenet.Issue
 	for i := range keptIssuesc {
 		issues = append(issues, i)
 	}
@@ -275,7 +277,7 @@ func readCfgs(cfgList []cfgMap, errc chan error) <-chan cfgMap {
 type tenetReview struct {
 	configHash string
 	filesc     chan *api.File
-	issuesc    chan *api.Issue
+	issuesc    chan *tenet.Issue
 	info       *api.Info
 	issuesWG   *sync.WaitGroup
 	filesTM    *tomb.Tomb
@@ -392,7 +394,7 @@ func reviewQueue(mappings <-chan cfgMap, changed *map[string][]int, errc chan er
 					r = &tenetReview{
 						configHash: configHash,
 						filesc:     make(chan *api.File),
-						issuesc:    make(chan *api.Issue),
+						issuesc:    make(chan *tenet.Issue),
 						info:       info,
 						issuesWG:   &sync.WaitGroup{},
 						filesTM:    &tomb.Tomb{},
