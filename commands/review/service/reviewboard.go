@@ -91,6 +91,8 @@ func rb(ctx *cli.Context) error {
 	}
 	reviewID := ctx.Args()[0]
 
+	fmt.Println("Posting review to reviewboard ...")
+
 	return errors.Trace(postToRB(reviewID, rbCfg, issues))
 }
 
