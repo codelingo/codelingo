@@ -245,7 +245,29 @@ z:
 		}
 	}
 
-	return issues, nil
+	return localContext(issues), nil
+}
+
+func localContext(oldIssues []*tenet.Issue) []*tenet.Issue {
+	// TODO: Anything better. This is a quite hacky way to get nicer
+	// comments in case of discarded issues. It doesn't preserve context
+	// information (ie FirstInFile) as that is not available here. It also
+	// does not prevent context filling up tenet-side which can result in
+	// early termination when there are more comments available.
+	commentQueues := make(map[string][]string)
+	issues := []*tenet.Issue{}
+
+	for _, o := range oldIssues {
+		commentQueues[o.TenetName] = append(commentQueues[o.TenetName], o.Comment)
+
+		if !o.Discard {
+			o.Comment = commentQueues[o.TenetName][0]                   // queue
+			commentQueues[o.TenetName] = commentQueues[o.TenetName][1:] // pop
+		}
+		issues = append(issues, o)
+	}
+
+	return issues
 }
 
 type cfgMap struct {
