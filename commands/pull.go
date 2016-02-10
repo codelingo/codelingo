@@ -60,10 +60,13 @@ func pull(c *cli.Context) {
 		return
 	}
 
+	// TODO(waigani) It doesn't make sense to have both registry and source.
+	// Either registry for docker or source for binary.
 	reg := c.String("registry")
+	source := c.String("source")
 	driver := c.String("driver")
 
-	if err := pullOne(c, c.Args().First(), driver, reg); err != nil {
+	if err := pullOne(c, c.Args().First(), driver, reg, source); err != nil {
 		common.OSErrf(err.Error())
 	}
 }
@@ -94,11 +97,12 @@ func pullAll(c *cli.Context) error {
 	return nil
 }
 
-func pullOne(c *cli.Context, name, driverName, registry string) error {
+func pullOne(c *cli.Context, name, driverName, registry, source string) error {
 	t, err := common.NewTenet(common.TenetConfig{
 		Name:     name,
 		Driver:   driverName,
 		Registry: registry,
+		Source:   source,
 	})
 	if err != nil {
 		return errors.Trace(err)

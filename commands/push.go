@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"os"
-	"os/exec"
 	"sync"
 
 	"github.com/cheggaaa/pb"
@@ -10,6 +8,7 @@ import (
 	"github.com/juju/errors"
 
 	"github.com/lingo-reviews/lingo/commands/common"
+	bt "github.com/lingo-reviews/lingo/tenet/build"
 	"github.com/lingo-reviews/lingo/util"
 )
 
@@ -63,14 +62,14 @@ func push(ctx *cli.Context) {
 	// }
 	drivers := []string{"docker"}
 
-	lingofiles, err := getLingofiles(ctx)
+	lingofiles, err := getLingoFiles(ctx.Bool("all"))
 	if err != nil {
 		common.OSErrf(err.Error())
 		return
 	}
 	fn := len(lingofiles)
 	if fn == 0 {
-		util.Printf("WARNING tenet not built. No %s found.\n", lingofile)
+		util.Printf("WARNING tenet not built. No %s found.\n", common.Lingofile)
 		return
 	}
 
@@ -80,7 +79,7 @@ func push(ctx *cli.Context) {
 	dn := len(drivers)
 	allWaits.Add(dn)
 
-	driverWaits := make(map[string]*driverWait, dn)
+	driverWaits := make(map[string]*bt.DriverWait, dn)
 	for _, driver := range drivers {
 		bar := pb.New(fn)
 		bar.Prefix(driver + " ")
@@ -89,10 +88,10 @@ func push(ctx *cli.Context) {
 		start.Add(fn)
 		end := &sync.WaitGroup{}
 		end.Add(fn)
-		driverWaits[driver] = &driverWait{
-			start: start,
-			end:   end,
-			bar:   bar,
+		driverWaits[driver] = &bt.DriverWait{
+			Start: start,
+			End:   end,
+			Bar:   bar,
 		}
 
 		errsc := make(chan error)
@@ -115,14 +114,14 @@ func push(ctx *cli.Context) {
 
 	// print progress bars to user
 	for driver, dw := range driverWaits {
-		go func(dw *driverWait) {
-			dw.start.Wait()
+		go func(dw *bt.DriverWait) {
+			dw.Start.Wait()
 			msg := "The %s tenet is being pushed ..."
 			if fn > 0 {
 				msg = "All %s tenets are being pushed ..."
 			}
 			util.Printf(msg, driver)
-			dw.bar.Start()
+			dw.Bar.Start()
 		}(dw)
 	}
 
@@ -153,8 +152,8 @@ func push(ctx *cli.Context) {
 
 }
 
-func pushTenet(lingofilePath string, waits map[string]*driverWait) []error {
-	cfg, err := readLingoFile(lingofilePath)
+func pushTenet(lingofilePath string, waits map[string]*bt.DriverWait) []error {
+	cfg, err := bt.ReadLingoFile(lingofilePath)
 	if err != nil {
 		return []error{errors.Trace(err)}
 	}
@@ -172,11 +171,11 @@ func pushTenet(lingofilePath string, waits map[string]*driverWait) []error {
 		binaryW, ok := waits["binary"]
 		if ok {
 			defer wg.Done()
-			cfg.Binary.dw = binaryW
-			if err := cfg.pushBinary(); err != nil {
+			cfg.Binary.DW = binaryW
+			if err := cfg.PushBinary(); err != nil {
 				errsc <- err
 			}
-			binaryW.end.Done()
+			binaryW.End.Done()
 		}
 	}()
 
@@ -184,11 +183,11 @@ func pushTenet(lingofilePath string, waits map[string]*driverWait) []error {
 		dockerW, ok := waits["docker"]
 		if ok {
 			defer wg.Done()
-			cfg.Docker.dw = dockerW
-			if err := cfg.pushDocker(); err != nil {
+			cfg.Docker.DW = dockerW
+			if err := cfg.PushDocker(); err != nil {
 				errsc <- err
 			}
-			dockerW.end.Done()
+			dockerW.End.Done()
 		}
 	}()
 
@@ -196,11 +195,11 @@ func pushTenet(lingofilePath string, waits map[string]*driverWait) []error {
 		remoteW, ok := waits["remote"]
 		if ok {
 			defer wg.Done()
-			cfg.Remote.dw = remoteW
-			if err := cfg.pushRemote(); err != nil {
+			cfg.Remote.DW = remoteW
+			if err := cfg.PushRemote(); err != nil {
 				errsc <- err
 			}
-			remoteW.end.Done()
+			remoteW.End.Done()
 		}
 	}()
 
@@ -210,51 +209,4 @@ func pushTenet(lingofilePath string, waits map[string]*driverWait) []error {
 	}
 
 	return errs
-}
-
-func (cfg *lingofileCfg) pushBinary() error {
-	// dw := cfg.Binary.dw
-	// dw.start.Done()
-	// dw.bar.Increment()
-	// dw.end.Done()
-
-	return nil
-}
-
-func (cfg *lingofileCfg) pushDocker() error {
-	dw := cfg.Binary.dw
-	dw.start.Done()
-	// defer dw.end.Done()
-	defer dw.bar.Increment()
-
-	// TODO(waigani) use client with auth
-	// c, err := util.DockerClient()
-	// if err != nil {
-	// 	return errors.Trace(err)
-	// }
-	// opts := docker.PushImageOptions{
-	// 	Registry:     cfg.Registry,
-	// 	OutputStream: os.Stdout,
-	// 	Name:         cfg.Owner + "/" + cfg.Name,
-	// }
-	// auth := docker.AuthConfiguration{
-	// 	Username: cfg.Owner,
-	// }
-	// return c.PushImage(opts, auth)
-
-	// TODO(waigani) we're not setting registry
-	cmd := exec.Command("docker", "push", cfg.Owner+"/"+cfg.Name)
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
-	// cmd.Stdin = os.Stdin
-	return cmd.Start()
-}
-
-func (cfg *lingofileCfg) pushRemote() error {
-	// dw := cfgRemote.dw
-	// dw.start.Done()
-	// dw.bar.Increment()
-	// dw.end.Done()
-
-	return errors.New("not implemented")
 }
