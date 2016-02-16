@@ -26,6 +26,8 @@ import (
 
 const (
 	DefaultTenetCfgPath = ".lingo"
+	// TODO(waigani) change this to "Lingofile"
+	Lingofile = ".lingofile"
 )
 
 // TODO(waigani) The do server relies on this error message to know when to make a pull request.
@@ -71,6 +73,10 @@ type TenetConfig struct {
 
 	// Config options for tenet
 	Options map[string]interface{} `toml:"options"`
+
+	// Source is a url to a git repository which houses the source code for
+	// this tenet.
+	Source string `toml:"source"`
 }
 
 // Provide a means to compare TenetConfig for equality as maps aren't inherently comparable.
@@ -90,6 +96,7 @@ func NewTenet(tenetCfg TenetConfig) (tenet.Tenet, error) {
 		Registry:      tenetCfg.Registry,
 		Tag:           tenetCfg.Tag,
 		ConfigOptions: tenetCfg.Options,
+		Source:        tenetCfg.Source,
 	})
 }
 
@@ -231,6 +238,7 @@ func Tenets(ctx *cli.Context, cfg *Config) ([]tenet.Tenet, error) {
 			Driver:        tenetCfg.Driver,
 			Registry:      tenetCfg.Registry,
 			ConfigOptions: tenetCfg.Options,
+			Source:        tenetCfg.Source,
 		})
 		if err != nil {
 			message := fmt.Sprintf("could not create tenet '%s': %s", tenetCfg.Name, err.Error())

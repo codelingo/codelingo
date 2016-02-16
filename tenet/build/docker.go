@@ -1,4 +1,4 @@
-package commands
+package build
 
 import (
 	"io/ioutil"
@@ -19,8 +19,8 @@ type dockerBuildCfg struct {
 
 // BuildGo builds and installs a binary tenet. It assumes go is installed.
 func (cfg *dockerBuildCfg) BuildGo() error {
-	cfg.dw.start.Done()
-	defer cfg.dw.bar.Increment()
+	cfg.DW.Start.Done()
+	defer cfg.DW.Bar.Increment()
 
 	dockerfile := filepath.Join(cfg.dir, "Dockerfile")
 	var exists bool

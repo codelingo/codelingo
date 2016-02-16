@@ -17,6 +17,10 @@ type Base struct {
 	// ConfigOptions? Or do we have driverOptions?
 	Tag string
 
+	// Source is the url to a git repository which houses the source code for
+	// the tenet. TODO(waigani) this is specific to binary tenets.
+	Source string
+
 	// Config options for tenet
 	ConfigOptions Options
 

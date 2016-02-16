@@ -1,4 +1,4 @@
-package commands
+package build
 
 import (
 	"path/filepath"
@@ -17,8 +17,8 @@ type binaryBuildCfg struct {
 // BuildGo builds and installs a binary tenet. It assumes go is installed and
 // the we are in the root of the tenet package.
 func (cfg *binaryBuildCfg) BuildGo() error {
-	cfg.dw.start.Done()
-	defer cfg.dw.bar.Increment()
+	cfg.DW.Start.Done()
+	defer cfg.DW.Bar.Increment()
 
 	bin, err := util.LingoBin()
 	if err != nil {

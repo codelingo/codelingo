@@ -1,11 +1,16 @@
 package driver
 
 import (
+	"bytes"
+	"net/url"
 	"os"
+	"os/exec"
+	"path"
 	"path/filepath"
 	"runtime"
 
 	"github.com/juju/errors"
+	"github.com/lingo-reviews/lingo/tenet/build"
 	"github.com/lingo-reviews/lingo/tenet/driver/binary"
 	"github.com/lingo-reviews/lingo/util"
 	"github.com/lingo-reviews/tenets/go/dev/api"
@@ -96,4 +101,57 @@ func (*Binary) EditIssue(issue *api.Issue) (editedIssue *api.Issue) {
 	}
 
 	return issue
+}
+
+func (b *Binary) Pull(update bool) error {
+	if b.Source == "" {
+		return errors.Errorf("no source repo set for tenet %q", b.Name)
+	}
+
+	// TODO(waigani) hardcoding this to Go for now. We need to know the source
+	// code language to know where to clone the code to.
+	lang := "go"
+
+	switch lang {
+	case "go", "golang":
+
+		// TODO(waigani) support GB
+		gopath := os.Getenv("GOPATH")
+		if gopath == "" {
+			return errors.New("GOPATH not set. Unable to pull Go tenet from source.")
+		}
+
+		u, err := url.Parse(b.Source)
+		if err != nil {
+			return errors.Trace(err)
+		}
+
+		tenetPkg := path.Join(u.Host, u.Path)
+
+		var pullNew string
+		if update {
+			pullNew = "-u"
+		}
+
+		cmd := exec.Command("go", "get", pullNew, tenetPkg)
+
+		var stdout bytes.Buffer
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+		cmd.Stdout = &stdout
+
+		if err := cmd.Run(); err != nil {
+			return errors.Annotate(err, stderr.String()+" "+stdout.String())
+		}
+
+		lingofile := filepath.Join(gopath, "src", tenetPkg, ".lingofile")
+
+		if err := build.Run([]string{"binary"}, lingofile); err != nil {
+			return errors.Trace(err)
+		}
+
+	default:
+		return errors.Errorf("unrecognised language %q", lang)
+	}
+	return nil
 }
