@@ -133,7 +133,7 @@ func (b *Binary) Pull(update bool) error {
 			pullNew = "-u"
 		}
 
-		cmd := exec.Command("go", "get", pullNew, tenetPkg)
+		cmd := exec.Command("go", "get", "-d", pullNew, tenetPkg)
 
 		var stdout bytes.Buffer
 		var stderr bytes.Buffer
