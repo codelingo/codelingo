@@ -17,7 +17,7 @@ var AddCMD = cli.Command{
 	Usage: "add a tenet to lingo",
 	Description: `
 
-  "lingo remove github.com/lingo-reviews/unused-args"
+  "lingo add github.com/lingo-reviews/unused-args"
 
 `[1:],
 	Flags: []cli.Flag{
