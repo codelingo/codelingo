@@ -56,7 +56,14 @@ func reviewAction(ctx *cli.Context) {
 		fmt.Printf("review saved to %s\n", saveToFile)
 	}
 
+	count := 0
+	for _, i := range issues {
+		if !i.Discard {
+			count++
+		}
+	}
+
 	// TODO(waigani) make more informative
 	// TODO(waigani) if !ctx.String("quiet")
-	fmt.Printf("Done! Found %d issues \n", len(issues))
+	fmt.Printf("Done! Found %d issues \n", count)
 }
