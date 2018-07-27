@@ -112,6 +112,6 @@ See the [getting started guide](https://www.codelingo.io/docs/#getting-started) 
 
 ## About Us
 
-We are a small development team from 🥝 **New Zealand** with a passion for the art of software development in itself!
+We are a small **VC backed** development team from 🥝 **New Zealand** with a passion for the art of software development in itself!
 
 Check out our team page here: <a href="https://www.codelingo.io/team" target="_blank">codelingo.io/team</a>.
