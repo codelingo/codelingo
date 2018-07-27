@@ -1,0 +1,16 @@
+cpp.file:
+  cpp.method_declaration:
+    cpp.parameter_list:
+      cpp.parameter:
+        identifier_token: "incident"
+
+cpp.file:
+  cpp.method_declaration:
+    cpp.body:
+      cpp.if_statement:
+        cpp.body:
+          cpp.for_loop:
+            cpp.assignment_statement:
+              cpp.lhs:
+                cpp.identifier_name:
+                  identifier_token: "incident"

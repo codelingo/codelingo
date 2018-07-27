@@ -1,0 +1,37 @@
+tenets:
+  - name: use-offsite-check
+    doc: |
+      Ensures that any redirect with a value that depends directly on value from an http request is validated for offsite redirection.
+
+      Some assumptions are made about the codebase that can be altered according to your project's specific needs:
+        - Controllers have an redirect() method
+        - HTTP handlers on controllers take symfony request arguments called $request
+        - There is a function called offsiteCheck() that checks whether urls point to another site
+    flows:
+      codelingo/review:
+        comments: This redirect url depends on user input and should be validated with offsiteCheck().
+    query: |
+      import codelingo/ast/php
+
+      php.stmt_classmethod({depth: any}):
+        # Find value passed in by http request
+        php.expr_assign({depth: any}):
+          php.expr_variable:
+            name: $urlVar
+          php.expr_methodcall:
+            name: "get"
+            php.expr_propertyfetch:
+              name: "query"
+              php.expr_variable:
+                name: "request"
+        # Find unckecked redirect that uses the $urlVar
+        php.expr_methodcall({depth: any}):
+          name: "redirect"
+          exclude:
+            php.expr_funccall({depth: any}):
+              php.name_fullyqualified:
+                name: "offsiteCheck"
+          php.arg({depth: any}):
+            @ review.comment
+            php.expr_variable({depth:any}):
+              name: $urlVar

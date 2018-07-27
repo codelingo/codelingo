@@ -1,0 +1,13 @@
+tenets:
+  - name: if-assignment
+    doc: |
+      Assignments in if clauses and the like are considered a code smell. Assignments in PHP return the right operand as their result. In many cases, this is an expected behavior, but can lead to many difficult to spot bugs, especially when the right operand could result in zero, null or an empty string. - https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
+    flows:
+      codelingo/review:
+        comments: Avoid assigning values to variables in if clauses.
+    query: |
+      import codelingo/ast/php
+
+      @ review.comment
+      php.stmt_if({depth: any}):
+        php.expr_assign

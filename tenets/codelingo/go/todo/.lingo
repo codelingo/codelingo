@@ -1,0 +1,17 @@
+tenets:
+  - name: todo-comments
+    doc: |
+      Find comments containing TODO.
+
+      TODOs should be tracked in a place outside of the code to ensure they aren't forgotten.
+    flows:
+      codelingo/review:
+        comments: Make sure you add this TODO as an issue, milestone, or in your project management tool; eg. Trello.
+    query: |
+      import (
+        codelingo/ast/go
+      )
+
+      @ review.comment
+      go.comment({depth: any}):
+        text: /(?i)(^|\s)TODO.*/

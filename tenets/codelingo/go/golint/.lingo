@@ -1,0 +1,18 @@
+tenets:
+  - name: go-lint-rules
+    doc: |
+      Find all go linter rules.
+    flows:
+      codelingo/review:
+        comments: |
+          {{text}}
+    query: |
+      import (
+        codelingo/ast/golint
+      )
+
+      @ review.comment
+      golint.lint_rule({depth: any}):
+        @ review.vars.text
+        text
+

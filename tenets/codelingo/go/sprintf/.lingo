@@ -1,0 +1,24 @@
+tenets:
+  - name: sprintf-error
+    doc: |
+      Find instances of 'errors.New(fmt.Sprintf(...))'.
+    flows:
+      codelingo/review:
+        comments: Should replace errors.New(fmt.Sprintf(...)) with errors.Errorf(...).
+    query: |
+      import codelingo/ast/go
+  
+      @ review.comment
+      go.call_expr({depth: any}):
+        go.selector_expr:
+          go.ident:
+            name: "errors"
+          go.ident:
+            name: "New"
+        go.args:
+          go.call_expr:
+            go.selector_expr:
+              go.ident:
+                name: "fmt"
+              go.ident:
+                name: "Sprintf"

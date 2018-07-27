@@ -1,0 +1,4 @@
+name: parse
+description: Parse CLQL into search queries and resolve imports.
+parameters:
+  resolve-imports: Recursive by default, can be overridden with false, or depth argument.

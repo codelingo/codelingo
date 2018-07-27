@@ -1,0 +1,33 @@
+cpp.file:
+  cpp.function_decl:
+    cpp.compound_stmt:
+      cpp.switch_stmt:
+        cpp.compound_stmt:
+          cpp.case_stmt:
+              cpp.break_stmt
+
+cpp.file:
+  cpp.function_decl:
+    cpp.compound_stmt:
+      cpp.switch_stmt:
+        cpp.compound_stmt:
+          cpp.case_stmt:
+            cpp.break_stmt
+
+cpp.file:
+  cpp.function_decl:
+    cpp.compound_stmt:
+      cpp.switch_stmt:
+        cpp.compound_stmt:
+          cpp.case_stmt:
+            cpp.goto_stmt
+
+cpp.file:
+  cpp.function_decl:
+    cpp.compound_stmt:
+      cpp.switch_stmt:
+        cpp.compound_stmt:
+          cpp.case_stmt:
+            cpp.if_stmt:
+              cpp.compound_stmt:
+                cpp.break_stmt

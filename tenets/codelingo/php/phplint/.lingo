@@ -1,0 +1,20 @@
+tenets:
+  - name: php-lint-rules
+    doc: Example tenet that finds all lint problems.
+    flows:
+      codelingo/review:
+        comments: |
+          {{category}}
+          {{text}}
+
+    query: |
+      import (
+        codelingo/ast/phplint
+      )
+
+      @ review.comment
+      phplint.lint_rule({depth: any}):
+        @ review.vars.category
+        category
+        @ review.vars.text
+        text

@@ -1,0 +1,18 @@
+tenets:
+  - name: bool-arg
+    doc: |
+      Find functions with one or more boolean arguments.
+    flows:
+      codelingo/review:
+        comments: Boolean arguments can indicate low cohesion. Consider using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.
+    query: |
+      import codelingo/ast/go
+
+      @ review.comment
+      go.func_decl({depth: any}):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type: "bool"

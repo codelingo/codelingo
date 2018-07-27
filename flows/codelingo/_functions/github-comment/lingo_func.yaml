@@ -1,0 +1,7 @@
+name: github-comment
+description: Create a comment on a github pull request for a given file and line.
+parameters: 
+  comment: ""
+  line: ""
+  file: ""
+  pullRequestID: ""

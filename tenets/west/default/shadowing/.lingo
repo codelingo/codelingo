@@ -1,0 +1,34 @@
+tenets:
+  - name: shadowed-parameter
+    doc: Finds parameters that are updated in the method body.
+    flows:
+      codelingo/review:
+        comment: This assignment may corrupt the parameter. Consider using another variable instead.
+    query: |
+      import codelingo/ast/cpp
+
+      cpp.function_decl({depth: any}):
+        cpp.parm_decl:
+          name: $paramName
+        cpp.compound_stmt:
+          @ review.comment
+          cpp.binary_operator({depth: any}):
+            cpp.decl_ref_expr:
+              name: $paramName
+
+  - name: shadowed-declaration
+    doc: Finds declarations that are updated in an inner scope.
+    flows:
+      codelingo/review:
+        comment: This assignment may corrupt the variable. Consider creating another variable instead.
+    query: |
+      import codelingo/ast/cpp
+
+      cpp.var_decl({depth: any}):
+        cpp.parm_decl:
+          name: $varName
+      cpp.compound_stmt({depth: any}):
+        @ review.comment
+        cpp.binary_operator({depth: any}):
+          cpp.decl_ref_expr:
+            name: $varName

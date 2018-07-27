@@ -1,0 +1,10 @@
+name: filter
+description: Filter out search results based on user defined logic
+parameters:
+  language: |
+   Currently supported: Go
+  body: |
+    The filter body must include a function with the following signature:
+      Filter(results map[string]interface{}) (bool, error)
+
+    The results map is populated with values from properties decorated by @ filter.<key>, and can be retrieved by results["key"].

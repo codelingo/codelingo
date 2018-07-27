@@ -1,0 +1,34 @@
+tenets:
+  - name: mixed-marshalling
+    doc: |
+      Find cases where a server marshals data into a client data type.
+
+      Separates client and server versions of a request by ensuring the server never unmarshalls to the client's version. Use the types of your own structs to create a project specific review.
+    flows:
+      codelingo/review:
+        comments: Request should not be marshalled to a client type in the server.
+    query: |
+      import codelingo/ast/go
+
+      go.func_decl({depth: any}):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.star_expr:
+                @ review.comment
+                go.ident:
+                  # Replace with your own client/server types (prepended with /resource/).
+                  type: "/resource/tenets/codelingo/go/marshalling/example.go.Server"
+          go.field_list # Refers to parameters, making the first field list the reciever
+        go.block_stmt:
+          go.assign_stmt({depth: any}):
+            go.rhs:
+              go.call_expr:
+                go.selector_expr:
+                  go.ident:
+                    name: "json"
+                  go.ident:
+                    name: "Marshal"
+                go.args:
+                  go.ident:
+                    type: "/resource/tenets/codelingo/go/marshalling/example.go.ClientData"

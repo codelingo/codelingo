@@ -1,0 +1,38 @@
+tenets:
+  - name: no-fmt-printx
+    doc: |
+      Find uses fmt.Print* (eg. Print, Println, Printf).
+
+      The log package is better suited for logging than the fmt package for a number of reasons:
+      1. log can be configured to use different writers.
+      2. log messages can include additional info; eg. timestamps, source code location.
+      3. log messages will never be interleaved.
+    flows:
+      codelingo/review:
+        comments: |
+          Use log.Print* instead. The log package is better suited for logging.
+    query: |
+      import (
+        codelingo/ast/go
+      )
+
+      go.file({depth: any}):
+        any_of:
+          go.import_spec({depth: any}): # aliased import
+            go.ident:
+              name: $packageName
+            go.basic_lit:
+              value: "fmt"
+          go.import_spec({depth: any}): # unaliased import
+            exclude:
+              go.ident
+            go.basic_lit:
+              value: "fmt"
+              value: $packageName
+        @ review.comment
+        go.call_expr({depth: any}):
+          go.selector_expr:
+            go.ident:
+              name: $packageName
+            go.ident:
+              name: /^Print.*$/

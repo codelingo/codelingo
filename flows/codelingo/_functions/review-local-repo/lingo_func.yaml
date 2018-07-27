@@ -1,0 +1,4 @@
+name: review-local-repo
+description: Find relevant tenets and scope review to a given directory.
+parameters:
+  review-directory: ""

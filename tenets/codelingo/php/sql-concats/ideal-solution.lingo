@@ -1,0 +1,62 @@
+tenets:
+  - name: sql-concats
+    doc: Find all variable name ending in SQL that contain string concatenations.
+    flows:
+      codelingo/review:
+        comments: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
+    query: |
+      import codelingo/ast/php
+
+      # Find values from an http request
+      php.stmt_classmethod({depth: any}):
+        php.expr_assign:
+          php.expr_variable:
+            name: $httpVariable
+          php.expr_methodcall({depth: any}): # PHP surprisingly appears to have objects hanging off method calls
+            name: "get"
+            php.expr_propertyfetch:
+              name: "request"
+
+        # Find method that concatenates the http value into a string
+        php.calls({depth: any}):
+          php.arg:
+            name: $httpVariable
+          # Recurse along method call chain to find concatenation method
+          # TODO: validate that the $httpVariable is passed along call chain
+          php.calls({depth: any, follow: callgraph}):
+            php.stmt_classmethod({depth: any}):
+              php.param:
+                # find variables whose value can be affected by the parameter
+                php.may_assign_to:
+                  name: $httpArg
+              any_of:
+                php.expr_assignop_concat({depth: any}):
+                  @ review.comment
+                  php.expr_variable({depth: any}):
+                    name: $sqlStatement
+                    php.expr_variable({depth: any}):
+                      name: $httpArg
+                php.expr_assign({depth: any}):
+                  @ review.comment
+                  php.expr_variable({depth: any}):
+                    name: $sqlStatement
+                    php.expr_variable({depth: any}):
+                      name: $httpArg
+                  php.expr_binaryop_concat({depth: any})
+
+              # Check that $sqlStatement is passed to a database method
+              @ review.comment
+              php.calls({depth: any}):
+                php.arg:
+                  php.expr_variable:
+                    name: $sqlStatement
+                # TODO: validate that the $sqlStatement is passed along call chain
+                php.calls({depth: any, follow: callgraph}):
+                  is: $dbmethod
+
+      # Collect methods that access the database
+      php.stmt_namespace:
+        php.name: "Util\DB"
+        php.stmt_class:
+          name: Model
+          php.stmt_classmethod: $dbmethod

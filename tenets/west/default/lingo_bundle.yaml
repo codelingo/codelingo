@@ -1,0 +1,11 @@
+decscrpiton: Tenets written for West
+version: 0.0.0
+tenets:
+  - allocation
+  - shadowing
+  - switch
+tags:
+  - c#
+  - csharp
+  - cpp
+  - c++
