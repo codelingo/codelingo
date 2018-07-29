@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/codelingo/hub/util/mdgen/dataStruct"
+	"github.com/codelingo/codelingo/util/mdgen/dataStruct"
 	"github.com/spf13/cobra"
 )
 
@@ -34,14 +34,14 @@ statically in the website etc. There are no file generating side
 effects and output is json of the form:
 
 {
-	name: 'codelingo/hub - nil_only_functions',
-	repo: 'github.com/codelingo/hub',
+	name: 'codelingo/codelingo - nil_only_functions',
+	repo: 'github.com/codelingo/codelingo',
 	dir: '/',
 	tenet: 'codelingo/go/nil_only_functions'
 },
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		tenetsRootPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/hub/tenets"
+		tenetsRootPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/codelingo/tenets"
 		result, err := parseTenetsDir(tenetsRootPath)
 		if err != nil {
 			panic(err)
@@ -105,8 +105,8 @@ func buildTenetList(hubtenets dataStruct.HubTenets) []*TenetDesc {
 				tenetName := filepath.Join(ownerKey, bundleKey, tenetKey)
 
 				tenetList = append(tenetList, &TenetDesc{
-					Name:  "codelingo/hub - " + tenetKey,
-					Repo:  "github.com/codelingo/hub",
+					Name:  "codelingo/codelingo - " + tenetKey,
+					Repo:  "github.com/codelingo/codelingo",
 					Dir:   "tenets/" + tenetName,
 					Tenet: tenetName,
 					owner: ownerKey,

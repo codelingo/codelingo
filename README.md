@@ -47,7 +47,7 @@ Every pull request to your repository will now be checked against the go Tenet b
 
 <!-- TODO add screenshot of review comment -->
 
-Other Tenet bundles (including for other languages) from the community can be found under the [tenets directory](https://github.com/codelingo/hub/tree/master/tenets) in this repository.
+Other Tenet bundles (including for other languages) from the community can be found under the [tenets directory](https://github.com/codelingo/codelingo/tree/master/tenets) in this repository.
 
 <!-- TODO add instructions on how to interact with Review Flow with GitHub comments -->
 
