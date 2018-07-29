@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"github.com/codelingo/hub/util/mdgen/dataStruct"
+	"github.com/codelingo/codelingo/util/mdgen/dataStruct"
 	"github.com/juju/errors"
 	"github.com/spf13/cobra"
 	"io/ioutil"
@@ -38,7 +38,7 @@ to quickly create a Cobra application.`,
 		tmplPath := "template/tenet.md"
 		//outPath := args[0]
 
-		tenetsRootPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/hub/tenets"
+		tenetsRootPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/codelingo/tenets"
 		result, err := parseTenetsDir(tenetsRootPath)
 		if err != nil {
 			panic(err)

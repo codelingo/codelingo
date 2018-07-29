@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/codelingo/hub/util/mdgen/cmd"
+import "github.com/codelingo/codelingo/util/mdgen/cmd"
 
 func main() {
 	cmd.Execute()

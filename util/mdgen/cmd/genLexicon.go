@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"github.com/codelingo/lingo/service"
 	"github.com/juju/errors"
@@ -70,7 +71,7 @@ type lexInfo struct {
 
 func listLexs() ([]*lexInfo, error) {
 
-	lexsPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/hub/lexicons"
+	lexsPath := os.Getenv("GOPATH") + "/src/github.com/codelingo/codelingo/lexicons"
 
 	tree, err := directory_tree.NewTree(lexsPath)
 	if err != nil {
@@ -117,15 +118,10 @@ func writeLexMD(data *lexInfo) error {
 
 	outPath := data.OutPath + "/README.md"
 	data.Facts = facts
-	return writeFile(os.Getenv("GOPATH")+"/src/github.com/codelingo/hub/util/mdgen/template/lexicon.md", outPath, data)
+	return writeFile(os.Getenv("GOPATH")+"/src/github.com/codelingo/codelingo/util/mdgen/template/lexicon.md", outPath, data)
 
 }
 
 func listFacts(owner, lexName string) (map[string][]string, error) {
-	svc, err := service.New()
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-
-	return svc.ListFacts(owner, lexName, "")
+	return service.ListFacts(context.Background(), owner, lexName, "")
 }
