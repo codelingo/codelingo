@@ -38,7 +38,7 @@ tenets:
           cpp.rhs:
             cpp.function_call:
               cpp.identifier_name:
-                identifier_token: "malloc"
+                identifier_token == "malloc"
         cpp.delete_statement:
           @ review.comment
           cpp.variable:

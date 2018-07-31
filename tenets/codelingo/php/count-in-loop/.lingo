@@ -14,23 +14,23 @@ tenets:
             php.expr_funccall({depth: any}):
               any_of:
                 php.name_fullyqualified:
-                  name: "sizeof"
+                  name == "sizeof"
                 php.name_fullyqualified:
-                  name: "count"
+                  name == "count"
           @ review.comment
           php.stmt_for({depth: any}):
             php.expr_funccall({depth: any}):
               any_of:
                 php.name_fullyqualified:
-                  name: "sizeof"
+                  name == "sizeof"
                 php.name_fullyqualified:
-                  name: "count"
+                  name == "count"
           @ review.comment
           php.stmt_do({depth: any}):
             php.expr_funccall({depth: any}):
               any_of:
                 php.name_fullyqualified:
-                  name: "sizeof"
+                  name == "sizeof"
                 php.name_fullyqualified:
-                  name: "count"
+                  name == "count"
 

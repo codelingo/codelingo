@@ -19,4 +19,4 @@ tenets:
         @ review.comment
         python36.call:
           python36.name:
-            id: "Exception"
+            id == "Exception"

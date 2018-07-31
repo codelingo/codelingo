@@ -22,12 +22,12 @@ tenets:
             go.ident:
               name: $packageName
             go.basic_lit:
-              value: "fmt"
+              value == "fmt"
           go.import_spec({depth: any}): # unaliased import
             exclude:
               go.ident
             go.basic_lit:
-              value: "fmt"
+              value == "fmt"
               value: $packageName
         @ review.comment
         go.call_expr({depth: any}):

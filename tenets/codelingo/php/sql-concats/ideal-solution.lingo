@@ -11,16 +11,16 @@ tenets:
       php.stmt_classmethod({depth: any}):
         php.expr_assign:
           php.expr_variable:
-            name: $httpVariable
+            name as httpVariable
           php.expr_methodcall({depth: any}): # PHP surprisingly appears to have objects hanging off method calls
-            name: "get"
+            name == "get"
             php.expr_propertyfetch:
-              name: "request"
+              name == "request"
 
         # Find method that concatenates the http value into a string
         php.calls({depth: any}):
           php.arg:
-            name: $httpVariable
+            name as httpVariable
           # Recurse along method call chain to find concatenation method
           # TODO: validate that the $httpVariable is passed along call chain
           php.calls({depth: any, follow: callgraph}):
@@ -28,20 +28,20 @@ tenets:
               php.param:
                 # find variables whose value can be affected by the parameter
                 php.may_assign_to:
-                  name: $httpArg
+                  name as httpArg
               any_of:
                 php.expr_assignop_concat({depth: any}):
                   @ review.comment
                   php.expr_variable({depth: any}):
-                    name: $sqlStatement
+                    name as sqlStatement
                     php.expr_variable({depth: any}):
-                      name: $httpArg
+                      name as httpArg
                 php.expr_assign({depth: any}):
                   @ review.comment
                   php.expr_variable({depth: any}):
-                    name: $sqlStatement
+                    name as sqlStatement
                     php.expr_variable({depth: any}):
-                      name: $httpArg
+                      name as httpArg
                   php.expr_binaryop_concat({depth: any})
 
               # Check that $sqlStatement is passed to a database method
@@ -49,10 +49,10 @@ tenets:
               php.calls({depth: any}):
                 php.arg:
                   php.expr_variable:
-                    name: $sqlStatement
+                    name as sqlStatement
                 # TODO: validate that the $sqlStatement is passed along call chain
                 php.calls({depth: any, follow: callgraph}):
-                  is: $dbmethod
+                  is as dbmethod
 
       # Collect methods that access the database
       php.stmt_namespace:

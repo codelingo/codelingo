@@ -17,21 +17,21 @@ tenets:
         # Find value passed in by http request
         php.expr_assign({depth: any}):
           php.expr_variable:
-            name: $urlVar
+            name as urlVar
           php.expr_methodcall:
-            name: "get"
+            name == "get"
             php.expr_propertyfetch:
-              name: "query"
+              name == "query"
               php.expr_variable:
-                name: "request"
+                name == "request"
         # Find unckecked redirect that uses the $urlVar
         php.expr_methodcall({depth: any}):
-          name: "redirect"
+          name == "redirect"
           exclude:
             php.expr_funccall({depth: any}):
               php.name_fullyqualified:
-                name: "offsiteCheck"
+                name == "offsiteCheck"
           php.arg({depth: any}):
             @ review.comment
             php.expr_variable({depth:any}):
-              name: $urlVar
+              name as urlVar
