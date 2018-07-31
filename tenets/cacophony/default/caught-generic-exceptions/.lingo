@@ -20,7 +20,7 @@ tenets:
           @ review.comment
           python36.except_handler:
             python36.name:
-              id: "Exception"
+              id == "Exception"
           @ review.comment
           python36.except_handler:
-            type: "None"
+            type == "None"

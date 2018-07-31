@@ -12,13 +12,13 @@ tenets:
       go.call_expr({depth: any}):
         go.selector_expr:
           go.ident:
-            name: "errors"
+            name == "errors"
           go.ident:
-            name: "New"
+            name == "New"
         go.args:
           go.call_expr:
             go.selector_expr:
               go.ident:
-                name: "fmt"
+                name == "fmt"
               go.ident:
-                name: "Sprintf"
+                name == "Sprintf"

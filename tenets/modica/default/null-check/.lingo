@@ -10,4 +10,4 @@ tenets:
       @ review.comment
       php.expr_funccall({depth: any}):
         php.name_fullyqualified:
-          name: "is_null"
+          name == "is_null"

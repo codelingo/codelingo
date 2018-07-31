@@ -15,4 +15,4 @@ tenets:
             go.field:
               go.names:
                 go.ident:
-                  type: "bool"
+                  type == "bool"

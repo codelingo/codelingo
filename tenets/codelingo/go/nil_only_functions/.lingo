@@ -22,7 +22,7 @@ tenets:
         go.return_stmt({depth: any}):
           go.results:
             go.ident:
-              name: "nil"
+              name == "nil"
 
         # exclude functions with anything but "return nil"
         exclude:
@@ -30,4 +30,4 @@ tenets:
             go.results:
               exclude:
                 go.ident:
-                  name: "nil"
+                  name == "nil"

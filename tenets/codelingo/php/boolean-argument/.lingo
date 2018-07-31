@@ -10,5 +10,5 @@ tenets:
       php.stmt_function({depth: any}):
         @ review.comment
         php.param:
-          type: "bool"
+          type == "bool"
 
