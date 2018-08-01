@@ -20,7 +20,7 @@ tenets:
         any_of:
           go.import_spec({depth: any}): # aliased import
             go.ident:
-              name: $packageName
+              name as packageName
             go.basic_lit:
               value == "fmt"
           go.import_spec({depth: any}): # unaliased import
@@ -28,11 +28,11 @@ tenets:
               go.ident
             go.basic_lit:
               value == "fmt"
-              value: $packageName
+              value as packageName
         @ review.comment
         go.call_expr({depth: any}):
           go.selector_expr:
             go.ident:
-              name: $packageName
+              name as packageName
             go.ident:
               name: /^Print.*$/
