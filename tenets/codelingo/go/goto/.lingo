@@ -12,4 +12,4 @@ tenets:
 
       @ review.comment
       go.branch_stmt({depth: any}):
-        tok == 73
+        tok == "goto"
