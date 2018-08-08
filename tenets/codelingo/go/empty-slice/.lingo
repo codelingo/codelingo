@@ -10,7 +10,7 @@ tenets:
   
       @ review.comment
       go.assign_stmt({depth: any}):
-        tok == 47 # Specifies that the assignemt is a definition, ie, uses ":=" https://golang.org/pkg/go/token/#DEFINE
+        tok == ":="
         go.rhs:
           go.composite_lit:
             child_count == 1
