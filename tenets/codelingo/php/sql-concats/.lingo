@@ -6,14 +6,14 @@ tenets:
         comments: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
     query: |
       import codelingo/ast/php
-      php.file({depth: any}):
+      php.file(depth = any):
         any_of:
-          php.expr_assignop_concat({depth: any}):
+          php.expr_assignop_concat(depth = any):
             @ review.comment
-            php.expr_variable({depth: any}):
+            php.expr_variable(depth = any):
               name: /(?i)SQL/
-          php.expr_assign({depth: any}):
+          php.expr_assign(depth = any):
             @ review.comment
-            php.expr_variable({depth: any}):
+            php.expr_variable(depth = any):
               name: /(?i)SQL/
-            php.expr_binaryop_concat({depth: any})
+            php.expr_binaryop_concat(depth = any)

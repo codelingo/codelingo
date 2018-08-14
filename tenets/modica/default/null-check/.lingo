@@ -8,6 +8,6 @@ tenets:
       import codelingo/ast/php
   
       @ review.comment
-      php.expr_funccall({depth: any}):
+      php.expr_funccall(depth = any):
         php.name_fullyqualified:
           name == "is_null"

@@ -13,9 +13,9 @@ tenets:
         codelingo/ast/go
       )
 
-      go.for_stmt({depth: any}):
+      go.for_stmt(depth = any):
         exclude:
-          go.func_lit({depth: any}):
-            include({depth: any}):
+          go.func_lit(depth = any):
+            include(depth = any):
               @ review.comment
-              go.defer_stmt({depth: any})
+              go.defer_stmt(depth = any)

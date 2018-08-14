@@ -11,5 +11,5 @@ tenets:
       )
 
       @ review.comment
-      go.branch_stmt({depth: any}):
+      go.branch_stmt(depth = any):
         tok == "goto"

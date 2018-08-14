@@ -12,7 +12,7 @@ tenets:
         codelingo/ast/go
       )
 
-      go.defer_stmt({depth: any}):
+      go.defer_stmt(depth = any):
         go.call_expr:
           go.func_lit:
             go.block_stmt:

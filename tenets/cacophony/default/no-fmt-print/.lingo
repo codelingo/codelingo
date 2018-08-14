@@ -16,21 +16,21 @@ tenets:
         codelingo/ast/go
       )
 
-      go.file({depth: any}):
+      go.file(depth = any):
         any_of:
-          go.import_spec({depth: any}): # aliased import
+          go.import_spec(depth = any): # aliased import
             go.ident:
               name as packageName
             go.basic_lit:
               value == "fmt"
-          go.import_spec({depth: any}): # unaliased import
+          go.import_spec(depth = any): # unaliased import
             exclude:
               go.ident
             go.basic_lit:
               value == "fmt"
               value as packageName
         @ review.comment
-        go.call_expr({depth: any}):
+        go.call_expr(depth = any):
           go.selector_expr:
             go.ident:
               name as packageName

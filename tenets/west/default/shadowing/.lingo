@@ -7,12 +7,12 @@ tenets:
     query: |
       import codelingo/ast/cpp
 
-      cpp.function_decl({depth: any}):
+      cpp.function_decl(depth = any):
         cpp.parm_decl:
           name as paramName
         cpp.compound_stmt:
           @ review.comment
-          cpp.binary_operator({depth: any}):
+          cpp.binary_operator(depth = any):
             cpp.decl_ref_expr:
               name as paramName
 
@@ -24,11 +24,11 @@ tenets:
     query: |
       import codelingo/ast/cpp
 
-      cpp.var_decl({depth: any}):
+      cpp.var_decl(depth = any):
         cpp.parm_decl:
           name as varName
-      cpp.compound_stmt({depth: any}):
+      cpp.compound_stmt(depth = any):
         @ review.comment
-        cpp.binary_operator({depth: any}):
+        cpp.binary_operator(depth = any):
           cpp.decl_ref_expr:
             name as varName

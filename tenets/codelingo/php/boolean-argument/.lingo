@@ -7,7 +7,7 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      php.stmt_function({depth: any}):
+      php.stmt_function(depth = any):
         @ review.comment
         php.param:
           type == "bool"

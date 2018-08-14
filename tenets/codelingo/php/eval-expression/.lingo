@@ -9,4 +9,4 @@ tenets:
       import codelingo/ast/php
 
       @ review.comment
-      php.expr_eval({depth: any})
+      php.expr_eval(depth = any)

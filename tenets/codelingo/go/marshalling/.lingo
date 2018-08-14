@@ -10,7 +10,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.func_decl({depth: any}):
+      go.func_decl(depth = any):
         go.func_type:
           go.field_list:
             go.field:
@@ -21,7 +21,7 @@ tenets:
                   type == "/resource/tenets/codelingo/go/marshalling/example.go.Server"
           go.field_list # Refers to parameters, making the first field list the reciever
         go.block_stmt:
-          go.assign_stmt({depth: any}):
+          go.assign_stmt(depth = any):
             go.rhs:
               go.call_expr:
                 go.selector_expr:
