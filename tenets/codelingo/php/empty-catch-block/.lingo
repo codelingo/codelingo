@@ -9,5 +9,5 @@ tenets:
       import codelingo/ast/php
 
       @ review.comment
-      php.stmt_catch({depth: any}):
+      php.stmt_catch(depth = any):
         child_count == "1"

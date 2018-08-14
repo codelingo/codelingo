@@ -12,7 +12,7 @@ tenets:
       )
 
       @ review.comment
-      golint.lint_rule({depth: any}):
+      golint.lint_rule(depth = any):
         @ review.vars.text
         text
 

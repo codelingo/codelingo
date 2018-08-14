@@ -14,7 +14,7 @@ tenets:
       )
 
       @ review.comment
-      python36.expr({depth: any}):
+      python36.expr(depth = any):
         python36.call:
           python36.name:
             id == "print"

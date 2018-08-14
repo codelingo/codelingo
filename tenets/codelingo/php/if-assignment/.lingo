@@ -9,5 +9,5 @@ tenets:
       import codelingo/ast/php
 
       @ review.comment
-      php.stmt_if({depth: any}):
+      php.stmt_if(depth = any):
         php.expr_assign

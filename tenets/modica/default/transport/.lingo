@@ -4,7 +4,7 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      php.dir({depth: any}):
+      php.dir(depth = any):
         php.file:
           @ filter.filename
           filename

@@ -15,7 +15,7 @@ tenets:
         codelingo/ast/python36
       )
 
-      python36.try({depth: any}):
+      python36.try(depth = any):
         any_of:
           @ review.comment
           python36.except_handler:

@@ -13,9 +13,9 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      php.stmt_classmethod({depth: any}):
+      php.stmt_classmethod(depth = any):
         # Find value passed in by http request
-        php.expr_assign({depth: any}):
+        php.expr_assign(depth = any):
           php.expr_variable:
             name as urlVar
           php.expr_methodcall:
@@ -25,13 +25,13 @@ tenets:
               php.expr_variable:
                 name == "request"
         # Find unckecked redirect that uses the $urlVar
-        php.expr_methodcall({depth: any}):
+        php.expr_methodcall(depth = any):
           name == "redirect"
           exclude:
-            php.expr_funccall({depth: any}):
+            php.expr_funccall(depth = any):
               php.name_fullyqualified:
                 name == "offsiteCheck"
-          php.arg({depth: any}):
+          php.arg(depth = any):
             @ review.comment
-            php.expr_variable({depth:any}):
+            php.expr_variable(depth =any):
               name as urlVar

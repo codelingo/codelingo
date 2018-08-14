@@ -8,7 +8,7 @@ tenets:
       import codelingo/ast/cpp
 
       cpp.block:
-        cpp.assignment_statement({depth: any}):
+        cpp.assignment_statement(depth = any):
           cpp.lhs:
             cpp.variable:
               cpp.identifier_name:
@@ -30,7 +30,7 @@ tenets:
       import codelingo/ast/cpp
 
       cpp.block:
-        cpp.assignment_statement({depth: any}):
+        cpp.assignment_statement(depth = any):
           cpp.lhs:
             cpp.variable:
               cpp.identifier_name:
@@ -59,7 +59,7 @@ tenets:
             identifier_token as varName
       any_of:
         cpp.element:
-          cpp.variable({depth: any}):
+          cpp.variable(depth = any):
             cpp.identifier_name:
               identifier_token as varName
         cpp.variable:
@@ -74,8 +74,8 @@ tenets:
     query: |
       import codelingo/ast/cpp
 
-      cpp.method_declaration({depth: any}):
-        cpp.assignment_statement({depth: any}):
+      cpp.method_declaration(depth = any):
+        cpp.assignment_statement(depth = any):
           cpp.lhs:
             cpp.variable:
               type: /ref.*/
@@ -83,7 +83,7 @@ tenets:
                 identifier_token as varName
         exclude:
           any_of:
-            cpp.delete_statement({depth: any}):
+            cpp.delete_statement(depth = any):
               cpp.variable:
                 cpp.identifier_name:
                   identifier_token as varName

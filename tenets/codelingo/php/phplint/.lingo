@@ -13,7 +13,7 @@ tenets:
       )
 
       @ review.comment
-      phplint.lint_rule({depth: any}):
+      phplint.lint_rule(depth = any):
         @ review.vars.category
         category
         @ review.vars.text

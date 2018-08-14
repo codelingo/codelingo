@@ -15,7 +15,7 @@ tenets:
         codelingo/ast/python36
       )
 
-      python36.raise({depth: any}):
+      python36.raise(depth = any):
         @ review.comment
         python36.call:
           python36.name:

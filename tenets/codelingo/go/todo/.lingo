@@ -13,5 +13,5 @@ tenets:
       )
 
       @ review.comment
-      go.comment({depth: any}):
+      go.comment(depth = any):
         text: /(?i)(^|\s)TODO.*/
