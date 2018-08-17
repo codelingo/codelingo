@@ -34,10 +34,10 @@ Test out writing and running a Tenet online with zero installs on the [playgroun
 
 ### GitHub Review Flow
 
-After installing [Codelingo on GitHub](https://github.com/apps/codelingo), write the following .lingo.yaml to the root of your repository:
+After installing [Codelingo on GitHub](https://github.com/apps/codelingo), write the following codelingo.yaml to the root of your repository:
 
 ```yaml
-# .lingo.yaml file
+# codelingo.yaml file
 
 tenets:
   - import: codelingo/go
@@ -59,11 +59,11 @@ To run the Review Flow against repositories on your local machine, install the [
 # Run this command from anywhere. Follow the prompts to set up Codelingo on your machine.
 $ lingo config setup
 
-# Run this command inside a git repository to add a default .lingo.yaml file in the current directory.
+# Run this command inside a git repository to add a default codelingo.yaml file in the current directory.
 $ lingo init
 ```
 
-Replace the content of the .lingo.yaml file we wrote above with:
+Replace the content of the codelingo.yaml file we wrote above with:
 
 ```yaml
   tenets:
@@ -73,7 +73,7 @@ Replace the content of the .lingo.yaml file we wrote above with:
 You can now run the Review Flow to check your source code against the go Tenet bundle we imported above.
 
 ```bash
-# Run this command from the same directory as the .lingo.yaml file or any of its sub directories.
+# Run this command from the same directory as the codelingo.yaml file or any of its sub directories.
 $ lingo run review
 ```
 
