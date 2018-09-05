@@ -78,7 +78,8 @@ tenets:
         cpp.assignment_statement(depth = any):
           cpp.lhs:
             cpp.variable:
-              type: /ref.*/
+              type as refType
+              regex(/ref.*/, refType)
               cpp.identifier_name:
                 identifier_token as varName
         exclude:
