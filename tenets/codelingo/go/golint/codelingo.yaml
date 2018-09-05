@@ -4,7 +4,7 @@ tenets:
       Find all go linter rules.
     flows:
       codelingo/review:
-        comments: |
+        comment: |
           {{text}}
     query: |
       import (

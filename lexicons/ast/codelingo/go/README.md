@@ -13,7 +13,7 @@ tenets:
     doc:  Example query to find all instances of declarations
     flows:
       codelingo/review
-	       comments: This is a declarations.
+	       comment: This is a declarations.
 	   query: |
 	     import codelingo/ast/go
 
@@ -32,7 +32,7 @@ tenets:
     doc:  Example query to find all instances of expressions
     flows:
       codelingo/review
-	       comments: This is a expressions.
+	       comment: This is a expressions.
 	   query: |
 	     import codelingo/ast/go
 
@@ -51,7 +51,7 @@ tenets:
     doc:  Example query to find all instances of specs
     flows:
       codelingo/review
-	       comments: This is a specs.
+	       comment: This is a specs.
 	   query: |
 	     import codelingo/ast/go
 
@@ -70,7 +70,7 @@ tenets:
     doc:  Example query to find all instances of statements
     flows:
       codelingo/review
-	       comments: This is a statements.
+	       comment: This is a statements.
 	   query: |
 	     import codelingo/ast/go
 

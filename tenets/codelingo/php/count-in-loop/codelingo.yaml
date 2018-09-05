@@ -3,7 +3,7 @@ tenets:
     doc: Using count/sizeof in loops expressions is considered bad practice https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/design.rst#countinloopexpression.
     flows:
       codelingo/review:
-        comments: Sizeof and Count should not be used in loops.
+        comment: Sizeof and Count should not be used in loops.
     query: |
       import codelingo/ast/php
 

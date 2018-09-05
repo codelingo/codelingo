@@ -4,7 +4,7 @@ tenets:
       Find empty slice assignments.
     flows:
       codelingo/review:
-        comments: You should declare this using "var" not ":=" see t https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
+        comment: You should declare this using "var" not ":=" see t https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
     query: |
       import codelingo/ast/go
   

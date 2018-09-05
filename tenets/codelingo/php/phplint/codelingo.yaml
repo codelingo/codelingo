@@ -3,7 +3,7 @@ tenets:
     doc: Example tenet that finds all lint problems.
     flows:
       codelingo/review:
-        comments: |
+        comment: |
           {{category}}
           {{text}}
 

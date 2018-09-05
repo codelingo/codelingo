@@ -3,7 +3,7 @@ tenets:
     doc: Find all variable name ending in SQL that contain string concatenations.
     flows:
       codelingo/review:
-        comments: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
+        comment: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
     query: |
       import codelingo/ast/php
       php.file(depth = any):

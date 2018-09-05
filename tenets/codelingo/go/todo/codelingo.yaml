@@ -6,7 +6,7 @@ tenets:
       TODOs should be tracked in a place outside of the code to ensure they aren't forgotten.
     flows:
       codelingo/review:
-        comments: Make sure you add this TODO as an issue, milestone, or in your project management tool; eg. Trello.
+        comment: Make sure you add this TODO as an issue, milestone, or in your project management tool; eg. Trello.
     query: |
       import (
         codelingo/ast/go

@@ -6,7 +6,7 @@ tenets:
       Separates client and server versions of a request by ensuring the server never unmarshalls to the client's version. Use the types of your own structs to create a project specific review.
     flows:
       codelingo/review:
-        comments: Request should not be marshalled to a client type in the server.
+        comment: Request should not be marshalled to a client type in the server.
     query: |
       import codelingo/ast/go
 

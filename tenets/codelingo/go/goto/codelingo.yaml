@@ -4,7 +4,7 @@ tenets:
       Find uses of goto.
     flows:
       codelingo/review:
-        comments: goto statments have a niche use and can obscure the flow of a program.
+        comment: goto statments have a niche use and can obscure the flow of a program.
     query: |
       import (
         codelingo/ast/go

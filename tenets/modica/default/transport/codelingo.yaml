@@ -21,7 +21,7 @@ tenets:
                 name
     flows:
       codelingo/review:
-        comments: |
+        comment: |
           Controller class and method name in files named '<controller_category>/<controller_name>/<actionName>.php', should match :
 
           namespace Omni\Controller\<Controller_Category>;

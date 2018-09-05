@@ -6,7 +6,7 @@ tenets:
       A single line defer is cleaner and easier to read than one wrapped in a function.
     flows:
       codelingo/review:
-        comments: Redundant defer wrapping. This can be a single line defer instead, eg. defer log.Println("done").
+        comment: Redundant defer wrapping. This can be a single line defer instead, eg. defer log.Println("done").
     query: |
       import (
         codelingo/ast/go

@@ -4,7 +4,7 @@ tenets:
       Find functions that only return nil.
     flows:
       codelingo/review:
-        comments: Functions that don't return a non-nil value can be refactored without a reutrn type.
+        comment: Functions that don't return a non-nil value can be refactored without a reutrn type.
     query: |
       import (
         codelingo/ast/go
