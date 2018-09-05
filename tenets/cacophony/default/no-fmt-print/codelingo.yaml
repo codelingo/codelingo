@@ -35,4 +35,5 @@ tenets:
             go.ident:
               name as packageName
             go.ident:
-              name: /^Print.*$/
+              name as printName
+              regex(/^Print.*$/, printName)

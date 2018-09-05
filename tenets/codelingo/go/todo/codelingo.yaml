@@ -14,4 +14,5 @@ tenets:
 
       @ review.comment
       go.comment(depth = any):
-        text: /(?i)(^|\s)TODO.*/
+        text as todoText
+        regex(/(?i)(^|\s)TODO.*/, todoText)

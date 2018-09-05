@@ -11,9 +11,11 @@ tenets:
           php.expr_assignop_concat(depth = any):
             @ review.comment
             php.expr_variable(depth = any):
-              name: /(?i)SQL/
+              name as sqlName1
+              regex(/(?i)SQL/, sqlName1)
           php.expr_assign(depth = any):
             @ review.comment
             php.expr_variable(depth = any):
-              name: /(?i)SQL/
+              name as sqlName2
+              regex(/(?i)SQL/, sqlName2)
             php.expr_binaryop_concat(depth = any)
