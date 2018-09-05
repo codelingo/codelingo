@@ -1,7 +1,7 @@
 tenets:
   - flows:
       codelingo/review:
-        comments: Please use `=== null` rather than `is_null`
+        comment: Please use `=== null` rather than `is_null`
     name: null-check
     doc: Finds all calls to null-check
     query: |

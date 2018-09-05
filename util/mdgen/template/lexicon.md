@@ -13,7 +13,7 @@ tenets:
     doc:  Example query to find all instances of {{$fact}}
     flows:
       codelingo/review
-	       comments: This is a {{$fact}}.
+	       comment: This is a {{$fact}}.
 	   query: |
 	     import {{$owner}}/{{$type}}/{{$name}}
 

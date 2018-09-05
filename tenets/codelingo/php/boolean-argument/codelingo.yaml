@@ -3,7 +3,7 @@ tenets:
     doc: A boolean flag argument is a reliable indicator for a violation of the Single Responsibility Principle (SRP). https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
     flows:
       codelingo/review:
-        comments: This boolean argument likely violates SPR, consider splitting the logic into its own class or method.
+        comment: This boolean argument likely violates SPR, consider splitting the logic into its own class or method.
     query: |
       import codelingo/ast/php
 

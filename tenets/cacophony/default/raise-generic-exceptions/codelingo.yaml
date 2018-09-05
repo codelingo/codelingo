@@ -8,7 +8,7 @@ tenets:
       See the full hierarchy of the built in exceptions here: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
     flows:
       codelingo/review:
-        comments: |
+        comment: |
           Exception type is too generic. Use a more specific exception: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
     query: |
       import (

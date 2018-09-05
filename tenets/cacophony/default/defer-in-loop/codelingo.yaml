@@ -7,7 +7,7 @@ tenets:
       build up and can be executed later than expected. The defers will never get called if the loop does not exit.
     flows:
       codelingo/review:
-        comments: Defer is inside a loop. These will build up and can be executed later than expected.
+        comment: Defer is inside a loop. These will build up and can be executed later than expected.
     query: |
       import (
         codelingo/ast/go

@@ -7,7 +7,7 @@ tenets:
       They make the program unnecessarily verbose and can output sensitive information.
     flows:
       codelingo/review:
-        comments: Remove debug prints as they make the program unnecessarily verbose and can output sensitive information.
+        comment: Remove debug prints as they make the program unnecessarily verbose and can output sensitive information.
     query: |
       import (
         codelingo/ast/python36

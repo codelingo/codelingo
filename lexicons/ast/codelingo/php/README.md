@@ -13,7 +13,7 @@ tenets:
     doc:  Example query to find all instances of arg
     flows:
       codelingo/review
-	       comments: This is a arg.
+	       comment: This is a arg.
 	   query: |
 	     import codelingo/ast/php
 
@@ -32,7 +32,7 @@ tenets:
     doc:  Example query to find all instances of const
     flows:
       codelingo/review
-	       comments: This is a const.
+	       comment: This is a const.
 	   query: |
 	     import codelingo/ast/php
 
@@ -51,7 +51,7 @@ tenets:
     doc:  Example query to find all instances of expr_array
     flows:
       codelingo/review
-	       comments: This is a expr_array.
+	       comment: This is a expr_array.
 	   query: |
 	     import codelingo/ast/php
 
@@ -70,7 +70,7 @@ tenets:
     doc:  Example query to find all instances of expr_arraydimfetch
     flows:
       codelingo/review
-	       comments: This is a expr_arraydimfetch.
+	       comment: This is a expr_arraydimfetch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -89,7 +89,7 @@ tenets:
     doc:  Example query to find all instances of expr_arrayitem
     flows:
       codelingo/review
-	       comments: This is a expr_arrayitem.
+	       comment: This is a expr_arrayitem.
 	   query: |
 	     import codelingo/ast/php
 
@@ -108,7 +108,7 @@ tenets:
     doc:  Example query to find all instances of expr_assign
     flows:
       codelingo/review
-	       comments: This is a expr_assign.
+	       comment: This is a expr_assign.
 	   query: |
 	     import codelingo/ast/php
 
@@ -127,7 +127,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop
     flows:
       codelingo/review
-	       comments: This is a expr_assignop.
+	       comment: This is a expr_assignop.
 	   query: |
 	     import codelingo/ast/php
 
@@ -146,7 +146,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_bitwiseand
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_bitwiseand.
+	       comment: This is a expr_assignop_bitwiseand.
 	   query: |
 	     import codelingo/ast/php
 
@@ -165,7 +165,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_bitwiseor
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_bitwiseor.
+	       comment: This is a expr_assignop_bitwiseor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -184,7 +184,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_bitwisexor
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_bitwisexor.
+	       comment: This is a expr_assignop_bitwisexor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -203,7 +203,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_concat
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_concat.
+	       comment: This is a expr_assignop_concat.
 	   query: |
 	     import codelingo/ast/php
 
@@ -222,7 +222,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_div
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_div.
+	       comment: This is a expr_assignop_div.
 	   query: |
 	     import codelingo/ast/php
 
@@ -241,7 +241,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_minus
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_minus.
+	       comment: This is a expr_assignop_minus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -260,7 +260,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_mod
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_mod.
+	       comment: This is a expr_assignop_mod.
 	   query: |
 	     import codelingo/ast/php
 
@@ -279,7 +279,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_mul
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_mul.
+	       comment: This is a expr_assignop_mul.
 	   query: |
 	     import codelingo/ast/php
 
@@ -298,7 +298,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_plus
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_plus.
+	       comment: This is a expr_assignop_plus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -317,7 +317,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_pow
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_pow.
+	       comment: This is a expr_assignop_pow.
 	   query: |
 	     import codelingo/ast/php
 
@@ -336,7 +336,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_shiftleft
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_shiftleft.
+	       comment: This is a expr_assignop_shiftleft.
 	   query: |
 	     import codelingo/ast/php
 
@@ -355,7 +355,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignop_shiftright
     flows:
       codelingo/review
-	       comments: This is a expr_assignop_shiftright.
+	       comment: This is a expr_assignop_shiftright.
 	   query: |
 	     import codelingo/ast/php
 
@@ -374,7 +374,7 @@ tenets:
     doc:  Example query to find all instances of expr_assignref
     flows:
       codelingo/review
-	       comments: This is a expr_assignref.
+	       comment: This is a expr_assignref.
 	   query: |
 	     import codelingo/ast/php
 
@@ -393,7 +393,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop.
+	       comment: This is a expr_binaryop.
 	   query: |
 	     import codelingo/ast/php
 
@@ -412,7 +412,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_bitwiseand
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_bitwiseand.
+	       comment: This is a expr_binaryop_bitwiseand.
 	   query: |
 	     import codelingo/ast/php
 
@@ -431,7 +431,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_bitwiseor
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_bitwiseor.
+	       comment: This is a expr_binaryop_bitwiseor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -450,7 +450,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_bitwisexor
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_bitwisexor.
+	       comment: This is a expr_binaryop_bitwisexor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -469,7 +469,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_booleanand
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_booleanand.
+	       comment: This is a expr_binaryop_booleanand.
 	   query: |
 	     import codelingo/ast/php
 
@@ -488,7 +488,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_booleanor
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_booleanor.
+	       comment: This is a expr_binaryop_booleanor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -507,7 +507,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_coalesce
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_coalesce.
+	       comment: This is a expr_binaryop_coalesce.
 	   query: |
 	     import codelingo/ast/php
 
@@ -526,7 +526,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_concat
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_concat.
+	       comment: This is a expr_binaryop_concat.
 	   query: |
 	     import codelingo/ast/php
 
@@ -545,7 +545,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_div
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_div.
+	       comment: This is a expr_binaryop_div.
 	   query: |
 	     import codelingo/ast/php
 
@@ -564,7 +564,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_equal
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_equal.
+	       comment: This is a expr_binaryop_equal.
 	   query: |
 	     import codelingo/ast/php
 
@@ -583,7 +583,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_greater
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_greater.
+	       comment: This is a expr_binaryop_greater.
 	   query: |
 	     import codelingo/ast/php
 
@@ -602,7 +602,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_greaterorequal
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_greaterorequal.
+	       comment: This is a expr_binaryop_greaterorequal.
 	   query: |
 	     import codelingo/ast/php
 
@@ -621,7 +621,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_identical
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_identical.
+	       comment: This is a expr_binaryop_identical.
 	   query: |
 	     import codelingo/ast/php
 
@@ -640,7 +640,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_logicaland
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_logicaland.
+	       comment: This is a expr_binaryop_logicaland.
 	   query: |
 	     import codelingo/ast/php
 
@@ -659,7 +659,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_logicalor
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_logicalor.
+	       comment: This is a expr_binaryop_logicalor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -678,7 +678,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_logicalxor
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_logicalxor.
+	       comment: This is a expr_binaryop_logicalxor.
 	   query: |
 	     import codelingo/ast/php
 
@@ -697,7 +697,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_minus
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_minus.
+	       comment: This is a expr_binaryop_minus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -716,7 +716,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_mod
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_mod.
+	       comment: This is a expr_binaryop_mod.
 	   query: |
 	     import codelingo/ast/php
 
@@ -735,7 +735,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_mul
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_mul.
+	       comment: This is a expr_binaryop_mul.
 	   query: |
 	     import codelingo/ast/php
 
@@ -754,7 +754,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_notequal
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_notequal.
+	       comment: This is a expr_binaryop_notequal.
 	   query: |
 	     import codelingo/ast/php
 
@@ -773,7 +773,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_notidentical
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_notidentical.
+	       comment: This is a expr_binaryop_notidentical.
 	   query: |
 	     import codelingo/ast/php
 
@@ -792,7 +792,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_plus
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_plus.
+	       comment: This is a expr_binaryop_plus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -811,7 +811,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_pow
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_pow.
+	       comment: This is a expr_binaryop_pow.
 	   query: |
 	     import codelingo/ast/php
 
@@ -830,7 +830,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_shiftleft
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_shiftleft.
+	       comment: This is a expr_binaryop_shiftleft.
 	   query: |
 	     import codelingo/ast/php
 
@@ -849,7 +849,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_shiftright
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_shiftright.
+	       comment: This is a expr_binaryop_shiftright.
 	   query: |
 	     import codelingo/ast/php
 
@@ -868,7 +868,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_smaller
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_smaller.
+	       comment: This is a expr_binaryop_smaller.
 	   query: |
 	     import codelingo/ast/php
 
@@ -887,7 +887,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_smallerorequal
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_smallerorequal.
+	       comment: This is a expr_binaryop_smallerorequal.
 	   query: |
 	     import codelingo/ast/php
 
@@ -906,7 +906,7 @@ tenets:
     doc:  Example query to find all instances of expr_binaryop_spaceship
     flows:
       codelingo/review
-	       comments: This is a expr_binaryop_spaceship.
+	       comment: This is a expr_binaryop_spaceship.
 	   query: |
 	     import codelingo/ast/php
 
@@ -925,7 +925,7 @@ tenets:
     doc:  Example query to find all instances of expr_bitwisenot
     flows:
       codelingo/review
-	       comments: This is a expr_bitwisenot.
+	       comment: This is a expr_bitwisenot.
 	   query: |
 	     import codelingo/ast/php
 
@@ -944,7 +944,7 @@ tenets:
     doc:  Example query to find all instances of expr_booleannot
     flows:
       codelingo/review
-	       comments: This is a expr_booleannot.
+	       comment: This is a expr_booleannot.
 	   query: |
 	     import codelingo/ast/php
 
@@ -963,7 +963,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_array
     flows:
       codelingo/review
-	       comments: This is a expr_cast_array.
+	       comment: This is a expr_cast_array.
 	   query: |
 	     import codelingo/ast/php
 
@@ -982,7 +982,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_bool
     flows:
       codelingo/review
-	       comments: This is a expr_cast_bool.
+	       comment: This is a expr_cast_bool.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1001,7 +1001,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_double
     flows:
       codelingo/review
-	       comments: This is a expr_cast_double.
+	       comment: This is a expr_cast_double.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1020,7 +1020,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_int
     flows:
       codelingo/review
-	       comments: This is a expr_cast_int.
+	       comment: This is a expr_cast_int.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1039,7 +1039,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_object
     flows:
       codelingo/review
-	       comments: This is a expr_cast_object.
+	       comment: This is a expr_cast_object.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1058,7 +1058,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_string
     flows:
       codelingo/review
-	       comments: This is a expr_cast_string.
+	       comment: This is a expr_cast_string.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1077,7 +1077,7 @@ tenets:
     doc:  Example query to find all instances of expr_cast_unset
     flows:
       codelingo/review
-	       comments: This is a expr_cast_unset.
+	       comment: This is a expr_cast_unset.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1096,7 +1096,7 @@ tenets:
     doc:  Example query to find all instances of expr_classconstfetch
     flows:
       codelingo/review
-	       comments: This is a expr_classconstfetch.
+	       comment: This is a expr_classconstfetch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1115,7 +1115,7 @@ tenets:
     doc:  Example query to find all instances of expr_clone
     flows:
       codelingo/review
-	       comments: This is a expr_clone.
+	       comment: This is a expr_clone.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1134,7 +1134,7 @@ tenets:
     doc:  Example query to find all instances of expr_closure
     flows:
       codelingo/review
-	       comments: This is a expr_closure.
+	       comment: This is a expr_closure.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1153,7 +1153,7 @@ tenets:
     doc:  Example query to find all instances of expr_closureuse
     flows:
       codelingo/review
-	       comments: This is a expr_closureuse.
+	       comment: This is a expr_closureuse.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1172,7 +1172,7 @@ tenets:
     doc:  Example query to find all instances of expr_constfetch
     flows:
       codelingo/review
-	       comments: This is a expr_constfetch.
+	       comment: This is a expr_constfetch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1191,7 +1191,7 @@ tenets:
     doc:  Example query to find all instances of expr_empty
     flows:
       codelingo/review
-	       comments: This is a expr_empty.
+	       comment: This is a expr_empty.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1210,7 +1210,7 @@ tenets:
     doc:  Example query to find all instances of expr_errorsuppress
     flows:
       codelingo/review
-	       comments: This is a expr_errorsuppress.
+	       comment: This is a expr_errorsuppress.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1229,7 +1229,7 @@ tenets:
     doc:  Example query to find all instances of expr_eval
     flows:
       codelingo/review
-	       comments: This is a expr_eval.
+	       comment: This is a expr_eval.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1248,7 +1248,7 @@ tenets:
     doc:  Example query to find all instances of expr_exit
     flows:
       codelingo/review
-	       comments: This is a expr_exit.
+	       comment: This is a expr_exit.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1267,7 +1267,7 @@ tenets:
     doc:  Example query to find all instances of expr_funccall
     flows:
       codelingo/review
-	       comments: This is a expr_funccall.
+	       comment: This is a expr_funccall.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1286,7 +1286,7 @@ tenets:
     doc:  Example query to find all instances of expr_include
     flows:
       codelingo/review
-	       comments: This is a expr_include.
+	       comment: This is a expr_include.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1305,7 +1305,7 @@ tenets:
     doc:  Example query to find all instances of expr_instanceof
     flows:
       codelingo/review
-	       comments: This is a expr_instanceof.
+	       comment: This is a expr_instanceof.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1324,7 +1324,7 @@ tenets:
     doc:  Example query to find all instances of expr_isset
     flows:
       codelingo/review
-	       comments: This is a expr_isset.
+	       comment: This is a expr_isset.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1343,7 +1343,7 @@ tenets:
     doc:  Example query to find all instances of expr_list
     flows:
       codelingo/review
-	       comments: This is a expr_list.
+	       comment: This is a expr_list.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1362,7 +1362,7 @@ tenets:
     doc:  Example query to find all instances of expr_methodcall
     flows:
       codelingo/review
-	       comments: This is a expr_methodcall.
+	       comment: This is a expr_methodcall.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1381,7 +1381,7 @@ tenets:
     doc:  Example query to find all instances of expr_new
     flows:
       codelingo/review
-	       comments: This is a expr_new.
+	       comment: This is a expr_new.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1400,7 +1400,7 @@ tenets:
     doc:  Example query to find all instances of expr_postdec
     flows:
       codelingo/review
-	       comments: This is a expr_postdec.
+	       comment: This is a expr_postdec.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1419,7 +1419,7 @@ tenets:
     doc:  Example query to find all instances of expr_postinc
     flows:
       codelingo/review
-	       comments: This is a expr_postinc.
+	       comment: This is a expr_postinc.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1438,7 +1438,7 @@ tenets:
     doc:  Example query to find all instances of expr_predec
     flows:
       codelingo/review
-	       comments: This is a expr_predec.
+	       comment: This is a expr_predec.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1457,7 +1457,7 @@ tenets:
     doc:  Example query to find all instances of expr_preinc
     flows:
       codelingo/review
-	       comments: This is a expr_preinc.
+	       comment: This is a expr_preinc.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1476,7 +1476,7 @@ tenets:
     doc:  Example query to find all instances of expr_print
     flows:
       codelingo/review
-	       comments: This is a expr_print.
+	       comment: This is a expr_print.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1495,7 +1495,7 @@ tenets:
     doc:  Example query to find all instances of expr_propertyfetch
     flows:
       codelingo/review
-	       comments: This is a expr_propertyfetch.
+	       comment: This is a expr_propertyfetch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1514,7 +1514,7 @@ tenets:
     doc:  Example query to find all instances of expr_shellexec
     flows:
       codelingo/review
-	       comments: This is a expr_shellexec.
+	       comment: This is a expr_shellexec.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1533,7 +1533,7 @@ tenets:
     doc:  Example query to find all instances of expr_staticcall
     flows:
       codelingo/review
-	       comments: This is a expr_staticcall.
+	       comment: This is a expr_staticcall.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1552,7 +1552,7 @@ tenets:
     doc:  Example query to find all instances of expr_staticpropertyfetch
     flows:
       codelingo/review
-	       comments: This is a expr_staticpropertyfetch.
+	       comment: This is a expr_staticpropertyfetch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1571,7 +1571,7 @@ tenets:
     doc:  Example query to find all instances of expr_ternary
     flows:
       codelingo/review
-	       comments: This is a expr_ternary.
+	       comment: This is a expr_ternary.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1590,7 +1590,7 @@ tenets:
     doc:  Example query to find all instances of expr_unaryminus
     flows:
       codelingo/review
-	       comments: This is a expr_unaryminus.
+	       comment: This is a expr_unaryminus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1609,7 +1609,7 @@ tenets:
     doc:  Example query to find all instances of expr_unaryplus
     flows:
       codelingo/review
-	       comments: This is a expr_unaryplus.
+	       comment: This is a expr_unaryplus.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1628,7 +1628,7 @@ tenets:
     doc:  Example query to find all instances of expr_variable
     flows:
       codelingo/review
-	       comments: This is a expr_variable.
+	       comment: This is a expr_variable.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1647,7 +1647,7 @@ tenets:
     doc:  Example query to find all instances of expr_yield
     flows:
       codelingo/review
-	       comments: This is a expr_yield.
+	       comment: This is a expr_yield.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1666,7 +1666,7 @@ tenets:
     doc:  Example query to find all instances of expr_yieldfrom
     flows:
       codelingo/review
-	       comments: This is a expr_yieldfrom.
+	       comment: This is a expr_yieldfrom.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1685,7 +1685,7 @@ tenets:
     doc:  Example query to find all instances of name
     flows:
       codelingo/review
-	       comments: This is a name.
+	       comment: This is a name.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1704,7 +1704,7 @@ tenets:
     doc:  Example query to find all instances of param
     flows:
       codelingo/review
-	       comments: This is a param.
+	       comment: This is a param.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1723,7 +1723,7 @@ tenets:
     doc:  Example query to find all instances of scalar_encapsedstringpart
     flows:
       codelingo/review
-	       comments: This is a scalar_encapsedstringpart.
+	       comment: This is a scalar_encapsedstringpart.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1742,7 +1742,7 @@ tenets:
     doc:  Example query to find all instances of scalar_string
     flows:
       codelingo/review
-	       comments: This is a scalar_string.
+	       comment: This is a scalar_string.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1761,7 +1761,7 @@ tenets:
     doc:  Example query to find all instances of stmt_break
     flows:
       codelingo/review
-	       comments: This is a stmt_break.
+	       comment: This is a stmt_break.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1780,7 +1780,7 @@ tenets:
     doc:  Example query to find all instances of stmt_case
     flows:
       codelingo/review
-	       comments: This is a stmt_case.
+	       comment: This is a stmt_case.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1799,7 +1799,7 @@ tenets:
     doc:  Example query to find all instances of stmt_catch
     flows:
       codelingo/review
-	       comments: This is a stmt_catch.
+	       comment: This is a stmt_catch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1818,7 +1818,7 @@ tenets:
     doc:  Example query to find all instances of stmt_class
     flows:
       codelingo/review
-	       comments: This is a stmt_class.
+	       comment: This is a stmt_class.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1837,7 +1837,7 @@ tenets:
     doc:  Example query to find all instances of stmt_classconst
     flows:
       codelingo/review
-	       comments: This is a stmt_classconst.
+	       comment: This is a stmt_classconst.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1856,7 +1856,7 @@ tenets:
     doc:  Example query to find all instances of stmt_classmethod
     flows:
       codelingo/review
-	       comments: This is a stmt_classmethod.
+	       comment: This is a stmt_classmethod.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1875,7 +1875,7 @@ tenets:
     doc:  Example query to find all instances of stmt_const
     flows:
       codelingo/review
-	       comments: This is a stmt_const.
+	       comment: This is a stmt_const.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1894,7 +1894,7 @@ tenets:
     doc:  Example query to find all instances of stmt_continue
     flows:
       codelingo/review
-	       comments: This is a stmt_continue.
+	       comment: This is a stmt_continue.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1913,7 +1913,7 @@ tenets:
     doc:  Example query to find all instances of stmt_declare
     flows:
       codelingo/review
-	       comments: This is a stmt_declare.
+	       comment: This is a stmt_declare.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1932,7 +1932,7 @@ tenets:
     doc:  Example query to find all instances of stmt_declaredeclare
     flows:
       codelingo/review
-	       comments: This is a stmt_declaredeclare.
+	       comment: This is a stmt_declaredeclare.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1951,7 +1951,7 @@ tenets:
     doc:  Example query to find all instances of stmt_do
     flows:
       codelingo/review
-	       comments: This is a stmt_do.
+	       comment: This is a stmt_do.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1970,7 +1970,7 @@ tenets:
     doc:  Example query to find all instances of stmt_echo
     flows:
       codelingo/review
-	       comments: This is a stmt_echo.
+	       comment: This is a stmt_echo.
 	   query: |
 	     import codelingo/ast/php
 
@@ -1989,7 +1989,7 @@ tenets:
     doc:  Example query to find all instances of stmt_else
     flows:
       codelingo/review
-	       comments: This is a stmt_else.
+	       comment: This is a stmt_else.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2008,7 +2008,7 @@ tenets:
     doc:  Example query to find all instances of stmt_elseif
     flows:
       codelingo/review
-	       comments: This is a stmt_elseif.
+	       comment: This is a stmt_elseif.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2027,7 +2027,7 @@ tenets:
     doc:  Example query to find all instances of stmt_finally
     flows:
       codelingo/review
-	       comments: This is a stmt_finally.
+	       comment: This is a stmt_finally.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2046,7 +2046,7 @@ tenets:
     doc:  Example query to find all instances of stmt_foreach
     flows:
       codelingo/review
-	       comments: This is a stmt_foreach.
+	       comment: This is a stmt_foreach.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2065,7 +2065,7 @@ tenets:
     doc:  Example query to find all instances of stmt_function
     flows:
       codelingo/review
-	       comments: This is a stmt_function.
+	       comment: This is a stmt_function.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2084,7 +2084,7 @@ tenets:
     doc:  Example query to find all instances of stmt_global
     flows:
       codelingo/review
-	       comments: This is a stmt_global.
+	       comment: This is a stmt_global.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2103,7 +2103,7 @@ tenets:
     doc:  Example query to find all instances of stmt_goto
     flows:
       codelingo/review
-	       comments: This is a stmt_goto.
+	       comment: This is a stmt_goto.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2122,7 +2122,7 @@ tenets:
     doc:  Example query to find all instances of stmt_groupuse
     flows:
       codelingo/review
-	       comments: This is a stmt_groupuse.
+	       comment: This is a stmt_groupuse.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2141,7 +2141,7 @@ tenets:
     doc:  Example query to find all instances of stmt_haltcompiler
     flows:
       codelingo/review
-	       comments: This is a stmt_haltcompiler.
+	       comment: This is a stmt_haltcompiler.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2160,7 +2160,7 @@ tenets:
     doc:  Example query to find all instances of stmt_if
     flows:
       codelingo/review
-	       comments: This is a stmt_if.
+	       comment: This is a stmt_if.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2179,7 +2179,7 @@ tenets:
     doc:  Example query to find all instances of stmt_inlinehtml
     flows:
       codelingo/review
-	       comments: This is a stmt_inlinehtml.
+	       comment: This is a stmt_inlinehtml.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2198,7 +2198,7 @@ tenets:
     doc:  Example query to find all instances of stmt_interface
     flows:
       codelingo/review
-	       comments: This is a stmt_interface.
+	       comment: This is a stmt_interface.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2217,7 +2217,7 @@ tenets:
     doc:  Example query to find all instances of stmt_namespace
     flows:
       codelingo/review
-	       comments: This is a stmt_namespace.
+	       comment: This is a stmt_namespace.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2236,7 +2236,7 @@ tenets:
     doc:  Example query to find all instances of stmt_property
     flows:
       codelingo/review
-	       comments: This is a stmt_property.
+	       comment: This is a stmt_property.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2255,7 +2255,7 @@ tenets:
     doc:  Example query to find all instances of stmt_propertyproperty
     flows:
       codelingo/review
-	       comments: This is a stmt_propertyproperty.
+	       comment: This is a stmt_propertyproperty.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2274,7 +2274,7 @@ tenets:
     doc:  Example query to find all instances of stmt_return
     flows:
       codelingo/review
-	       comments: This is a stmt_return.
+	       comment: This is a stmt_return.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2293,7 +2293,7 @@ tenets:
     doc:  Example query to find all instances of stmt_staticvar
     flows:
       codelingo/review
-	       comments: This is a stmt_staticvar.
+	       comment: This is a stmt_staticvar.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2312,7 +2312,7 @@ tenets:
     doc:  Example query to find all instances of stmt_switch
     flows:
       codelingo/review
-	       comments: This is a stmt_switch.
+	       comment: This is a stmt_switch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2331,7 +2331,7 @@ tenets:
     doc:  Example query to find all instances of stmt_throw
     flows:
       codelingo/review
-	       comments: This is a stmt_throw.
+	       comment: This is a stmt_throw.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2350,7 +2350,7 @@ tenets:
     doc:  Example query to find all instances of stmt_trait
     flows:
       codelingo/review
-	       comments: This is a stmt_trait.
+	       comment: This is a stmt_trait.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2369,7 +2369,7 @@ tenets:
     doc:  Example query to find all instances of stmt_traituse
     flows:
       codelingo/review
-	       comments: This is a stmt_traituse.
+	       comment: This is a stmt_traituse.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2388,7 +2388,7 @@ tenets:
     doc:  Example query to find all instances of stmt_traituseadaptation_alias
     flows:
       codelingo/review
-	       comments: This is a stmt_traituseadaptation_alias.
+	       comment: This is a stmt_traituseadaptation_alias.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2407,7 +2407,7 @@ tenets:
     doc:  Example query to find all instances of stmt_traituseadaptation_precedence
     flows:
       codelingo/review
-	       comments: This is a stmt_traituseadaptation_precedence.
+	       comment: This is a stmt_traituseadaptation_precedence.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2426,7 +2426,7 @@ tenets:
     doc:  Example query to find all instances of stmt_trycatch
     flows:
       codelingo/review
-	       comments: This is a stmt_trycatch.
+	       comment: This is a stmt_trycatch.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2445,7 +2445,7 @@ tenets:
     doc:  Example query to find all instances of stmt_unset
     flows:
       codelingo/review
-	       comments: This is a stmt_unset.
+	       comment: This is a stmt_unset.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2464,7 +2464,7 @@ tenets:
     doc:  Example query to find all instances of stmt_use
     flows:
       codelingo/review
-	       comments: This is a stmt_use.
+	       comment: This is a stmt_use.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2483,7 +2483,7 @@ tenets:
     doc:  Example query to find all instances of stmt_useuse
     flows:
       codelingo/review
-	       comments: This is a stmt_useuse.
+	       comment: This is a stmt_useuse.
 	   query: |
 	     import codelingo/ast/php
 
@@ -2502,7 +2502,7 @@ tenets:
     doc:  Example query to find all instances of stmt_while
     flows:
       codelingo/review
-	       comments: This is a stmt_while.
+	       comment: This is a stmt_while.
 	   query: |
 	     import codelingo/ast/php
 

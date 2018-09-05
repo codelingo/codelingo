@@ -4,7 +4,7 @@ tenets:
       Find instances of 'errors.New(fmt.Sprintf(...))'.
     flows:
       codelingo/review:
-        comments: Should replace errors.New(fmt.Sprintf(...)) with errors.Errorf(...).
+        comment: Should replace errors.New(fmt.Sprintf(...)) with errors.Errorf(...).
     query: |
       import codelingo/ast/go
   

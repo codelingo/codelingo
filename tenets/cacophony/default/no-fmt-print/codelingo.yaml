@@ -9,7 +9,7 @@ tenets:
       3. log messages will never be interleaved.
     flows:
       codelingo/review:
-        comments: |
+        comment: |
           Use log.Print* instead. The log package is better suited for logging.
     query: |
       import (
