@@ -28,7 +28,11 @@ Our vision is for Codelingo to be the protocol on top of which the insights and 
 
 Test out writing and running a Tenet online with zero installs on the [playground](https://codelingo.io/playground) - it's easier than you think!
 
-<!-- TODO image of the playground UI -->
+<p align="center">
+  <a href="https://codelingo.io/playground" target="_blank">
+    <img src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_sandbox.png" />
+  </a>
+</p>
 
 <!-- TODO CLQL tutorial -->
 
@@ -45,11 +49,16 @@ tenets:
 
 Every pull request to your repository will now be checked against the go Tenet bundle we imported above. 
 
-<!-- TODO add screenshot of review comment -->
+<p align="center">
+<img src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_review2.png" />
+</p>
+
 
 Other Tenet bundles (including for other languages) from the community can be found under the [tenets directory](https://github.com/codelingo/codelingo/tree/master/tenets) in this repository.
 
 <!-- TODO add instructions on how to interact with Review Flow with GitHub comments -->
+
+
 
 ### Local Review Flow
 
@@ -77,7 +86,10 @@ You can now run the Review Flow to check your source code against the go Tenet b
 $ lingo run review
 ```
 
-<!-- TODO: screen shot of review result -->
+<p align="center">
+<img src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_local_review.png" />
+</p>
+
 
 ## Next Steps
 
@@ -89,7 +101,7 @@ See the [getting started guide](https://www.codelingo.io/docs/#getting-started) 
 
 <!-- TODO slack numbers -->
 
- - [slack](https://join.slack.com/t/codelingo/shared_invite/enQtMzY4MzA5ODYwOTYzLWVhMjI1ODU1YmM3ODAxYWUxNWU5ZTI0NWI0MGVkMmUwZDZhNWYxNGRiNWY4ZDY0NzRkMjU5YTRiYWY2N2FlMmU)
+ - [slack](https://join.slack.com/t/codelingo/shared_invite/enQtNDI5MjUzMDI3ODc4LWI3OGZiNWY1NTBkNGNiMmI3YTRmMjUwMzAyMzZlMDA5NDg0NGI0ZDAzOTFiZmQ5ZDg3ZjhkNDgyNmNlOGJhYzk)
  - [codelingo.io/discuss](http://codelingo.io/discuss)
  - [hello@codelingo.io](mailto:hello@codelingo.io)
 
