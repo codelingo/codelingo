@@ -11,16 +11,16 @@ tenets:
         go.decls:
           go.gen_decl:
             go.type_spec:
-              name as structType
+              go.ident:
+                name as structType
               go.struct_type:
                 go.field_list:
                   go.field:
                     go.names: 
-                      go.ident: 
+                      go.ident:
                         name as fieldName
                     go.array_type
           go.func_decl(depth = any):
-            name as updatingFunction
             go.field_list: # This refers to method reciever fields, not generic fields
               go.field:
                 go.names:
@@ -30,11 +30,14 @@ tenets:
                 #  go.ident: // Possible issue with variables and 'or' like the previous negation/variables issue
                 #    name == structType
                 go.star_expr:
-                  go.ident: 
+                  go.ident:
                     name == structType
+            go.ident:
+              name as updatingFunction
             go.block_stmt:
               go.call_expr(depth = any):
-                expr == "append"
+                go.ident:
+                  name == "append"
                 go.args:
                   go.selector_expr:
                     go.ident: # refers to lhs
@@ -52,9 +55,6 @@ tenets:
                     name == structType
             go.element(depth = any):  # Could refer to go.block_stmt or any other parent of for and assign
               go.assign_stmt: # repeated code
-                go.lhs:
-                  go.ident:
-                    name as pointerName
                 go.rhs:
                   go.unary_expr:
                     go.index_expr:
@@ -66,9 +66,6 @@ tenets:
               go.for_stmt:
                 exclude:
                   go.assign_stmt:
-                    go.lhs:
-                      go.ident:
-                        name as pointerName
                     go.rhs:
                       go.unary_expr:
                         go.index_expr:
@@ -77,7 +74,7 @@ tenets:
                               name == structName
                             go.ident:
                               name == fieldName
-                @ review.comment
+                @review.comment
                 go.call_expr(depth = any):
                   go.selector_expr:
                     go.ident:
