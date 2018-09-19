@@ -7,7 +7,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.file(depth = any): # package instead
+      go.file(depth = any): # TODO: package instead
         go.decls:
           go.gen_decl:
             go.type_spec:
@@ -26,11 +26,11 @@ tenets:
                 go.names:
                   go.ident:
                     name as structName
-                #or:
-                #  go.ident: // Possible issue with variables and 'or' like the previous negation/variables issue
-                #    name == structType
-                go.star_expr:
-                  go.ident:
+                any_of:
+                  go.star_expr:
+                    go.ident: # Handle pointer reciever
+                      name == structType
+                  go.ident: # Handle non-pointer reciever
                     name == structType
             go.ident:
               name as updatingFunction
@@ -45,7 +45,7 @@ tenets:
                     go.ident:
                       name == fieldName
           go.func_decl(depth = any):
-            go.field_list: # Repeated method-of-struct-structure should be captured in macrofact
+            go.field_list: # TODO: Repeated method-of-struct-structure macrofact
               go.field: 
                 go.names:
                   go.ident:
@@ -54,7 +54,7 @@ tenets:
                   go.ident: 
                     name == structType
             go.element(depth = any):  # Could refer to go.block_stmt or any other parent of for and assign
-              go.assign_stmt: # repeated code
+              go.assign_stmt:
                 go.rhs:
                   go.unary_expr:
                     go.index_expr:
@@ -65,7 +65,7 @@ tenets:
                           name == fieldName
               go.for_stmt:
                 exclude:
-                  go.assign_stmt:
+                  go.assign_stmt: # TODO: repeated index-of-array macrofact
                     go.rhs:
                       go.unary_expr:
                         go.index_expr:
