@@ -1,0 +1,36 @@
+functions:
+  - name: newConcat
+    type: resolver
+    body: |
+      function (a, b) {
+        return a.concat(b);
+      }
+  - name: testFile
+    type: resolver
+    body: |
+      function (filename) {
+        return filename.split(".")[0] + "_test.gko";
+      }
+tenets:
+  - name: find-funcs
+    doc: Example tenet that finds all exported functions that do not have a corresponding test function.
+    flows:
+      codelingo/review:
+        comment: This exported function does not have a corresponding test function.
+    query: |
+      import codelingo/ast/go
+      go.file(depth = any):
+        filename as filename
+        go.decls:
+          @review.comment
+          go.func_decl:
+            go.ident:
+              public == "true"
+              name as funcName
+      exclude:
+        go.file(depth = any):
+          filename == testFile(filename)
+          go.decls:
+            go.func_decl:
+              go.ident:
+                name == newConcat("Test", funcName)
