@@ -1,0 +1,33 @@
+tenets:
+  - name: find-funcs
+    doc: Example tenet that finds unsafe variables in goroutines.
+    flows:
+      codelingo/review:
+        comments: This variable is not safe to use in this goroutine.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        go.decls:
+          go.func_decl:
+            any_of:
+              go.range_stmt(depth = any):
+                go.go_stmt(depth = any):
+                  go.expr_stmt(depth = any):
+                    @review.comment
+                    go.ident:
+                      name as identName
+                  exclude:
+                    go.names(depth = any):
+                      go.ident(depth = any):
+                        name == identName
+              go.for_stmt(depth = any):
+                go.go_stmt(depth = any):
+                  go.expr_stmt(depth = any):
+                    @review.comment
+                    go.ident:
+                      name as identName
+                  exclude:
+                    go.names(depth = any):
+                      go.ident(depth = any):
+                        name == identName
