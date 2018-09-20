@@ -1,0 +1,23 @@
+[
+    {
+     "name": "find-funcs",
+     "position": {
+      "start": {
+       "filename": "main_test.go",
+       "Offset": 14,
+       "Line": 3,
+       "Column": 1
+      },
+      "end": {
+       "filename": "main_test.go",
+       "Offset": 43,
+       "Line": 5,
+       "Column": 2
+      }
+     },
+     "comment": "This exported function does not have a corresponding test function.",
+     "ctxBefore": "package main\n",
+     "lineText": "func TestPrint() {\n\tPrint()\n}",
+     "newCode": true
+    }
+   ]
