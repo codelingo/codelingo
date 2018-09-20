@@ -11,6 +11,12 @@ functions:
       function (filename) {
         return filename.split(".")[0] + "_test.go";
       }
+  - name: doesNotContain
+    type: asserter
+    body: |
+      function (str, substr) {
+        return str.indexOf(substr) == -1
+      }
 tenets:
   - name: find-funcs
     doc: Example tenet that finds all exported functions that do not have a corresponding test function.
@@ -21,6 +27,7 @@ tenets:
       import codelingo/ast/go
       go.file(depth = any):
         filename as filename
+        doesNotContain(filename, "_test.go")
         go.decls:
           @review.comment
           go.func_decl:
