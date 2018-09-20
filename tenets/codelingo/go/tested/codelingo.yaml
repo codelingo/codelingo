@@ -9,7 +9,7 @@ functions:
     type: resolver
     body: |
       function (filename) {
-        return filename.split(".")[0] + "_test.gko";
+        return filename.split(".")[0] + "_test.go";
       }
 tenets:
   - name: find-funcs
