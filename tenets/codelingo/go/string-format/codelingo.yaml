@@ -1,0 +1,30 @@
+functions:
+  - name: countVerbs
+    type: asserter
+    body: |
+      function (cc, str) {
+        var count = 1;
+        if (str[0] == '%') count++;
+        for (var i = 1; i < str.length; i++) {
+          if (str[i] == '%' && str[i-1] != '\\') count++;
+        }
+        return count != cc;
+      }
+tenets:
+  - name: find-funcs
+    doc: Find formatted strings missing variable(s).
+    flows:
+      codelingo/review:
+        comment: This formatted string is missing variable(s)
+    query: |
+      import codelingo/ast/go
+      @review.comment
+      go.call_expr(depth = any):
+        go.selector_expr
+        go.args:
+          child_count as cc
+          go.basic_lit:
+            kind == "string"
+            value as strValue
+          countVerbs(cc, strValue)
+
