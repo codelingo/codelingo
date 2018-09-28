@@ -1,0 +1,24 @@
+[
+  {
+   "name": "init",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 247,
+     "Line": 23,
+     "Column": 6
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 251,
+     "Line": 23,
+     "Column": 10
+    }
+   },
+   "comment": "Init functions cause an import to have a side effects, and side effects are hard to test, reduce readability and increase the complexity of code.",
+   "ctxBefore": "}\n",
+   "lineText": "func init() {",
+   "ctxAfter": "}\n",
+   "newCode": true
+  }
+ ]
