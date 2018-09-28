@@ -1,0 +1,24 @@
+tenets:
+  - name: println-format-strings
+    doc: |
+      Find Print and Println using format strings.
+    flows:
+      codelingo/review:
+        comment: |
+          {{identName}} doesn't support format strings, use Printf instead.
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.call_expr(depth = any):
+        go.selector_expr:
+          go.ident:
+            @review.vars.identName
+            name as identName
+            regex(/^(Sp|P)rint(ln)?$/, identName)
+        go.args:
+          go.basic_lit:
+            kind == "string"
+            value as litVal
+            regex(/\%[a-zA-Z#]/, litVal)
+
