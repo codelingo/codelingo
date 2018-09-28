@@ -6,15 +6,14 @@ tenets:
         comment: This private function is not used in the package.
     query: |
       import codelingo/ast/go
-      go.package:
-        go.func_decl(depth = any):
-          @review.comment
+      go.func_decl(depth = any):
+        @review.comment
+        go.ident:
+          private == "true"
+          name as funcName
+          name != "main"
+          name != "init"
+      exclude:
+        go.call_expr(depth = any):
           go.ident:
-            private == "true"
             name as funcName
-            exclude:
-              name == "main"
-        exclude:
-          go.call_expr(depth = any):
-            go.ident:
-              name as funcName
