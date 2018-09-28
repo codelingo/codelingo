@@ -19,11 +19,11 @@ func correct() {
 }
 
 func incorrect() {
-	fmt.Println("hello %s", "world")
+	fmt.Println("hello %s", "world") // ISSUE
 
 	var str string
-	str = fmt.Sprint("hello %s\n", "world")
+	str = fmt.Sprint("hello %s\n", "world") // ISSUE
 	fmt.Print(str)
-	str = fmt.Sprint("4 + 6 = %d\n", 4+6)
+	str = fmt.Sprint("4 + 6 = %d\n", 4+6) // ISSUE
 	fmt.Print(str)
 }
