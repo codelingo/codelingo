@@ -1,0 +1,18 @@
+tenets:
+  - name: unconvert
+    doc: |
+      Identify unnecessary type conversions
+    flows:
+      codelingo/review:
+        comment: Unnecessary type conversion {{name}}; i.e., expression {{name}}(x) where x already has type {{name}}.
+    query: |
+      import codelingo/ast/go
+      go.file(depth = any):
+        go.call_expr(depth = any):
+          go.ident:
+            @ review.vars.name
+            name as typeName
+          go.args:
+            @ review.comment
+            go.ident:
+              type == typeName
