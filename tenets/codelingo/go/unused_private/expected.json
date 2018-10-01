@@ -1,0 +1,24 @@
+[
+  {
+   "name": "unused_private",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 32,
+     "Line": 5,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 43,
+     "Line": 5,
+     "Column": 16
+    }
+   },
+   "comment": "privateVarA is private yet not referenced anywhere else in the file example.go.\n",
+   "ctxBefore": "import \"fmt\"\n",
+   "lineText": "var privateVarA string = \"baz\"",
+   "ctxAfter": "var privateVarB string = \"baz\"\n",
+   "newCode": true
+  }
+ ]
