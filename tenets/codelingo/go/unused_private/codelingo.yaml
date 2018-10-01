@@ -1,0 +1,30 @@
+tenets:
+  - name: unused_private
+    doc: |
+      Find unused private const, var, func, struct in Go.
+    flows:
+      codelingo/review:
+        comment: |
+          {{thingname}} is private yet not referenced anywhere else in the file {{myfname}}.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        @ review.vars.myfname
+        filename as fname
+        go.decls:
+          go.gen_decl:
+            go.value_spec:
+              go.names:
+                @ review.comment
+                go.ident(depth = any):
+                  @ review.vars.thingname
+                  name as privateVarName
+                  private == "true"
+      go.file(depth = any):
+        filename == fname
+        go.call_expr(depth = any):
+          go.args:
+            go.ident:
+              name == privateVarName
+              private == "true"
