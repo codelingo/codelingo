@@ -19,11 +19,16 @@ func unexportedFunc() {
 	}
 
 	fmt.Printf("%t\n", b.m["exhibit B"])
+	fmt.Printf("%s\n", privateVarB)
 }
 
 var privateVarA string = "baz"
 var privateVarB string = "baz"
+var privateVarC string = "baz"
 
 func foo() {
+    a := unexportedVar
+    fmt.Printf("%s\n", a)
+
 	fmt.Printf("%s\n", privateVarA)
 }

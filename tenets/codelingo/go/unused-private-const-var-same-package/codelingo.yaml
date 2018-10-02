@@ -22,8 +22,6 @@ tenets:
                     private == "true"
         exclude:
           go.file(depth = any):
-            go.call_expr(depth = any):
-              go.args:
-                go.ident:
-                  name == privateVarName
-                  private == "true"
+            go.ident(depth = any):
+              name == privateVarName
+              private == "true"
