@@ -5,22 +5,19 @@ tenets:
     flows:
       codelingo/review:
         comment: |
-          '{{thingname}}' is private yet it is not referenced anywhere else in its package.
-          It should probably be removed.
+          Private global {{globalname}} is never used.  It should probably be removed.
     query: |
       import codelingo/ast/go
 
       go.dir:
         go.file(depth = any):
-          @ review.vars.myfname
-          filename
           go.decls:
             go.gen_decl:
               go.value_spec:
                 go.names:
                   @ review.comment
                   go.ident:
-                    @ review.vars.thingname
+                    @ review.vars.globalname
                     name as privateVarName
                     private == "true"
         exclude:
