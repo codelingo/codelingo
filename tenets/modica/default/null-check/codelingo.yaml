@@ -6,8 +6,14 @@ tenets:
     doc: Finds all calls to null-check
     query: |
       import codelingo/ast/php
-  
-      @ review.comment
-      php.expr_funccall(depth = any):
-        php.name_fullyqualified:
-          name == "is_null"
+
+      php.file(depth = any):
+        any_of:
+          @review.comment
+          php.expr_funccall(depth = any):
+            php.name_fullyqualified:
+              name == "is_null"
+          @review.comment
+          php.expr_funccall(depth = any):
+            php.name:
+              name == "is_null"
