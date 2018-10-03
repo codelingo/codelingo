@@ -1,0 +1,25 @@
+[
+    {
+     "name": "parallel-integration-tests",
+     "position": {
+      "start": {
+       "filename": "auth_integration_test.go",
+       "Offset": 163,
+       "Line": 10,
+       "Column": 2
+      },
+      "end": {
+       "filename": "auth_integration_test.go",
+       "Offset": 175,
+       "Line": 10,
+       "Column": 14
+      }
+     },
+     "comment": "Integration tests should not use t.Paralle()",
+     "ctxBefore": "\nfunc TestAuthConfigParallel(t *testing.T) {",
+     "lineText": "\tt.Parallel()",
+     "ctxAfter": "\tauth.DoAuthStuff()\n}",
+     "newCode": true
+    }
+   ]
+  
