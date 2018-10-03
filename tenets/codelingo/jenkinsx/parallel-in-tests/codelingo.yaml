@@ -1,0 +1,49 @@
+functions:
+- name: excludeIntegration
+  type: asserter
+  body: |
+    function (str) {
+      return str.match(/.*_test.go$/) && !str.match(/.*_integration_test.go$/);
+    }
+tenets:
+  - name: parallel-in-tests
+    doc: |
+      Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
+
+      https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
+    flows:
+      codelingo/review:
+        comment: Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        filename as fname
+        excludeIntegration(fname)
+        @review.comment
+        go.func_decl(depth = any):
+          go.ident:
+            name as funcName
+            regex(/Test.*/, funcName)
+          go.func_type:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident:
+                    name == "t"
+                go.star_expr:
+                  go.selector_expr:
+                    go.ident:
+                      name == "testing"
+                    go.ident:
+                      name == "T"
+          exclude:
+            go.block_stmt:
+              go.list:
+                go.expr_stmt:
+                  go.call_expr:
+                    go.selector_expr:
+                      go.ident:
+                        name == "t"
+                      go.ident:
+                        name == "Parallel"
