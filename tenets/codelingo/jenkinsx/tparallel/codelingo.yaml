@@ -1,0 +1,20 @@
+tenets:
+  # Integration test suite
+  - name: parallel-integration-tests
+    doc: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
+    flows:
+      codelingo/review:
+        comment: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        filename as fname
+        regex(/.*_integration_test.go/, fname)
+        @ review.comment
+        go.call_expr(depth = any):
+          go.selector_expr:
+            go.ident:
+              name == "t"
+            go.ident:
+              name == "Parallel"
