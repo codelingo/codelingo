@@ -148,3 +148,50 @@ tenets:
           go.ident:
             name as packagename
             regex(/.*_test/, packagename)
+
+## Better solutions:
+# Match files that have some characteristic of an integration test and are missing
+# a characteristic. Failing due to "hit a uncaught error: got 0 results expecting 1 for block h, fact "common.comment_group"
+
+# @review.comment
+# go.file(depth = any):
+#   any_of:
+#     filename as fname
+#     regex(/.*_integration_test.go/, fname)
+#     go.comment_group:
+#       go.comment:
+#         start_offset == 0
+#         text == "// +build integration"
+#     # The only top level ident in a go file is (should be) the package name
+#     go.ident:
+#       name as packagename
+#       regex(/.*_test/, packagename)
+#   exclude:
+#     # TODO: with fragment for fully repeated code
+#     any_of:
+#       filename as fname
+#       regex(/.*_test.go, fname/)
+#       go.comment_group:
+#         go.comment:
+#           start_offset == 0
+#           text == "// +build integration"
+#       # The only top level ident in a go file is (should be) the package name
+#       go.ident:
+#         name as packagename
+#         regex(/.*_test/, packagename)
+
+# Match a file that has one or two of the three charateristics of integration tests
+# Not implemented
+# @review.comment
+# go.file(depth = any):
+#   1:2_of:
+#     filename as fname
+#     regex(/.*_integration_test.go/, fname)
+#     go.comment_group:
+#       go.comment:
+#         start_offset == 0
+#         text == "// +build integration"
+#     # The only top level ident in a go file is (should be) the package name
+#     go.ident:
+#       name as packagename
+#       regex(/.*_test/, packagename)
