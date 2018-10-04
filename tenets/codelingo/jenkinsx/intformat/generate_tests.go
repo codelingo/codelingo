@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 )
 
 type srccode struct {
@@ -36,7 +37,7 @@ func main() {
 
 		var packageName = ""
 		if example.hasValidPackage {
-			packageName = "_integration_test"
+			packageName = "_test"
 			fname += "P"
 		} else {
 			fname += "O"
@@ -49,7 +50,7 @@ func main() {
 			fname += "O"
 		}
 
-		err := ioutil.WriteFile(fname+".go", []byte(fmt.Sprintf(filetemplate, intd, packageName, fname)), 0644)
+		err := ioutil.WriteFile(filepath.Join("src/", fname+".go"), []byte(fmt.Sprintf(filetemplate, intd, packageName, fname)), 0644)
 		if err != nil {
 			panic(err)
 		}

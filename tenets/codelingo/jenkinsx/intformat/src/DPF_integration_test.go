@@ -1,5 +1,5 @@
 // +build integration
 
-package intformat_integration_test
+package intformat_test
 
 func DPF_integration_test() {}
