@@ -1,0 +1,46 @@
+[
+  {
+   "name": "orginterfaces",
+   "position": {
+    "start": {
+     "filename": "bad-interface.go",
+     "Offset": 56,
+     "Line": 6,
+     "Column": 15
+    },
+    "end": {
+     "filename": "bad-interface.go",
+     "Offset": 102,
+     "Line": 9,
+     "Column": 2
+    }
+   },
+   "comment": "Interfaces should be defined in a file called interface.go in the relevant folder.",
+   "ctxBefore": "import \"math\"\n",
+   "lineText": "type geometry interface {\n\tarea() float64\n\tperim() float64\n}",
+   "ctxAfter": "\ntype rect struct {",
+   "newCode": true
+  },
+  {
+   "name": "orginterfaces",
+   "position": {
+    "start": {
+     "filename": "example/bad-interface-2.go",
+     "Offset": 59,
+     "Line": 6,
+     "Column": 18
+    },
+    "end": {
+     "filename": "example/bad-interface-2.go",
+     "Offset": 111,
+     "Line": 9,
+     "Column": 2
+    }
+   },
+   "comment": "Interfaces should be defined in a file called interface.go in the relevant folder.",
+   "ctxBefore": "import \"math\"\n",
+   "lineText": "type badGeometry interface {\n\tbadArea() float64\n\tbadPerim() float64\n}",
+   "ctxAfter": "\ntype badRect struct {",
+   "newCode": true
+  }
+ ]
