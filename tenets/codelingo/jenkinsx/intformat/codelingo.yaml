@@ -1,9 +1,9 @@
 functions:
-- name: notIntegrationTestFile
-  type: asserter
+- name: append
+  type: resolver
   body: |
-    function (str) {
-      return str.indexOf("_integration_test.go", str.length - 8) === -1
+    function (a, b) {
+      return a + b
     }
 tenets:
   # Tenets that ensure integration tests have the correct package name, file name,
@@ -32,13 +32,16 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         go.comment_group:
           go.comment:
             start_offset == 0
             text == "// +build integration"
-        filename as fname
-        notIntegrationTestFile(fname)
+        filename != append(packagename, "_integration_test.go")
 
   - name: right-build-directive-wrong-package
     doc: |
@@ -54,6 +57,10 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         go.comment_group:
           go.comment:
@@ -62,8 +69,8 @@ tenets:
         exclude:
         # The only top level ident in a go file is (should be) the package name
           go.ident:
-            name as packagename
-            regex(/.*_test/, packagename)
+            name as testPackageName
+            name == append(packageName, "_test")
 
   - name: right-package-wrong-build-directive
     doc: |
@@ -79,11 +86,15 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         # The only top level ident in a go file is (should be) the package name
         go.ident:
-          name as packagename
-          regex(/.*_test/, packagename)
+          name as testPackageName
+          name == append(packageName, "_test")
         exclude:
           go.comment_group:
             go.comment:
@@ -104,13 +115,16 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         # The only top level ident in a go file is (should be) the package name
         go.ident:
-          name as packagename
-          regex(/.*_test/, packagename)
-        filename as fname
-        notIntegrationTestFile(fname)
+          name as testPackageName
+          name == append(packageName, "_test")
+        filename != append(packagename, "_integration_test.go")
 
   - name: right-file-wrong-build-directive
     doc: |
@@ -126,9 +140,13 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         filename as fname
-        regex(/.*_integration_test.go/, fname)
+        filename == append(packageName, "integration_test.go")
         exclude:
           go.comment_group:
             go.comment:
@@ -149,14 +167,18 @@ tenets:
       import codelingo/ast/go
 
       @review.comment
+      go.dir(depth = any):
+        go.file:
+          go.ident:
+            name as packageName
       go.file(depth = any):
         filename as fname
-        regex(/.*_integration_test.go/, fname)
+        filename == append(packageName, "integration_test.go")
         exclude:
           # The only top level ident in a go file is (should be) the package name
           go.ident:
-            name as packagename
-            regex(/.*_test/, packagename)
+            name as testPackageName
+            name == append(packageName, "_test")
 
 ## Better solutions:
 # Match files that have some characteristic of an integration test and are missing
@@ -166,15 +188,15 @@ tenets:
 # go.file(depth = any):
 #   any_of:
 #     filename as fname
-#     regex(/.*_integration_test.go/, fname)
+#     filename == append(packageName, "integration_test.go")
 #     go.comment_group:
 #       go.comment:
 #         start_offset == 0
 #         text == "// +build integration"
 #     # The only top level ident in a go file is (should be) the package name
 #     go.ident:
-#       name as packagename
-#       regex(/.*_test/, packagename)
+#       name as testPackageName
+name == append(packageName, "_test")
 #   exclude:
 #     # TODO: with fragment for fully repeated code
 #     any_of:
@@ -186,8 +208,8 @@ tenets:
 #           text == "// +build integration"
 #       # The only top level ident in a go file is (should be) the package name
 #       go.ident:
-#         name as packagename
-#         regex(/.*_test/, packagename)
+#         name as testPackageName
+name == append(packageName, "_test")
 
 # Match a file that has one or two of the three charateristics of integration tests
 # Not implemented
@@ -195,12 +217,12 @@ tenets:
 # go.file(depth = any):
 #   1:2_of:
 #     filename as fname
-#     regex(/.*_integration_test.go/, fname)
+#     filename == append(packageName, "integration_test.go")
 #     go.comment_group:
 #       go.comment:
 #         start_offset == 0
 #         text == "// +build integration"
 #     # The only top level ident in a go file is (should be) the package name
 #     go.ident:
-#       name as packagename
-#       regex(/.*_test/, packagename)
+#       name as testPackageName
+name == append(packageName, "_test")
