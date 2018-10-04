@@ -1,0 +1,150 @@
+functions:
+- name: notTestFile
+  type: asserter
+  body: |
+    function (str) {
+      return str.indexOf("_test.go", str.length - 8) === -1
+    }
+tenets:
+  # Tenets that ensure integration tests have the correct package name, file name,
+  # and custom build directive.
+  # There is an explicit tenet for each case. See more concise possible solutions below.
+  - name: right-build-directive-wrong-file
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-build-directive-wrong-file
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        go.comment_group:
+          go.comment:
+            start_offset == 0
+            text == "// +build integration"
+        filename as fname
+        notTestFile(fname)
+
+  - name: right-build-directive-wrong-package
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-build-directive-wrong-package
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        go.comment_group:
+          go.comment:
+            start_offset == 0
+            text == "// +build integration"
+        exclude:
+        # The only top level ident in a go file is (should be) the package name
+          go.ident:
+            name as packagename
+            regex(/.*_test/, packagename)
+
+  - name: right-package-wrong-build-directive
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-package-wrong-build-directive
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        # The only top level ident in a go file is (should be) the package name
+        go.ident:
+          name as packagename
+          regex(/.*_test/, packagename)
+        exclude:
+          go.comment_group:
+            go.comment:
+              start_offset == 0
+              text == "// +build integration"
+
+  - name: right-package-wrong-file
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-package-wrong-file
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        # The only top level ident in a go file is (should be) the package name
+        go.ident:
+          name as packagename
+          regex(/.*_test/, packagename)
+        filename as fname
+        notTestFile(fname)
+
+  - name: right-file-wrong-build-directive
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-file-wrong-build-directive
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        filename as fname
+        regex(/.*_integration_test.go/, fname)
+        exclude:
+          go.comment_group:
+            go.comment:
+              start_offset == 0
+              text == "// +build integration"
+
+  - name: right-file-wrong-package
+    doc: |
+      Integration tests should have the custom build directive `// +build integration`,
+      belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    flows:
+      codelingo/review:
+        comment: |
+          right-file-wrong-package
+          Integration tests should have the custom build directive `// +build integration`,
+          belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.file(depth = any):
+        filename as fname
+        regex(/.*_integration_test.go/, fname)
+        exclude:
+          # The only top level ident in a go file is (should be) the package name
+          go.ident:
+            name as packagename
+            regex(/.*_test/, packagename)
