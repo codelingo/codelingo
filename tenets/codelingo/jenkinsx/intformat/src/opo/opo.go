@@ -1,0 +1,3 @@
+package opo
+
+func opo() {}

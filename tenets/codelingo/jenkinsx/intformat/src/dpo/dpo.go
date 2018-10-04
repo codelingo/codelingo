@@ -1,0 +1,3 @@
+package dpo
+
+func dpo() {}

@@ -1,0 +1,3 @@
+package oof
+
+func oof() {}

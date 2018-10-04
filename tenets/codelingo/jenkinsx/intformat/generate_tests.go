@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 )
 
@@ -26,41 +27,86 @@ func main() {
 		{true, true, false},
 		{true, true, true},
 	} {
-		var fname string
-		var intd = ""
+		var idString string
+		var integrationDirective = ""
 		if example.hasIntegrationDirective {
-			intd = "// +build integration"
-			fname += "D"
+			integrationDirective = "// +build integration"
+			idString += "d"
 		} else {
-			fname += "O"
+			idString += "o"
 		}
 
-		var packageName = ""
 		if example.hasValidPackage {
-			packageName = "_test"
-			fname += "P"
+			idString += "p"
 		} else {
-			fname += "O"
+			idString += "o"
 		}
 
 		if example.hasValidFilename {
-			fname += "F"
-			fname += "_integration_test"
+			idString += "f"
 		} else {
-			fname += "O"
+			idString += "o"
 		}
 
-		err := ioutil.WriteFile(filepath.Join("src/", fname+".go"), []byte(fmt.Sprintf(filetemplate, intd, packageName, fname)), 0644)
+		testPackageName := idString
+		if example.hasValidPackage {
+			testPackageName += "_test"
+		} else {
+			testPackageName += invalidator
+		}
+
+		testFileName := idString
+		if example.hasValidFilename {
+			testFileName += "_integration_test"
+		} else {
+			testFileName += invalidator
+		}
+
+		testFileName = filepath.Join("src", idString, testFileName+".go")
+		dirFileName := filepath.Join("src", idString)
+		srcFileName := filepath.Join("src", idString, idString+".go")
+
+		if _, err := os.Stat(dirFileName); os.IsNotExist(err) {
+			os.Mkdir(dirFileName, os.FileMode(0777))
+		}
+
+		fileMode := os.FileMode(0666)
+		err := ioutil.WriteFile(testFileName, []byte(fmt.Sprintf(
+			testFileTemplate,
+			integrationDirective,
+			testPackageName,
+			idString,
+			idString,
+		)), fileMode)
+		if err != nil {
+			panic(err)
+		}
+
+		err = ioutil.WriteFile(srcFileName, []byte(fmt.Sprintf(
+			srcFileTemplate,
+			idString,
+			idString,
+		)), fileMode)
 		if err != nil {
 			panic(err)
 		}
 	}
 }
 
-var filetemplate = `
+var invalidator = "invalid"
+
+var testFileTemplate = `
 %s
 
-package intformat%s
+package %s
+
+func Test%s() {
+	%s()
+}
+`[1:]
+
+var srcFileTemplate = `
+package %s
 
 func %s() {}
 `[1:]

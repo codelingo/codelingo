@@ -1,0 +1,3 @@
+package doo
+
+func doo() {}

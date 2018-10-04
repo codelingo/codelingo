@@ -1,0 +1,3 @@
+package dof
+
+func dof() {}
