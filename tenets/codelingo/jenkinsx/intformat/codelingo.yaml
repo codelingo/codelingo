@@ -1,9 +1,9 @@
 functions:
-- name: notTestFile
+- name: notIntegrationTestFile
   type: asserter
   body: |
     function (str) {
-      return str.indexOf("_test.go", str.length - 8) === -1
+      return str.indexOf("_integration_test.go", str.length - 8) === -1
     }
 tenets:
   # Tenets that ensure integration tests have the correct package name, file name,
@@ -38,7 +38,7 @@ tenets:
             start_offset == 0
             text == "// +build integration"
         filename as fname
-        notTestFile(fname)
+        notIntegrationTestFile(fname)
 
   - name: right-build-directive-wrong-package
     doc: |
@@ -110,7 +110,7 @@ tenets:
           name as packagename
           regex(/.*_test/, packagename)
         filename as fname
-        notTestFile(fname)
+        notIntegrationTestFile(fname)
 
   - name: right-file-wrong-build-directive
     doc: |
