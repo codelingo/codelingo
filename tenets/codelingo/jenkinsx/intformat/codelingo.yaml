@@ -23,6 +23,10 @@ tenets:
   # right-file-wrong-build-directive.
   # This gives a total of 12 issues.
 
+  # Caveat: we don't test that the test package name is `<pkgname>_test`, we just test
+  # that it ends in `_test`. Similarly we don't test that the test file name is
+  # `<pkgname>_integration_test.go`, we just test that it ends in `integration_test.go`.
+
   # There is an explicit tenet for each case. See more concise possible solutions below.
   - name: right-build-directive-wrong-file
     doc: |
