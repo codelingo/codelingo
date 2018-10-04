@@ -1,0 +1,3 @@
+package ooo
+
+func ooo() {}

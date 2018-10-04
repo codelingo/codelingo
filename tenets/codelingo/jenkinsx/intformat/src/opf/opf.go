@@ -1,0 +1,3 @@
+package opf
+
+func opf() {}
