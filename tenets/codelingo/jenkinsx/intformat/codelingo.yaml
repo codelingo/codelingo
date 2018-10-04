@@ -13,7 +13,7 @@ functions:
     }
 tenets:
   # Tenets that ensure integration tests have the correct package name, file name,
-  # and custom build directive.
+  # and custom build directive as per https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#integration-tests.
 
   # There is a test file for each possible combination of having the directive (D),
   # correct package name (P), and correct filename (F). Every combination except
