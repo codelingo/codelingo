@@ -8,6 +8,15 @@ functions:
 tenets:
   # Tenets that ensure integration tests have the correct package name, file name,
   # and custom build directive.
+
+  # There is a test file for each possible combination of having the directive (D),
+  # correct package name (P), and correct filename (F). Every combination except
+  # DPF and OOO will be matched by two tenets. For example, DOO will be matched by
+  # right-build-directive-wrong-file and right-build-directive-wrong-package,
+  #  and OPF will be matched by right-package-wrong-build-directive and 
+  # right-file-wrong-build-directive.
+  # This gives a total of 12 issues.
+
   # There is an explicit tenet for each case. See more concise possible solutions below.
   - name: right-build-directive-wrong-file
     doc: |
