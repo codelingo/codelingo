@@ -1,0 +1,26 @@
+functions:
+- name: missingTestSuffix
+  type: asserter
+  body: |
+    function (str) {
+      return !str.match(/.*_test$/);
+    }
+tenets:
+  - name: test-package-name
+    doc: |
+      Best practice for unit tests is to define the testing package appending _test to the name of your package. This encourages good package design and will enable you to define the exported package API in a composable way.
+
+      https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
+    flows:
+      codelingo/review:
+        comment: Best practice for unit tests is to define the testing package appending _test to the name of your package.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        @review.comment
+        go.ident:
+          name as packageName
+          missingTestSuffix(packageName)
+        filename as fname
+        regex(/.*_test.go/, fname)
