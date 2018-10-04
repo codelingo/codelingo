@@ -5,6 +5,12 @@ functions:
     function (a, b) {
       return a + b
     }
+- name: doesNotMatch
+  type: asserter
+  body: |
+    function (reg, str) {
+      return !str.match(reg)
+    }
 tenets:
   # Tenets that ensure integration tests have the correct package name, file name,
   # and custom build directive.
@@ -31,17 +37,20 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        go.comment_group:
-          go.comment:
-            start_offset == 0
-            text == "// +build integration"
-        filename != append(packagename, "_integration_test.go")
+            doesNotMatch(/test/, packageName)
+        @review.comment
+        go.file:
+          go.comment_group:
+            go.comment:
+              start_offset == 0
+              text == "// +build integration"
+          filename as fname
+          doesNotMatch(/_integration_test.go/, fname)
+          # filename != append("packageName", "_integration_test.go")
 
   - name: right-build-directive-wrong-package
     doc: |
@@ -56,21 +65,23 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        go.comment_group:
-          go.comment:
-            start_offset == 0
-            text == "// +build integration"
-        exclude:
-        # The only top level ident in a go file is (should be) the package name
-          go.ident:
+            doesNotMatch(/test/, packageName)
+        # @review.comment
+        go.file:
+          go.comment_group:
+            go.comment:
+              start_offset == 0
+              text == "// +build integration"
+          # The only top level ident in a go file is (should be) the package name
+          @review.comment
+          go.ident(depth = 0:2):
             name as testPackageName
-            name == append(packageName, "_test")
+            doesNotMatch(/_test/, testPackageName)
+            # name != append(packageName, "_test")
 
   - name: right-package-wrong-build-directive
     doc: |
@@ -85,21 +96,21 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        # The only top level ident in a go file is (should be) the package name
-        go.ident:
-          name as testPackageName
-          name == append(packageName, "_test")
-        exclude:
-          go.comment_group:
-            go.comment:
-              start_offset == 0
-              text == "// +build integration"
+            doesNotMatch(/test/, packageName)
+        @review.comment
+        go.file:
+          # The only top level ident in a go file is (should be) the package name
+          go.ident:
+            name == append(packageName, "_test")
+          exclude:
+            go.comment_group:
+              go.comment:
+                start_offset == 0
+                text == "// +build integration"
 
   - name: right-package-wrong-file
     doc: |
@@ -114,17 +125,19 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        # The only top level ident in a go file is (should be) the package name
-        go.ident:
-          name as testPackageName
-          name == append(packageName, "_test")
-        filename != append(packagename, "_integration_test.go")
+            doesNotMatch(/test/, packageName)
+        @review.comment
+        go.file:
+          # The only top level ident in a go file is (should be) the package name
+          go.ident:
+            name == append(packageName, "_test")
+          filename as fname
+          doesNotMatch(/_integration_test.go/, fname)
+          # filename != append(packageName, "_integration_test.go")
 
   - name: right-file-wrong-build-directive
     doc: |
@@ -139,19 +152,21 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        filename as fname
-        filename == append(packageName, "integration_test.go")
-        exclude:
-          go.comment_group:
-            go.comment:
-              start_offset == 0
-              text == "// +build integration"
+            doesNotMatch(/test/, packageName)
+        @review.comment
+        go.file:
+          filename as fname
+          regex(/integration_test.go/, fname)
+          # filename == append(packageName, "integration_test.go")
+          exclude:
+            go.comment_group:
+              go.comment:
+                start_offset == 0
+                text == "// +build integration"
 
   - name: right-file-wrong-package
     doc: |
@@ -166,19 +181,22 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
       go.dir(depth = any):
-        go.file:
+        go.file(depth = 0:2):
           go.ident:
             name as packageName
-      go.file(depth = any):
-        filename as fname
-        filename == append(packageName, "integration_test.go")
-        exclude:
-          # The only top level ident in a go file is (should be) the package name
-          go.ident:
-            name as testPackageName
-            name == append(packageName, "_test")
+            doesNotMatch(/test/, packageName)
+        @review.comment
+        go.file:
+          filename as fname
+          regex(/integration_test.go/, fname)
+          # filename == append(packageName, "integration_test.go")
+          exclude:
+            # The only top level ident in a go file is (should be) the package name
+            go.ident:
+              name as testPackagename
+              regex(/_test/, testPackagename)
+              # name == append(packageName, "_test")
 
 ## Better solutions:
 # Match files that have some characteristic of an integration test and are missing
@@ -196,7 +214,7 @@ tenets:
 #     # The only top level ident in a go file is (should be) the package name
 #     go.ident:
 #       name as testPackageName
-name == append(packageName, "_test")
+#       name == append(packageName, "_test")
 #   exclude:
 #     # TODO: with fragment for fully repeated code
 #     any_of:
@@ -209,7 +227,7 @@ name == append(packageName, "_test")
 #       # The only top level ident in a go file is (should be) the package name
 #       go.ident:
 #         name as testPackageName
-name == append(packageName, "_test")
+#       name == append(packageName, "_test")
 
 # Match a file that has one or two of the three charateristics of integration tests
 # Not implemented
@@ -225,4 +243,4 @@ name == append(packageName, "_test")
 #     # The only top level ident in a go file is (should be) the package name
 #     go.ident:
 #       name as testPackageName
-name == append(packageName, "_test")
+#       name == append(packageName, "_test")
