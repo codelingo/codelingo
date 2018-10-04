@@ -203,8 +203,9 @@ tenets:
               # name == append(packageName, "_test")
 
 ## Better solutions:
-# Match files that have some characteristic of an integration test and are missing
-# a characteristic. Failing due to "hit a uncaught error: got 0 results expecting 1 for block h, fact "common.comment_group"
+# Match files that have at least one of the three characteristics of an integration
+# test and are also missing at least one.
+# Failing due to "hit a uncaught error: got 0 results expecting 1 for block h, fact "common.comment_group"
 
 # @review.comment
 # go.file(depth = any):
