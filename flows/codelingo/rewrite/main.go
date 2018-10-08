@@ -17,6 +17,11 @@ import (
 	"github.com/juju/errors"
 )
 
+const (
+	vcsGit string = "git"
+	vcsP4  string = "perforce"
+)
+
 var rewriteCmd = cli.Command{
 	Name:  "rewrite",
 	Usage: "Modify code following tenets in codelingo.yaml.",
@@ -136,8 +141,8 @@ func rewriteCMD(cliCtx *cli.Context) (string, error) {
 
 	sha, err := repo.CurrentCommitId()
 	if err != nil {
-		if noCommitErr(err) {
-			return "", errors.New(noCommitErrMsg)
+		if flowutil.NoCommitErr(err) {
+			return "", errors.New(flowutil.NoCommitErrMsg)
 		}
 
 		return "", errors.Trace(err)
