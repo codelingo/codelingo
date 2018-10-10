@@ -1,0 +1,17 @@
+tenets:
+  - name: global-variable
+    doc: |
+      Check that no globals are present in Go code.
+    flows:
+      codelingo/review:
+        comment: Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.value_spec(depth = 1):
+            go.names:
+              @ review.comment
+              go.ident:
+                private == "true"

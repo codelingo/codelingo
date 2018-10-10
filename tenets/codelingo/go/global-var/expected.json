@@ -1,0 +1,662 @@
+[
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 324,
+     "Line": 36,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 346,
+     "Line": 36,
+     "Column": 27
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar = 1\n",
+   "lineText": "var errFakeErrorUnexported = 1",
+   "ctxAfter": "var ErrFakeErrorExported = 1\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 804,
+     "Line": 50,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 815,
+     "Line": 50,
+     "Column": 16
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\nvar declaredErr error = errors.New(\"declaredErr\")",
+   "lineText": "var errDeclared error = errors.New(\"errDeclared\")",
+   "ctxAfter": "\ntype customError struct{ e string }",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 249,
+     "Line": 28,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 254,
+     "Line": 28,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "}\n",
+   "lineText": "var myVar = \"global\"",
+   "ctxAfter": "\nvar myVar1, myVar2 = 1, 2",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 153,
+     "Line": 18,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 159,
+     "Line": 18,
+     "Column": 11
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "}\n",
+   "lineText": "var theVar = true",
+   "ctxAfter": "\nvar myVar = \"global\"",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 635,
+     "Line": 46,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 654,
+     "Line": 46,
+     "Column": 24
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var errUnexported = errors.New(\"errUnexported\")\nvar ErrExported = errors.New(\"ErrExported\")",
+   "lineText": "var errCustomUnexported = customError{\"errCustomUnexported\"}",
+   "ctxAfter": "var ErrCustomExported = customError{\"ErrCustomExported\"}\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 60,
+     "Line": 9,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 65,
+     "Line": 9,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "const constant = 0\n",
+   "lineText": "var myVar = 0",
+   "ctxAfter": "\nvar myTestVar = 0",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 309,
+     "Line": 34,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 314,
+     "Line": 34,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var _ = 0\n",
+   "lineText": "var myVar = 1",
+   "ctxAfter": "\nvar errFakeErrorUnexported = 1",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 194,
+     "Line": 22,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 200,
+     "Line": 22,
+     "Column": 11
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar = \"global\"\n",
+   "lineText": "var theVar = 2",
+   "ctxAfter": "\nfunc someCode() bool {",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 172,
+     "Line": 20,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 177,
+     "Line": 20,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var theVar = true\n",
+   "lineText": "var myVar = \"global\"",
+   "ctxAfter": "\nvar theVar = 2",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 461,
+     "Line": 41,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 471,
+     "Line": 41,
+     "Column": 15
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myErrVar = errors.New(\"myErrVar\")\nvar myVarErr = errors.New(\"myVarErr\")",
+   "lineText": "var myVarError = errors.New(\"myVarErr\")",
+   "ctxAfter": "var customErr = customError{\"customErr\"}\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 75,
+     "Line": 11,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 84,
+     "Line": 11,
+     "Column": 14
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar = 0\n",
+   "lineText": "var myTestVar = 0",
+   "ctxAfter": "\nfunc someCode() bool {",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 754,
+     "Line": 49,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 765,
+     "Line": 49,
+     "Column": 16
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var ErrCustomExported = customError{\"ErrCustomExported\"}\n",
+   "lineText": "var declaredErr error = errors.New(\"declaredErr\")",
+   "ctxAfter": "var errDeclared error = errors.New(\"errDeclared\")\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 271,
+     "Line": 30,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 277,
+     "Line": 30,
+     "Column": 11
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar = \"global\"\n",
+   "lineText": "var myVar1, myVar2 = 1, 2",
+   "ctxAfter": "\nvar _ = 0",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 279,
+     "Line": 30,
+     "Column": 13
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 285,
+     "Line": 30,
+     "Column": 19
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar = \"global\"\n",
+   "lineText": "var myVar1, myVar2 = 1, 2",
+   "ctxAfter": "\nvar _ = 0",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 42,
+     "Line": 7,
+     "Column": 7
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 50,
+     "Line": 7,
+     "Column": 15
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": ")\n",
+   "lineText": "const constant = 0",
+   "ctxAfter": "\nvar myVar = 0",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 423,
+     "Line": 40,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 431,
+     "Line": 40,
+     "Column": 13
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\nvar myErrVar = errors.New(\"myErrVar\")",
+   "lineText": "var myVarErr = errors.New(\"myVarErr\")",
+   "ctxAfter": "var myVarError = errors.New(\"myVarErr\")\nvar customErr = customError{\"customErr\"}",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 298,
+     "Line": 32,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 299,
+     "Line": 32,
+     "Column": 6
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVar1, myVar2 = 1, 2\n",
+   "lineText": "var _ = 0",
+   "ctxAfter": "\nvar myVar = 1",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 385,
+     "Line": 39,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 393,
+     "Line": 39,
+     "Column": 13
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var ErrFakeErrorExported = 1\n",
+   "lineText": "var myErrVar = errors.New(\"myErrVar\")",
+   "ctxAfter": "var myVarErr = errors.New(\"myVarErr\")\nvar myVarError = errors.New(\"myVarErr\")",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1038,
+     "Line": 61,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1060,
+     "Line": 61,
+     "Column": 24
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tmyVar = 1\n",
+   "lineText": "\terrFakeErrorUnexported = 1",
+   "ctxAfter": "\tErrFakeErrorExported   = 1\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1508,
+     "Line": 75,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1519,
+     "Line": 75,
+     "Column": 13
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\n\tdeclaredErr error = errors.New(\"declaredErr\")",
+   "lineText": "\terrDeclared error = errors.New(\"errDeclared\")",
+   "ctxAfter": ")\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1206,
+     "Line": 67,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1215,
+     "Line": 67,
+     "Column": 11
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tmyVarErr   = errors.New(\"myVarErr\")\n\tmyVarError = errors.New(\"myVarErr\")",
+   "lineText": "\tcustomErr  = customError{\"customErr\"}",
+   "ctxAfter": "\n\terrUnexported       = errors.New(\"errUnexported\")",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1095,
+     "Line": 64,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1103,
+     "Line": 64,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tErrFakeErrorExported   = 1\n",
+   "lineText": "\tmyErrVar   = errors.New(\"myErrVar\")",
+   "ctxAfter": "\tmyVarErr   = errors.New(\"myVarErr\")\n\tmyVarError = errors.New(\"myVarErr\")",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1246,
+     "Line": 69,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1259,
+     "Line": 69,
+     "Column": 15
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tcustomErr  = customError{\"customErr\"}\n",
+   "lineText": "\terrUnexported       = errors.New(\"errUnexported\")",
+   "ctxAfter": "\tErrExported         = errors.New(\"ErrExported\")\n\terrCustomUnexported = customError{\"errCustomUnexported\"}",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1132,
+     "Line": 65,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1140,
+     "Line": 65,
+     "Column": 10
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\n\tmyErrVar   = errors.New(\"myErrVar\")",
+   "lineText": "\tmyVarErr   = errors.New(\"myVarErr\")",
+   "ctxAfter": "\tmyVarError = errors.New(\"myVarErr\")\n\tcustomErr  = customError{\"customErr\"}",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1169,
+     "Line": 66,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1179,
+     "Line": 66,
+     "Column": 12
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tmyErrVar   = errors.New(\"myErrVar\")\n\tmyVarErr   = errors.New(\"myVarErr\")",
+   "lineText": "\tmyVarError = errors.New(\"myVarErr\")",
+   "ctxAfter": "\tcustomErr  = customError{\"customErr\"}\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1026,
+     "Line": 59,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1031,
+     "Line": 59,
+     "Column": 7
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var (\n\t// Those are not errors",
+   "lineText": "\tmyVar = 1",
+   "ctxAfter": "\n\terrFakeErrorUnexported = 1",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1461,
+     "Line": 74,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1472,
+     "Line": 74,
+     "Column": 13
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\tErrCustomExported   = customError{\"ErrCustomExported\"}\n",
+   "lineText": "\tdeclaredErr error = errors.New(\"declaredErr\")",
+   "ctxAfter": "\terrDeclared error = errors.New(\"errDeclared\")\n)",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1346,
+     "Line": 71,
+     "Column": 2
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1365,
+     "Line": 71,
+     "Column": 21
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "\terrUnexported       = errors.New(\"errUnexported\")\n\tErrExported         = errors.New(\"ErrExported\")",
+   "lineText": "\terrCustomUnexported = customError{\"errCustomUnexported\"}",
+   "ctxAfter": "\tErrCustomExported   = customError{\"ErrCustomExported\"}\n",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 543,
+     "Line": 44,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 556,
+     "Line": 44,
+     "Column": 18
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var customErr = customError{\"customErr\"}\n",
+   "lineText": "var errUnexported = errors.New(\"errUnexported\")",
+   "ctxAfter": "var ErrExported = errors.New(\"ErrExported\")\nvar errCustomUnexported = customError{\"errCustomUnexported\"}",
+   "newCode": true
+  },
+  {
+   "name": "global-variable",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 501,
+     "Line": 42,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 510,
+     "Line": 42,
+     "Column": 14
+    }
+   },
+   "comment": "Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.",
+   "ctxBefore": "var myVarErr = errors.New(\"myVarErr\")\nvar myVarError = errors.New(\"myVarErr\")",
+   "lineText": "var customErr = customError{\"customErr\"}",
+   "ctxAfter": "\nvar errUnexported = errors.New(\"errUnexported\")",
+   "newCode": true
+  }
+ ]
