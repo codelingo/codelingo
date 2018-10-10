@@ -1,0 +1,46 @@
+[
+  {
+   "name": "unused-private-const-var-same-package",
+   "position": {
+    "start": {
+     "filename": "example/foo.go",
+     "Offset": 63,
+     "Line": 6,
+     "Column": 5
+    },
+    "end": {
+     "filename": "example/foo.go",
+     "Offset": 76,
+     "Line": 6,
+     "Column": 18
+    }
+   },
+   "comment": "Private global unexportedVar is never used.  It should probably be removed.\n",
+   "ctxBefore": "\nvar ExportedVar string = \"baz\"",
+   "lineText": "var unexportedVar string = \"baz\"",
+   "ctxAfter": "\nconst ExportedConst string = \"baz\"",
+   "newCode": true
+  },
+  {
+   "name": "unused-private-const-var-same-package",
+   "position": {
+    "start": {
+     "filename": "example/foo.go",
+     "Offset": 134,
+     "Line": 9,
+     "Column": 7
+    },
+    "end": {
+     "filename": "example/foo.go",
+     "Offset": 149,
+     "Line": 9,
+     "Column": 22
+    }
+   },
+   "comment": "Private global unexportedConst is never used.  It should probably be removed.\n",
+   "ctxBefore": "\nconst ExportedConst string = \"baz\"",
+   "lineText": "const unexportedConst string = \"baz\"",
+   "ctxAfter": "\ntype unexportedStructA struct {",
+   "newCode": true
+  }
+ ]

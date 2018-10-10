@@ -1,0 +1,27 @@
+tenets:
+  - name: unused-private-const-var-same-package
+    doc: |
+      Find private const or var which are unused in a given package.
+    flows:
+      codelingo/review:
+        comment: |
+          Private global {{globalname}} is never used.  It should probably be removed.
+    query: |
+      import codelingo/ast/go
+
+      go.dir:
+        go.file(depth = any):
+          go.decls:
+            go.gen_decl:
+              go.value_spec:
+                go.names:
+                  @ review.comment
+                  go.ident:
+                    @ review.vars.globalname
+                    name as privateVarName
+                    private == "true"
+        exclude:
+          go.file(depth = any):
+            go.ident(depth = any):
+              name == privateVarName
+              private == "true"
