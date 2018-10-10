@@ -1,0 +1,10 @@
+tenets:
+  - name: needs-to-be-lowercase
+    doc: doc str
+    flows:
+      codelingo/review:
+        comment: comment here
+    query:
+        import codelingo/ast/go
+
+        go.func_decl

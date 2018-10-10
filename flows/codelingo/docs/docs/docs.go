@@ -2,6 +2,7 @@ package docs
 
 import (
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -41,28 +42,18 @@ func GetLingoFiles(workingDir string) (map[string][]byte, error) {
 
 // gets the file paths of all the codelingo.yaml files in the repo
 func getLingoFilepaths(workingDir string) ([]string, error) {
-
-	staged, err := gitCMD("-C", workingDir, "ls-tree", "-r", "--name-only", "--full-tree", "HEAD")
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-
-	unstaged, err := gitCMD("-C", workingDir, "ls-files", "--others", "--exclude-standard")
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-
-	files := strings.Split(staged, "\n")
-	files = append(files, strings.Split(unstaged, "\n")...)
-
-	lingoFilepaths := []string{}
-	for _, filepath := range files {
-		if isLingoFile(filepath) {
-			lingoFilepaths = append(lingoFilepaths, filepath)
+	var files []string
+	err := filepath.Walk(workingDir, func(path string, info os.FileInfo, err error) error {
+		if isLingoFile(path) {
+			files = append(files, path)
 		}
+		return nil
+	})
+	if err != nil {
+		return nil, errors.Trace(err)
 	}
 
-	return lingoFilepaths, nil
+	return files, nil
 }
 
 // isDotlingoFile returns if that given filepath has a recognised lingo extension.
