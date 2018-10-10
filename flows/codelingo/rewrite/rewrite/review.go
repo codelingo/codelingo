@@ -89,9 +89,13 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Iss
 
 	go func() {
 		for reply := range replyc {
+			if reply.Error != "" {
+				errc <- errors.New(reply.Error)
+				continue
+			}
 
 			issue := &flow.Issue{}
-			ptypes.UnmarshalAny(reply.Payload, issue)
+			err := ptypes.UnmarshalAny(reply.Payload, issue)
 			if err != nil {
 				errc <- err
 				continue
