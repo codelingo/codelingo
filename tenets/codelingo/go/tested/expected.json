@@ -1,23 +1,45 @@
 [
-    {
-     "name": "find-funcs",
-     "position": {
-      "start": {
-       "filename": "main_test.go",
-       "Offset": 14,
-       "Line": 3,
-       "Column": 1
-      },
-      "end": {
-       "filename": "main_test.go",
-       "Offset": 43,
-       "Line": 5,
-       "Column": 2
-      }
-     },
-     "comment": "This exported function does not have a corresponding test function.",
-     "ctxBefore": "package main\n",
-     "lineText": "func TestPrint() {\n\tPrint()\n}",
-     "newCode": true
+  {
+   "name": "find-funcs",
+   "position": {
+    "start": {
+     "filename": "main.go",
+     "Offset": 90,
+     "Line": 9,
+     "Column": 1
+    },
+    "end": {
+     "filename": "main.go",
+     "Offset": 111,
+     "Line": 9,
+     "Column": 22
     }
-   ]
+   },
+   "comment": "This exported function does not have a corresponding test function.",
+   "ctxBefore": "\n// SecondPrint also prints",
+   "lineText": "func SecondPrint() {}",
+   "newCode": true
+  },
+  {
+   "name": "find-funcs",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 94,
+     "Line": 12,
+     "Column": 1
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 197,
+     "Line": 17,
+     "Column": 2
+    }
+   },
+   "comment": "This exported function does not have a corresponding test function.",
+   "ctxBefore": "\n// No test function",
+   "lineText": "func (a *aStruct) SayA() string {\n\tif a.b == nil {\n\t\treturn \"end\"\n\t}\n\treturn \"I'm a \" // + a.b.SayB()\n}",
+   "ctxAfter": "\ntype bStruct struct {",
+   "newCode": true
+  }
+ ]
