@@ -17,6 +17,9 @@ import (
 
 // Parse is responsible for all dotlingo parsing in the bot flow layer.
 func Parse(dl string) ([]*dotlingo.Dotlingo, error) {
+	if dl == "" {
+		return nil, errors.New("cannot parse codelingo, string is empty")
+	}
 	queries, err := dotlingo.Parse(dl)
 	if err != nil {
 		return nil, errors.Annotate(err, "failed to parse given lingo")
