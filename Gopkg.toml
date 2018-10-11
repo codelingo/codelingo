@@ -23,6 +23,10 @@
   version = "0.8.0"
 
 [[constraint]]
+  name = "github.com/russross/blackfriday"
+  version = "^1.5.2"
+
+[[constraint]]
   name = "github.com/spf13/cobra"
   version = "0.0.3"
 

@@ -86,7 +86,7 @@
   branch = "master"
   name = "github.com/codelingo/sdk"
   packages = ["flow"]
-  revision = "325b3aa4e403c3c1bb6d280e4a90bde22fec7d10"
+  revision = "0befa5b97b15caa053a660b9a363990644ed251a"
 
 [[projects]]
   branch = "master"
@@ -369,20 +369,14 @@
 [[projects]]
   name = "github.com/russross/blackfriday"
   packages = ["."]
-  revision = "d3b5b032dc8e8927d31a5071b56e14c89f045135"
-  version = "v2.0.1"
+  revision = "05f3235734ad95d0016f6a23902f06461fcf567a"
+  version = "v1.5.2"
 
 [[projects]]
   branch = "master"
   name = "github.com/samfoo/ansi"
   packages = ["."]
   revision = "b6bd2ded7189ce35bc02233b554eb56a5146af73"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/shurcooL/sanitized_anchor_name"
-  packages = ["."]
-  revision = "86672fcb3f950f35f2e675df2240550f2a50762f"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -656,6 +650,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8d138d9bef88d53586b86ad39cde7fea4abe70f7c2a86d4a7d30d2aa9df1a82c"
+  inputs-digest = "7cc508899a7a802749b2496b40c1759ebbda120704b51bf099d558061aa2232f"
   solver-name = "gps-cdcl"
   solver-version = 1
