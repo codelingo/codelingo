@@ -67,7 +67,7 @@ tenets:
       php.stmt_classmethod(depth = any):
         php.expr_assign:
           php.expr_methodcall(depth = any): # PHP surprisingly appears to have objects hanging off method calls
-            name == "get"
+            name == "get" #TODO: handle other http verbs - ideally more robustly
             php.expr_propertyfetch:
               name == "request"
 
