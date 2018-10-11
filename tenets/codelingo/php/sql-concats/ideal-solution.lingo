@@ -71,7 +71,8 @@ tenets:
             php.expr_propertyfetch:
               name == "request"
 
-           # Follow the reaches graph to function calls, but stop where the variable is passed into the sanitise function.
+          # Follow the reaches graph to function calls.
+          # Stop at variables defined by a call to the sanatise function.
           path(repeat = 0:):
             edge("reaches"):
               php.expr_assign:
@@ -88,10 +89,13 @@ tenets:
         php.method_call(depth = any): # fork path to reach
           php.expr_variable:
             id == callVar1
+          # Recursively traverse to the function definition.
           path(repeat = 0:):
             edge("calls"):
               php.stmt_classmethod:
                 php.args:
+                  # Follow the reaches graph from the arguments to function calls.
+                  # Stop at variables defined by a call to the sanatise function.
                   path(repeat = 0:): # repeated path call
                     edge("reaches"):
                       php.expr_assign:
@@ -110,6 +114,7 @@ tenets:
                     id == callVar2
                   pathcontinue
           pathend:
+            # Conclude callgraph recursion at the db function.
             php.stmt_classmethod:
               id == dbmethod
 
