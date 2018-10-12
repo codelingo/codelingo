@@ -1,62 +1,127 @@
 tenets:
   - name: sql-concats
-    doc: Find all variable name ending in SQL that contain string concatenations.
+    doc: |
+      Find all http handlers that trigger a call to the database with unvalidated input.
+
+      Steps:
+        - Find a value extracted from an http request.
+        - Follow the reaches graph (https://en.wikipedia.org/wiki/Reaching_definition) to function calls.
+          Stop at variables defined by a call to the sanatise function.
+        - Recursively:
+          - Traverse to the function definition.
+          - Follow the reaches graph from the arguments to function calls.
+            Stop at variables defined by a call to the sanatise function.
+        - Conclude at the db function.
+
+      Caveats:
+        - Currently only follows method calls, rather than methods and functions.
+        - Starts from all arguments of a function, rather than
+        - Gets false positives if sanatise is run off the call path. In other words, we recurse along a
+          linear call chain from the handler to the db, if the input is sanatised by some other function
+          it will be considered unsafe where following "reaches".
+        - Doesn't catch direct calls to the database from the handler.
+        - Possible reaches/defines issues:
+          - This tenet follows a direct reaching definition chain. This may be be confounded by having multiple
+            references to the same variable, especially across function boundaries.
+            In this example b->val is only indirectly given an unsafe value, and the $userInput definition
+            may not recursively reach $b->val:
+              ```<?php
+              class A {
+                public $BChild;
+              }
+
+              class B {
+                public $val;
+              }
+
+              function mustBeCalledSafely(string $str) {
+                  echo $str;
+              }
+
+              $userInput = "unsafeUserInput";
+
+              $a = new A();
+              $b = new B();
+
+              $b->val = "safe";
+              $a->BChild = $b;
+              $a->BChild->val = $userInput;
+
+              mustBeCalledSafely($b->val);
+          - Variables can be influenced through non-definition means:
+              $safeByte = [];
+              for (bit in $unsafeByte) {
+                if bit == 0 {
+                  $safeByte += 0
+                } else {
+                  $safeByte += 1
+                }
+              }```
     flows:
       codelingo/review:
         comment: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
     query: |
       import codelingo/ast/php
 
-      # Find values from an http request
+      # Find a value extracted from an http request.
       php.stmt_classmethod(depth = any):
         php.expr_assign:
-          php.expr_variable:
-            name as httpVariable
           php.expr_methodcall(depth = any): # PHP surprisingly appears to have objects hanging off method calls
-            name == "get"
+            name == "get" #TODO: handle other http verbs - ideally more robustly
             php.expr_propertyfetch:
               name == "request"
 
-        # Find method that concatenates the http value into a string
-        php.calls(depth = any):
-          php.arg:
-            name as httpVariable
-          # Recurse along method call chain to find concatenation method
-          # TODO: validate that the $httpVariable is passed along call chain
-          php.calls(depth = any, follow: callgraph):
-            php.stmt_classmethod(depth = any):
-              php.param:
-                # find variables whose value can be affected by the parameter
-                php.may_assign_to:
-                  name as httpArg
-              any_of:
-                php.expr_assignop_concat(depth = any):
-                  @ review.comment
-                  php.expr_variable(depth = any):
-                    name as sqlStatement
-                    php.expr_variable(depth = any):
-                      name as httpArg
-                php.expr_assign(depth = any):
-                  @ review.comment
-                  php.expr_variable(depth = any):
-                    name as sqlStatement
-                    php.expr_variable(depth = any):
-                      name as httpArg
-                  php.expr_binaryop_concat(depth = any)
-
-              # Check that $sqlStatement is passed to a database method
-              @ review.comment
-              php.calls(depth = any):
-                php.arg:
+          # Follow the reaches graph to function calls.
+          # Stop at variables defined by a call to the sanatise function.
+          path(repeat = 0:):
+            edge("reaches"):
+              php.expr_assign:
+                exclude:
+                  php.expr_methodcall(depth = any):
+                    name == "sanatise"
+                    php.expr_propertyfetch:
+                      name == "db"
+                pathcontinue
+          pathend:
+            edge("defines"):
+              php.expr_variable:
+                id as callVar1
+        php.method_call(depth = any): # fork path to reach
+          php.expr_variable:
+            id == callVar1
+          # Recursively traverse to the function definition.
+          path(repeat = 0:):
+            edge("calls"):
+              php.stmt_classmethod:
+                php.args:
+                  # Follow the reaches graph from the arguments to function calls.
+                  # Stop at variables defined by a call to the sanatise function.
+                  path(repeat = 0:): # repeated path call
+                    edge("reaches"):
+                      php.expr_assign:
+                        exclude:
+                          php.expr_methodcall(depth = any):
+                            name == "sanatise"
+                            php.expr_propertyfetch:
+                              name == "db"
+                        pathcontinue
+                  pathend:
+                    edge("defines"):
+                      php.expr_variable:
+                        id as callVar2
+                php.method_call(depth = any):
                   php.expr_variable:
-                    name as sqlStatement
-                # TODO: validate that the $sqlStatement is passed along call chain
-                php.calls(depth = any, follow: callgraph):
-                  is as dbmethod
+                    id == callVar2
+                  pathcontinue
+          pathend:
+            # Conclude callgraph recursion at the db function.
+            php.stmt_classmethod:
+              id == dbmethod
 
       # Collect methods that access the database
-      php.stmt_namespace:
+      php.stmt_namespace(depth = any):
         php.name: "Util\DB"
         php.stmt_class:
           name: Model
-          php.stmt_classmethod: $dbmethod
+          php.stmt_classmethod:
+            id as dbmethod
