@@ -266,9 +266,30 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/juju/retry"
+  packages = ["."]
+  revision = "9058e192b216b21e4741c2eeb20ac798ba1ea80a"
+
+[[projects]]
+  branch = "master"
   name = "github.com/juju/testing"
-  packages = ["checkers"]
+  packages = [
+    ".",
+    "checkers"
+  ]
   revision = "472a3e8b2073fb3cd67c12d2bc5f3cd28e5f4116"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/juju/utils"
+  packages = ["."]
+  revision = "bf9cc5bdd62dabc40b7f634b39a5e2dc44d44c45"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/juju/version"
+  packages = ["."]
+  revision = "b64dbd566305c836274f0268fa59183a52906b36"
 
 [[projects]]
   name = "github.com/kr/pretty"
@@ -480,7 +501,10 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
+  packages = [
+    "pbkdf2",
+    "ssh/terminal"
+  ]
   revision = "c126467f60eb25f8f27e5a981f32a87e3965053f"
 
 [[projects]]
@@ -618,8 +642,11 @@
   branch = "v2"
   name = "gopkg.in/mgo.v2"
   packages = [
+    ".",
     "bson",
-    "internal/json"
+    "internal/json",
+    "internal/sasl",
+    "internal/scram"
   ]
   revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
 
@@ -650,6 +677,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7cc508899a7a802749b2496b40c1759ebbda120704b51bf099d558061aa2232f"
+  inputs-digest = "f8aa4167f4d8c57836dc52ca68018bdeb5aa3a0f76f6fd73dc1f94714319683d"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -7,13 +7,14 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/rewrite/rewrite"
+	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
 
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/app/util/common/config"
 	"github.com/codelingo/lingo/vcs"
-	"github.com/codelingo/rpc/flow"
-	flowutil "github.com/codelingo/sdk/flow"
+	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 )
 
@@ -36,16 +37,16 @@ var rewriteCmd = cli.Command{
 		},
 		cli.StringFlag{
 			Name:  util.OutputFlg.String(),
-			Usage: "File to save found issues to.",
+			Usage: "File to save found hunks to.",
 		},
 		cli.StringFlag{
 			Name:  util.FormatFlg.String(),
 			Value: "json-pretty",
-			Usage: "How to format the found issues. Possible values are: json, json-pretty.",
+			Usage: "How to format the found hunks. Possible values are: json, json-pretty.",
 		},
 		cli.BoolFlag{
 			Name:  util.KeepAllFlg.String(),
-			Usage: "Keep all issues and don't be prompted to confirm each issue.",
+			Usage: "Keep all hunks and don't be prompted to confirm each hunk.",
 		},
 		cli.StringFlag{
 			Name:  util.DirectoryFlg.String(),
@@ -107,6 +108,17 @@ func rewriteRequire() error {
 	return nil
 }
 
+func hunkChan(itemc chan proto.Message) chan *rewriterpc.Hunk {
+	hunkc := make(chan *rewriterpc.Hunk)
+	go func() {
+		for item := range itemc {
+			hunkc <- item.(*rewriterpc.Hunk)
+		}
+		close(hunkc)
+	}()
+	return hunkc
+}
+
 func rewriteCMD(cliCtx *cli.Context) (string, error) {
 	defer util.Logger.Sync()
 	if cliCtx.IsSet("debug") {
@@ -119,7 +131,7 @@ func rewriteCMD(cliCtx *cli.Context) (string, error) {
 		}
 	}
 
-	dotlingo, err := rewrite.ReadDotLingo(cliCtx)
+	dotlingo, err := flowutil.ReadDotLingo(cliCtx)
 	if err != nil {
 		return "", errors.Trace(err)
 	}
@@ -168,10 +180,8 @@ func rewriteCMD(cliCtx *cli.Context) (string, error) {
 	}
 
 	ctx, cancel := util.UserCancelContext(context.Background())
-	issuec := make(chan *flow.Issue)
-	errorc := make(chan error)
 
-	req := &flow.ReviewRequest{
+	req := &rewriterpc.Request{
 		Repo:     name,
 		Sha:      sha,
 		Patches:  patches,
@@ -192,7 +202,7 @@ func rewriteCMD(cliCtx *cli.Context) (string, error) {
 
 		req.Host = addr
 		req.Hostname = hostname
-		req.OwnerOrDepot = &flow.ReviewRequest_Owner{owner}
+		req.OwnerOrDepot = &rewriterpc.Request_Owner{owner}
 	case vcsP4:
 		addr, err := cfg.P4ServerAddr()
 		if err != nil {
@@ -210,33 +220,30 @@ func rewriteCMD(cliCtx *cli.Context) (string, error) {
 
 		req.Host = addr
 		req.Hostname = hostname
-		req.OwnerOrDepot = &flow.ReviewRequest_Depot{depot}
+		req.OwnerOrDepot = &rewriterpc.Request_Depot{depot}
 		req.Repo = name
 	default:
 		return "", errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
 	}
 
 	fmt.Println("Running rewrite flow...")
-	issuec, errorc, err = rewrite.RequestReview(ctx, req)
+
+	// proto.RegisterType((*rewriterpc.Hunk)(nil), "rpc.Hunk")
+	itemc, errorc, err := flowutil.RunFlow(ctx, "rewrite", req, func() proto.Message { return &rewriterpc.Hunk{} })
 	if err != nil {
 		return "", errors.Trace(err)
 	}
 
-	issues, err := rewrite.ConfirmIssues(cancel, issuec, errorc, cliCtx.Bool("keep-all"), cliCtx.String("output"))
+	hunkc := hunkChan(itemc)
+
+	hunks, err := flowutil.ConfirmIssues(cancel, hunkc, errorc, cliCtx.Bool("keep-all"), cliCtx.String("output"))
 	if err != nil {
 		return "", errors.Trace(err)
 	}
 
-	if len(issues) == 0 {
-		return fmt.Sprintf("Done! No issues found.\n"), nil
+	if len(hunks) == 0 {
+		return fmt.Sprintf("Done! No rewrites found.\n"), nil
 	}
 
-	// Remove dicarded issues from report
-	var keptIssues []*rewrite.SRCHunk
-	for _, issue := range issues {
-		if !issue.Discard {
-			keptIssues = append(keptIssues, issue)
-		}
-	}
-	return "", errors.Trace(rewrite.Write(keptIssues))
+	return "", errors.Trace(rewrite.Write(hunks))
 }

@@ -9,13 +9,13 @@ import (
 	"github.com/golang/protobuf/ptypes"
 
 	"github.com/codegangsta/cli"
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	"github.com/codelingo/rpc/flow"
 	"github.com/codelingo/rpc/flow/client"
-	flowutil "github.com/codelingo/sdk/flow"
 	"github.com/juju/errors"
 )
 

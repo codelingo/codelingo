@@ -7,12 +7,12 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/review/review"
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/app/util/common/config"
 	"github.com/codelingo/lingo/vcs"
 	"github.com/codelingo/rpc/flow"
-	flowutil "github.com/codelingo/sdk/flow"
 	"github.com/juju/errors"
 )
 
