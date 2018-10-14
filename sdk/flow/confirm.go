@@ -22,7 +22,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/juju/errors"
 	"github.com/waigani/diffparser"
-	"github.com/waigani/xxx"
 )
 
 type hunkconfirmer struct {
@@ -249,8 +248,6 @@ func (c hunkconfirmer) Confirm(attempt int, hunk *rewriterpc.Hunk) bool {
 }
 
 func (c *hunkconfirmer) FormatPlainText(hunk *rewriterpc.Hunk) string {
-
-	xxx.Dump(hunk)
 
 	g := color.New(color.FgGreen).SprintfFunc()
 	return indent(g("\n%s", hunk.SRC), true, false)
