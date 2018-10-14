@@ -1,4 +1,4 @@
-package rewrite_test
+package rewrite
 
 import (
 	"bytes"

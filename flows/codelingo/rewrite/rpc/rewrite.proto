@@ -56,8 +56,9 @@ message Request {
 
 message Hunk {
     string filename =1;
-    int64 startOffset =2;
-    int64 endOffset =3;
+    int32 startOffset =2;
+    int32 endOffset =3;
     string SRC =4;
-    bool isHeartbeet =5;
+    string decoratorOptions =5;
+    bool isHeartbeat =6;
 }
