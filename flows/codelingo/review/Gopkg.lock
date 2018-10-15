@@ -42,6 +42,15 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/codelingo/codelingo"
+  packages = [
+    "flows/codelingo/rewrite/rpc",
+    "sdk/flow"
+  ]
+  revision = "f15fd5ca05eced572b2d92bcd1a8322e9667ef2e"
+
+[[projects]]
+  branch = "master"
   name = "github.com/codelingo/lingo"
   packages = [
     "app/commands/verify",
@@ -66,12 +75,6 @@
     "service"
   ]
   revision = "283372594e0084af67bb2ba8d0b77da19b9c8070"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/codelingo/sdk"
-  packages = ["flow"]
-  revision = "0befa5b97b15caa053a660b9a363990644ed251a"
 
 [[projects]]
   name = "github.com/containerd/continuity"
@@ -476,6 +479,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c83514b47c9cf8a7ee5378bc4ae0fd180956971c14195763fdc2f8b95f847a39"
+  inputs-digest = "88fe7ff98388094fb41d2e589cb04b3f70de204e425721e0d7c755f7a9ec7a6d"
   solver-name = "gps-cdcl"
   solver-version = 1
