@@ -112,6 +112,7 @@ func hunkChan(itemc chan proto.Message) chan *rewriterpc.Hunk {
 	hunkc := make(chan *rewriterpc.Hunk)
 	go func() {
 		for item := range itemc {
+			util.Logger.Debug("got item %v", item)
 			hunkc <- item.(*rewriterpc.Hunk)
 		}
 		close(hunkc)

@@ -81,6 +81,7 @@ l:
 				hunkc = nil
 				break
 			}
+			util.Logger.Debugf("received hunk %v", hunk)
 
 			if cfm.Confirm(0, hunk) {
 				confirmedHunks = append(confirmedHunks, hunk)
