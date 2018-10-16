@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/codelingo/lingo/app/util"
 	"github.com/juju/errors"
 )
 
@@ -24,6 +25,13 @@ func Run(cmd cli.Command) error {
 	}
 
 	ctx := cli.NewContext(nil, fSet, nil)
+
+	if ctx.Bool("debug") {
+		err := util.SetDebugLogger()
+		if err != nil {
+			return errors.Trace(err)
+		}
+	}
 
 	cmd.Action.(func(*cli.Context))(ctx)
 	return nil

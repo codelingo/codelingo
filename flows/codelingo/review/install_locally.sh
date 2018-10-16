@@ -2,3 +2,4 @@
 
 dep ensure -v
 go build -o ~/.codelingo/flows/codelingo/review/cmd
+rm -rf ./vendor

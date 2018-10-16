@@ -21,10 +21,13 @@ import (
 )
 
 func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Issue, chan error, error) {
+	defer util.Logger.Sync()
+	util.Logger.Debug("opening connection to flow server ...")
 	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
+	util.Logger.Debug("...connection to flow server opened")
 	c := client.NewFlowClient(conn)
 
 	// Create context with metadata
@@ -38,11 +41,12 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Iss
 		return nil, nil, errors.Trace(err)
 	}
 
-	// TODO(waigani) refactor review, search and codemod code out of client completely.
+	util.Logger.Debug("sending request to flow server...")
 	replyc, runErrc, err := c.Run(ctx, &flow.Request{Flow: "review", Payload: payload})
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
+	util.Logger.Debug("...request to flow server sent. Received reply channel.")
 
 	issuec := make(chan *flow.Issue)
 	errc := make(chan error)
@@ -145,6 +149,7 @@ func ConfirmIssues(cancel context.CancelFunc, issuec chan *flow.Issue, errorc ch
 	// If user is manually confirming reviews, set a long timeout.
 	timeout := time.After(time.Hour * 1)
 
+	util.Logger.Debug("waiting for results from repy chan...")
 l:
 	for {
 		select {
@@ -169,8 +174,10 @@ l:
 
 			// Flow server checking the connection; can be safely ignored.
 			if iss.IsHeartbeat {
+				util.Logger.Debug("received heartbeat...")
 				continue
 			}
+			util.Logger.Debug("...received result")
 
 			if !keepAll {
 				spnr.Stop()
