@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
+	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	grpcflow "github.com/codelingo/rpc/flow"
@@ -62,6 +63,8 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 				errc <- errors.New(reply.Error)
 				continue
 			}
+
+			util.Logger.Debug("got reply %v", reply)
 
 			item := newItem()
 			err := ptypes.UnmarshalAny(reply.Payload, item)
