@@ -1,0 +1,22 @@
+# TODO This tenet is only a mock. The query here needs to be updated.
+
+tenets:
+  - name: well-named-package
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+          Consider parent directory name when choosing a package name. Unless there's a good reason, the `package foo` line should match the name of the directory in which the .go file exists.
+      codelingo/review:
+        comment: Package name does not match the name of the parent directory. Unless there\'s a good reason, `package {{packagename}}` should match the name of the directory in which {{filename}} file exists, i.e. {{dirname}}.
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

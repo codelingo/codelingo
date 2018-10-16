@@ -1,0 +1,49 @@
+functions:
+  - name: contains
+    type: asserter
+    body: |
+      function (str, substr) {
+        return str.indexOf(substr) != -1
+      }
+
+tenets:
+  - name: flags-have-underscores
+    flows:
+      codelingo/docs:
+        title: flagsHaveUnderscores
+        body: |
+          Command-line flags should use dashes, not underscores. See "https://github.com/kubernetes/community/blob/master/contributors/guide/coding-conventions.md"
+      codelingo/review:
+        comment: Flag `{{flagname}}` contains an underscore. Use a dash instead.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.import_spec(depth = 1):
+            go.basic_lit:
+              value == "github.com/spf13/pflag"
+          go.func_decl:
+            go.func_type:
+              go.field_list:
+                go.field:
+                  go.names:
+                    go.ident:
+                      name as paraname
+                  go.star_expr:
+                    go.selector_expr:
+                      go.ident:
+                        name == "pflag"
+                      go.ident:
+                        name == "FlagSet"
+            go.call_expr(depth = 3):
+              go.selector_expr:
+                go.ident:
+                  name == paraname
+                go.ident:
+                  name == "StringVar"
+              go.args:
+                @review.comment
+                go.ident:
+                  value as flagname
+                  contains(flagname, "_")

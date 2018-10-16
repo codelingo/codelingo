@@ -1,0 +1,22 @@
+# TODO This tenet is only a mock. The query here needs to be updated.
+
+tenets:
+  - name: well-named-lock
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+          A lock should be called `lock` unless other locks are present.
+      codelingo/review:
+        comment: There are no other locks besides `{{lockname}}` here. Rename `{{locname}}` to `lock`.
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

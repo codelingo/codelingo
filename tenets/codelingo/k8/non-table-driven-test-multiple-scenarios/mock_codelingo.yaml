@@ -1,0 +1,22 @@
+# TODO This tenet is only a mock. The query here needs to be updated.
+
+tenets:
+  - name: non-table-driven-test-multiple-scenarios
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+          Table-driven tests are preferred for testing multiple scenarios/inputs
+      codelingo/review:
+        comment: This test case does not appear to be 'table-driven' but multiple inputs / scenarios are being tested. Consider using a table-driven approach.
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

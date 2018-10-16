@@ -1,0 +1,22 @@
+# TODO This tenet is only a mock. The query here needs to be updated.
+
+tenets:
+  - name: jsonapi-obj-compulsory-metadata
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+          Every object must provide a nested object field called 'metadata' that contains fields 'resourceVersion', 'generation', 'creationTimestamp', 'deletionTimestamp', 'labels' and 'annotations'.
+      codelingo/review:
+        comment: This object has not provided a nested object field called 'metadata' that contains fields 'resourceVersion', 'generation', 'creationTimestamp', 'deletionTimestamp', 'labels' and 'annotations'.
+    query: |
+      import codelingo/ast/go
+
+      @review.comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

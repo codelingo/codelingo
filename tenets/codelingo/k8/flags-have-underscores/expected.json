@@ -1,0 +1,25 @@
+[
+  {
+   "name": "flags-have-underscores",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 381,
+     "Line": 18,
+     "Column": 33
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 392,
+     "Line": 18,
+     "Column": 44
+    }
+   },
+   "comment": "Flag `{{flagname}}` contains an underscore. Use a dash instead.",
+   "ctxBefore": "func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {\n    flags.StringVar(f.CertFile, flagGoodName, *f.CertFile, \"This is the discription of a good flag\")",
+   "lineText": "    flags.StringVar(f.CertFile, flagBadName, *f.CertFile, \"This is the discription of a bad flag\")",
+   "ctxAfter": "}",
+   "newCode": true
+  }
+ ]
+
