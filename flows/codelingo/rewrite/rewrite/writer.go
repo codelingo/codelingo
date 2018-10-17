@@ -28,7 +28,7 @@ func Write(newSRCs []*rewriterpc.Hunk) error {
 
 	for filename, hunks := range hunkMap {
 
-		rootPath, err := flowutil.GitCMD("root")
+		rootPath, err := flowutil.GitCMD("rev-parse", "--show-toplevel")
 		if err != nil {
 			return errors.Trace(err)
 		}
