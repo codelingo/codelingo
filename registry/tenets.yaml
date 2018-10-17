@@ -34,7 +34,7 @@ codelingo:
       - unconvert
     tags:
       - golang
-      - g
+      - go
   jenkinsx:
     description: Best practices from the jenkins-x/js repository.
     version: 0.0.0
