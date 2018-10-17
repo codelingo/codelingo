@@ -8,7 +8,6 @@ import (
 	"text/template"
 
 	"github.com/codegangsta/cli"
-	"github.com/codelingo/clql/dotlingo"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/docs"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/docs/parse"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/render"
@@ -94,7 +93,7 @@ func renderDocs(ctx *cli.Context, docStr string) error {
 
 func formattedDocsFromTenets(ctx *cli.Context) (string, error) {
 
-	allTenets, err := tenets(ctx)
+	allDocs, err := docMaps(ctx)
 	if err != nil {
 		return "", errors.Trace(err)
 	}
@@ -104,7 +103,7 @@ func formattedDocsFromTenets(ctx *cli.Context) (string, error) {
 		templateStr, err = ioutil.ReadFile(templateFile)
 	}
 
-	mdDocs, err := tenetsToRawMdDocs(allTenets, string(templateStr))
+	mdDocs, err := tenetsToRawMdDocs(allDocs, string(templateStr))
 	if err != nil {
 		return "", errors.Trace(err)
 	}
@@ -137,7 +136,7 @@ func formattedDocsFromTenets(ctx *cli.Context) (string, error) {
 	return "", errors.New("unknown format: " + docFmt)
 }
 
-func tenets(ctx *cli.Context) ([]*dotlingo.Tenet, error) {
+func docMaps(ctx *cli.Context) ([]map[string]string, error) {
 
 	workingDir, err := os.Getwd()
 	if err != nil {
@@ -149,7 +148,7 @@ func tenets(ctx *cli.Context) ([]*dotlingo.Tenet, error) {
 		return nil, errors.Trace(err)
 	}
 
-	var allTenets []*dotlingo.Tenet
+	var allDocs []map[string]string
 	for _, fileSRC := range files {
 
 		lingoFiles, err := parse.Parse(string(fileSRC))
@@ -159,25 +158,31 @@ func tenets(ctx *cli.Context) ([]*dotlingo.Tenet, error) {
 
 		for _, lingoFile := range lingoFiles {
 			for _, tenet := range lingoFile.Tenets {
-				allTenets = append(allTenets, tenet)
+
+				for _, flow := range tenet.Bots {
+					if flow.Owner == "codelingo" && flow.Name == "docs" {
+						allDocs = append(allDocs, flow.Config)
+					}
+				}
+
 			}
 		}
 	}
 
-	return allTenets, nil
+	return allDocs, nil
 }
 
 // TODO(waigani) in cmd help, show default template
 var defaultTemplate string = `
 # Contributor Guide
 {{range .}}
-## {{.Name}}
+## {{.title}}
 
-{{.Doc}}
+{{.body}}
 {{end}}
 `[1:]
 
-func tenetsToRawMdDocs(tenets []*dotlingo.Tenet, templateSRC string) (string, error) {
+func tenetsToRawMdDocs(docs []map[string]string, templateSRC string) (string, error) {
 	tempSRC := defaultTemplate
 	if templateSRC != "" {
 		tempSRC = templateSRC
@@ -185,7 +190,7 @@ func tenetsToRawMdDocs(tenets []*dotlingo.Tenet, templateSRC string) (string, er
 	t := template.Must(template.New("t3").Parse(tempSRC))
 
 	var tpl bytes.Buffer
-	if err := t.Execute(&tpl, tenets); err != nil {
+	if err := t.Execute(&tpl, docs); err != nil {
 		return "", errors.Trace(err)
 	}
 
