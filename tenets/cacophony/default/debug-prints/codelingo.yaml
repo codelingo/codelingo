@@ -1,11 +1,13 @@
 tenets:
   - name: debug-prints
-    doc: |
-      Find debug print calls.
-
-      Debug print calls shouldn't be left in production code.
-      They make the program unnecessarily verbose and can output sensitive information.
     flows:
+      codelingo/docs:
+        title: Debug Prints
+        body: |
+          Find debug print calls.
+
+          Debug print calls shouldn't be left in production code.
+          They make the program unnecessarily verbose and can output sensitive information.
       codelingo/review:
         comment: Remove debug prints as they make the program unnecessarily verbose and can output sensitive information.
     query: |

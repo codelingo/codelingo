@@ -1,8 +1,10 @@
 tenets:
   - name: nil-only-functions
-    doc: |
-      Find functions that only return nil.
     flows:
+      codelingo/docs:
+        title: Nil Only Functions
+        body: |
+          Find functions that only return nil.
       codelingo/review:
         comment: Functions that don't return a non-nil value can be refactored without a reutrn type.
     query: |

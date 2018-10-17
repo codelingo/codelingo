@@ -1,8 +1,10 @@
 tenets:
   - name: eval-expression
-    doc: |
-     "An eval-expression is untestable, a security risk and bad practice. Therefore it should be avoided. Consider to replace the eval-expression with regular code." - https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
     flows:
+      codelingo/docs:
+        title: Eval Expression
+        body: |
+         "An eval-expression is untestable, a security risk and bad practice. Therefore it should be avoided. Consider to replace the eval-expression with regular code." - https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
       codelingo/review:
         comment: This eval-expression may be a security risk, please replace it with regular code.
     query: |

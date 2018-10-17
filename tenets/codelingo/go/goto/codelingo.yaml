@@ -1,8 +1,10 @@
 tenets:
   - name: goto-statement
-    doc: |
-      Find uses of goto.
     flows:
+      codelingo/docs:
+        title: Goto Statement
+        body: |
+          Find uses of goto.
       codelingo/review:
         comment: goto statments have a niche use and can obscure the flow of a program.
     query: |

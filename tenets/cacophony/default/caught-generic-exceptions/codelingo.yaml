@@ -1,12 +1,14 @@
 tenets:
   - name: caught-generic-exceptions
-    doc: |
-      Find caught generic exceptions.
-
-      In most cases, only specific exceptions should be caught. This allows different exceptions to be handled in different ways.
-      Catching generically will capture all other exception types lower in the hierarchy.
-      See the full hierarchy of the built in exceptions here: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
     flows:
+      codelingo/docs:
+        title: Caught Generic Exceptions
+        body: |
+          Find caught generic exceptions.
+
+          In most cases, only specific exceptions should be caught. This allows different exceptions to be handled in different ways.
+          Catching generically will capture all other exception types lower in the hierarchy.
+          See the full hierarchy of the built in exceptions here: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
       codelingo/review:
         comment: |
           Caught exception is too generic. Catch a more specific exception(s): https://docs.python.org/3/library/exceptions.html#exception-hierarchy.

@@ -19,8 +19,10 @@ functions:
       }
 tenets:
   - name: find-funcs
-    doc: Example tenet that finds all exported functions that do not have a corresponding test function.
     flows:
+      codelingo/docs:
+        title: NewConcat
+        body: Example tenet that finds all exported functions that do not have a corresponding test function.
       codelingo/review:
         comment: This exported function does not have a corresponding test function.
     query: |

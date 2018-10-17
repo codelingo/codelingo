@@ -1,9 +1,11 @@
 tenets:
-  - flows:
+  - name: null-check
+    flows:
+      codelingo/docs:
+        title: Null Check
+        body: Finds all calls to null-check
       codelingo/review:
         comment: Please use `=== null` rather than `is_null`
-    name: null-check
-    doc: Finds all calls to null-check
     query: |
       import codelingo/ast/php
 

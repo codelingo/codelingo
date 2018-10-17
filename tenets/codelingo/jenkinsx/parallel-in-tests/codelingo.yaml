@@ -7,11 +7,13 @@ functions:
     }
 tenets:
   - name: parallel-in-tests
-    doc: |
-      Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
-
-      https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
     flows:
+      codelingo/docs:
+        title: ExcludeIntegration
+        body: |
+          Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
+
+          https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
         comment: Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
     query: |

@@ -1,12 +1,14 @@
 tenets:
   - name: raised-generic-exceptions
-    doc: |
-      Find raised generic exceptions.
-
-      Raised exceptions should be as specific as possible to describe the issue as each type can be caught and handled differently.
-      Raising generic exceptions requires them to be caught, which will also catch all other exception types lower in the hierarchy.
-      See the full hierarchy of the built in exceptions here: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
     flows:
+      codelingo/docs:
+        title: Raised Generic Exceptions
+        body: |
+          Find raised generic exceptions.
+
+          Raised exceptions should be as specific as possible to describe the issue as each type can be caught and handled differently.
+          Raising generic exceptions requires them to be caught, which will also catch all other exception types lower in the hierarchy.
+          See the full hierarchy of the built in exceptions here: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.
       codelingo/review:
         comment: |
           Exception type is too generic. Use a more specific exception: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.

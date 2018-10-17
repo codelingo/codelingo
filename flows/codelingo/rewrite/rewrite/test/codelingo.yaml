@@ -1,7 +1,9 @@
 tenets:
   - name: append-test
-    doc: "change test names"
     flows:
+      codelingo/docs:
+        title: Append Test
+        body: "change test names"
       codelingo/rewrite:
         name: "Test{{name}}" # TODO: support modifiers here e.g. {{toUpper(name)}} where toUpper is a defined function.
         comment: "// Test is some kind of test"

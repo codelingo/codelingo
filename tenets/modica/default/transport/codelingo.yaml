@@ -1,6 +1,9 @@
 tenets:
   - name: transport-template
-    doc: Find transport controllers and actions that violate naming conventions
+    flows:
+      codelingo/docs:
+        title: Transport Template
+        body: Find transport controllers and actions that violate naming conventions
     query: |
       import codelingo/ast/php
 

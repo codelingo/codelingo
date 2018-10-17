@@ -1,8 +1,10 @@
 tenets:
   - name: unconvert
-    doc: |
-      Identify unnecessary type conversions
     flows:
+      codelingo/docs:
+        title: Unconvert
+        body: |
+          Identify unnecessary type conversions
       codelingo/review:
         comment: Unnecessary type conversion {{name}}; i.e., expression {{name}}(x) where x already has type {{name}}.
     query: |
