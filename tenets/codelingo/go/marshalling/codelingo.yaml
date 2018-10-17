@@ -2,7 +2,7 @@ tenets:
   - name: mixed-marshalling
     flows:
       codelingo/docs:
-        title: mixed-marshalling
+        title: Mixed Marshalling
         body: |
           Find cases where a server marshals data into a client data type.
 

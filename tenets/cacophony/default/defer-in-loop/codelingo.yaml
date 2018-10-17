@@ -2,7 +2,7 @@ tenets:
   - name: defer-in-loop
     flows:
       codelingo/docs:
-        title: defer-in-loop
+        title: Defer In Loop
         body: |
           Finds defer calls in loops.
 

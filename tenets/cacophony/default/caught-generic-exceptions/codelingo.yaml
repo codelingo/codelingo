@@ -2,7 +2,7 @@ tenets:
   - name: caught-generic-exceptions
     flows:
       codelingo/docs:
-        title: caught-generic-exceptions
+        title: Caught Generic Exceptions
         body: |
           Find caught generic exceptions.
 

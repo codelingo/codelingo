@@ -2,7 +2,7 @@ tenets:
   - name: php-lint-rules
     flows:
       codelingo/docs:
-        title: php-lint-rules
+        title: Php Lint Rules
         body: Example tenet that finds all lint problems.
       codelingo/review:
         comment: |

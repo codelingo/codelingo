@@ -2,7 +2,7 @@ tenets:
   - name: use-offsite-check
     flows:
       codelingo/docs:
-        title: use-offsite-check
+        title: Use Offsite Check
         body: |
           Ensures that any redirect with a value that depends directly on value from an http request is validated for offsite redirection.
 

@@ -2,7 +2,7 @@ tenets:
   - name: bool-arg
     flows:
       codelingo/docs:
-        title: bool-arg
+        title: Bool Arg
         body: |
           Find functions with one or more boolean arguments.
       codelingo/review:

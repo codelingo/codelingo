@@ -2,7 +2,7 @@ tenets:
   - name: global-variable
     flows:
       codelingo/docs:
-        title: global-variable
+        title: Global Variable
         body: |
           Check that no globals are present in Go code.
       codelingo/review:

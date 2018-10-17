@@ -31,7 +31,7 @@ tenets:
   - name: right-build-directive-wrong-file
     flows:
       codelingo/docs:
-        title: append
+        title: Append
         body: |
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
@@ -61,7 +61,7 @@ tenets:
   - name: right-build-directive-wrong-package
     flows:
       codelingo/docs:
-        title: right-build-directive-wrong-package
+        title: Right Build Directive Wrong Package
         body:
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
@@ -94,7 +94,7 @@ tenets:
   - name: right-package-wrong-build-directive
     flows:
       codelingo/docs:
-        title: right-package-wrong-build-directive
+        title: Right Package Wrong Build Directive
         body:
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
@@ -125,7 +125,7 @@ tenets:
   - name: right-package-wrong-file
     flows:
       codelingo/docs:
-        title: right-package-wrong-file
+        title: Right Package Wrong File
         body:
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
@@ -154,7 +154,7 @@ tenets:
   - name: right-file-wrong-build-directive
     flows:
       codelingo/docs:
-        title: right-file-wrong-build-directive
+        title: Right File Wrong Build Directive
         body:
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
@@ -185,7 +185,7 @@ tenets:
   - name: right-file-wrong-package
     flows:
       codelingo/docs:
-        title: right-file-wrong-package
+        title: Right File Wrong Package
         body:
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`

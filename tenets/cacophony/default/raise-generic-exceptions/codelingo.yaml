@@ -2,7 +2,7 @@ tenets:
   - name: raised-generic-exceptions
     flows:
       codelingo/docs:
-        title: raised-generic-exceptions
+        title: Raised Generic Exceptions
         body: |
           Find raised generic exceptions.
 

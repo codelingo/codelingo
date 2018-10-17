@@ -2,7 +2,7 @@ tenets:
   - name: if-assignment
     flows:
       codelingo/docs:
-        title: if-assignment
+        title: If Assignment
         body: |
           Assignments in if clauses and the like are considered a code smell. Assignments in PHP return the right operand as their result. In many cases, this is an expected behavior, but can lead to many difficult to spot bugs, especially when the right operand could result in zero, null or an empty string. - https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
       codelingo/review:

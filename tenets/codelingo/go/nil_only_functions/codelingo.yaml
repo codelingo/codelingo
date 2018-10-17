@@ -2,7 +2,7 @@ tenets:
   - name: nil-only-functions
     flows:
       codelingo/docs:
-        title: nil-only-functions
+        title: Nil Only Functions
         body: |
           Find functions that only return nil.
       codelingo/review:

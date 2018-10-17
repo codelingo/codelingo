@@ -2,7 +2,7 @@ tenets:
   - name: fall-through-case
     flows:
       codelingo/docs:
-        title: fall-through-case
+        title: Fall Through Case
         body: Finds non-empty cases that fall through.
       codelingo/review:
         comment: Non-empty cases must end with a break, return, or goto.

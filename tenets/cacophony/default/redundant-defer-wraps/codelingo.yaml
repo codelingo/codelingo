@@ -2,7 +2,7 @@ tenets:
   - name: redundant-defer-wraps
     flows:
       codelingo/docs:
-        title: redundant-defer-wraps
+        title: Redundant Defer Wraps
         body: |
           Finds redundant defer wrapping that could be simplified into a single line.
 

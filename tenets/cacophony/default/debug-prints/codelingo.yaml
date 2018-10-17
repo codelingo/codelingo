@@ -2,7 +2,7 @@ tenets:
   - name: debug-prints
     flows:
       codelingo/docs:
-        title: debug-prints
+        title: Debug Prints
         body: |
           Find debug print calls.
 

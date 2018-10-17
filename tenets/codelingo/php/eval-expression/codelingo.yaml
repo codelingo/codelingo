@@ -2,7 +2,7 @@ tenets:
   - name: eval-expression
     flows:
       codelingo/docs:
-        title: eval-expression
+        title: Eval Expression
         body: |
          "An eval-expression is untestable, a security risk and bad practice. Therefore it should be avoided. Consider to replace the eval-expression with regular code." - https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules
       codelingo/review:

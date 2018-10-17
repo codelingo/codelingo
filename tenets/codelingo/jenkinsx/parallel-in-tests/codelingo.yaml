@@ -9,7 +9,7 @@ tenets:
   - name: parallel-in-tests
     flows:
       codelingo/docs:
-        title: excludeIntegration
+        title: ExcludeIntegration
         body: |
           Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
 

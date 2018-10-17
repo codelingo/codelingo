@@ -2,7 +2,7 @@ tenets:
   - name: freed-new-object
     flows:
       codelingo/docs:
-        title: freed-new-object
+        title: Freed New Object
         body: Finds objects that were created with new and freed.
       codelingo/review:
         comment: This was created with new, and should be deleted not freed.
@@ -26,7 +26,7 @@ tenets:
   - name: deleted-malloced-objects
     flows:
       codelingo/docs:
-        title: deleted-malloced-objects
+        title: Deleted Malloced Objects
         body: Finds objects that were obtained with malloc and deleted.
       codelingo/review:
         comment: This was obtained with malloc, and should be freed not deleted.
@@ -52,7 +52,7 @@ tenets:
   - name: used-after-deletion
     flows:
       codelingo/docs:
-        title: used-after-deletion
+        title: Used After Deletion
         body: Finds objects used after deletion.
       codelingo/review:
         comment: This object has already been deleted.
@@ -75,7 +75,7 @@ tenets:
   - name: undeleted-returned-object
     flows:
       codelingo/docs:
-        title: undeleted-returned-object
+        title: Undeleted Returned Object
         body: Finds objects new that are not deleted.
       codelingo/review:
         comment: This object is neither deleted nor passed to a method that could delete it.

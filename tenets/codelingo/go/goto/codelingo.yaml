@@ -2,7 +2,7 @@ tenets:
   - name: goto-statement
     flows:
       codelingo/docs:
-        title: goto-statement
+        title: Goto Statement
         body: |
           Find uses of goto.
       codelingo/review:

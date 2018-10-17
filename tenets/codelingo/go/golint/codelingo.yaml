@@ -2,7 +2,7 @@ tenets:
   - name: go-lint-rules
     flows:
       codelingo/docs:
-        title: go-lint-rules
+        title: Go Lint Rules
         body: |
           Find all go linter rules.
       codelingo/review:

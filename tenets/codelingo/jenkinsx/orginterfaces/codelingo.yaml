@@ -9,7 +9,7 @@ tenets:
   - name: orginterfaces
     flows:
       codelingo/docs:
-        title: isNotInterfaceFile
+        title: IsNotInterfaceFile
         body: Finds interfaces which are not defined in a file called interface.go.
       codelingo/review:
         comment: Interfaces should be defined in a file called interface.go in the relevant folder.

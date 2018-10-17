@@ -2,7 +2,7 @@ tenets:
   - name: append-test
     flows:
       codelingo/docs:
-        title: append-test
+        title: Append Test
         body: "change test names"
       codelingo/rewrite:
         name: "Test{{name}}" # TODO: support modifiers here e.g. {{toUpper(name)}} where toUpper is a defined function.

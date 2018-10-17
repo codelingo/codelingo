@@ -3,7 +3,7 @@ tenets:
   - name: parallel-integration-tests
     flows:
       codelingo/docs:
-        title: parallel-integration-tests
+        title: Parallel Integration Tests
         body: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
       codelingo/review:
         comment: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.

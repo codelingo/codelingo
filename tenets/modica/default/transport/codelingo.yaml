@@ -2,7 +2,7 @@ tenets:
   - name: transport-template
     flows:
       codelingo/docs:
-        title: transport-template
+        title: Transport Template
         body: Find transport controllers and actions that violate naming conventions
     query: |
       import codelingo/ast/php

@@ -2,7 +2,7 @@ tenets:
   - name: todo-comments
     flows:
       codelingo/docs:
-        title: todo-comments
+        title: Todo Comments
         body: |
           Find comments containing TODO.
 

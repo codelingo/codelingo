@@ -2,7 +2,7 @@ tenets:
   - name: null-check
     flows:
       codelingo/docs:
-        title: null-check
+        title: Null Check
         body: Finds all calls to null-check
       codelingo/review:
         comment: Please use `=== null` rather than `is_null`

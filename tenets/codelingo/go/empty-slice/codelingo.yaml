@@ -2,7 +2,7 @@ tenets:
   - name: empty-slice
     flows:
       codelingo/docs:
-        title: empty-slice
+        title: Empty Slice
         body: |
           Find empty slice assignments.
       codelingo/review:

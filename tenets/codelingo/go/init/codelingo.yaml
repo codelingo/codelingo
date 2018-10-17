@@ -2,7 +2,7 @@ tenets:
   - name: init
     flows:
       codelingo/docs:
-        title: init
+        title: Init
         body: |
           Check that no inits functions are present in Go code.
       codelingo/review:

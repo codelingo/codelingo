@@ -2,7 +2,7 @@ tenets:
   - name: no-fmt-printx
     flows:
       codelingo/docs:
-        title: no-fmt-printx
+        title: No Fmt Printx
         body: |
           Find uses fmt.Print* (eg. Print, Println, Printf).
 

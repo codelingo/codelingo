@@ -9,7 +9,7 @@ tenets:
   - name: test-package-name
     flows:
       codelingo/docs:
-        title: missingTestSuffix
+        title: MissingTestSuffix
         body: |
           Best practice for unit tests is to define the testing package appending _test to the name of your package. This encourages good package design and will enable you to define the exported package API in a composable way.
 

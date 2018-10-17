@@ -2,7 +2,7 @@ tenets:
   - name: println-format-strings
     flows:
       codelingo/docs:
-        title: println-format-strings
+        title: Println Format Strings
         body: |
           Find Print and Println using format strings.
       codelingo/review:

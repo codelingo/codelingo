@@ -2,7 +2,7 @@ tenets:
   - name: unconvert
     flows:
       codelingo/docs:
-        title: unconvert
+        title: Unconvert
         body: |
           Identify unnecessary type conversions
       codelingo/review:

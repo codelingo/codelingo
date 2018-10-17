@@ -2,7 +2,7 @@ tenets:
   - name: sprintf-error
     flows:
       codelingo/docs:
-        title: sprintf-error
+        title: Sprintf Error
         body: |
           Find instances of 'errors.New(fmt.Sprintf(...))'.
       codelingo/review:
