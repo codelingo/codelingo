@@ -1,8 +1,10 @@
 tenets:
   - name: init
-    doc: |
-      Check that no inits functions are present in Go code.
     flows:
+      codelingo/docs:
+        title: init
+        body: |
+          Check that no inits functions are present in Go code.
       codelingo/review:
         comment: Init functions cause an import to have a side effects, and side effects are hard to test, reduce readability and increase the complexity of code.
     query: |

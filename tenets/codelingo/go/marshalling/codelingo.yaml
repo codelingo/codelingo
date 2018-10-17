@@ -1,10 +1,12 @@
 tenets:
   - name: mixed-marshalling
-    doc: |
-      Find cases where a server marshals data into a client data type.
-
-      Separates client and server versions of a request by ensuring the server never unmarshalls to the client's version. Use the types of your own structs to create a project specific review.
     flows:
+      codelingo/docs:
+        title: mixed-marshalling
+        body: |
+          Find cases where a server marshals data into a client data type.
+
+          Separates client and server versions of a request by ensuring the server never unmarshalls to the client's version. Use the types of your own structs to create a project specific review.
       codelingo/review:
         comment: Request should not be marshalled to a client type in the server.
     query: |

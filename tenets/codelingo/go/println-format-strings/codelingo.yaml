@@ -1,8 +1,10 @@
 tenets:
   - name: println-format-strings
-    doc: |
-      Find Print and Println using format strings.
     flows:
+      codelingo/docs:
+        title: println-format-strings
+        body: |
+          Find Print and Println using format strings.
       codelingo/review:
         comment: |
           {{identName}} doesn't support format strings, use Printf instead.

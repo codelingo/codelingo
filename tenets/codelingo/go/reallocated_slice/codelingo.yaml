@@ -1,7 +1,9 @@
 tenets:
   - name: reallocated_slice_pointers
-    doc: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313
     flows:
+      codelingo/docs:
+        title: reallocated_slice_pointers
+        body: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313
       codelingo/review:
         comment: This pointer may become invalid as the slice it comes from is reallocated.
     query: |

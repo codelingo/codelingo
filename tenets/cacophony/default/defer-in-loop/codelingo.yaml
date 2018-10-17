@@ -1,11 +1,13 @@
 tenets:
   - name: defer-in-loop
-    doc: |
-      Finds defer calls in loops.
-
-      Defers are only executed when a function returns. Using them inside loops is often a mistake since they will
-      build up and can be executed later than expected. The defers will never get called if the loop does not exit.
     flows:
+      codelingo/docs:
+        title: defer-in-loop
+        body: |
+          Finds defer calls in loops.
+
+          Defers are only executed when a function returns. Using them inside loops is often a mistake since they will
+          build up and can be executed later than expected. The defers will never get called if the loop does not exit.
       codelingo/review:
         comment: Defer is inside a loop. These will build up and can be executed later than expected.
     query: |

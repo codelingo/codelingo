@@ -1,8 +1,10 @@
 tenets:
   - name: go-lint-rules
-    doc: |
-      Find all go linter rules.
     flows:
+      codelingo/docs:
+        title: go-lint-rules
+        body: |
+          Find all go linter rules.
       codelingo/review:
         comment: |
           {{text}}

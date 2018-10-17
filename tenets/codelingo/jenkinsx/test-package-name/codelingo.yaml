@@ -7,11 +7,13 @@ functions:
     }
 tenets:
   - name: test-package-name
-    doc: |
-      Best practice for unit tests is to define the testing package appending _test to the name of your package. This encourages good package design and will enable you to define the exported package API in a composable way.
-
-      https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
     flows:
+      codelingo/docs:
+        title: missingTestSuffix
+        body: |
+          Best practice for unit tests is to define the testing package appending _test to the name of your package. This encourages good package design and will enable you to define the exported package API in a composable way.
+
+          https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
         comment: Best practice for unit tests is to define the testing package appending _test to the name of your package.
     query: |

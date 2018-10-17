@@ -1,8 +1,10 @@
 tenets:
   - name: bool-arg
-    doc: |
-      Find functions with one or more boolean arguments.
     flows:
+      codelingo/docs:
+        title: bool-arg
+        body: |
+          Find functions with one or more boolean arguments.
       codelingo/review:
         comment: Boolean arguments can indicate low cohesion. Consider using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.
     query: |

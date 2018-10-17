@@ -1,8 +1,10 @@
 tenets:
   - name: sprintf-error
-    doc: |
-      Find instances of 'errors.New(fmt.Sprintf(...))'.
     flows:
+      codelingo/docs:
+        title: sprintf-error
+        body: |
+          Find instances of 'errors.New(fmt.Sprintf(...))'.
       codelingo/review:
         comment: Should replace errors.New(fmt.Sprintf(...)) with errors.Errorf(...).
     query: |
