@@ -48,10 +48,15 @@ func NewFlow(cliCMD *CLICommand, decoratorCMD *DecoratorCommand) *flowRunner {
 }
 
 func (f *flowRunner) Run() (decoratedResultc chan *DecoratedResult, err error) {
+	waitc := make(chan struct{})
 	defer func() {
-		if err != nil {
-			close(decoratedResultc)
+		if err != nil && waitc != nil {
+			close(waitc)
 		}
+	}()
+	go func() {
+		<-waitc
+		close(decoratedResultc)
 	}()
 
 	resultc, errc, cancel, err := f.RunCLI()
@@ -66,7 +71,9 @@ func (f *flowRunner) Run() (decoratedResultc chan *DecoratedResult, err error) {
 	wg.Add(1)
 	go func() {
 		wg.Wait()
-		close(decoratedResultc)
+		if waitc != nil {
+			close(waitc)
+		}
 	}()
 
 l:
@@ -171,7 +178,6 @@ func NewCtx(cmd cli.Command, input []string) (*cli.Context, error) {
 	}
 
 	return ctx, nil
-
 }
 
 func normalizeFlags(flags []cli.Flag, set *flag.FlagSet) error {
