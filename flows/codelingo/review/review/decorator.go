@@ -16,12 +16,7 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 	Command: cli.Command{
 		Name:  "review",
 		Usage: "Review code following tenets in codelingo.yaml.",
-		Flags: []cli.Flag{
-			cli.BoolFlag{
-				Name:  "variable, v",
-				Usage: "extract the value of the fact property as a variable",
-			},
-		},
+		Flags: []cli.Flag{},
 		Description: `
 "@review reviews the decorated node.
 `[1:],

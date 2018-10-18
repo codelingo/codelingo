@@ -47,13 +47,14 @@ func main() {
 		return
 	}
 
-	msg, err := review.MakeReport(cliCtx, results)
-	if err != nil {
-		util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))
-		util.FatalOSErr(err)
-		return
+	if cliCtx.IsSet("output") {
+		msg, err := review.MakeReport(cliCtx, results)
+		if err != nil {
+			util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))
+			util.FatalOSErr(err)
+			return
+		}
+		fmt.Println(msg)
 	}
-
-	fmt.Println(msg)
 
 }
