@@ -1,0 +1,7 @@
+decscrpiton: Tenets written for Modica
+version: 0.0.0
+tenets:
+  - null-check
+  - transport
+tags:
+  - php
