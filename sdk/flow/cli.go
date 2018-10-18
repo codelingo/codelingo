@@ -64,7 +64,7 @@ func (f *flowRunner) Run() (decoratedResultc chan *DecoratedResult, err error) {
 		return nil, errors.Trace(err)
 	}
 
-	// If user is manually confirming reviews, set a long timeout.
+	// If user is manually confirming results, set a long timeout.
 	timeout := time.After(time.Hour * 1)
 
 	wg := sync.WaitGroup{}
@@ -85,7 +85,7 @@ l:
 				break
 			}
 
-			util.Logger.Debugf("Review error: %s", errors.ErrorStack(err))
+			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
 			return nil, errors.Trace(err)
 		case result, ok := <-resultc:
 			if !ok {
