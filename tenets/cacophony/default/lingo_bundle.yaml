@@ -1,0 +1,14 @@
+decscrpiton: Tenets written for The Cacophony Project
+version: 0.0.0
+tenets:
+  - caught-generic-exceptions
+  - debug-prints
+  - defer-in-loop
+  - no-fmt-print
+  - raise-generic-exceptions
+  - redundant-defer-wraps
+tags:
+  - golang
+  - go
+  - python
+  - py
