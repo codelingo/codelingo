@@ -12,7 +12,7 @@ tenets:
       go.file(depth = any):
         go.call_expr(depth = any):
           go.ident:
-            @ review.vars.name
+             @var name
             name as typeName
           go.args:
             @review comment
