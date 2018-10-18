@@ -1,10 +1,6 @@
 package option
 
-import (
-	"strings"
-
-	"github.com/juju/errors"
-)
+import "github.com/codegangsta/cli"
 
 type option uint32
 
@@ -67,17 +63,13 @@ func strToOpt(str string) option {
 
 // New returns a new option object built from a decorator string with the
 // following format:  <flow>.[<options>].<config_key>
-func New(decStr string) (option, error) {
+func New(ctx *cli.Context) (option, error) {
 	opts := opt_replace | opt_startToEndOffset | opt_byte
 
-	parts := strings.Split(decStr, ".")
-	if len(parts) < 2 {
-		return 0, errors.Errorf("badly formatted decorator options, expected '@rewrite.<config_key>', got:  %q", decStr)
-	}
-
-	// add all options
-	for _, optStr := range parts[1 : len(parts)-1] {
-		opts.addOption(strToOpt(optStr))
+	for _, flag := range []string{"replace", "prepend", "append", "line", "byte", "start-offset", "end-offset", "start-to-end-offset"} {
+		if ctx.Bool(flag) {
+			opts.addOption(strToOpt(flag))
+		}
 	}
 
 	return opts, nil

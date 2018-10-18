@@ -15,11 +15,13 @@ import (
 	"github.com/juju/errors"
 )
 
-func RunFlow(ctx context.Context, flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, error) {
+func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {
+
+	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	rpcReq := &grpcflow.Request{
@@ -29,11 +31,11 @@ func RunFlow(ctx context.Context, flowName string, req proto.Message, newItem fu
 
 	replyc, runErrc, err := Request(ctx, rpcReq)
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
-	return itemc, ErrFanIn(runErrc, marshalErrc), nil
+	return itemc, ErrFanIn(runErrc, marshalErrc), cancel, nil
 }
 
 func Request(ctx context.Context, req *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {

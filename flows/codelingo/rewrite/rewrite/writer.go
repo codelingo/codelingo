@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/rewrite/rewrite/option"
 	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
@@ -13,20 +14,21 @@ import (
 	"github.com/juju/errors"
 )
 
-func Write(newSRCs []*rewriterpc.Hunk) error {
+func Write(results []*flowutil.DecoratedResult) error {
 
 	// TODO(waigani) use one open file handler per file to write all changes
 	// and use a buffered writer: https://www.devdungeon.com/content/working-
 	// files-go#write_buffered
 
-	// first group all hunks by file
-	hunkMap := make(map[string][]*rewriterpc.Hunk)
+	// first group all results by file
+	resultMap := make(map[string][]*flowutil.DecoratedResult)
 
-	for _, newSRC := range newSRCs {
-		hunkMap[newSRC.Filename] = append(hunkMap[newSRC.Filename], newSRC)
+	for _, result := range results {
+		filename := result.Payload.(*rewriterpc.Hunk).Filename
+		resultMap[filename] = append(resultMap[filename], result)
 	}
 
-	for filename, hunks := range hunkMap {
+	for filename, results := range resultMap {
 
 		rootPath, err := flowutil.GitCMD("rev-parse", "--show-toplevel")
 		if err != nil {
@@ -39,14 +41,14 @@ func Write(newSRCs []*rewriterpc.Hunk) error {
 			return errors.Trace(err)
 		}
 
-		// then order hunks by start offset such that we apply the
+		// then order results by start offset such that we apply the
 		// modifications to the file from the bottom up.
-		sort.Sort(byOffset(hunks))
+		sort.Sort(byOffset(results))
 		var i int
-		var hunk *rewriterpc.Hunk
-		for i, hunk = range hunks {
+		var result *flowutil.DecoratedResult
+		for i, result = range results {
 
-			fileSRC, err = newFileSRC(hunk, fileSRC)
+			fileSRC, err = newFileSRC(result.Ctx, result.Payload.(*rewriterpc.Hunk), fileSRC)
 			if err != nil {
 				return errors.Trace(err)
 			}
@@ -84,9 +86,9 @@ func lineOffsets(src []byte, offset int32) []int32 {
 	return []int32{start, end}
 }
 
-func newFileSRC(hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, error) {
+func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, error) {
 
-	opts, err := option.New(hunk.DecoratorOptions)
+	opts, err := option.New(ctx)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -175,7 +177,7 @@ func newFileSRC(hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, error) {
 	return fileSRC, nil
 }
 
-type byOffset []*rewriterpc.Hunk
+type byOffset []*flowutil.DecoratedResult
 
 func (o byOffset) Len() int {
 	return len(o)
@@ -186,5 +188,5 @@ func (o byOffset) Swap(i, j int) {
 }
 
 func (o byOffset) Less(i, j int) bool {
-	return o[j].StartOffset < o[i].StartOffset
+	return o[j].Payload.(*rewriterpc.Hunk).StartOffset < o[i].Payload.(*rewriterpc.Hunk).StartOffset
 }
