@@ -4,15 +4,12 @@ tenets:
       codelingo/docs:
         title: Append Test
         body: "change test names"
-      codelingo/rewrite:
-        name: "Test{{name}}" # TODO: support modifiers here e.g. {{toUpper(name)}} where toUpper is a defined function.
-        comment: "// Test is some kind of test"
+      codelingo/rewrite
     query: |
       import codelingo/ast/go
-
-      @rewrite.prepend.line.comment
+      @rewrite -pl "// Test is some kind of test"
       go.func_decl(depth = any):
-        @rewrite.replace.name
+        @rewrite "Test{{name}}"
         go.ident:
-          @rewrite.vars.name
+          @vars name
           name
