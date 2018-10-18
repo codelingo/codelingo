@@ -8,9 +8,6 @@ funcs:
 tenets:
   - name: test-package-name
     flows:
-      codelingo/rewrite:
-        name: |
-          {{packageName}}_test
       codelingo/docs:
         title: MissingTestSuffix
         body: |
@@ -19,10 +16,14 @@ tenets:
           https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
         comment: Best practice for unit tests is to define the testing package appending _test to the name of your package.
+      codelingo/rewrite:
+        name: |
+          {{packageName}}_test
     query: |
       import codelingo/ast/go
 
       go.file(depth = any):
+        @rewrite name
         @review comment
         @rewrite --replace name
         go.ident:

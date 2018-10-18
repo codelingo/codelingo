@@ -38,8 +38,6 @@ tenets:
   # There is an explicit tenet for each case. See more concise possible solutions below.
   - name: right-build-directive-wrong-file
     flows:
-      codelingo/rewrite:
-        name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
         title: Append
         body: |
@@ -50,6 +48,7 @@ tenets:
           right-build-directive-wrong-file
           Integration tests should have the custom build directive `// +build integration`,
           belong to a file called `.*_integration_test.go`, and a a package called `<packagename>_test`
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
 
@@ -58,6 +57,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
+        @rewrite name
         @review comment
         go.file:
           go.comment_group:
@@ -100,6 +100,7 @@ tenets:
               start_offset == 0
               text == "// +build integration"
           # The only top level ident in a go file is (should be) the package name
+          @rewrite name
           @review comment
           go.ident(depth = 0:2):
             name as testPackageName
@@ -128,6 +129,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
+        @rewrite name
         @review comment
         go.file:
           # The only top level ident in a go file is (should be) the package name
@@ -162,6 +164,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
+        @rewrite name
         @review comment
         go.file:
           # The only top level ident in a go file is (should be) the package name
@@ -194,6 +197,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
+        @rewrite name
         @review comment
         go.file:
           @rewrite --prepend "// +build integration"
@@ -231,6 +235,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
+        @rewrite name
         @review comment
         go.file:
           filename as fname

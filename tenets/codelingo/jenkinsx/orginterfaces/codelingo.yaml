@@ -8,6 +8,11 @@ funcs:
 tenets:
   - name: orginterfaces
     flows:
+      codelingo/rewrite:
+        name: mycoolkey
+      codelingo/docs:
+        title: Title in Docs
+        body: |
       codelingo/docs:
         title: IsNotInterfaceFile
         body: Finds interfaces which are not defined in a file called interface.go.
@@ -19,5 +24,6 @@ tenets:
       go.file(depth = any):
         filename as fname
         isNotInterfaceFile(fname)
+        @rewrite.name
         @review comment
         go.interface_type(depth = any)

@@ -8,7 +8,6 @@ funcs:
 tenets:
   - name: parallel-in-tests
     flows:
-      codelingo/rewrite:
       codelingo/docs:
         title: Is Parallel In Tests
         body: |
@@ -17,12 +16,14 @@ tenets:
           https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
         comment: This unit test does not contain the `t.Parallel()` directive. Consider adding `t.Parallel()` as the first line of this test to keep it nice and speedy.
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
 
       go.file(depth = any):
         filename as fname
         excludeIntegration(fname)
+        @rewrite name
         @review comment
         go.func_decl(depth = any):
           @rewrite --append --line "t.Parallel()"
