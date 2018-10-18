@@ -23,7 +23,6 @@ tenets:
       go.file(depth = any):
         filename as fname
         excludeIntegration(fname)
-        @rewrite name
         @review comment
         go.func_decl(depth = any):
           @rewrite --append --line "t.Parallel()"
