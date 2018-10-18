@@ -17,7 +17,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/go
 
-	     @ review.comment
+	     @review comment
 	     go.declarations
 ```
 </p></details>
@@ -36,7 +36,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/go
 
-	     @ review.comment
+	     @review comment
 	     go.expressions
 ```
 </p></details>
@@ -55,7 +55,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/go
 
-	     @ review.comment
+	     @review comment
 	     go.specs
 ```
 </p></details>
@@ -74,7 +74,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/go
 
-	     @ review.comment
+	     @review comment
 	     go.statements
 ```
 </p></details>

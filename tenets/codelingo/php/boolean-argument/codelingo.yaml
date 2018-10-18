@@ -10,7 +10,7 @@ tenets:
       import codelingo/ast/php
 
       php.stmt_function(depth = any):
-        @ review.comment
+        @review comment
         php.param:
           type == "bool"
 

@@ -14,7 +14,7 @@ tenets:
         codelingo/ast/phplint
       )
 
-      @ review.comment
+      @review comment
       phplint.lint_rule(depth = any):
         @ review.vars.category
         category

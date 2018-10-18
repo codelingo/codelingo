@@ -34,6 +34,6 @@ tenets:
               php.name_fullyqualified:
                 name == "offsiteCheck"
           php.arg(depth = any):
-            @ review.comment
+            @review comment
             php.expr_variable(depth =any):
               name as urlVar

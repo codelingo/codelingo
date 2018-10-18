@@ -48,7 +48,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        @review.comment
+        @review comment
         go.file:
           go.comment_group:
             go.comment:
@@ -78,14 +78,14 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        # @review.comment
+        # @review comment
         go.file:
           go.comment_group:
             go.comment:
               start_offset == 0
               text == "// +build integration"
           # The only top level ident in a go file is (should be) the package name
-          @review.comment
+          @review comment
           go.ident(depth = 0:2):
             name as testPackageName
             doesNotMatch(/_test/, testPackageName)
@@ -111,7 +111,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        @review.comment
+        @review comment
         go.file:
           # The only top level ident in a go file is (should be) the package name
           go.ident:
@@ -142,7 +142,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        @review.comment
+        @review comment
         go.file:
           # The only top level ident in a go file is (should be) the package name
           go.ident:
@@ -171,7 +171,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        @review.comment
+        @review comment
         go.file:
           filename as fname
           regex(/integration_test.go/, fname)
@@ -202,7 +202,7 @@ tenets:
           go.ident:
             name as packageName
             doesNotMatch(/test/, packageName)
-        @review.comment
+        @review comment
         go.file:
           filename as fname
           regex(/integration_test.go/, fname)
@@ -219,7 +219,7 @@ tenets:
 # test and are also missing at least one.
 # Failing due to "hit a uncaught error: got 0 results expecting 1 for block h, fact "common.comment_group"
 
-# @review.comment
+# @review comment
 # go.file(depth = any):
 #   any_of:
 #     filename as fname
@@ -248,7 +248,7 @@ tenets:
 
 # Match a file that has one or two of the three charateristics of integration tests
 # Not implemented
-# @review.comment
+# @review comment
 # go.file(depth = any):
 #   1:2_of:
 #     filename as fname

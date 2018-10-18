@@ -25,6 +25,7 @@ type DecoratedResult struct {
 }
 
 type flowRunner struct {
+	cliCtx       *cli.Context
 	cliCMD       *CLICommand
 	decoratorCMD *DecoratorCommand
 }
@@ -47,7 +48,8 @@ func NewFlow(cliCMD *CLICommand, decoratorCMD *DecoratorCommand) *flowRunner {
 	}
 }
 
-func (f *flowRunner) Run() (decoratedResultc chan *DecoratedResult, err error) {
+func (f *flowRunner) Run() (_ chan *DecoratedResult, err error) {
+	decoratedResultc := make(chan *DecoratedResult)
 	waitc := make(chan struct{})
 	defer func() {
 		if err != nil && waitc != nil {
@@ -97,7 +99,7 @@ l:
 			// TODO(waigani) this is brittle and expects the result struct to have a
 			// DecoratorOptions field. We need to refactor the Flow server to return a
 			// tuple of [<decorator>, <result>].
-			decorator := reflect.ValueOf(result).FieldByName("DecoratorOptions").String()
+			decorator := reflect.Indirect(reflect.ValueOf(result)).FieldByName("DecoratorOptions").String()
 			keep, err := f.ConfirmDecorated(decorator, result)
 			if err != nil {
 				cancel()
@@ -134,14 +136,25 @@ l:
 	return decoratedResultc, nil
 }
 
-// TODO(waigani) move this to codelingo/sdk/flow
+func (f *flowRunner) CliCtx() (*cli.Context, error) {
+	if f.cliCtx == nil {
+		cmd := *f.cliCMD
+		ctx, err := NewCtx(cmd.Command, os.Args[1:])
+		if err != nil {
+			return nil, errors.Trace(err)
+		}
+		f.cliCtx = ctx
+	}
+	return f.cliCtx, nil
+}
+
+// TODO(waicmdgani) move this to codelingo/sdk/flow
 func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
-	cmd := *f.cliCMD
-	ctx, err := NewCtx(cmd.Command, os.Args[1:])
+	ctx, err := f.CliCtx()
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
-	return cmd.Request(ctx)
+	return f.cliCMD.Request(ctx)
 }
 
 func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (bool, error) {

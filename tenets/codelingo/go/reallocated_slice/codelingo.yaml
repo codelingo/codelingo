@@ -76,7 +76,7 @@ tenets:
                               name == structName
                             go.ident:
                               name == fieldName
-                @review.comment
+                @review comment
                 go.call_expr(depth = any):
                   go.selector_expr:
                     go.ident:

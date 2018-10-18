@@ -19,5 +19,5 @@ tenets:
         exclude:
           go.func_lit(depth = any):
             include(depth = any):
-              @ review.comment
+              @review comment
               go.defer_stmt(depth = any)

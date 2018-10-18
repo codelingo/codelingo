@@ -14,6 +14,6 @@ tenets:
         go.decls:
           go.value_spec(depth = 1):
             go.names:
-              @ review.comment
+              @review comment
               go.ident:
                 private == "true"

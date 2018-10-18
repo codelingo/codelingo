@@ -6,21 +6,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"sync"
-	"time"
 
 	"github.com/golang/protobuf/ptypes"
 
-	"github.com/briandowns/spinner"
 	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	"github.com/codelingo/rpc/flow"
 	"github.com/codelingo/rpc/flow/client"
+	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 )
 
-func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Issue, chan error, error) {
+func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan proto.Message, chan error, error) {
 	defer util.Logger.Sync()
 	util.Logger.Debug("opening connection to flow server ...")
 	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer)
@@ -48,7 +47,7 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Iss
 	}
 	util.Logger.Debug("...request to flow server sent. Received reply channel.")
 
-	issuec := make(chan *flow.Issue)
+	issuec := make(chan proto.Message)
 	errc := make(chan error)
 	wg := sync.WaitGroup{}
 	wg.Add(2)
@@ -88,7 +87,18 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan *flow.Iss
 	return issuec, errc, nil
 }
 
-func MakeReport(issues []*flow.Issue, format, outputFile string) (string, error) {
+type ReportStrt struct {
+	Comment  string
+	Filename string
+	Line     int
+	Snippet  string
+}
+
+func MakeReport(cliCtx *cli.Context, issues []*ReportStrt) (string, error) {
+
+	format := cliCtx.String("format")
+	outputFile := cliCtx.String("output")
+
 	var data []byte
 	var err error
 	switch format {
@@ -129,88 +139,6 @@ func ReadDotLingo(ctx *cli.Context) (string, error) {
 		}
 	}
 	return string(dotlingo), nil
-}
-
-func ConfirmIssues(cancel context.CancelFunc, issuec chan *flow.Issue, errorc chan error, keepAll bool, saveToFile string) ([]*flow.Issue, error) {
-	defer util.Logger.Sync()
-
-	var confirmedIssues []*flow.Issue
-	spnr := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-	spnr.Start()
-	defer spnr.Stop()
-
-	output := saveToFile == ""
-	cfm, err := NewConfirmer(output, keepAll, nil)
-	if err != nil {
-		cancel()
-		return nil, errors.Trace(err)
-	}
-
-	// If user is manually confirming reviews, set a long timeout.
-	timeout := time.After(time.Hour * 1)
-
-	util.Logger.Debug("waiting for results from repy chan...")
-l:
-	for {
-		select {
-		case err, ok := <-errorc:
-			if !ok {
-				errorc = nil
-				break
-			}
-
-			// Abort review
-			cancel()
-			util.Logger.Debugf("Review error: %s", errors.ErrorStack(err))
-			return nil, errors.Trace(err)
-		case iss, ok := <-issuec:
-			if !ok {
-				issuec = nil
-				if !keepAll {
-					spnr.Stop()
-				}
-				break
-			}
-
-			// Flow server checking the connection; can be safely ignored.
-			if iss.IsHeartbeat {
-				util.Logger.Debug("received heartbeat...")
-				continue
-			}
-			util.Logger.Debug("...received result")
-
-			if !keepAll {
-				spnr.Stop()
-			}
-
-			// TODO: remove errors from issues; there's a separate channel for that
-			if iss.Err != "" {
-				// Abort review
-				cancel()
-				return nil, errors.New(iss.Err)
-			}
-
-			if cfm.Confirm(0, iss) {
-				confirmedIssues = append(confirmedIssues, iss)
-			}
-
-			if !keepAll {
-				spnr.Restart()
-			}
-		case <-timeout:
-			cancel()
-			return nil, errors.New("timed out waiting for issue")
-		}
-		if issuec == nil && errorc == nil {
-			break l
-		}
-	}
-
-	// Stop spinner if it hasn't been stopped already
-	if keepAll {
-		spnr.Stop()
-	}
-	return confirmedIssues, nil
 }
 
 func NewRange(filename string, startLine, endLine int) *flow.IssueRange {

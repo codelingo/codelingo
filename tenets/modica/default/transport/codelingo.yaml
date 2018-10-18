@@ -18,7 +18,7 @@ tenets:
             php.stmt_class:
               @ filter.controller
               name
-              @review.comment
+              @review comment
               php.stmt_classmethod:
                 @ filter.action
                 name

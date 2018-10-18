@@ -17,7 +17,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.arg
 ```
 </p></details>
@@ -36,7 +36,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.const
 ```
 </p></details>
@@ -55,7 +55,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_array
 ```
 </p></details>
@@ -74,7 +74,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_arraydimfetch
 ```
 </p></details>
@@ -93,7 +93,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_arrayitem
 ```
 </p></details>
@@ -112,7 +112,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assign
 ```
 </p></details>
@@ -131,7 +131,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop
 ```
 </p></details>
@@ -150,7 +150,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_bitwiseand
 ```
 </p></details>
@@ -169,7 +169,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_bitwiseor
 ```
 </p></details>
@@ -188,7 +188,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_bitwisexor
 ```
 </p></details>
@@ -207,7 +207,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_concat
 ```
 </p></details>
@@ -226,7 +226,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_div
 ```
 </p></details>
@@ -245,7 +245,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_minus
 ```
 </p></details>
@@ -264,7 +264,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_mod
 ```
 </p></details>
@@ -283,7 +283,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_mul
 ```
 </p></details>
@@ -302,7 +302,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_plus
 ```
 </p></details>
@@ -321,7 +321,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_pow
 ```
 </p></details>
@@ -340,7 +340,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_shiftleft
 ```
 </p></details>
@@ -359,7 +359,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignop_shiftright
 ```
 </p></details>
@@ -378,7 +378,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_assignref
 ```
 </p></details>
@@ -397,7 +397,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop
 ```
 </p></details>
@@ -416,7 +416,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_bitwiseand
 ```
 </p></details>
@@ -435,7 +435,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_bitwiseor
 ```
 </p></details>
@@ -454,7 +454,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_bitwisexor
 ```
 </p></details>
@@ -473,7 +473,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_booleanand
 ```
 </p></details>
@@ -492,7 +492,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_booleanor
 ```
 </p></details>
@@ -511,7 +511,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_coalesce
 ```
 </p></details>
@@ -530,7 +530,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_concat
 ```
 </p></details>
@@ -549,7 +549,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_div
 ```
 </p></details>
@@ -568,7 +568,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_equal
 ```
 </p></details>
@@ -587,7 +587,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_greater
 ```
 </p></details>
@@ -606,7 +606,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_greaterorequal
 ```
 </p></details>
@@ -625,7 +625,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_identical
 ```
 </p></details>
@@ -644,7 +644,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_logicaland
 ```
 </p></details>
@@ -663,7 +663,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_logicalor
 ```
 </p></details>
@@ -682,7 +682,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_logicalxor
 ```
 </p></details>
@@ -701,7 +701,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_minus
 ```
 </p></details>
@@ -720,7 +720,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_mod
 ```
 </p></details>
@@ -739,7 +739,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_mul
 ```
 </p></details>
@@ -758,7 +758,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_notequal
 ```
 </p></details>
@@ -777,7 +777,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_notidentical
 ```
 </p></details>
@@ -796,7 +796,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_plus
 ```
 </p></details>
@@ -815,7 +815,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_pow
 ```
 </p></details>
@@ -834,7 +834,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_shiftleft
 ```
 </p></details>
@@ -853,7 +853,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_shiftright
 ```
 </p></details>
@@ -872,7 +872,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_smaller
 ```
 </p></details>
@@ -891,7 +891,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_smallerorequal
 ```
 </p></details>
@@ -910,7 +910,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_binaryop_spaceship
 ```
 </p></details>
@@ -929,7 +929,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_bitwisenot
 ```
 </p></details>
@@ -948,7 +948,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_booleannot
 ```
 </p></details>
@@ -967,7 +967,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_array
 ```
 </p></details>
@@ -986,7 +986,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_bool
 ```
 </p></details>
@@ -1005,7 +1005,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_double
 ```
 </p></details>
@@ -1024,7 +1024,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_int
 ```
 </p></details>
@@ -1043,7 +1043,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_object
 ```
 </p></details>
@@ -1062,7 +1062,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_string
 ```
 </p></details>
@@ -1081,7 +1081,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_cast_unset
 ```
 </p></details>
@@ -1100,7 +1100,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_classconstfetch
 ```
 </p></details>
@@ -1119,7 +1119,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_clone
 ```
 </p></details>
@@ -1138,7 +1138,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_closure
 ```
 </p></details>
@@ -1157,7 +1157,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_closureuse
 ```
 </p></details>
@@ -1176,7 +1176,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_constfetch
 ```
 </p></details>
@@ -1195,7 +1195,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_empty
 ```
 </p></details>
@@ -1214,7 +1214,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_errorsuppress
 ```
 </p></details>
@@ -1233,7 +1233,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_eval
 ```
 </p></details>
@@ -1252,7 +1252,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_exit
 ```
 </p></details>
@@ -1271,7 +1271,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_funccall
 ```
 </p></details>
@@ -1290,7 +1290,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_include
 ```
 </p></details>
@@ -1309,7 +1309,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_instanceof
 ```
 </p></details>
@@ -1328,7 +1328,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_isset
 ```
 </p></details>
@@ -1347,7 +1347,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_list
 ```
 </p></details>
@@ -1366,7 +1366,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_methodcall
 ```
 </p></details>
@@ -1385,7 +1385,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_new
 ```
 </p></details>
@@ -1404,7 +1404,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_postdec
 ```
 </p></details>
@@ -1423,7 +1423,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_postinc
 ```
 </p></details>
@@ -1442,7 +1442,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_predec
 ```
 </p></details>
@@ -1461,7 +1461,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_preinc
 ```
 </p></details>
@@ -1480,7 +1480,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_print
 ```
 </p></details>
@@ -1499,7 +1499,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_propertyfetch
 ```
 </p></details>
@@ -1518,7 +1518,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_shellexec
 ```
 </p></details>
@@ -1537,7 +1537,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_staticcall
 ```
 </p></details>
@@ -1556,7 +1556,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_staticpropertyfetch
 ```
 </p></details>
@@ -1575,7 +1575,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_ternary
 ```
 </p></details>
@@ -1594,7 +1594,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_unaryminus
 ```
 </p></details>
@@ -1613,7 +1613,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_unaryplus
 ```
 </p></details>
@@ -1632,7 +1632,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_variable
 ```
 </p></details>
@@ -1651,7 +1651,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_yield
 ```
 </p></details>
@@ -1670,7 +1670,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.expr_yieldfrom
 ```
 </p></details>
@@ -1689,7 +1689,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.name
 ```
 </p></details>
@@ -1708,7 +1708,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.param
 ```
 </p></details>
@@ -1727,7 +1727,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.scalar_encapsedstringpart
 ```
 </p></details>
@@ -1746,7 +1746,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.scalar_string
 ```
 </p></details>
@@ -1765,7 +1765,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_break
 ```
 </p></details>
@@ -1784,7 +1784,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_case
 ```
 </p></details>
@@ -1803,7 +1803,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_catch
 ```
 </p></details>
@@ -1822,7 +1822,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_class
 ```
 </p></details>
@@ -1841,7 +1841,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_classconst
 ```
 </p></details>
@@ -1860,7 +1860,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_classmethod
 ```
 </p></details>
@@ -1879,7 +1879,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_const
 ```
 </p></details>
@@ -1898,7 +1898,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_continue
 ```
 </p></details>
@@ -1917,7 +1917,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_declare
 ```
 </p></details>
@@ -1936,7 +1936,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_declaredeclare
 ```
 </p></details>
@@ -1955,7 +1955,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_do
 ```
 </p></details>
@@ -1974,7 +1974,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_echo
 ```
 </p></details>
@@ -1993,7 +1993,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_else
 ```
 </p></details>
@@ -2012,7 +2012,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_elseif
 ```
 </p></details>
@@ -2031,7 +2031,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_finally
 ```
 </p></details>
@@ -2050,7 +2050,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_foreach
 ```
 </p></details>
@@ -2069,7 +2069,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_function
 ```
 </p></details>
@@ -2088,7 +2088,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_global
 ```
 </p></details>
@@ -2107,7 +2107,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_goto
 ```
 </p></details>
@@ -2126,7 +2126,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_groupuse
 ```
 </p></details>
@@ -2145,7 +2145,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_haltcompiler
 ```
 </p></details>
@@ -2164,7 +2164,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_if
 ```
 </p></details>
@@ -2183,7 +2183,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_inlinehtml
 ```
 </p></details>
@@ -2202,7 +2202,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_interface
 ```
 </p></details>
@@ -2221,7 +2221,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_namespace
 ```
 </p></details>
@@ -2240,7 +2240,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_property
 ```
 </p></details>
@@ -2259,7 +2259,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_propertyproperty
 ```
 </p></details>
@@ -2278,7 +2278,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_return
 ```
 </p></details>
@@ -2297,7 +2297,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_staticvar
 ```
 </p></details>
@@ -2316,7 +2316,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_switch
 ```
 </p></details>
@@ -2335,7 +2335,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_throw
 ```
 </p></details>
@@ -2354,7 +2354,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_trait
 ```
 </p></details>
@@ -2373,7 +2373,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_traituse
 ```
 </p></details>
@@ -2392,7 +2392,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_traituseadaptation_alias
 ```
 </p></details>
@@ -2411,7 +2411,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_traituseadaptation_precedence
 ```
 </p></details>
@@ -2430,7 +2430,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_trycatch
 ```
 </p></details>
@@ -2449,7 +2449,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_unset
 ```
 </p></details>
@@ -2468,7 +2468,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_use
 ```
 </p></details>
@@ -2487,7 +2487,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_useuse
 ```
 </p></details>
@@ -2506,7 +2506,7 @@ tenets:
 	   query: |
 	     import codelingo/ast/php
 
-	     @ review.comment
+	     @review comment
 	     php.stmt_while
 ```
 </p></details>

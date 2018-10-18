@@ -15,6 +15,6 @@ tenets:
             @ review.vars.name
             name as typeName
           go.args:
-            @ review.comment
+            @review comment
             go.ident:
               type == typeName

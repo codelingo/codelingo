@@ -11,7 +11,7 @@ tenets:
 
       php.file(depth = any):
         any_of:
-          @ review.comment
+          @review comment
           php.stmt_while(depth = any):
             php.expr_funccall(depth = any):
               any_of:
@@ -19,7 +19,7 @@ tenets:
                   name == "sizeof"
                 php.name_fullyqualified:
                   name == "count"
-          @ review.comment
+          @review comment
           php.stmt_for(depth = any):
             php.expr_funccall(depth = any):
               any_of:
@@ -27,7 +27,7 @@ tenets:
                   name == "sizeof"
                 php.name_fullyqualified:
                   name == "count"
-          @ review.comment
+          @review comment
           php.stmt_do(depth = any):
             php.expr_funccall(depth = any):
               any_of:

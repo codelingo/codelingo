@@ -19,10 +19,10 @@ tenets:
 
       python36.try(depth = any):
         any_of:
-          @ review.comment
+          @review comment
           python36.except_handler:
             python36.name:
               id == "Exception"
-          @ review.comment
+          @review comment
           python36.except_handler:
             type == "None"

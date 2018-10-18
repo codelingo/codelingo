@@ -18,7 +18,7 @@ tenets:
       )
 
       python36.raise(depth = any):
-        @ review.comment
+        @review comment
         python36.call:
           python36.name:
             id == "Exception"

@@ -31,7 +31,7 @@ tenets:
         filename as filename
         doesNotContain(filename, "_test.go")
         go.decls:
-          @review.comment
+          @review comment
           go.func_decl:
             go.ident:
               public == "true"

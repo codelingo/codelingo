@@ -10,7 +10,7 @@ tenets:
     query: |
       import codelingo/ast/go
   
-      @ review.comment
+      @review comment
       go.assign_stmt(depth = any):
         tok == ":="
         go.rhs:

@@ -11,11 +11,11 @@ tenets:
 
       php.file(depth = any):
         any_of:
-          @review.comment
+          @review comment
           php.expr_funccall(depth = any):
             php.name_fullyqualified:
               name == "is_null"
-          @review.comment
+          @review comment
           php.expr_funccall(depth = any):
             php.name:
               name == "is_null"

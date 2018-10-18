@@ -12,6 +12,6 @@ tenets:
         codelingo/ast/go
       )
 
-      @ review.comment
+      @review comment
       go.branch_stmt(depth = any):
         tok == "goto"

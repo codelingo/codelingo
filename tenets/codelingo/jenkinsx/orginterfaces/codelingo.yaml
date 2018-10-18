@@ -19,5 +19,5 @@ tenets:
       go.file(depth = any):
         filename as fname
         isNotInterfaceFile(fname)
-        @review.comment
+        @review comment
         go.interface_type(depth = any)

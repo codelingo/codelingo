@@ -13,7 +13,7 @@ tenets:
         codelingo/ast/golint
       )
 
-      @ review.comment
+      @review comment
       golint.lint_rule(depth = any):
         @ review.vars.text
         text
