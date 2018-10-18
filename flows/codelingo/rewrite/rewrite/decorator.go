@@ -16,11 +16,6 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 		Name:  "rewrite",
 		Usage: "Modify code following tenets in codelingo.yaml.",
 		Flags: []cli.Flag{
-
-			cli.BoolFlag{
-				Name:  "variable, v",
-				Usage: "extract the value of the fact property as a variable",
-			},
 			cli.BoolFlag{
 				Name:  "replace, r",
 				Usage: "replace the decorated node with the new source code",
