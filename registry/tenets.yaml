@@ -1,0 +1,88 @@
+cacophony:
+  default:
+    description: Tenets written for The Cacophony Project.
+    version: 0.0.0
+    tenets:
+      - caught-generic-exceptions
+      - debug-prints
+      - defer-in-loop
+      - no-fmt-print
+      - raise-generic-exceptions
+      - redundant-defer-wraps
+    tags:
+      - golang
+      - go
+      - python
+      - py
+codelingo:
+  go:
+    description: Best Practices for Golang.
+    version: 0.0.0
+    tenets:
+      - bool-param
+      - empty-slice
+      - global-var
+      - golint
+      - goto
+      - marshalling
+      - nil_only_functions
+      - println-format-strings
+      - reallocated-slice
+      - sprintf
+      - tested
+      - todo
+      - unconvert
+    tags:
+      - golang
+      - go
+  jenkinsx:
+    description: Best practices from the jenkins-x/js repository.
+    version: 0.0.0
+    tenets:
+      - intformat
+      - orginterfaces
+      - parallel-in-tests
+      - test-package-name
+      - tparallel
+    tags:
+      - jenkins
+      - jenkins-x
+      - golang
+      - go
+  php:
+    description: Best practices for PHP.
+    version: 0.0.0
+    tenets:
+      - boolean-argument
+      - count-in-loop
+      - empty-catch-block
+      - eval-expression
+      - if-assignment
+      - offsite-redirection
+      - phplint
+      - sql-concats
+    tags:
+      - php
+modica:
+  default:
+    description: Tenets written for Modica
+    version: 0.0.0
+    tenets:
+      - null-check
+      - transport
+    tags:
+      - php
+west:
+  default:
+    description: Tenets written for West
+    version: 0.0.0
+    tenets:
+      - allocation
+      - shadowing
+      - switch
+    tags:
+      - c#
+      - csharp
+      - cpp
+      - c++
+      
