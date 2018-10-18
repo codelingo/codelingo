@@ -1,61 +1,29 @@
-package rewrite
+package review
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/codegangsta/cli"
 
-	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
+	"github.com/codelingo/rpc/flow"
 	"github.com/fatih/color"
 	"github.com/golang/protobuf/proto"
 )
 
 var DecoratorCMD = &flowutil.DecoratorCommand{
 	Command: cli.Command{
-		Name:  "rewrite",
-		Usage: "Modify code following tenets in codelingo.yaml.",
+		Name:  "review",
+		Usage: "Review code following tenets in codelingo.yaml.",
 		Flags: []cli.Flag{
-
 			cli.BoolFlag{
 				Name:  "variable, v",
 				Usage: "extract the value of the fact property as a variable",
 			},
-			cli.BoolFlag{
-				Name:  "replace, r",
-				Usage: "replace the decorated node with the new source code",
-			},
-			cli.BoolFlag{
-				Name:  "prepend, p",
-				Usage: "prepend the decorated node with the new source code",
-			},
-			cli.BoolFlag{
-				Name:  "append, a",
-				Usage: "append the decorated node with the new source code",
-			},
-			cli.BoolFlag{
-				Name:  "line, l",
-				Usage: "operate on the entire line instead of the byte offsets",
-			},
-			cli.BoolFlag{
-				Name:  "byte, b",
-				Usage: "operate on the byte offsets instead of the entire line",
-			},
-			cli.BoolFlag{
-				Name:  "start-offset, s",
-				Usage: "operate on the start offset only",
-			},
-			cli.BoolFlag{
-				Name:  "end-offset, e",
-				Usage: "operate on the end offset only",
-			},
-			cli.BoolFlag{
-				Name:  "start-to-end-offset, m",
-				Usage: "operate on the start to end offset range",
-			},
 		},
 		Description: `
-"@rewrite rewrites the decorated node.
+"@review reviews the decorated node.
 `[1:],
 	},
 	ConfirmDecorated: decoratorAction,
@@ -63,19 +31,36 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 
 func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {
 
-	hunk := payload.(*rewriterpc.Hunk)
+	issue := payload.(*flow.Issue)
 
 	item := &flowutil.ConfirmerItem{
 		Preview: func() string {
+			m := color.New(color.FgWhite, color.Faint).SprintfFunc()
+			y := color.New(color.FgYellow).SprintfFunc()
+			yf := color.New(color.FgYellow, color.Faint).SprintfFunc()
+			cy := color.New(color.FgCyan).SprintfFunc()
+			filename := issue.Position.Start.Filename
 
-			g := color.New(color.FgGreen).SprintfFunc()
-			return indent(g("\n%s", hunk.SRC), true, false)
+			addrFmtStr := fmt.Sprintf("%s:%d", filename, issue.Position.End.Line)
+			if col := issue.Position.End.Column; col != 0 {
+				addrFmtStr += fmt.Sprintf(":%d", col)
+			}
+			address := m(addrFmtStr)
+			comment := strings.Trim(issue.Comment, "\n")
+			comment = cy(indent("\n"+comment+"\n", false, false))
+
+			ctxBefore := indent(yf("\n...\n%s", issue.CtxBefore), false, false)
+			issueLines := indent(y("\n%s", issue.LineText), true, false)
+			ctxAfter := indent(yf("\n%s\n...", issue.CtxAfter), false, false)
+			src := ctxBefore + issueLines + ctxAfter
+
+			return fmt.Sprintf("%s\n%s\n%s", address, comment, src)
 		},
 
 		// Options is a map of option keys to confirm functions. Each confirm function returns: <keep>bool, <retry>bool, <err>error
 		Options: map[string]func() (bool, bool, error){
 			"[o]pen": func() (bool, bool, error) {
-				return flowutil.OpenFileConfirmAction(hunk.Filename, int64(0))
+				return flowutil.OpenFileConfirmAction(issue.Position.Start.Filename, int64(0))
 			},
 			"[k]eep": func() (bool, bool, error) {
 				return true, false, nil

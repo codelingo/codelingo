@@ -31,7 +31,7 @@ tenets:
             go.basic_lit:
               value == "fmt"
               value as packageName
-        @ review.comment
+        @review comment
         go.call_expr(depth = any):
           go.selector_expr:
             go.ident:

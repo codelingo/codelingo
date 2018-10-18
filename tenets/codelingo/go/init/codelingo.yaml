@@ -13,7 +13,7 @@ tenets:
       go.file(depth = any):
         go.decls:
           go.func_decl:
-            @ review.comment
+            @review comment
             go.ident:
               name == "init"
             go.func_type:

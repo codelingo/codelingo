@@ -13,7 +13,7 @@ tenets:
       go.file(depth = any):
         filename as fname
         regex(/.*_integration_test.go/, fname)
-        @ review.comment
+        @review comment
         go.call_expr(depth = any):
           go.selector_expr:
             go.ident:

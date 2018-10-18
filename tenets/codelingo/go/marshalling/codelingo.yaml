@@ -17,7 +17,7 @@ tenets:
           go.field_list:
             go.field:
               go.star_expr:
-                @ review.comment
+                @review comment
                 go.ident:
                   # Replace with your own client/server types (prepended with /resource/).
                   type == "/resource/tenets/codelingo/go/marshalling/example.go.Server"

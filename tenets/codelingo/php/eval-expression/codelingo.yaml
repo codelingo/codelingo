@@ -10,5 +10,5 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      @ review.comment
+      @review comment
       php.expr_eval(depth = any)

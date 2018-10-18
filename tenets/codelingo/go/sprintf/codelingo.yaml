@@ -10,7 +10,7 @@ tenets:
     query: |
       import codelingo/ast/go
   
-      @ review.comment
+      @review comment
       go.call_expr(depth = any):
         go.selector_expr:
           go.ident:

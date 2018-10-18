@@ -15,7 +15,7 @@ tenets:
         codelingo/ast/python36
       )
 
-      @ review.comment
+      @review comment
       python36.expr(depth = any):
         python36.call:
           python36.name:

@@ -17,7 +17,7 @@ tenets:
                 identifier_token as varName
           cpp.rhs:
             cpp.new_keyword
-        @ review.comment
+        @review comment
         cpp.free_statement:
           cpp.variable:
             cpp.identifier_name:
@@ -44,7 +44,7 @@ tenets:
               cpp.identifier_name:
                 identifier_token == "malloc"
         cpp.delete_statement:
-          @ review.comment
+          @review comment
           cpp.variable:
             cpp.identifier_name:
               identifier_token as varName

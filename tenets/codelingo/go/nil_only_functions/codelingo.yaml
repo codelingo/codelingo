@@ -12,7 +12,7 @@ tenets:
         codelingo/ast/go
       )
 
-      @ review.comment
+      @review comment
       go.func_decl(depth = any):
 
         # only include functions with at least one return value

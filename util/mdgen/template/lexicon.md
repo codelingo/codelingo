@@ -17,7 +17,7 @@ tenets:
 	   query: |
 	     import {{$owner}}/{{$type}}/{{$name}}
 
-	     @ review.comment
+	     @review comment
 	     {{$name}}.{{$fact}}
 ```
 </p></details>

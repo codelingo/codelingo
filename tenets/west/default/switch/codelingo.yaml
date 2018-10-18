@@ -10,7 +10,7 @@ tenets:
       import codelingo/ast/cpp
 
       cpp.switch_stmt(depth = 0:0):
-        @ review.comment
+        @review comment
         cpp.case_stmt(depth = 0:2):
           cpp.element
           exclude:

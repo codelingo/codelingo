@@ -10,7 +10,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @ review.comment
+      @review comment
       go.func_decl(depth = any):
         go.func_type:
           go.field_list:

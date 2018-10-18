@@ -20,6 +20,6 @@ tenets:
             go.block_stmt:
               go.list:
                 child_count == 1
-                @ review.comment
+                @review comment
                 go.expr_stmt:
                   go.call_expr
