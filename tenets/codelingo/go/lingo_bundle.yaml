@@ -1,0 +1,14 @@
+decscrpiton: Best Practices for Golang
+version: 0.0.0
+tenets:
+  - bool-param
+  - empty-slice
+  - golint
+  - goto
+  - marshalling
+  - nil_only_functions
+  - sprintf
+  - todo
+tags:
+  - golang
+  - go
