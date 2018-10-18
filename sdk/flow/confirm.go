@@ -5,55 +5,39 @@ package flow
 // structs to do this.
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"log"
-	"os"
-	"os/exec"
-	"strings"
 	"time"
 
-	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
-
-	"github.com/briandowns/spinner"
+	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
-	"github.com/codelingo/rpc/flow"
-	"github.com/fatih/color"
+	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
-	"github.com/waigani/diffparser"
 )
 
-type hunkconfirmer struct {
-	keepAll bool
-	output  bool
+type Confirmer struct {
+	cancel      context.CancelFunc
+	ctx         *cli.Context
+	msgc        chan proto.Message
+	errorc      chan error
+	itemFactory func(msg proto.Message) *ConfirmerItem
 }
 
-func NewConfirmer(output, keepAll bool, d *diffparser.Diff) (*hunkconfirmer, error) {
-	cfm := hunkconfirmer{
-		keepAll: keepAll,
-		output:  output,
-	}
+func (c *Confirmer) Confirm() (confirmed []proto.Message, err error) {
 
-	return &cfm, nil
-}
-
-func ConfirmIssues(cancel context.CancelFunc, hunkc chan *rewriterpc.Hunk, errorc chan error, keepAll bool, saveToFile string) ([]*rewriterpc.Hunk, error) {
+	defer func() {
+		if err != nil {
+			c.cancel()
+		}
+	}()
 	defer util.Logger.Sync()
 
-	var confirmedHunks []*rewriterpc.Hunk
-	spnr := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-	spnr.Start()
-	defer spnr.Stop()
+	// spnr := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+	// spnr.Start()
+	// defer spnr.Stop()
 
-	output := saveToFile == ""
-	cfm, err := NewConfirmer(output, keepAll, nil)
-
-	if err != nil {
-		cancel()
-		return nil, errors.Trace(err)
-	}
-
+	keepAll := c.ctx.IsSet("keep-all")
 	// If user is manually confirming reviews, set a long timeout.
 	timeout := time.After(time.Hour * 1)
 	if keepAll {
@@ -63,229 +47,146 @@ func ConfirmIssues(cancel context.CancelFunc, hunkc chan *rewriterpc.Hunk, error
 l:
 	for {
 		select {
-		case err, ok := <-errorc:
+		case err, ok := <-c.errorc:
 			if !ok {
-				errorc = nil
+				c.errorc = nil
 				break
 			}
 
-			// Abort review
-			cancel()
 			util.Logger.Debugf("error: %s", errors.ErrorStack(err))
 			return nil, errors.Trace(err)
-		case hunk, ok := <-hunkc:
-			if !keepAll {
-				spnr.Stop()
-			}
+		case msg, ok := <-c.msgc:
+			// if !keepAll {
+			// 	spnr.Stop()
+			// }
 			if !ok {
-				hunkc = nil
+				c.msgc = nil
 				break
 			}
-			util.Logger.Debugf("received hunk %v", hunk)
+			util.Logger.Debugf("received msg %v", msg)
 
-			if cfm.Confirm(0, hunk) {
-				confirmedHunks = append(confirmedHunks, hunk)
+			item := c.itemFactory(msg)
+
+			pass, err := item.Confirm(c.ctx)
+			if err != nil {
+				return nil, errors.Trace(err)
+			}
+			if pass {
+				confirmed = append(confirmed, msg)
 			}
 
-			if !keepAll {
-				spnr.Restart()
-			}
+			// if !keepAll {
+			// 	spnr.Restart()
+			// }
 		case <-timeout:
-			cancel()
+			c.cancel()
 			return nil, errors.New("timed out waiting for response")
 		}
-		if hunkc == nil && errorc == nil {
+		if c.msgc == nil && c.errorc == nil {
 			break l
 		}
 	}
 
 	// Stop spinner if it hasn't been stopped already
-	if keepAll {
-		spnr.Stop()
-	}
-	return confirmedHunks, nil
+	// if keepAll {
+	// 	spnr.Stop()
+	// }
+	return
 }
 
-// returns the full lines of the SRC for the hunk.
-func fullLineSRC(hunk *flow.Issue, newSRC string) (string, error) {
+type ConfirmerItem struct {
+	attempt int
+	Preview func() string
 
-	pos := hunk.GetPosition()
-	startPos := pos.GetStart()
-	endPos := pos.GetEnd()
+	// Options is a map of option keys to confirm functions. Each confirm function returns: <keep>bool, <retry>bool, <err>error
+	Options map[string]func() (bool, bool, error)
 
-	file, err := os.Open(startPos.Filename)
-	if err != nil {
-		return "", errors.Trace(err)
-	}
-	defer file.Close()
+	// OptionKeyMap maps an option key to aliases e.g. "[k]eep" => "k", "keep", "K"
+	OptionKeyMap map[string][]string
 
-	scanner := bufio.NewScanner(file)
-
-	var byt int64
-	var src []byte
-	var strtLineByt int64
-	var endLineByt int64
-	var foundStart bool
-	var foundEnd bool
-	for scanner.Scan() {
-		src = append(src, append(scanner.Bytes(), []byte("\n")...)...)
-
-		startByt := byt
-		endByt := startByt + int64(len(scanner.Bytes())+1) // +1 for \n char
-
-		if startPos.Offset >= startByt && startPos.Offset <= endByt {
-
-			// found start line
-			strtLineByt = startByt
-			foundStart = true
-		}
-
-		if endPos.Offset >= startByt && endPos.Offset <= endByt {
-
-			// found end line
-			endLineByt = endByt
-			foundEnd = true
-		}
-
-		if foundStart && foundEnd {
-
-			// xxx.Print(string(src))
-			// fmt.Printf("\n[%d:%d]", strtLineByt, startPos.Offset)
-			beforeNewSRC := string(src[strtLineByt:startPos.Offset])
-			endNewSRC := string(src[endPos.Offset:endLineByt])
-
-			return beforeNewSRC + newSRC + endNewSRC, nil
-
-		}
-
-		byt = endByt
-	}
-
-	return "", errors.Trace(scanner.Err())
+	// FlagOptions is a map of flags to options show if that flag is present.
+	// "_all" is a builtin flag for those options that don't require a flag.
+	FlagOptions map[string][]string
 }
 
-func GetDiffRootPath(filename string) string {
-	// Get filename relative to git root folder
-	// TODO: Handle error in case of git not being installed
-	// https://github.com/codelingo/demo/hunks/2
-	out, err := exec.Command("git", "ls-tree", "--full-name", "--name-only", "HEAD", filename).Output()
-	if err == nil && len(out) != 0 {
-		if len(out) != 0 {
-			filename = strings.TrimSuffix(string(out), "\n")
-		}
-	}
-	return filename
-}
-
-var editor string
-
-// confirm returns true if the hunk should be kept or false if it should be
+// confirm returns true if the msg should be kept or false if it should be
 // dropped.
-func (c hunkconfirmer) Confirm(attempt int, hunk *rewriterpc.Hunk) bool {
-	if c.keepAll {
-		return true
+func (item *ConfirmerItem) Confirm(ctx *cli.Context) (bool, error) {
+
+	if item.attempt == 0 {
+		fmt.Println(item.Preview())
 	}
-	if attempt == 0 {
-		fmt.Println(c.FormatPlainText(hunk))
-	}
-	attempt++
-	var options string
-	fmt.Print("\n[o]pen")
-	if c.output {
-		fmt.Print(" [d]iscard [k]eep")
+	item.attempt++
+
+	var option string
+	fmt.Print("\n")
+
+	for flag, opts := range item.FlagOptions {
+		if flag == "_all" || ctx.IsSet(flag) {
+			for _, opt := range opts {
+				fmt.Print(opt, " ")
+			}
+		}
 	}
 	fmt.Print(": ")
-
-	fmt.Scanln(&options)
-
-	switch options {
-	case "o":
-		var app string
-		defaultEditor := "vi" // TODO(waigani) use EDITOR or VISUAL env vars
-		// https://github.com/codelingo/demo/hunks/3
-		if editor != "" {
-			defaultEditor = editor
-		}
-		fmt.Printf("application (%s):", defaultEditor)
-		fmt.Scanln(&app)
-		filename := hunk.Filename
-		if app == "" {
-			app = defaultEditor
-		}
-		// c := hunk.Position.Start.Column // TODO(waigani) use column
-		// https://github.com/codelingo/demo/hunks/4
-
-		// TODO(waigani) calc line from offset
-		l := int64(0)
-		cmd, err := util.OpenFileCmd(app, filename, l)
-		if err != nil {
-			fmt.Println(err)
-			return c.Confirm(attempt, hunk)
-		}
-
-		if err = cmd.Start(); err != nil {
-			log.Println(err)
-		}
-		if err = cmd.Wait(); err != nil {
-			log.Println(err)
-		}
-
-		editor = app
-
-		c.Confirm(attempt, hunk)
-	case "d":
-		return false
-	case "", "k", "K", "\n":
-		return true
-	default:
-		fmt.Printf("invalid input: %s\n", options)
-		fmt.Println(options)
-		c.Confirm(attempt, hunk)
+	fmt.Scanln(&option)
+	action, err := item.action(option)
+	if err != nil {
+		return false, errors.Trace(err)
 	}
 
-	// TODO(waigani) build up hunks here.
-
-	return true
+	pass, retry, err := action()
+	if err != nil {
+		return false, errors.Trace(err)
+	}
+	if retry {
+		return item.Confirm(ctx)
+	}
+	return pass, err
 }
 
-func (c *hunkconfirmer) FormatPlainText(hunk *rewriterpc.Hunk) string {
+func (c *ConfirmerItem) action(option string) (func() (bool, bool, error), error) {
+	for optKey, aliases := range c.OptionKeyMap {
+		for _, alias := range aliases {
+			if alias == option {
+				return c.Options[optKey], nil
+			}
+		}
+	}
 
-	g := color.New(color.FgGreen).SprintfFunc()
-	return indent(g("\n%s", hunk.SRC), true, false)
-
-	// TODO(waigani) generate a diff hunk
-
-	// m := color.New(color.FgWhite, color.Faint).SprintfFunc()
-	// y := color.New(color.FgRed).SprintfFunc()
-	// yf := color.New(color.FgWhite, color.Faint).SprintfFunc()
-	// filename := hunk.Filename
-
-	// // TODO(waigani) get line from offset
-	// line := 0
-	// addrFmtStr := fmt.Sprintf("%s:%d", filename, line)
-
-	// // TODO(waigani) get column from offset
-	// col := 0
-	// addrFmtStr += fmt.Sprintf(":%d", col)
-	// address := m(addrFmtStr)
-
-	// ctxBefore := indent(yf("\n...\n%s", hunk.CtxBefore), false, false)
-	// oldLines := indent(y("\n%s", hunk.LineText), false, true)
-
-	// newLines := indent(g("\n%s", newSRC), true, false)
-	// ctxAfter := indent(yf("\n%s\n...", hunk.CtxAfter), false, false)
-	// src := ctxBefore + oldLines + newLines + ctxAfter
-
-	// return fmt.Sprintf("%s\n%s", address, src)
+	return nil, errors.Errorf("no action found for option %q", option)
 }
 
-func indent(str string, add, remove bool) string {
-	replace := "\n    "
-	if add {
-		replace = "\n  + "
+// confirm actions
+
+func OpenFileConfirmAction(filename string, line int64) (bool, bool, error) {
+	var editor string
+	var app string
+	defaultEditor := "vi" // TODO(waigani) use EDITOR or VISUAL env vars
+	// https://github.com/codelingo/demo/msgs/3
+	if editor != "" {
+		defaultEditor = editor
 	}
-	if remove {
-		replace = "\n  - "
+	fmt.Printf("application (%s):", defaultEditor)
+	fmt.Scanln(&app)
+	if app == "" {
+		app = defaultEditor
 	}
-	return strings.Replace(str, "\n", replace, -1)
+	// c := msg.Position.Start.Column // TODO(waigani) use column
+	// https://github.com/codelingo/demo/msgs/4
+
+	cmd, err := util.OpenFileCmd(app, filename, line)
+	if err != nil {
+		return false, true, err
+	}
+
+	if err = cmd.Start(); err != nil {
+		log.Println(err)
+	}
+	if err = cmd.Wait(); err != nil {
+		log.Println(err)
+	}
+
+	editor = app
+	return false, true, nil
 }

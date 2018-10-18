@@ -140,11 +140,3 @@ func (c *IssueConfirmer) FormatPlainText(issue *flow.Issue) string {
 
 	return fmt.Sprintf("%s\n%s\n%s", address, comment, src)
 }
-
-func indent(str string, point bool) string {
-	replace := "\n    "
-	if point {
-		replace = "\n  > "
-	}
-	return strings.Replace(str, "\n", replace, -1)
-}
