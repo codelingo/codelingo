@@ -16,7 +16,7 @@ tenets:
 
           https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
-        comment: This unit test does does not contain the `t.Parallel()` directive. Consider adding `t.Parallel()` as the first line of this test to keep it nice and speedy.
+        comment: This unit test does not contain the `t.Parallel()` directive. Consider adding `t.Parallel()` as the first line of this test to keep it nice and speedy.
     query: |
       import codelingo/ast/go
 
