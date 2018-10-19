@@ -9,7 +9,6 @@ tenets:
   - name: parallel-in-tests
     flows:
       codelingo/rewrite:
-        tp: t.Parallel()
       codelingo/docs:
         title: Is Parallel In Tests
         body: |
@@ -25,7 +24,7 @@ tenets:
         filename as fname
         excludeIntegration(fname)
         @review comment
-        @rewrite --append --line tp
+        @rewrite --append --line "Parallel()"
         go.func_decl(depth = any):
           go.ident:
             name as funcName
