@@ -15,6 +15,6 @@ tenets:
 
       @review comment
       golint.lint_rule(depth = any):
-         @var text
+        @var text
         text
 
