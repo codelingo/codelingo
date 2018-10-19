@@ -15,7 +15,7 @@ tenets:
         filename as fname
         regex(/.*_integration_test.go/, fname)
         @review comment
-        @rewrite --delete
+        @rewrite ""
         go.call_expr(depth = any):
           go.selector_expr:
             go.ident:
