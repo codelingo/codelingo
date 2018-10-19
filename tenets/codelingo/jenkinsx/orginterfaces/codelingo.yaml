@@ -5,19 +5,39 @@ funcs:
     function (str) {
       return ! str.match(/(^|\/)interface.go$/);
     }
+- name: isInterfaceFile
+  type: asserter
+  body: |
+    function (str) {
+      return str.match(/(^|\/)interface.go$/);
+    }
 tenets:
   - name: orginterfaces
     flows:
       codelingo/docs:
-        title: IsNotInterfaceFile
-        body: Finds interfaces which are not defined in a file called interface.go.
+        title: Interface Not In The Interface File
+        body: Finds interfaces which are not defined in `interface.go`.
       codelingo/review:
-        comment: Interfaces should be defined in a file called interface.go in the relevant folder.
+        comment: Interface `{{iname}}` is not defined in the `interface.go` that is present in same directory. Interfaces should be defined in the `interface.go` of the relevant folder.
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
 
-      go.file(depth = any):
-        filename as fname
-        isNotInterfaceFile(fname)
-        @review comment
-        go.interface_type(depth = any)
+      go.dir:
+        go.file:
+          filename as fnamebad
+          isNotInterfaceFile(fnamebad)
+
+          @rewrite --cut src
+          @review comment
+          go.type_spec(depth = any):
+            go.ident:
+              child_count == 0
+              name as iname
+
+            go.interface_type
+
+        @rewrite --append --line src
+        go.file:
+          filename as fnameinterfacego
+          isInterfaceFile(fnameinterfacego)
