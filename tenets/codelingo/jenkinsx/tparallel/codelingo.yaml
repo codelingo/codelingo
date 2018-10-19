@@ -7,6 +7,7 @@ tenets:
         body: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
       codelingo/review:
         comment: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
 
@@ -14,6 +15,7 @@ tenets:
         filename as fname
         regex(/.*_integration_test.go/, fname)
         @review comment
+        @rewrite ""
         go.call_expr(depth = any):
           go.selector_expr:
             go.ident:
