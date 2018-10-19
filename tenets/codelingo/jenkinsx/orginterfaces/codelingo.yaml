@@ -18,8 +18,7 @@ tenets:
         title: Interface Not In The Interface File
         body: Finds interfaces which are not defined in `interface.go`.
       codelingo/review:
-        comment: Your interface is not defined in the `interface.go` that is present in same directory. Interfaces should be defined in the `interface.go` of the relevant folder.
-      codelingo/rewrite:
+        comment: Interface `{{iname}}` is not defined in the `interface.go` that is present in same directory. Interfaces should be defined in the `interface.go` of the relevant folder.
     query: |
       import codelingo/ast/go
 
@@ -27,13 +26,20 @@ tenets:
         go.file:
           filename as fnamebad
           isNotInterfaceFile(fnamebad)
-          
+
           @rewrite --cut src
           go.interface_type(depth = any)
 
+          @review comment
+          go.type_spec(depth = any):
+            go.ident:
+              child_count == 0
+              name as iname
+
+            go.interface_type
+
         @rewrite --append --line src
         go.file:
-          @rewrite --append --line src
           go.ident:
             name == pkgname
             start_line == 1
