@@ -8,6 +8,9 @@ functions:
 tenets:
   - name: test-package-name
     flows:
+      codelingo/rewrite:
+        name: |
+          {{name}}_test
       codelingo/docs:
         title: MissingTestSuffix
         body: |
@@ -21,7 +24,9 @@ tenets:
 
       go.file(depth = any):
         @review comment
+        @rewrite --replace name
         go.ident:
+          @var name
           name as packageName
           missingTestSuffix(packageName)
         filename as fname
