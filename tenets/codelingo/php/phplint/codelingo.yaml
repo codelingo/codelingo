@@ -16,7 +16,7 @@ tenets:
 
       @review comment
       phplint.lint_rule(depth = any):
-         @var category
+        @var category
         category
-         @var text
+        @var text
         text
