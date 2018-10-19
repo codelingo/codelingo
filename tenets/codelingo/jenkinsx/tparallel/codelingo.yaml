@@ -5,9 +5,6 @@ tenets:
       codelingo/rewrite:
         name: mycoolkey
       codelingo/docs:
-        title: Title in Docs
-        body: |
-      codelingo/docs:
         title: Parallel Integration Tests
         body: You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.
       codelingo/review:
@@ -19,7 +16,7 @@ tenets:
       go.file(depth = any):
         filename as fname
         regex(/.*_integration_test.go/, fname)
-        @rewrite.name
+        @rewrite name
         @review comment
         @rewrite ""
         go.call_expr(depth = any):

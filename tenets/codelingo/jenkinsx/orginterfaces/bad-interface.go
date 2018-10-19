@@ -3,7 +3,8 @@ package main
 import "fmt"
 import "math"
 
-type geometry interface {
+// This should live in `interface.go`
+type badlyPlacedGeometry interface {
 	area() float64
 	perim() float64
 }
@@ -29,7 +30,7 @@ func (c circle) perim() float64 {
 	return 2 * math.Pi * c.radius
 }
 
-func measure(g geometry) {
+func measure(g badlyPlacedGeometry) {
 	fmt.Println(g)
 	fmt.Println(g.area())
 	fmt.Println(g.perim())
