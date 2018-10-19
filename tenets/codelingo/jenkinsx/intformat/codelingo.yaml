@@ -30,6 +30,8 @@ tenets:
   # There is an explicit tenet for each case. See more concise possible solutions below.
   - name: right-build-directive-wrong-file
     flows:
+      codelingo/rewrite:
+        name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
         title: Append
         body: |
@@ -60,6 +62,9 @@ tenets:
 
   - name: right-build-directive-wrong-package
     flows:
+      codelingo/rewrite:
+        name: |
+          {{name}}_test
       codelingo/docs:
         title: Right Build Directive Wrong Package
         body:
@@ -75,7 +80,9 @@ tenets:
 
       go.dir(depth = any):
         go.file(depth = 0:2):
+          @rewrite --replace name
           go.ident:
+            @var name
             name as packageName
             doesNotMatch(/test/, packageName)
         # @review comment
@@ -93,6 +100,8 @@ tenets:
 
   - name: right-package-wrong-build-directive
     flows:
+      codelingo/rewrite:
+        name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
         title: Right Package Wrong Build Directive
         body:
@@ -114,6 +123,7 @@ tenets:
         @review comment
         go.file:
           # The only top level ident in a go file is (should be) the package name
+          @rewrite --prepend "// +build integration"
           go.ident:
             name == append(packageName, "_test")
           exclude:
@@ -124,6 +134,8 @@ tenets:
 
   - name: right-package-wrong-file
     flows:
+      codelingo/rewrite:
+        name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
         title: Right Package Wrong File
         body:
@@ -153,6 +165,8 @@ tenets:
 
   - name: right-file-wrong-build-directive
     flows:
+      codelingo/rewrite:
+        name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
         title: Right File Wrong Build Directive
         body:
@@ -173,6 +187,8 @@ tenets:
             doesNotMatch(/test/, packageName)
         @review comment
         go.file:
+          @rewrite --prepend "// +build integration"
+          go.ident
           filename as fname
           regex(/integration_test.go/, fname)
           # filename == append(packageName, "integration_test.go")
@@ -184,6 +200,9 @@ tenets:
 
   - name: right-file-wrong-package
     flows:
+      codelingo/rewrite:
+        name: |
+          {{name}}_test
       codelingo/docs:
         title: Right File Wrong Package
         body:
@@ -199,7 +218,9 @@ tenets:
 
       go.dir(depth = any):
         go.file(depth = 0:2):
+          @rewrite --replace name
           go.ident:
+            @var name
             name as packageName
             doesNotMatch(/test/, packageName)
         @review comment
