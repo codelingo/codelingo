@@ -8,14 +8,15 @@ functions:
 tenets:
   - name: parallel-in-tests
     flows:
+      codelingo/rewrite:
       codelingo/docs:
-        title: ExcludeIntegration
+        title: Is Parallel In Tests
         body: |
-          Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
+          Unit tests should contain the `t.Parallel()` directive in order to keep things nice and speedy.
 
           https://github.com/jenkins-x/jx/blob/master/docs/contributing/hacking.md#unit-tests
       codelingo/review:
-        comment: Unit tests should contain the t.Parallel() directive in order to keep things nice and speedy.
+        comment: This unit test does not contain the `t.Parallel()` directive. Consider adding `t.Parallel()` as the first line of this test to keep it nice and speedy.
     query: |
       import codelingo/ast/go
 
@@ -23,6 +24,7 @@ tenets:
         filename as fname
         excludeIntegration(fname)
         @review comment
+        @rewrite --append --line "Parallel()"
         go.func_decl(depth = any):
           go.ident:
             name as funcName
