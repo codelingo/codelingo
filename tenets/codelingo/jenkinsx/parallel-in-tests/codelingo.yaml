@@ -1,10 +1,10 @@
 functions:
-- name: excludeIntegration
-  type: asserter
-  body: |
-    function (str) {
-      return str.match(/.*_test.go$/) && !str.match(/.*_integration_test.go$/);
-    }
+  - name: excludeIntegration
+    type: asserter
+    body: |
+      function (str) {
+        return str.match(/.*_test.go$/) && !str.match(/.*_integration_test.go$/);
+      }
 tenets:
   - name: parallel-in-tests
     flows:
