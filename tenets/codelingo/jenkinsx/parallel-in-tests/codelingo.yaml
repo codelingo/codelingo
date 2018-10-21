@@ -24,7 +24,7 @@ tenets:
         filename as fname
         excludeIntegration(fname)
         @review comment
-        @rewrite --append --line "Parallel()"
+        @rewrite --append --line "t.Parallel()"
         go.func_decl(depth = any):
           go.ident:
             name as funcName
