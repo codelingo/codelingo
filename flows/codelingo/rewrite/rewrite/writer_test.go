@@ -2,6 +2,7 @@ package rewrite
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
@@ -29,6 +30,33 @@ func (s *cmdSuite) TestWrite(c *gc.C) {
 
 }
 
+func (s *cmdSuite) TestNewFile(c *gc.C) {
+
+	newFile := "new_test.go"
+
+	ctx, err := flowutil.NewCtx(DecoratorCMD.Command, "--new-file", newFile, "--new-file-perm", "0755")
+	c.Assert(err, jc.ErrorIsNil)
+
+	results := []*flowutil.DecoratedResult{
+		{
+
+			Ctx: ctx,
+			Payload: &rewriterpc.Hunk{
+				SRC:         "package rewrite_test",
+				StartOffset: int32(19),
+				EndOffset:   int32(23),
+				Filename:    "flows/codelingo/rewrite/rewrite/writer_test.go",
+			},
+		},
+	}
+
+	c.Assert(Write(results), jc.ErrorIsNil)
+
+	_, err = os.Stat(newFile)
+	c.Assert(os.IsNotExist(err), jc.IsFalse)
+	c.Assert(os.Remove(newFile), jc.ErrorIsNil)
+}
+
 func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 
 	for _, data := range testData {
@@ -41,7 +69,7 @@ func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 			Filename:         "not_used",
 		}
 
-		ctx, err := flowutil.NewCtx(DecoratorCMD.Command, strings.Split(hunk.DecoratorOptions, " ")[1:])
+		ctx, err := flowutil.NewCtx(DecoratorCMD.Command, strings.Split(hunk.DecoratorOptions, " ")[1:]...)
 		c.Assert(err, jc.ErrorIsNil)
 
 		newCode, err := newFileSRC(ctx, hunk, []byte(oldSRC))
