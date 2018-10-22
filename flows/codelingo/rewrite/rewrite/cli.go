@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codegangsta/cli"
 	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
+	"github.com/urfave/cli"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
@@ -21,34 +21,28 @@ const (
 	vcsP4  string = "perforce"
 )
 
-var CliCMD = &flowutil.CLICommand{
-	Command: cli.Command{
-		Name:  "rewrite",
-		Usage: "Modify code following tenets in codelingo.yaml.",
+var CLIApp = &flowutil.CLIApp{
+	App: cli.App{
+		Name:    "rewrite",
+		Usage:   "The Rewrite Flow rewrites sections of source code matching the query pattern in the Tenets it's run over.",
+		Version: "0.0.0",
+		// Action:  action,
 		Flags: []cli.Flag{
 			cli.StringFlag{
-				Name:  util.LingoFile.String(),
-				Usage: "A codelingo.yaml file to perform the review with. If the flag is not set, codelingo.yaml files are read from the branch being reviewed.",
-			},
-			cli.StringFlag{
-				Name:  util.DiffFlg.String(),
-				Usage: "Review only unstaged changes in the working tree.",
-			},
-			cli.StringFlag{
 				Name:  util.OutputFlg.String(),
-				Usage: "File to save found hunks to.",
+				Usage: "File to save found rewrites to.",
 			},
 			cli.StringFlag{
 				Name:  util.FormatFlg.String(),
 				Value: "json-pretty",
-				Usage: "How to format the found hunks. Possible values are: json, json-pretty.",
+				Usage: "How to format the results. Possible values are: json, json-pretty.",
 			},
 			cli.BoolFlag{
 				Name:  util.KeepAllFlg.String(),
-				Usage: "Keep all hunks and don't be prompted to confirm each hunk.",
+				Usage: "Keep all rewrites and don't be prompted to confirm each.",
 			},
 			cli.StringFlag{
-				Name:  util.DirectoryFlg.String(),
+				Name:  "dir, d",
 				Usage: "Modify a given directory.",
 			},
 			cli.BoolFlag{
@@ -56,9 +50,6 @@ var CliCMD = &flowutil.CLICommand{
 				Usage: "Display debug messages",
 			},
 		},
-		Description: `
-"$ lingo rewrite" rewrites code.
-`[1:],
 	},
 	Request: rewriteAction,
 }
@@ -71,6 +62,7 @@ func rewriteRequire() error {
 			return errors.Trace(err)
 		}
 	}
+
 	return nil
 }
 

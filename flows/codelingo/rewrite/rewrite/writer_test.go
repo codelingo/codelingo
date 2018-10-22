@@ -41,7 +41,7 @@ func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 			Filename:         "not_used",
 		}
 
-		ctx, err := flowutil.NewCtx(DecoratorCMD.Command, strings.Split(hunk.DecoratorOptions, " ")[1:])
+		ctx, err := flowutil.NewCtx(&DecoratorApp.App, strings.Split(hunk.DecoratorOptions, " ")[1:])
 		c.Assert(err, jc.ErrorIsNil)
 
 		newCode, err := newFileSRC(ctx, hunk, []byte(oldSRC))

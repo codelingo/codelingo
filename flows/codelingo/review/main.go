@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-	fRunner := flowutil.NewFlow(review.CliCMD, review.DecoratorCMD)
+	fRunner := flowutil.NewFlow(review.CLIApp, review.DecoratorApp)
 	resultc, err := fRunner.Run()
 	if err != nil {
 		util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))

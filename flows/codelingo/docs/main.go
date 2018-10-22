@@ -7,48 +7,53 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/docs"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/docs/parse"
 	"github.com/codelingo/codelingo/flows/codelingo/docs/render"
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/util"
-	"github.com/codelingo/sdk/flow"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 	//	"gopkg.in/russross/blackfriday.v2"
 	"github.com/russross/blackfriday"
 )
 
-var docsCommand = cli.Command{
-	Name:  "docs",
-	Usage: "Generate documentation from Tenets",
-	Flags: []cli.Flag{
-		cli.StringFlag{
-			Name:  "output, o",
-			Usage: "File to write output to. If no file is given, docs are printed to the terminal.",
+var docsApp = &flowutil.CLIApp{
+	App: cli.App{
+		Name:    "docs",
+		Usage:   "Generate documentation from Tenets",
+		Version: "0.0.0",
+		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "output, o",
+				Usage: "File to write output to. If no file is given, docs are printed to the terminal.",
+			},
+			cli.StringFlag{
+				Name:  "template, t",
+				Value: "default",
+				Usage: "The template file to use when generating docs.",
+			},
+			cli.StringFlag{
+				Name:  "format, f",
+				Usage: "Format to render docs to. Options are: md and html",
+			},
+			cli.BoolFlag{
+				Name:  "web, w",
+				Usage: "Render documentation as a static website and launch it",
+			},
 		},
-		cli.StringFlag{
-			Name:  "template, t",
-			Value: "default",
-			Usage: "The template file to use when generating docs.",
-		},
-		cli.StringFlag{
-			Name:  "format, f",
-			Usage: "Format to render docs to. Options are: md and html",
-		},
-		cli.BoolFlag{
-			Name:  "web, w",
-			Usage: "Render documentation as a static website and launch it",
-		},
+		Action: docsAction,
 	},
-	Description: `
-""$ lingo docs" .
-`[1:],
-	Action: docsAction,
 }
 
 func main() {
-	if err := flow.Run(docsCommand); err != nil {
-		flow.HandleErr(err)
+
+	fRunner := flowutil.NewFlow(docsApp, nil)
+	_, err := fRunner.Run()
+	if err != nil {
+		util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))
+		util.FatalOSErr(err)
+		return
 	}
 }
 

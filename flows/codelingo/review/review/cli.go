@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codegangsta/cli"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
@@ -14,6 +13,7 @@ import (
 	"github.com/codelingo/rpc/flow"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 const (
@@ -21,16 +21,14 @@ const (
 	vcsP4  string = "perforce"
 )
 
-var CliCMD = &flowutil.CLICommand{
-	Command: cli.Command{
+var CLIApp = &flowutil.CLIApp{
+	App: cli.App{
 
-		Name:  "review",
-		Usage: "Review code following tenets in codelingo.yaml.",
+		Name:    "review",
+		Usage:   "Review code following tenets in codelingo.yaml.",
+		Version: "0.0.0",
+
 		Flags: []cli.Flag{
-			cli.StringFlag{
-				Name:  util.LingoFile.String(),
-				Usage: "A codelingo.yaml file to perform the review with. If the flag is not set, codelingo.yaml files are read from the branch being reviewed.",
-			},
 			cli.StringFlag{
 				Name:  util.DiffFlg.String(),
 				Usage: "Review only unstaged changes in the working tree.",
@@ -61,10 +59,6 @@ var CliCMD = &flowutil.CLICommand{
 			// 	Usage: "review all files under all directories from pwd down",
 			// },
 		},
-		Description: `
-"$ lingo review" will review all code from pwd down.
-"$ lingo review <filename>" will only review named file.
-`[1:],
 		// "$ lingo review" will review any unstaged changes from pwd down.
 		// "$ lingo review [<filename>]" will review any unstaged changes in the named files.
 		// "$ lingo review --all [<filename>]" will review all code in the named files.

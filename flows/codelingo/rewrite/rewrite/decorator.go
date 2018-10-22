@@ -3,7 +3,7 @@ package rewrite
 import (
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 
 	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
@@ -11,10 +11,9 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-var DecoratorCMD = &flowutil.DecoratorCommand{
-	Command: cli.Command{
-		Name:  "rewrite",
-		Usage: "Modify code following tenets in codelingo.yaml.",
+var DecoratorApp = &flowutil.DecoratorApp{
+	App: cli.App{
+		Name: "rewrite",
 		Flags: []cli.Flag{
 			cli.BoolFlag{
 				Name:  "replace, r",
@@ -49,11 +48,10 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 				Usage: "operate on the start to end offset range",
 			},
 		},
-		Description: `
-"@rewrite rewrites the decorated node.
-`[1:],
 	},
 	ConfirmDecorated: decoratorAction,
+	DecoratorUsage:   "[options] <new code>",
+	DecoratorExample: `--prepend --line "// new comment on a Golang function`,
 }
 
 func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {

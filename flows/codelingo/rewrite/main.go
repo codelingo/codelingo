@@ -9,8 +9,7 @@ import (
 )
 
 func main() {
-
-	fRunner := flowutil.NewFlow(rewrite.CliCMD, rewrite.DecoratorCMD)
+	fRunner := flowutil.NewFlow(rewrite.CLIApp, rewrite.DecoratorApp)
 	resultc, err := fRunner.Run()
 	if err != nil {
 		util.Logger.Debugw("Rewrite Flow", "err_stack", errors.ErrorStack(err))
