@@ -48,6 +48,14 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 				Name:  "start-to-end-offset, m",
 				Usage: "operate on the start to end offset range",
 			},
+			cli.StringFlag{
+				Name:  "new-file, n",
+				Usage: "create a new file",
+			},
+			cli.IntFlag{
+				Name:  "new-file-perm, x",
+				Usage: "file permission for new file",
+			},
 		},
 		Description: `
 "@rewrite rewrites the decorated node.

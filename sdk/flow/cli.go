@@ -109,7 +109,7 @@ l:
 
 				go func(string, proto.Message) {
 					defer wg.Done()
-					ctx, err := NewCtx(f.decoratorCMD.Command, strings.Split(decorator, " ")[1:])
+					ctx, err := NewCtx(f.decoratorCMD.Command, strings.Split(decorator, " ")[1:]...)
 					if err != nil {
 						cancel()
 						util.Logger.Fatalf("error getting decorated context: %q", err)
@@ -139,7 +139,7 @@ l:
 func (f *flowRunner) CliCtx() (*cli.Context, error) {
 	if f.cliCtx == nil {
 		cmd := *f.cliCMD
-		ctx, err := NewCtx(cmd.Command, os.Args[1:])
+		ctx, err := NewCtx(cmd.Command, os.Args[1:]...)
 		if err != nil {
 			return nil, errors.Trace(err)
 		}
@@ -159,7 +159,7 @@ func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
 
 func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (bool, error) {
 	cmd := *f.decoratorCMD
-	ctx, err := NewCtx(cmd.Command, strings.Split(decorator, " "))
+	ctx, err := NewCtx(cmd.Command, strings.Split(decorator, " ")...)
 	if err != nil {
 		return false, errors.Trace(err)
 	}
@@ -167,7 +167,7 @@ func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (
 	return cmd.ConfirmDecorated(ctx, payload)
 }
 
-func NewCtx(cmd cli.Command, input []string) (*cli.Context, error) {
+func NewCtx(cmd cli.Command, input ...string) (*cli.Context, error) {
 
 	fSet := flag.NewFlagSet(cmd.Name, flag.ContinueOnError)
 	for _, flag := range cmd.Flags {
