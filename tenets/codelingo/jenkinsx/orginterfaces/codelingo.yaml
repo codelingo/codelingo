@@ -1,4 +1,4 @@
-functions:
+funcs:
 - name: isNotInterfaceFile
   type: asserter
   body: |

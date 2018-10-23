@@ -186,7 +186,7 @@ l:
 				wg.Add(1)
 				go func(string, proto.Message) {
 					defer wg.Done()
-					ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")[1:])
+					ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")[1:]...)
 					if err != nil {
 						cancel()
 						f.errc <- err
@@ -218,7 +218,7 @@ l:
 
 func (f *flowRunner) CliCtx() (*cli.Context, error) {
 	if f.cliCtx == nil {
-		ctx, err := NewCtx(&f.cliApp.App, os.Args[1:])
+		ctx, err := NewCtx(&f.cliApp.App, os.Args[1:]...)
 		if err != nil {
 			return nil, errors.Trace(err)
 		}
@@ -244,7 +244,7 @@ func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
 }
 
 func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (bool, error) {
-	ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " "))
+	ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")...)
 	if err != nil {
 		return false, errors.Trace(err)
 	}
@@ -252,7 +252,7 @@ func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (
 	return f.decoratorApp.ConfirmDecorated(ctx, payload)
 }
 
-func NewCtx(app *cli.App, input []string) (*cli.Context, error) {
+func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {
 
 	fSet := flag.NewFlagSet(app.Name, flag.ContinueOnError)
 	for _, flag := range app.Flags {

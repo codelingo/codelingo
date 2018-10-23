@@ -3,6 +3,8 @@ package rewrite
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -28,6 +30,8 @@ func Write(results []*flowutil.DecoratedResult) error {
 		resultMap[filename] = append(resultMap[filename], result)
 	}
 
+	seenNewFile := make(map[string]bool)
+
 	for filename, results := range resultMap {
 
 		rootPath, err := flowutil.GitCMD("rev-parse", "--show-toplevel")
@@ -35,7 +39,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 			return errors.Trace(err)
 		}
 
-		fullPath := strings.TrimSuffix(rootPath, "\n") + "/" + filename
+		fullPath := filepath.Join(strings.TrimSuffix(rootPath, "\n"), filename)
 		fileSRC, err := ioutil.ReadFile(fullPath)
 		if err != nil {
 			return errors.Trace(err)
@@ -48,7 +52,31 @@ func Write(results []*flowutil.DecoratedResult) error {
 		var result *flowutil.DecoratedResult
 		for i, result = range results {
 
-			fileSRC, err = newFileSRC(result.Ctx, result.Payload.(*rewriterpc.Hunk), fileSRC)
+			ctx := result.Ctx
+			hunk := result.Payload.(*rewriterpc.Hunk)
+
+			if ctx.IsSet("new-file") {
+
+				newFileName := ctx.String("new-file")
+				if seenNewFile[newFileName] {
+					if err != nil {
+						return errors.Errorf("cannot add new file %q more than once", newFileName)
+					}
+				}
+
+				perm := 0755
+				if ctx.IsSet("new-file-perm") {
+					perm = ctx.Int("new-file-perm")
+				}
+				if err := ioutil.WriteFile(filepath.Join(filepath.Dir(fullPath), newFileName), []byte(hunk.SRC), os.FileMode(perm)); err != nil {
+					return errors.Trace(err)
+				}
+
+				seenNewFile[newFileName] = true
+				continue
+			}
+
+			fileSRC, err = newFileSRC(ctx, hunk, fileSRC)
 			if err != nil {
 				return errors.Trace(err)
 			}

@@ -60,5 +60,4 @@ message Hunk {
     int32 endOffset =3;
     string SRC =4;
     string decoratorOptions =5;
-    bool isHeartbeat =6;
 }

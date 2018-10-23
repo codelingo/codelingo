@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "Functions that don't return a non-nil value can be refactored without a return type.",
+   "Filename": "example.go",
+   "Line": 102,
+   "Snippet": "\n// This is a random comment, func doesn't satisify interface.\nfunc returnNilHasComment() error {\n\treturn nil\n}\n"
+  },
+  {
+   "Comment": "Functions that don't return a non-nil value can be refactored without a return type.",
+   "Filename": "example.go",
+   "Line": 49,
+   "Snippet": "}\n\nfunc onlyReturnsNil() error {\n\ta := rand.Intn(10) + 1\n\tif a \u003c= 5 {\n\t\tlog.Println(\"error: wanted a number higher than 5\")\n\t}\n\tlog.Println(\"success: got a number higher than 5\")\n\treturn nil\n}\n\nfunc returnNonNil() (int, error) {"
+  },
+  {
+   "Comment": "Functions that don't return a non-nil value can be refactored without a return type.",
+   "Filename": "example.go",
+   "Line": 70,
+   "Snippet": "}\n\nfunc returnMultipleOnlyNil() (*example, error) {\n\tex := \u0026example{\n\t\tvalue: rand.Intn(15),\n\t}\n\tif ex.value \u003c= 5 {\n\t\tlog.Println(\"error: wanted a number higher than 5\")\n\t} else if ex.value \u003e= 6 \u0026\u0026 ex.value \u003c= 10 {\n\t\tex.value = ex.value * 2\n\t}\n\treturn nil, nil\n}\n\nfunc returnMultipleMixed() (*example, error) {"
+  }
+ ]
