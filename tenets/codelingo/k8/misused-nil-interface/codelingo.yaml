@@ -1,0 +1,82 @@
+funcs:
+  - name: newConcat
+    type: resolver
+    body: |
+      function (a, b) {
+        return a.concat(b);
+      }
+tenets:
+  - name: misused-nil-interface
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+          Nil interface is not the same as having a nil pointer in the interface.
+      codelingo/review:
+        comment: The variable being tested for nil, `{{varname}}` is a pointer to a pointer to nil.
+    query: |
+      import codelingo/ast/go
+      
+      @playground highlight
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.ident: # cat
+                type as interfacetype
+              go.interface_type:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident: # meow
+                        name as purevirtualfuncname
+                        type == "func()"
+          go.gen_decl:
+            go.type_spec:
+              go.ident:
+                type as typename
+              go.struct_type
+          go.func_decl: # meow of tabby
+            go.field_list:
+              go.field:
+                go.star_expr:
+                  go.ident: # tabby
+                    type == typename
+            go.ident: # meow
+              name == purevirtualfuncname
+            go.func_type
+          go.func_decl:
+            go.ident: # getacat
+              name as factoryfuncname
+            go.func_type:
+              go.field_list
+              go.field_list: # the 2nd field list specifies the return parameters. this is an important distinction here but without an 'order:' fact, clql does not know this
+                go.field:
+                  go.ident:
+                    type == interfacetype
+            go.block_stmt:
+              go.list:
+                go.decl_stmt:
+                  go.gen_decl:
+                    go.value_spec:
+                      go.names:
+                        go.ident:
+                          type == newConcat("*/", typename)
+                      go.star_expr:
+                        go.ident:
+                          type == typename
+                      go.values:
+                        go.ident:
+                          name == "nil" # important. set pointer to pointer to nil
+                go.return_stmt:
+                  go.results:
+                    go.ident:
+                      type == newConcat("*/", typename)
+          go.func_decl: # TestGetACat
+            go.block_stmt:
+              go.binary_expr(depth = 2):
+                go.call_expr:
+                  go.ident:
+                    name == factoryfuncname
+                go.ident:
+                  name == "nil" # important. test is equal to nil
