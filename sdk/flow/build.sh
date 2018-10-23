@@ -20,6 +20,8 @@ windows,amd64;\
 linux,amd64;\
 darwin,amd64;"
 
+version="0.0.0"
+
 # Build and push each bin to release
 echo $v | while IFS=',' read -d';' os arch;  do 
 	
