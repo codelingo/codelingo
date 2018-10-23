@@ -9,7 +9,7 @@ tenets:
   - name: misused-nil-interface
     flows:
       codelingo/docs:
-        title: Title in Docs
+        title: Misused Nil Interface
         body: |
           Nil interface is not the same as having a nil pointer in the interface.
       codelingo/review:
@@ -17,7 +17,6 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      @playground highlight
       go.file(depth = any):
         go.decls:
           go.gen_decl:
@@ -78,5 +77,6 @@ tenets:
                 go.call_expr:
                   go.ident:
                     name == factoryfuncname
+                @review comment
                 go.ident:
                   name == "nil" # important. test is equal to nil
