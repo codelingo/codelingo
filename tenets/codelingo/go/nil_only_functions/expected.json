@@ -1,0 +1,47 @@
+[
+  {
+   "name": "nil-only-functions",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 647,
+     "Line": 49,
+     "Column": 1
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 836,
+     "Line": 56,
+     "Column": 2
+    }
+   },
+   "comment": "Functions that don't return a non-nil value can be refactored without a return type.",
+   "ctxBefore": "}\n",
+   "lineText": "func onlyReturnsNil() error {\n\ta := rand.Intn(10) + 1\n\tif a \u003c= 5 {\n\t\tlog.Println(\"error: wanted a number higher than 5\")\n\t}\n\tlog.Println(\"success: got a number higher than 5\")\n\treturn nil\n}",
+   "ctxAfter": "\nfunc returnNonNil() (int, error) {",
+   "newCode": true
+  },
+  {
+   "name": "nil-only-functions",
+   "position": {
+    "start": {
+     "filename": "example.go",
+     "Offset": 1027,
+     "Line": 70,
+     "Column": 1
+    },
+    "end": {
+     "filename": "example.go",
+     "Offset": 1286,
+     "Line": 80,
+     "Column": 2
+    }
+   },
+   "comment": "Functions that don't return a non-nil value can be refactored without a return type.",
+   "ctxBefore": "}\n",
+   "lineText": "func returnMultipleOnlyNil() (*example, error) {\n\tex := \u0026example{\n\t\tvalue: rand.Intn(15),\n\t}\n\tif ex.value \u003c= 5 {\n\t\tlog.Println(\"error: wanted a number higher than 5\")\n\t} else if ex.value \u003e= 6 \u0026\u0026 ex.value \u003c= 10 {\n\t\tex.value = ex.value * 2\n\t}\n\treturn nil, nil\n}",
+   "ctxAfter": "\nfunc returnMultipleMixed() (*example, error) {",
+   "newCode": true
+  }
+ ]
+ 

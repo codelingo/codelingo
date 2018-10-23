@@ -1,3 +1,10 @@
+functions:
+  - name: excludeSatisfyingInterface
+    type: asserter
+    body: |
+      function (name, comment) {
+        return comment.indexOf(name + " satisfies interface ") !== -1;
+      }
 tenets:
   - name: nil-only-functions
     flows:
@@ -14,6 +21,8 @@ tenets:
 
       @review comment
       go.func_decl(depth = any):
+        go.ident:
+          name as funcName
 
         # only include functions with at least one return value
         go.func_type:
@@ -26,6 +35,12 @@ tenets:
             go.ident:
               name == "nil"
 
+        exclude:
+          go.comment_group:
+            go.comment:
+              text as commentText
+              excludeSatisfyingInterface(funcName, commentText)
+
         # exclude functions with anything but "return nil"
         exclude:
           go.return_stmt(depth = any):
@@ -36,5 +51,3 @@ tenets:
                 go.unary_expr
                 go.ident:
                   name != "nil"
-                
-                

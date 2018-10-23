@@ -92,3 +92,8 @@ func returnMultipleMixed() (*example, error) {
 	//return ex, errors.New("warning: uncaught value")
 	return ex, nil
 }
+
+// intFunc satisfies interface X.
+func (example) intFunc() error {
+	return nil
+}
