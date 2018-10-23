@@ -1,5 +1,5 @@
 functions:
-  - name: excludeSatisfyingInterface
+  - name: satisfiesInterface
     type: asserter
     body: |
       function (name, comment) {
@@ -39,7 +39,7 @@ tenets:
           go.comment_group:
             go.comment:
               text as commentText
-              excludeSatisfyingInterface(funcName, commentText)
+              satisfiesInterface(funcName, commentText)
 
         # exclude functions with anything but "return nil"
         exclude:

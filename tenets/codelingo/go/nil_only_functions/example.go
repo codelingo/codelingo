@@ -97,3 +97,8 @@ func returnMultipleMixed() (*example, error) {
 func (example) intFunc() error {
 	return nil
 }
+
+// This is a random comment, func doesn't satisify interface.
+func returnNilHasComment() error {
+	return nil
+}
