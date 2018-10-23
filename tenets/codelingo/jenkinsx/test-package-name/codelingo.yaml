@@ -1,4 +1,4 @@
-funcs:
+functions:
 - name: missingTestSuffix
   type: asserter
   body: |

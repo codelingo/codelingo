@@ -1,4 +1,4 @@
-funcs:
+functions:
   - name: newConcat
     type: resolver
     body: |
