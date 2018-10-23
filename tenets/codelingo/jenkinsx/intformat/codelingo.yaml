@@ -1,11 +1,10 @@
-functions:
+funcs:
 - name: append
   type: resolver
   body: |
     function (a, b) {
       return a + b
     }
-functions:
 - name: appendIntegrationTest
   type: resolver
   body: |

@@ -1,4 +1,4 @@
-functions:
+funcs:
   - name: excludeIntegration
     type: asserter
     body: |
