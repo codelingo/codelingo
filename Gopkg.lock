@@ -29,7 +29,7 @@
   version = "v3.5.1"
 
 [[projects]]
-  name = "github.com/urfave/cli"
+  name = "github.com/codegangsta/cli"
   packages = ["."]
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
   version = "v1.20.0"
@@ -47,7 +47,7 @@
     "dotlingo",
     "inner"
   ]
-  revision = "c3dd70533922b78f85162f8ae03ad9a75060be0f"
+  revision = "3dfcfd26ce8c9eb34b17fe22851fe15ddbe5b90e"
 
 [[projects]]
   branch = "master"
@@ -78,9 +78,9 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/codelingo/sdk"
-  packages = ["flow"]
-  revision = "0befa5b97b15caa053a660b9a363990644ed251a"
+  name = "github.com/common-nighthawk/go-figure"
+  packages = ["."]
+  revision = "18b2b544842cab16f3ff418fb5290d8f2896a069"
 
 [[projects]]
   branch = "master"
@@ -441,6 +441,12 @@
   version = "v0.5.4"
 
 [[projects]]
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
+  version = "v1.20.0"
+
+[[projects]]
   name = "go.uber.org/atomic"
   packages = ["."]
   revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
@@ -638,6 +644,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "59e477cabacbb53544f25f7ee4be9e08a12e8aeca99d81daf784f23cfe77e681"
+  inputs-digest = "efb0b0c490b16341dde81fe8869a34eaef8c2243cd1057a246eb195837721177"
   solver-name = "gps-cdcl"
   solver-version = 1

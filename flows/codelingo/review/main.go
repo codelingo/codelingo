@@ -13,24 +13,47 @@ import (
 func main() {
 
 	fRunner := flowutil.NewFlow(review.CLIApp, review.DecoratorApp)
-	resultc, err := fRunner.Run()
-	if err != nil {
-		util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))
-		util.FatalOSErr(err)
-		return
-	}
+	resultc, errc := fRunner.Run()
 
 	// TODO(waigani) capture false positives in the confirmer.
 	var results []*review.ReportStrt
-	for result := range resultc {
 
-		issue := result.Payload.(*flow.Issue)
-		results = append(results, &review.ReportStrt{
-			Comment:  issue.Comment,
-			Filename: issue.Position.Start.Filename,
-			Line:     int(issue.Position.Start.Line),
-			Snippet:  issue.CtxBefore + "\n" + issue.LineText + "\n" + issue.CtxAfter,
-		})
+	var hasErred bool
+
+l:
+	for {
+		select {
+		case err, ok := <-errc:
+			if !ok {
+				errc = nil
+				break
+			}
+
+			util.Logger.Debugw("Rewrite Flow", "err_stack", errors.ErrorStack(err))
+			util.FatalOSErr(err)
+			hasErred = true
+		case result, ok := <-resultc:
+			if !ok {
+				resultc = nil
+				break
+			}
+
+			issue := result.Payload.(*flow.Issue)
+			results = append(results, &review.ReportStrt{
+				Comment:  issue.Comment,
+				Filename: issue.Position.Start.Filename,
+				Line:     int(issue.Position.Start.Line),
+				Snippet:  issue.CtxBefore + "\n" + issue.LineText + "\n" + issue.CtxAfter,
+			})
+
+		}
+		if resultc == nil && errc == nil {
+			break l
+		}
+	}
+
+	if hasErred {
+		return
 	}
 
 	if len(results) == 0 {

@@ -49,11 +49,10 @@ var docsApp = &flowutil.CLIApp{
 func main() {
 
 	fRunner := flowutil.NewFlow(docsApp, nil)
-	_, err := fRunner.Run()
-	if err != nil {
-		util.Logger.Debugw("Review Flow", "err_stack", errors.ErrorStack(err))
+	_, errc := fRunner.Run()
+	for err := range errc {
+		util.Logger.Debugw("Rewrite Flow", "err_stack", errors.ErrorStack(err))
 		util.FatalOSErr(err)
-		return
 	}
 }
 

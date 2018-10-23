@@ -31,7 +31,7 @@ type flowRunner struct {
 	cliApp           *CLIApp
 	decoratorApp     *DecoratorApp
 	decoratedResultc chan *DecoratedResult
-	waitc            chan struct{}
+	errc             chan error
 }
 
 type CLIApp struct {
@@ -49,37 +49,37 @@ type DecoratorApp struct {
 }
 
 func NewFlow(CLIApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
+
+	// setBaseApp overrides Action with the help action. We don't want this
+	// and either want nil or the action that was already set on
+	// CLIApp.Action.
+	action := CLIApp.Action
 	setBaseApp(CLIApp)
+	CLIApp.Action = action
 
 	fRunner := &flowRunner{
-		cliApp:           CLIApp,
-		decoratorApp:     decoratorApp,
-		decoratedResultc: make(chan *DecoratedResult),
-		waitc:            make(chan struct{}),
+		cliApp:       CLIApp,
+		decoratorApp: decoratorApp,
+		errc:         make(chan error),
+	}
+	if fRunner.decoratorApp != nil {
+		fRunner.decoratorApp.Setup()
 	}
 	fRunner.setHelp()
-	go func() {
-		<-fRunner.waitc
-		close(fRunner.decoratedResultc)
-	}()
 
-	//fRunner.cliApp.Action = fRunner.action
+	if fRunner.cliApp.Action == nil {
+
+		// If Action is set, decoratedResultc is not used, nor is it closed.
+		// Only set it if we're calling the internal flowRunner.action.
+		fRunner.decoratedResultc = make(chan *DecoratedResult)
+		fRunner.cliApp.Action = fRunner.action
+	}
 	return fRunner
 }
 
-func (f *flowRunner) safeCloseWaitc() {
-	select {
-	case <-f.waitc:
-	default:
-	}
-
-	close(f.waitc)
-}
-
 func (f *flowRunner) setHelp() {
-	defer f.safeCloseWaitc()
-
 	cli.HelpPrinter = func(w io.Writer, templ string, data interface{}) {
+		defer close(f.decoratedResultc)
 		figure.NewFigure("codelingo", "larry3d", false).Print()
 		printHelp(w, CLIAPPHELPTMP, data)
 		if f.decoratorApp != nil {
@@ -112,21 +112,27 @@ func setBaseApp(cliApp *CLIApp) {
 	app.Name = cliApp.Name
 	app.Usage = cliApp.Usage
 	app.Flags = append(app.Flags, cliApp.Flags...)
-	if app.Action == nil {
-		app.Action = cliApp.Action
-	}
+	app.Action = cliApp.Action
 	app.Version = cliApp.Version
 
 	*cliApp = app
 }
 
-func (f *flowRunner) Run() (_ chan *DecoratedResult, err error) {
-	return f.decoratedResultc, f.cliApp.Run(os.Args)
+// TODO(waigani) incorrect usage func
+
+func (f *flowRunner) Run() (chan *DecoratedResult, chan error) {
+
+	go func() {
+		defer close(f.errc)
+		if err := f.cliApp.Run(os.Args); err != nil {
+			f.errc <- err
+		}
+	}()
+
+	return f.decoratedResultc, f.errc
 }
 
 func (f *flowRunner) action(ctx *cli.Context) {
-	panic("action run")
-
 	if err := f.command(ctx); err != nil {
 		util.Logger.Debugw(errors.ErrorStack(err))
 		util.FatalOSErr(err)
@@ -135,7 +141,13 @@ func (f *flowRunner) action(ctx *cli.Context) {
 }
 
 func (f *flowRunner) command(ctx *cli.Context) (err error) {
-	defer f.safeCloseWaitc()
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	defer func() {
+		wg.Wait()
+		close(f.decoratedResultc)
+	}()
+	defer wg.Done()
 
 	resultc, errc, cancel, err := f.RunCLI()
 	if err != nil {
@@ -144,14 +156,6 @@ func (f *flowRunner) command(ctx *cli.Context) (err error) {
 
 	// If user is manually confirming results, set a long timeout.
 	timeout := time.After(time.Hour * 1)
-
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	go func() {
-		wg.Wait()
-		f.safeCloseWaitc()
-	}()
-
 l:
 	for {
 		select {
@@ -168,7 +172,6 @@ l:
 				resultc = nil
 				break
 			}
-			wg.Add(1)
 
 			// TODO(waigani) this is brittle and expects the result struct to have a
 			// DecoratorOptions field. We need to refactor the Flow server to return a
@@ -180,19 +183,23 @@ l:
 				return errors.Trace(err)
 			}
 			if keep {
-
+				wg.Add(1)
 				go func(string, proto.Message) {
 					defer wg.Done()
 					ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")[1:])
 					if err != nil {
 						cancel()
+						f.errc <- err
 						util.Logger.Fatalf("error getting decorated context: %q", err)
 						return
 					}
+					util.Logger.Debug("sending result to Flow...")
 					f.decoratedResultc <- &DecoratedResult{
 						Ctx:     ctx,
 						Payload: result,
 					}
+					util.Logger.Debug("...result sent to Flow")
+
 				}(decorator, result)
 
 			}
@@ -205,7 +212,6 @@ l:
 			break l
 		}
 	}
-	wg.Done()
 
 	return
 }

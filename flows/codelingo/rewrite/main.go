@@ -10,16 +10,36 @@ import (
 
 func main() {
 	fRunner := flowutil.NewFlow(rewrite.CLIApp, rewrite.DecoratorApp)
-	resultc, err := fRunner.Run()
-	if err != nil {
-		util.Logger.Debugw("Rewrite Flow", "err_stack", errors.ErrorStack(err))
-		util.FatalOSErr(err)
-		return
-	}
-
+	resultc, errc := fRunner.Run()
 	var results []*flowutil.DecoratedResult
-	for result := range resultc {
-		results = append(results, result)
+
+	var hasErred bool
+l:
+	for {
+		select {
+		case err, ok := <-errc:
+			if !ok {
+				errc = nil
+				break
+			}
+
+			util.Logger.Debugw("Rewrite Flow", "err_stack", errors.ErrorStack(err))
+			util.FatalOSErr(err)
+			hasErred = true
+		case result, ok := <-resultc:
+			if !ok {
+				resultc = nil
+				break
+			}
+
+			results = append(results, result)
+		}
+		if resultc == nil && errc == nil {
+			break l
+		}
+	}
+	if hasErred {
+		return
 	}
 
 	if err := rewrite.Write(results); err != nil {
