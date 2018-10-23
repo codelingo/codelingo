@@ -79,7 +79,11 @@ func NewFlow(CLIApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
 
 func (f *flowRunner) setHelp() {
 	cli.HelpPrinter = func(w io.Writer, templ string, data interface{}) {
-		defer close(f.decoratedResultc)
+		defer func() {
+			if f.decoratedResultc != nil {
+				close(f.decoratedResultc)
+			}
+		}()
 		figure.NewFigure("codelingo", "larry3d", false).Print()
 		printHelp(w, CLIAPPHELPTMP, data)
 		if f.decoratorApp != nil {
