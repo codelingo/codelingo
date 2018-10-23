@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 // Read a codelingo.yaml file from a filepath argument

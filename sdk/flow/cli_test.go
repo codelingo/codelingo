@@ -5,7 +5,7 @@ import (
 	jc "github.com/juju/testing/checkers"
 	gc "gopkg.in/check.v1"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func (s *flowSuite) TestDecoratorInput(c *gc.C) {
@@ -29,8 +29,8 @@ func (s *flowSuite) TestDecoratorInput(c *gc.C) {
 	c.Assert(err, jc.ErrorIsNil)
 }
 
-var cliCMD = &CLICommand{
-	Command: cli.Command{
+var cliCMD = &CLIApp{
+	App: cli.App{
 		Name:  "cli",
 		Usage: "Dummy cli cmd",
 		Flags: []cli.Flag{
@@ -39,17 +39,14 @@ var cliCMD = &CLICommand{
 				Usage: "some cli usage",
 			},
 		},
-		Description: `
-some desc
-`[1:],
 	},
 	Request: func(*cli.Context) (chan proto.Message, chan error, func(), error) {
 		return nil, nil, nil, nil
 	},
 }
 
-var decoratorCMD = &DecoratorCommand{
-	Command: cli.Command{
+var decoratorCMD = &DecoratorApp{
+	App: cli.App{
 		Name:  "decorator",
 		Usage: "Dummy decorator cmd",
 		Flags: []cli.Flag{
@@ -66,8 +63,5 @@ var decoratorCMD = &DecoratorCommand{
 				Usage: "some decorator usage",
 			},
 		},
-		Description: `
-" some decorator desc
-`[1:],
 	},
 }

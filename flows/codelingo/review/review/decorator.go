@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/rpc/flow"
@@ -12,16 +12,17 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-var DecoratorCMD = &flowutil.DecoratorCommand{
-	Command: cli.Command{
+var DecoratorApp = &flowutil.DecoratorApp{
+	App: cli.App{
 		Name:  "review",
 		Usage: "Review code following tenets in codelingo.yaml.",
 		Flags: []cli.Flag{},
-		Description: `
-"@review reviews the decorated node.
-`[1:],
 	},
 	ConfirmDecorated: decoratorAction,
+
+	// help info
+	DecoratorUsage:   "<comment>",
+	DecoratorExample: `"this is a review comment"`,
 }
 
 func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {

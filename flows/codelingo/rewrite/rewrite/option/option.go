@@ -1,6 +1,6 @@
 package option
 
-import "github.com/codegangsta/cli"
+import "github.com/urfave/cli"
 
 type option uint32
 

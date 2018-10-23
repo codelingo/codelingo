@@ -2,16 +2,18 @@ package flow
 
 import (
 	"flag"
+	"io"
 	"os"
 	"reflect"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
+	"github.com/common-nighthawk/go-figure"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 type DecoratedResult struct {
@@ -25,59 +27,135 @@ type DecoratedResult struct {
 }
 
 type flowRunner struct {
-	cliCtx       *cli.Context
-	cliCMD       *CLICommand
-	decoratorCMD *DecoratorCommand
+	cliCtx           *cli.Context
+	cliApp           *CLIApp
+	decoratorApp     *DecoratorApp
+	decoratedResultc chan *DecoratedResult
+	errc             chan error
 }
 
-type CLICommand struct {
-	cli.Command
+type CLIApp struct {
+	cli.App
 	Request func(*cli.Context) (chan proto.Message, chan error, func(), error)
 }
 
-type DecoratorCommand struct {
-	cli.Command
+type DecoratorApp struct {
+	cli.App
 	ConfirmDecorated func(*cli.Context, proto.Message) (bool, error)
+
+	// Help info
+	DecoratorUsage   string
+	DecoratorExample string
 }
 
-func NewFlow(cliCMD *CLICommand, decoratorCMD *DecoratorCommand) *flowRunner {
+func NewFlow(CLIApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
 
-	return &flowRunner{
-		cliCMD:       cliCMD,
-		decoratorCMD: decoratorCMD,
+	// setBaseApp overrides Action with the help action. We don't want this
+	// and either want nil or the action that was already set on
+	// CLIApp.Action.
+	action := CLIApp.Action
+	setBaseApp(CLIApp)
+	CLIApp.Action = action
+
+	fRunner := &flowRunner{
+		cliApp:       CLIApp,
+		decoratorApp: decoratorApp,
+		errc:         make(chan error),
+	}
+	if fRunner.decoratorApp != nil {
+		fRunner.decoratorApp.Setup()
+	}
+	fRunner.setHelp()
+
+	if fRunner.cliApp.Action == nil {
+
+		// If Action is set, decoratedResultc is not used, nor is it closed.
+		// Only set it if we're calling the internal flowRunner.action.
+		fRunner.decoratedResultc = make(chan *DecoratedResult)
+		fRunner.cliApp.Action = fRunner.action
+	}
+	return fRunner
+}
+
+func (f *flowRunner) setHelp() {
+	cli.HelpPrinter = func(w io.Writer, templ string, data interface{}) {
+		defer close(f.decoratedResultc)
+		figure.NewFigure("codelingo", "larry3d", false).Print()
+		printHelp(w, CLIAPPHELPTMP, data)
+		if f.decoratorApp != nil {
+			printHelp(w, DECAPPHELPTMP, f.decoratorApp)
+		}
+		printHelp(w, INFOTMP, data)
 	}
 }
 
-func (f *flowRunner) Run() (_ chan *DecoratedResult, err error) {
-	decoratedResultc := make(chan *DecoratedResult)
-	waitc := make(chan struct{})
-	defer func() {
-		if err != nil && waitc != nil {
-			close(waitc)
+func setBaseApp(cliApp *CLIApp) {
+
+	app := CLIApp{
+		App:     *cli.NewApp(),
+		Request: cliApp.Request,
+	}
+
+	// base settings
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "lingo-file",
+			Value: "codelingo.yaml",
+			Usage: "the Tenet `FILE` to run rewrite over. If the flag is not set, codelingo.yaml files are read from the branch being rewritten.",
+			//	Destination: &language,
+		},
+	}
+	app.Compiled = time.Now()
+	app.EnableBashCompletion = true
+
+	// user settings
+	app.Name = cliApp.Name
+	app.Usage = cliApp.Usage
+	app.Flags = append(app.Flags, cliApp.Flags...)
+	app.Action = cliApp.Action
+	app.Version = cliApp.Version
+
+	*cliApp = app
+}
+
+// TODO(waigani) incorrect usage func
+
+func (f *flowRunner) Run() (chan *DecoratedResult, chan error) {
+
+	go func() {
+		defer close(f.errc)
+		if err := f.cliApp.Run(os.Args); err != nil {
+			f.errc <- err
 		}
 	}()
-	go func() {
-		<-waitc
-		close(decoratedResultc)
+
+	return f.decoratedResultc, f.errc
+}
+
+func (f *flowRunner) action(ctx *cli.Context) {
+	if err := f.command(ctx); err != nil {
+		util.Logger.Debugw(errors.ErrorStack(err))
+		util.FatalOSErr(err)
+	}
+
+}
+
+func (f *flowRunner) command(ctx *cli.Context) (err error) {
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	defer func() {
+		wg.Wait()
+		close(f.decoratedResultc)
 	}()
+	defer wg.Done()
 
 	resultc, errc, cancel, err := f.RunCLI()
 	if err != nil {
-		return nil, errors.Trace(err)
+		return errors.Trace(err)
 	}
 
 	// If user is manually confirming results, set a long timeout.
 	timeout := time.After(time.Hour * 1)
-
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	go func() {
-		wg.Wait()
-		if waitc != nil {
-			close(waitc)
-		}
-	}()
-
 l:
 	for {
 		select {
@@ -88,13 +166,12 @@ l:
 			}
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
-			return nil, errors.Trace(err)
+			return errors.Trace(err)
 		case result, ok := <-resultc:
 			if !ok {
 				resultc = nil
 				break
 			}
-			wg.Add(1)
 
 			// TODO(waigani) this is brittle and expects the result struct to have a
 			// DecoratorOptions field. We need to refactor the Flow server to return a
@@ -103,43 +180,45 @@ l:
 			keep, err := f.ConfirmDecorated(decorator, result)
 			if err != nil {
 				cancel()
-				return nil, errors.Trace(err)
+				return errors.Trace(err)
 			}
 			if keep {
-
+				wg.Add(1)
 				go func(string, proto.Message) {
 					defer wg.Done()
-					ctx, err := NewCtx(f.decoratorCMD.Command, strings.Split(decorator, " ")[1:]...)
+					ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")[1:]...)
 					if err != nil {
 						cancel()
+						f.errc <- err
 						util.Logger.Fatalf("error getting decorated context: %q", err)
 						return
 					}
-					decoratedResultc <- &DecoratedResult{
+					util.Logger.Debug("sending result to Flow...")
+					f.decoratedResultc <- &DecoratedResult{
 						Ctx:     ctx,
 						Payload: result,
 					}
+					util.Logger.Debug("...result sent to Flow")
+
 				}(decorator, result)
 
 			}
 
 		case <-timeout:
 			cancel()
-			return nil, errors.New("timed out waiting for issue")
+			return errors.New("timed out waiting for issue")
 		}
 		if resultc == nil && errc == nil {
 			break l
 		}
 	}
-	wg.Done()
 
-	return decoratedResultc, nil
+	return
 }
 
 func (f *flowRunner) CliCtx() (*cli.Context, error) {
 	if f.cliCtx == nil {
-		cmd := *f.cliCMD
-		ctx, err := NewCtx(cmd.Command, os.Args[1:]...)
+		ctx, err := NewCtx(&f.cliApp.App, os.Args[1:]...)
 		if err != nil {
 			return nil, errors.Trace(err)
 		}
@@ -154,41 +233,40 @@ func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
-	return f.cliCMD.Request(ctx)
+	if ctx.Bool("debug") {
+		err := util.SetDebugLogger()
+		if err != nil {
+			return nil, nil, nil, errors.Trace(err)
+		}
+	}
+
+	return f.cliApp.Request(ctx)
 }
 
 func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (bool, error) {
-	cmd := *f.decoratorCMD
-	ctx, err := NewCtx(cmd.Command, strings.Split(decorator, " ")...)
+	ctx, err := NewCtx(&f.decoratorApp.App, strings.Split(decorator, " ")...)
 	if err != nil {
 		return false, errors.Trace(err)
 	}
 
-	return cmd.ConfirmDecorated(ctx, payload)
+	return f.decoratorApp.ConfirmDecorated(ctx, payload)
 }
 
-func NewCtx(cmd cli.Command, input ...string) (*cli.Context, error) {
+func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {
 
-	fSet := flag.NewFlagSet(cmd.Name, flag.ContinueOnError)
-	for _, flag := range cmd.Flags {
+	fSet := flag.NewFlagSet(app.Name, flag.ContinueOnError)
+	for _, flag := range app.Flags {
 		flag.Apply(fSet)
 	}
 
 	if err := fSet.Parse(input); err != nil {
 		return nil, errors.Trace(err)
 	}
-	if err := normalizeFlags(cmd.Flags, fSet); err != nil {
+	if err := normalizeFlags(app.Flags, fSet); err != nil {
 		return nil, errors.Trace(err)
 	}
 
 	ctx := cli.NewContext(nil, fSet, nil)
-
-	if ctx.Bool("debug") {
-		err := util.SetDebugLogger()
-		if err != nil {
-			return nil, errors.Trace(err)
-		}
-	}
 
 	return ctx, nil
 }

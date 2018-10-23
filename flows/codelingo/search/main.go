@@ -8,7 +8,6 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	"github.com/codegangsta/cli"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
@@ -17,6 +16,7 @@ import (
 	"github.com/codelingo/rpc/flow"
 	"github.com/codelingo/rpc/flow/client"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 var searchCommand = cli.Command{

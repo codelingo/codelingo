@@ -8,10 +8,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/rewrite/rewrite/option"
 	rewriterpc "github.com/codelingo/codelingo/flows/codelingo/rewrite/rpc"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
+	"github.com/urfave/cli"
 
 	"github.com/juju/errors"
 )

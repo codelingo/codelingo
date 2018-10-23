@@ -10,10 +10,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 type Confirmer struct {

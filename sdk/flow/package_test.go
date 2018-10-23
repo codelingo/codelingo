@@ -5,7 +5,7 @@ import (
 
 	"testing"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 
 	gc "gopkg.in/check.v1"
 )

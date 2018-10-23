@@ -9,7 +9,6 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
@@ -17,6 +16,7 @@ import (
 	"github.com/codelingo/rpc/flow/client"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan proto.Message, chan error, error) {

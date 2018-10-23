@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/codelingo/codelingo/flows/codelingo/review/review"
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/rpc/flow"
 	"github.com/juju/errors"
+	"github.com/urfave/cli"
 )
 
 var pullRequestCmd = cli.Command{
