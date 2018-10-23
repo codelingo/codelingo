@@ -61,6 +61,9 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 
 	go func() {
 		for reply := range replyc {
+			if reply.IsHeartbeat {
+				continue
+			}
 			if reply.Error != "" {
 				errc <- errors.New(reply.Error)
 				continue
