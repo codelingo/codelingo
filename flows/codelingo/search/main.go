@@ -140,6 +140,9 @@ l:
 				break
 			}
 
+			if result.IsHeartbeat {
+				continue
+			}
 			if result.Error != "" {
 				cancel()
 				return "", errors.New(result.Error)

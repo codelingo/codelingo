@@ -27,9 +27,6 @@ var DecoratorCMD = &flowutil.DecoratorCommand{
 func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {
 
 	issue := payload.(*flow.Issue)
-	if issue.IsHeartbeat {
-		return false, nil
-	}
 
 	item := &flowutil.ConfirmerItem{
 		Preview: func() string {

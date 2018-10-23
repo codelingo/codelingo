@@ -61,6 +61,9 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan proto.Mes
 
 	go func() {
 		for reply := range replyc {
+			if reply.IsHeartbeat {
+				continue
+			}
 			if reply.Error != "" {
 				errc <- errors.New(reply.Error)
 				continue
