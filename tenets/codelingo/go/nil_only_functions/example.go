@@ -30,6 +30,22 @@ func main() {
 	}
 }
 
+type example struct {
+	value int
+}
+
+func returnNum() int {
+	return 3
+}
+
+func returnPointerAndNil() (*example, error) {
+	return &example{46}, nil
+}
+
+func returnCallAndNil() (int, error) {
+	return returnNum(), nil
+}
+
 func onlyReturnsNil() error {
 	a := rand.Intn(10) + 1
 	if a <= 5 {
@@ -39,16 +55,16 @@ func onlyReturnsNil() error {
 	return nil
 }
 
+func returnNonNil() (int, error) {
+	return 3, nil
+}
+
 func returnsMixed() error {
 	a := rand.Intn(10) + 1
 	if a <= 5 {
 		return errors.New("wanted a number higher than 5")
 	}
 	return nil
-}
-
-type example struct {
-	value int
 }
 
 func returnMultipleOnlyNil() (*example, error) {
@@ -73,5 +89,6 @@ func returnMultipleMixed() (*example, error) {
 		ex.value = ex.value * 2
 		return ex, nil
 	}
-	return ex, errors.New("warning: uncaught value")
+	//return ex, errors.New("warning: uncaught value")
+	return ex, nil
 }
