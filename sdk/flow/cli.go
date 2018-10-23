@@ -183,11 +183,18 @@ l:
 			// DecoratorOptions field. We need to refactor the Flow server to return a
 			// tuple of [<decorator>, <result>].
 			decorator := reflect.Indirect(reflect.ValueOf(result)).FieldByName("DecoratorOptions").String()
-			keep, err := f.ConfirmDecorated(decorator, result)
-			if err != nil {
-				cancel()
-				return errors.Trace(err)
+
+			var keep bool
+			if ctx.Bool("keep-all") {
+				keep = true
+			} else {
+				keep, err = f.ConfirmDecorated(decorator, result)
+				if err != nil {
+					cancel()
+					return errors.Trace(err)
+				}
 			}
+
 			if keep {
 				wg.Add(1)
 				go func(string, proto.Message) {

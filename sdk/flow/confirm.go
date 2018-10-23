@@ -5,94 +5,13 @@ package flow
 // structs to do this.
 
 import (
-	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/codelingo/lingo/app/util"
-	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 	"github.com/urfave/cli"
 )
-
-type Confirmer struct {
-	cancel      context.CancelFunc
-	ctx         *cli.Context
-	msgc        chan proto.Message
-	errorc      chan error
-	itemFactory func(msg proto.Message) *ConfirmerItem
-}
-
-func (c *Confirmer) Confirm() (confirmed []proto.Message, err error) {
-
-	defer func() {
-		if err != nil {
-			c.cancel()
-		}
-	}()
-	defer util.Logger.Sync()
-
-	// spnr := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-	// spnr.Start()
-	// defer spnr.Stop()
-
-	keepAll := c.ctx.IsSet("keep-all")
-	// If user is manually confirming reviews, set a long timeout.
-	timeout := time.After(time.Hour * 1)
-	if keepAll {
-		timeout = time.After(time.Minute * 11)
-	}
-
-l:
-	for {
-		select {
-		case err, ok := <-c.errorc:
-			if !ok {
-				c.errorc = nil
-				break
-			}
-
-			util.Logger.Debugf("error: %s", errors.ErrorStack(err))
-			return nil, errors.Trace(err)
-		case msg, ok := <-c.msgc:
-			// if !keepAll {
-			// 	spnr.Stop()
-			// }
-			if !ok {
-				c.msgc = nil
-				break
-			}
-			util.Logger.Debugf("received msg %v", msg)
-
-			item := c.itemFactory(msg)
-
-			pass, err := item.Confirm(c.ctx)
-			if err != nil {
-				return nil, errors.Trace(err)
-			}
-			if pass {
-				confirmed = append(confirmed, msg)
-			}
-
-			// if !keepAll {
-			// 	spnr.Restart()
-			// }
-		case <-timeout:
-			c.cancel()
-			return nil, errors.New("timed out waiting for response")
-		}
-		if c.msgc == nil && c.errorc == nil {
-			break l
-		}
-	}
-
-	// Stop spinner if it hasn't been stopped already
-	// if keepAll {
-	// 	spnr.Stop()
-	// }
-	return
-}
 
 type ConfirmerItem struct {
 	attempt int
