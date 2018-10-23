@@ -1,14 +1,12 @@
-# TODO This tenet is only a mock. The query here needs to be updated.
-
 tenets:
   - name: well-named-lock
     flows:
       codelingo/docs:
-        title: Title in Docs
+        title: Well Named Lock
         body: |
           A lock should be called `lock` unless other locks are present.
       codelingo/review:
-        comment: There are no other locks besides `{{lockname}}` here. Rename `{{locname}}` to `lock`.
+        comment: There are no other locks besides '{{lockname}}' here. Rename '{{lockname}}' to 'lock'.
     query: |
       import codelingo/ast/go
 
@@ -20,3 +18,4 @@ tenets:
               go.names:
                 go.ident:
                   type == "bool"
+                  name as lockname
