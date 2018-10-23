@@ -18,7 +18,7 @@ linux,amd64;\
 darwin,amd64;"
 
 # TODO(waigani) cmds should define versions
-version=0.0.0
+version="0.0.0"
 
 for owner in $codelingoPath/flows/*/ ; do
 	for d in $owner*/ ; do
