@@ -1,0 +1,81 @@
+tenets:
+  - name: looped-vars-outside
+    flows:
+      codelingo/docs:
+        title: Looped Vars Outside
+        body: |
+          In Go, the memory locations of loop variables are reused over iterations. Therefore, these addresses should never be allowed to escape the loop. Doing so may result in unpredictable behavior.
+      codelingo/review:
+        comment: Loop variable {{loopvarname}} is used outside the loop. Make a copy instead if you indent to use its value.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.for_stmt(depth = any): # important. could also use depth = 4
+          go.assign_stmt:
+            go.lhs:
+              go.ident:
+                name as loopvarname
+          go.block_stmt:
+            go.list:
+              # DONE Tested alone: Works
+              any_of:
+                go.expr_stmt:
+                  # well, actually, i don't think the call is needed. If a bad function is defined, that's bad enough
+                  # TODO Tested alone: 
+                  any_of:
+                    # DONE Tested alone: Works
+                    # A lambda call.
+                    go.call_expr: # important
+                      go.func_lit: # important
+                        go.args(depth = any): # or 4
+                          @review comment
+                          go.ident:
+                            name == loopvarname
+                    # TODO Tested alone: Works
+                    # A lambda definition
+                    go.func_lit: # important
+                      go.args(depth = any): # or 4
+                        @review comment
+                        go.ident:
+                          name == loopvarname
+                # TODO Tested alone: 
+                any_of:
+                  go.go_stmt: # new thread
+                    # A lambda call in a new thread
+                    # A lambda definition for a new thread is not checked here, though it could be
+                    go.call_expr: # important
+                      # TODO Tested alone: 
+                      any_of:
+                        # TODO Tested alone: 
+                        go.func_lit: # this part makes it a lambda
+                          go.args(depth = any): # or 4
+                            @review comment
+                            go.ident:
+                              name == loopvarname
+                        # TODO Tested alone: 
+                        go.args: # but any threaded call (i.e print) with the address of a loop variable is bad
+                          go.unary_expr:
+                            op == "&"
+                            @review comment
+                            go.ident:
+                              name == loopvarname
+                  go.defer_stmt:
+                    # A deferred lambda call
+                    # A deferred lambda definition is not checked here, though it could be
+                    go.call_expr: # important
+                      # TODO Tested alone: 
+                      any_of:
+                        # TODO Tested alone: 
+                        go.func_lit: # this part makes it a lambda
+                          go.args(depth = any): # or 4
+                            @review comment
+                            go.ident:
+                              name == loopvarname
+                        # TODO Tested alone: 
+                        go.args: # but any deferred call (i.e print) with the address of a loop variable is bad
+                          go.unary_expr:
+                            op == "&"
+                            @review comment
+                            go.ident:
+                              name == loopvarname
