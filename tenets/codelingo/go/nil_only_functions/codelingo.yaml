@@ -1,3 +1,10 @@
+functions:
+  - name: satisfiesInterface
+    type: asserter
+    body: |
+      function (name, comment) {
+        return comment.indexOf(name + " satisfies interface ") !== -1;
+      }
 tenets:
   - name: nil-only-functions
     flows:
@@ -6,7 +13,7 @@ tenets:
         body: |
           Find functions that only return nil.
       codelingo/review:
-        comment: Functions that don't return a non-nil value can be refactored without a reutrn type.
+        comment: Functions that don't return a non-nil value can be refactored without a return type.
     query: |
       import (
         codelingo/ast/go
@@ -14,6 +21,8 @@ tenets:
 
       @review comment
       go.func_decl(depth = any):
+        go.ident:
+          name as funcName
 
         # only include functions with at least one return value
         go.func_type:
@@ -26,10 +35,19 @@ tenets:
             go.ident:
               name == "nil"
 
+        exclude:
+          go.comment_group:
+            go.comment:
+              text as commentText
+              satisfiesInterface(funcName, commentText)
+
         # exclude functions with anything but "return nil"
         exclude:
           go.return_stmt(depth = any):
             go.results:
-              exclude:
+              any_of:
+                go.basic_lit
+                go.call_expr
+                go.unary_expr
                 go.ident:
-                  name == "nil"
+                  name != "nil"
