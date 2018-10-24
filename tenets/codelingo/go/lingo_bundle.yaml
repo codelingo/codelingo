@@ -3,12 +3,17 @@ version: 0.0.0
 tenets:
   - bool-param
   - empty-slice
+  - global-var
   - golint
   - goto
+  - init
   - marshalling
   - nil_only_functions
+  - println-format-strings
+  - reallocated_slice
   - sprintf
-  - todo
+  - tested
+  - unconvert
 tags:
   - golang
   - go
