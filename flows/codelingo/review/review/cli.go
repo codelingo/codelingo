@@ -63,7 +63,7 @@ var CLIApp = &flowutil.CLIApp{
 		// "$ lingo review [<filename>]" will review any unstaged changes in the named files.
 		// "$ lingo review --all [<filename>]" will review all code in the named files.
 	},
-
+	Tagline: "Automated Code Reviews",
 	Request: reviewAction,
 }
 

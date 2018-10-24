@@ -22,6 +22,7 @@ const (
 )
 
 var CLIApp = &flowutil.CLIApp{
+	Tagline: "Automated Code Fixes",
 	App: cli.App{
 		Name:    "rewrite",
 		Usage:   "The Rewrite Flow rewrites sections of source code matching the query pattern in the Tenets it's run over.",
