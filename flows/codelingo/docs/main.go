@@ -19,6 +19,7 @@ import (
 )
 
 var docsApp = &flowutil.CLIApp{
+	Tagline: "Automated Contributor Documentation",
 	App: cli.App{
 		Name:    "docs",
 		Usage:   "Generate documentation from Tenets",

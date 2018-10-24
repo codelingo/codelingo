@@ -37,6 +37,9 @@ type flowRunner struct {
 type CLIApp struct {
 	cli.App
 	Request func(*cli.Context) (chan proto.Message, chan error, func(), error)
+
+	// Help data
+	Tagline string
 }
 
 type DecoratorApp struct {
@@ -48,17 +51,17 @@ type DecoratorApp struct {
 	DecoratorExample string
 }
 
-func NewFlow(CLIApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
+func NewFlow(cliApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
 
 	// setBaseApp overrides Action with the help action. We don't want this
 	// and either want nil or the action that was already set on
 	// CLIApp.Action.
-	action := CLIApp.Action
-	setBaseApp(CLIApp)
-	CLIApp.Action = action
+	action := cliApp.Action
+	setBaseApp(cliApp)
+	cliApp.Action = action
 
 	fRunner := &flowRunner{
-		cliApp:       CLIApp,
+		cliApp:       cliApp,
 		decoratorApp: decoratorApp,
 		errc:         make(chan error),
 	}
@@ -87,11 +90,11 @@ func (f *flowRunner) setHelp() {
 			}
 		}()
 		figure.NewFigure("codelingo", "larry3d", false).Print()
-		printHelp(w, CLIAPPHELPTMP, data)
+		printHelp(w, CLIAPPHELPTMP, f.cliApp)
 		if f.decoratorApp != nil {
 			printHelp(w, DECAPPHELPTMP, f.decoratorApp)
 		}
-		printHelp(w, INFOTMP, data)
+		printHelp(w, INFOTMP, f.cliApp)
 	}
 }
 
@@ -116,6 +119,7 @@ func setBaseApp(cliApp *CLIApp) {
 
 	// user settings
 	app.Name = cliApp.Name
+	app.Tagline = cliApp.Tagline
 	app.Usage = cliApp.Usage
 	app.Flags = append(app.Flags, cliApp.Flags...)
 	app.Action = cliApp.Action
