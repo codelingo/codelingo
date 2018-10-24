@@ -7,16 +7,18 @@ tenets:
           Shadowing is considered harmful to your sanity.
       codelingo/review:
         comment: Identifier `{{paraname}}` := shadows parameter `{{paraname}}`. Rename one of them to make the code easier to read.
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
-
+      
       go.file(depth = any):
         go.decls:
           go.func_decl:
             go.func_type:
-              go.field_list # could be a function argument or return parameter
+              go.field_list: # could be a function argument or return parameter
                 go.field:
                   go.names: # important to distinguish from type name
+                    @rewrite newname
                     go.ident:
                       name as paraname
             go.block_stmt:
@@ -24,6 +26,10 @@ tenets:
                 go.list(depth = any):
                   go.assign_stmt:
                     go.lhs: # important
+                      # @rewrite newname
                       @review comment
                       go.ident:
                         name == paraname
+              # @rewrite newname
+              go.ident(depth = any):
+                name == paraname
