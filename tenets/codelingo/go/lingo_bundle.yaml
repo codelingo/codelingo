@@ -3,6 +3,7 @@ version: 0.0.0
 tenets:
   - bool-param
   - empty-slice
+  - global-var
   - golint
   - goto
   - marshalling
