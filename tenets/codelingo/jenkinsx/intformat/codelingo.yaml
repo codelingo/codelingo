@@ -65,7 +65,6 @@ tenets:
               start_offset == 0
               text == "// +build integration"
           @rewrite "{{ appendIntegrationTest(fname) }}""
-          @var fname
           filename as fname
           doesNotMatch(/_integration_test.go/, fname)
           # filename != append("packageName", "_integration_test.go")
@@ -74,7 +73,7 @@ tenets:
     flows:
       codelingo/rewrite:
         name: |
-          {{name}}_test
+          {{packageName}}_test
       codelingo/docs:
         title: Right Build Directive Wrong Package
         body:
@@ -92,7 +91,6 @@ tenets:
         go.file(depth = 0:2):
           @rewrite --replace name
           go.ident:
-            @var name
             name as packageName
             doesNotMatch(/test/, packageName)
         # @review comment
@@ -170,7 +168,6 @@ tenets:
           go.ident:
             name == append(packageName, "_test")
           @rewrite "{{ appendIntegrationTest(fname) }}""
-          @var fname
           filename as fname
           doesNotMatch(/_integration_test.go/, fname)
           # filename != append(packageName, "_integration_test.go")
@@ -214,7 +211,7 @@ tenets:
     flows:
       codelingo/rewrite:
         name: |
-          {{name}}_test
+          {{packageName}}_test
       codelingo/docs:
         title: Right File Wrong Package
         body:
@@ -232,7 +229,6 @@ tenets:
         go.file(depth = 0:2):
           @rewrite --replace name
           go.ident:
-            @var name
             name as packageName
             doesNotMatch(/test/, packageName)
         @review comment
