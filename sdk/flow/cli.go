@@ -2,12 +2,16 @@ package flow
 
 import (
 	"flag"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"reflect"
 	"strings"
 	"sync"
 	"time"
+
+	"encoding/json"
 
 	"github.com/codelingo/lingo/app/util"
 	"github.com/common-nighthawk/go-figure"
@@ -96,6 +100,62 @@ func (f *flowRunner) setHelp() {
 		}
 		printHelp(w, INFOTMP, f.cliApp)
 	}
+
+	f.cliApp.Commands = append(f.cliApp.Commands, cli.Command{
+		Name: "_genJSONHelp",
+		Action: func(ctx *cli.Context) {
+
+			defer func() {
+				// decoratedResultc is nil if the Flow is using it's own action.
+				if f.decoratedResultc != nil {
+					close(f.decoratedResultc)
+				}
+			}()
+
+			var cliFlags, decFlags []string
+			for _, flag := range f.cliApp.Flags {
+				cliFlags = append(cliFlags, flag.String())
+			}
+			if f.decoratorApp != nil {
+				for _, flag := range f.decoratorApp.Flags {
+					decFlags = append(decFlags, flag.String())
+				}
+			}
+
+			helpData := helpData{
+				Name:         f.cliApp.Name,
+				Tagline:      f.cliApp.Tagline,
+				Description:  f.cliApp.Usage,
+				LastCompiled: f.cliApp.Compiled.String(),
+				Version:      f.cliApp.Version,
+
+				Options: decFlags,
+			}
+
+			if f.decoratorApp != nil {
+				helpData.Decorator = decHelp{
+					Description: f.decoratorApp.Usage,
+					// Example: f.decoratorApp.Example,
+					Options: decFlags,
+				}
+			}
+
+			b, err := json.Marshal(helpData)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			outPath := ctx.Args()[0]
+			if err := ioutil.WriteFile(outPath, b, 0644); err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println("Success! JSON Help written to:", outPath)
+
+		},
+	})
+
 }
 
 func setBaseApp(cliApp *CLIApp) {

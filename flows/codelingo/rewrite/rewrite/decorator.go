@@ -13,7 +13,8 @@ import (
 
 var DecoratorApp = &flowutil.DecoratorApp{
 	App: cli.App{
-		Name: "rewrite",
+		Name:  "rewrite",
+		Usage: "Replace the decorated node with the new code",
 		Flags: []cli.Flag{
 			cli.BoolFlag{
 				Name:  "replace, r",
