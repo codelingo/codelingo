@@ -11,5 +11,4 @@ tenets:
       go.func_decl(depth = any):
         @rewrite "Test{{name}}"
         go.ident:
-          @var name
-          name
+          name as name
