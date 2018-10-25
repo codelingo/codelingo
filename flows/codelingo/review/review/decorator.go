@@ -15,7 +15,7 @@ import (
 var DecoratorApp = &flowutil.DecoratorApp{
 	App: cli.App{
 		Name:  "review",
-		Usage: "Review code following tenets in codelingo.yaml.",
+		Usage: "Comment on the decorated code.",
 		Flags: []cli.Flag{},
 	},
 	ConfirmDecorated: decoratorAction,

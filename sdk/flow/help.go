@@ -104,3 +104,14 @@ var INFOTMP = `
    {{end}}
 
 `[1:]
+
+type helpData struct {
+	Name, Tagline, Description, Version, LastCompiled string
+	Options                                           []string
+	Decorator                                         decHelp
+}
+
+type decHelp struct {
+	Description, Example string
+	Options              []string
+}
