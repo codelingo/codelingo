@@ -12,7 +12,7 @@ tenets:
   - println-format-strings
   - reallocated_slice
   - sprintf
-  - tested
+  # - tested # this is causing a mem spike. Remove from bundle until fixed
   - unconvert
 tags:
   - golang
