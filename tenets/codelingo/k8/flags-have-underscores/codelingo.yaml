@@ -1,4 +1,4 @@
-functions:
+funcs:
   - name: contains
     type: asserter
     body: |
@@ -10,7 +10,7 @@ tenets:
   - name: flags-have-underscores
     flows:
       codelingo/docs:
-        title: flagsHaveUnderscores
+        title: Flags Have Underscores
         body: |
           Command-line flags should use dashes, not underscores. See "https://github.com/kubernetes/community/blob/master/contributors/guide/coding-conventions.md"
       codelingo/review:
@@ -43,7 +43,7 @@ tenets:
                 go.ident:
                   name == "StringVar"
               go.args:
-                @review.comment
+                @review comment
                 go.ident:
                   value as flagname
                   contains(flagname, "_")

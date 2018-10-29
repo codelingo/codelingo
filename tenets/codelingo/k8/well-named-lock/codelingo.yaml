@@ -9,13 +9,30 @@ tenets:
         comment: There are no other locks besides '{{lockname}}' here. Rename '{{lockname}}' to 'lock'.
     query: |
       import codelingo/ast/go
-
-      @review.comment
-      go.func_decl(depth = any):
-        go.func_type:
-          go.field_list:
-            go.field:
-              go.names:
-                go.ident:
-                  type == "bool"
-                  name as lockname
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.struct_type:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      @review comment
+                      go.ident:
+                        name as lockname
+                        name != "lock"
+                    go.selector_expr:
+                      go.ident:
+                        name == "sync"
+                      go.ident:
+                        name == "Mutex"
+                  exclude:
+                    go.field:
+                      go.names:
+                        go.ident
+                      go.selector_expr:
+                        go.ident:
+                          name == "sync"
+                        go.ident:
+                          name == "Mutex"
