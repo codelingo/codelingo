@@ -4,7 +4,7 @@ tenets:
   - name: well-named-package
     flows:
       codelingo/docs:
-        title: Title in Docs
+        title: Well Named Package
         body: |
           Consider parent directory name when choosing a package name. Unless there's a good reason, the `package foo` line should match the name of the directory in which the .go file exists.
       codelingo/review:
