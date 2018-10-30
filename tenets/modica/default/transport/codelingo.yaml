@@ -9,18 +9,18 @@ tenets:
 
       php.dir(depth = any):
         php.file:
-          @ filter.filename
+          @filter filename
           filename
           php.stmt_namespace:
             php.name:
-              @ filter.namespace
+              @filter namespace
               name
             php.stmt_class:
-              @ filter.controller
+              @filter controller
               name
               @review comment
               php.stmt_classmethod:
-                @ filter.action
+                @filter action
                 name
     flows:
       codelingo/review:
