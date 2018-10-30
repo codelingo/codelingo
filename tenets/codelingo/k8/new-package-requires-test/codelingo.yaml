@@ -31,12 +31,12 @@ tenets:
           go.ident:
             name as packageName
       exclude:
-        # The packages I am looking for would be imported, right?
-        # Find a way to enumerate all the 
         go.dir(depth = any):
+          filename as testDirName
           isTestPath(testDirName)
           go.file:
             filename as fileName
-            go.ident:
-              name as packageName
-              name == dirName
+            go.import_spec(depth = any):
+              go.basic_lit:
+                kind == "string"
+                value == packageName
