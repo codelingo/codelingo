@@ -1,0 +1,14 @@
+tenets:
+  - name: well-named-package
+    flows:
+      codelingo/docs:
+        title: Well Named Package
+        body: |
+          none
+      codelingo/review:
+        comment: none
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.ident(depth = any)
