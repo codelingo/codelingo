@@ -10,7 +10,7 @@ tenets:
     flows:
       codelingo/rewrite:
         name: |
-          {{name}}_test
+          {{packageName}}_test
       codelingo/docs:
         title: MissingTestSuffix
         body: |
@@ -26,7 +26,6 @@ tenets:
         @review comment
         @rewrite --replace name
         go.ident:
-          @var name
           name as packageName
           missingTestSuffix(packageName)
         filename as fname

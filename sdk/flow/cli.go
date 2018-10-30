@@ -169,7 +169,6 @@ func setBaseApp(cliApp *CLIApp) {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "lingo-file",
-			Value: "codelingo.yaml",
 			Usage: "the Tenet `FILE` to run rewrite over. If the flag is not set, codelingo.yaml files are read from the branch being rewritten.",
 			//	Destination: &language,
 		},
