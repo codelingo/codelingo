@@ -15,6 +15,6 @@ tenets:
         @review comment
         go.file:
           filename as fileName
-          # go.ident:
-          #   name as packageName
-          #   name != dirName
+          go.ident:
+            name as packageName
+            name != dirName
