@@ -1,5 +1,3 @@
-# TODO This tenet is only a mock. The query here needs to be updated.
-
 tenets:
   - name: use-informer-not-list
     doc: |
