@@ -1,10 +1,8 @@
-# TODO This tenet is only a mock. The query here needs to be updated.
-
 tenets:
   - name: significant-command-feature-needs-test
     flows:
       codelingo/docs:
-        title: Title in Docs
+        title: Significant Command Feature Needs Test
         body: |
           Significant command features should come with an integration and/or end-to-end (e2e) test.
       codelingo/review:
@@ -12,7 +10,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review.comment
+      @review comment
       go.func_decl(depth = any):
         go.func_type:
           go.field_list:
