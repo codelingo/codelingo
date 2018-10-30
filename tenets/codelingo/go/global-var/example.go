@@ -4,50 +4,25 @@ import (
 	"errors"
 )
 
-const constant = 0
+const c1 = 0
 
-var myVar = 0
+const (
+	c2 = 1
+	c3 = 2
+)
 
-var myTestVar = 0
-
-func someCode() bool {
-	yourVar := true
-	return yourVar
-}
-
-var theVar = true
-
-var myVar = "global"
-
-var theVar = 2
-
-func someCode() bool {
-	return true
-}
-
-var myVar = "global"
-
-var myVar1, myVar2 = 1, 2
-
+var v1 = 0
+var v2, v3 = 1, 2
 var _ = 0
 
-var myVar = 1
+func someCode() bool {
+	v4 := true
+	return v4
+}
 
-var errFakeErrorUnexported = 1
-var ErrFakeErrorExported = 1
+var errOne = errors.New("myErrVar")
 
-var myErrVar = errors.New("myErrVar")
-var myVarErr = errors.New("myVarErr")
-var myVarError = errors.New("myVarErr")
-var customErr = customError{"customErr"}
-
-var errUnexported = errors.New("errUnexported")
-var ErrExported = errors.New("ErrExported")
-var errCustomUnexported = customError{"errCustomUnexported"}
-var ErrCustomExported = customError{"ErrCustomExported"}
-
-var declaredErr error = errors.New("declaredErr")
-var errDeclared error = errors.New("errDeclared")
+var errTwo error = errors.New("declaredErr")
 
 type customError struct{ e string }
 
@@ -55,26 +30,6 @@ func (e *customError) Error() string { return e.e }
 
 // These should also be detected as global variables
 var (
-	// Those are not errors
-	myVar = 1
-
-	errFakeErrorUnexported = 1
-	ErrFakeErrorExported   = 1
-
-	myErrVar   = errors.New("myErrVar")
-	myVarErr   = errors.New("myVarErr")
-	myVarError = errors.New("myVarErr")
-	customErr  = customError{"customErr"}
-
-	errUnexported       = errors.New("errUnexported")
-	ErrExported         = errors.New("ErrExported")
-	errCustomUnexported = customError{"errCustomUnexported"}
-	ErrCustomExported   = customError{"ErrCustomExported"}
-
-	declaredErr error = errors.New("declaredErr")
+	v5                = 1
 	errDeclared error = errors.New("errDeclared")
 )
-
-type customError struct{ e string }
-
-func (e *customError) Error() string { return e.e }
