@@ -12,8 +12,9 @@ tenets:
       
       go.file(depth = any):
         go.decls:
-          go.value_spec(depth = 1):
-            go.names:
+          go.gen_decl:
+            tok != "const"
+            go.value_spec:
               @review comment
-              go.ident:
-                private == "true"
+              go.names
+
