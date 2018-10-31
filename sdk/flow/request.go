@@ -39,7 +39,7 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 }
 
 func Request(ctx context.Context, req *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {
-	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer)
+	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, true)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}

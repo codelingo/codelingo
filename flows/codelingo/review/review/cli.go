@@ -54,6 +54,11 @@ var CLIApp = &flowutil.CLIApp{
 				Name:  "debug",
 				Usage: "Display debug messages",
 			},
+			cli.BoolFlag{
+				Name:   "insecure",
+				Hidden: true,
+				Usage:  "Review without TLS",
+			},
 			// cli.BoolFlag{
 			// 	Name:  "all",
 			// 	Usage: "review all files under all directories from pwd down",
@@ -94,6 +99,9 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 			return nil, nil, nil, err
 		}
 	}
+
+	insecure := cliCtx.IsSet("insecure")
+	util.Logger.Debugf("insecure %t", insecure)
 
 	dotlingo, err := ReadDotLingo(cliCtx)
 	if err != nil {
@@ -211,6 +219,6 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	}
 
 	fmt.Println("Running review flow...")
-	resultc, errc, err := RequestReview(ctx, req)
+	resultc, errc, err := RequestReview(ctx, req, insecure)
 	return resultc, errc, cancel, errors.Trace(err)
 }
