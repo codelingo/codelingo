@@ -130,7 +130,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	sha, err := repo.CurrentCommitId()
 	if err != nil {
 		if flowutil.NoCommitErr(err) {
-			return nil, nil, nil, errors.Trace(err)ors.New(flowutil.NoCommitErrMsg)
+			return nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
 		}
 
 		return nil, nil, nil, errors.Trace(err)
@@ -215,7 +215,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 		req.OwnerOrDepot = &flow.ReviewRequest_Depot{depot}
 		req.Repo = name
 	default:
-		return nil, nil, nil, errors.Trace(err)ors.Errorf("Invalid VCS '%s'", vcsTypeStr)
+		return nil, nil, nil, errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
 	}
 
 	fmt.Println("Running review flow...")
