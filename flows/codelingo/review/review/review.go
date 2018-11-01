@@ -19,10 +19,10 @@ import (
 	"github.com/urfave/cli"
 )
 
-func RequestReview(ctx context.Context, req *flow.ReviewRequest) (chan proto.Message, chan error, error) {
+func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, chan error, error) {
 	defer util.Logger.Sync()
 	util.Logger.Debug("opening connection to flow server ...")
-	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer)
+	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, insecure)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}

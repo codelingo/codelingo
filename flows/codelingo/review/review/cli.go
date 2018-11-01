@@ -54,6 +54,11 @@ var CLIApp = &flowutil.CLIApp{
 				Name:  "debug",
 				Usage: "Display debug messages",
 			},
+			cli.BoolFlag{
+				Name:   "insecure",
+				Hidden: true,
+				Usage:  "Review without TLS",
+			},
 			// cli.BoolFlag{
 			// 	Name:  "all",
 			// 	Usage: "review all files under all directories from pwd down",
@@ -81,7 +86,7 @@ func reviewRequire() error {
 func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), error) {
 	err := reviewRequire()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	defer util.Logger.Sync()
@@ -91,31 +96,34 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	dir := cliCtx.String("directory")
 	if dir != "" {
 		if err := os.Chdir(dir); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 		}
 	}
 
+	insecure := cliCtx.IsSet("insecure")
+	util.Logger.Debugf("insecure %t", insecure)
+
 	dotlingo, err := ReadDotLingo(cliCtx)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 	vcsType, repo, err := vcs.New()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
 	// TODO: replace this system with nfs-like communication.
 	fmt.Println("Syncing your repo...")
 	if err = vcs.SyncRepo(vcsType, repo); err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
 	owner, name, err := repo.OwnerAndNameFromRemote()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
@@ -125,13 +133,13 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 			return nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
 		}
 
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
 	patches, err := repo.Patches()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 	var patchesSize int64
@@ -144,18 +152,18 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 
 	workingDir, err := repo.WorkingDir()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
 	cfg, err := config.Platform()
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 	vcsTypeStr, err := vcs.TypeToString(vcsType)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, errors.Trace(err)
 
 	}
 
@@ -172,12 +180,12 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	case vcsGit:
 		addr, err := cfg.GitServerAddr()
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 
 		}
 		hostname, err := cfg.GitRemoteName()
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 
 		}
 
@@ -187,17 +195,17 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	case vcsP4:
 		addr, err := cfg.P4ServerAddr()
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 
 		}
 		hostname, err := cfg.P4RemoteName()
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 
 		}
 		depot, err := cfg.P4RemoteDepotName()
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, errors.Trace(err)
 
 		}
 		name = owner + "/" + name
@@ -211,6 +219,6 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	}
 
 	fmt.Println("Running review flow...")
-	resultc, errc, err := RequestReview(ctx, req)
+	resultc, errc, err := RequestReview(ctx, req, insecure)
 	return resultc, errc, cancel, errors.Trace(err)
 }
