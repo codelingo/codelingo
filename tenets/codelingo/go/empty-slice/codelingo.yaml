@@ -6,7 +6,7 @@ tenets:
         body: |
           Find empty slice assignments.
       codelingo/review:
-        comment: You should declare this using "var" not ":=" see t https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
+        comment: You should declare this using "var" not ":=" see https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices
     query: |
       import codelingo/ast/go
   
