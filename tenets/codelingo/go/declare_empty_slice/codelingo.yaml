@@ -1,0 +1,22 @@
+tenets:
+  - name: test
+    flows:
+      codelingo/review:
+        comment: When declaring an empty slice, prefer `var t []string` over `t := []string{}`.
+    query: |
+      import (
+        codelingo/ast/go
+      )
+
+      @review comment
+      go.assign_stmt(depth = any):
+        go.rhs:
+          go.composite_lit:
+            go.array_type:
+              go.ident
+
+              exclude:
+                go.basic_lit
+                  
+            exclude:
+              go.elts

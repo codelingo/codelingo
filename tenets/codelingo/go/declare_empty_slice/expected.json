@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "When declaring an empty slice, prefer `var t []string` over `t := []string{}`.",
+   "Filename": "example.go",
+   "Line": 8,
+   "Snippet": "\n  var t []string\n  t := []string{}\n  t := [2]string{2,3}\n  "
+  },
+  {
+   "Comment": "When declaring an empty slice, prefer `var t []string` over `t := []string{}`.",
+   "Filename": "example.go",
+   "Line": 14,
+   "Snippet": "  for i \u003c 10 {\n    var w []string\n    w := []string{}\n    w := [2]string{2,3}\n    i++"
+  }
+ ]
