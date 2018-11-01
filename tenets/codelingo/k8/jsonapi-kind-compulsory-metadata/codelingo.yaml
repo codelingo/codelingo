@@ -1,10 +1,8 @@
-# TODO This tenet is only a mock. The query here needs to be updated.
-
 tenets:
   - name: jsonapi-kind-compulsory-metadata
     flows:
       codelingo/docs:
-        title: Title in Docs
+        title: JSON
         body: |
           Every object kind must provide a nested object field called 'metadata' that contains both a 'namespace' and a 'name' field.
       codelingo/review:

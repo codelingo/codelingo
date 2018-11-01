@@ -1,0 +1,19 @@
+tenets:
+  - name: use-shared-informer
+    flows:
+      codelingo/docs:
+        title: Use Shared Informer
+        body: |
+      codelingo/review:
+        comment: You are using an informer here. Consider using a shared informer instead.
+    query: |
+      import codelingo/ast/go
+      
+      @review comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

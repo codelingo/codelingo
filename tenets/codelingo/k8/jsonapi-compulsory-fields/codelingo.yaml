@@ -1,0 +1,19 @@
+tenets:
+  - name: jsonapi-compulsory-fields
+    flows:
+      codelingo/docs:
+        title: JSON API Compulsory Fields
+        body: |
+      codelingo/review:
+        comment: This is a JSON object that is returned by an API but it does not have both a 'kind' and 'apiVersion' field.
+    query: |
+      import codelingo/ast/go
+      
+      @review comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"
