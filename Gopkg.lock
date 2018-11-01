@@ -64,7 +64,7 @@
     "vcs/git",
     "vcs/p4"
   ]
-  revision = "fa9b4edd1dcad69f83892282d69877ab51f4e89c"
+  revision = "ca7671ccfc2640f32a959d63c9d7a7c1e67ef8f7"
 
 [[projects]]
   branch = "master"
