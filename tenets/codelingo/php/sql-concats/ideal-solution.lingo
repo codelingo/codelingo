@@ -6,7 +6,7 @@ tenets:
       Steps:
         - Find a value extracted from an http request.
         - Follow the reaches graph (https://en.wikipedia.org/wiki/Reaching_definition) to function calls.
-          Stop at variables defined by a call to the sanatise function.
+        - Stop at variables defined by a call to the sanatise function.
         - Recursively:
           - Traverse to the function definition.
           - Follow the reaches graph from the arguments to function calls.
@@ -15,14 +15,11 @@ tenets:
 
       Caveats:
         - Currently only follows method calls, rather than methods and functions.
-        - Starts from all arguments of a function, rather than
-        - Gets false positives if sanatise is run off the call path. In other words, we recurse along a
-          linear call chain from the handler to the db, if the input is sanatised by some other function
-          it will be considered unsafe where following "reaches".
+        - Starts from all arguments of a function, rather than the argument passed in
+        - Gets false positives if sanatise is run off the call path. In other words, we recurse along a linear call chain from the handler to the db, if the input is sanatised by some other function it will be considered unsafe where following "reaches".
         - Doesn't catch direct calls to the database from the handler.
         - Possible reaches/defines issues:
-          - This tenet follows a direct reaching definition chain. This may be be confounded by having multiple
-            references to the same variable, especially across function boundaries.
+          - This tenet follows a direct reaching definition chain. This may be be confounded by having multiple references to the same variable, especially across function boundaries.
             In this example b->val is only indirectly given an unsafe value, and the $userInput definition
             may not recursively reach $b->val:
               ```<?php
@@ -47,8 +44,9 @@ tenets:
               $a->BChild = $b;
               $a->BChild->val = $userInput;
 
-              mustBeCalledSafely($b->val);
+              mustBeCalledSafely($b->val);```
           - Variables can be influenced through non-definition means:
+              ```<?php
               $safeByte = [];
               for (bit in $unsafeByte) {
                 if bit == 0 {
@@ -59,7 +57,7 @@ tenets:
               }```
     flows:
       codelingo/review:
-        comment: SQL query strings shouldnt be concatenated as these are susceptible to SQL injection
+        comment: Values from HTTP requests must be validated before being passed into SQL queries
     query: |
       import codelingo/ast/php
 
