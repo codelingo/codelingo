@@ -1,5 +1,5 @@
 tenets:
-  - name: test
+  - name: declare_empty_slice
     flows:
       codelingo/review:
         comment: When declaring an empty slice, prefer `var t []string` over `t := []string{}`.
