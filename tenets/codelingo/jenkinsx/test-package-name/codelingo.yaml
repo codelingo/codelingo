@@ -23,7 +23,6 @@ tenets:
       import codelingo/ast/go
 
       go.file(depth = any):
-        @rewrite name
         @review comment
         @rewrite --replace name
         go.ident:
