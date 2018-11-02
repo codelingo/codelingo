@@ -33,7 +33,7 @@ func printHelp(out io.Writer, templ string, data interface{}) {
 
 var CLIAPPHELPTMP = `
 
- --- {{.Tagline}} - https://codelingo.io/flow/codelingo/{{.Name}} ---
+ --- {{.Tagline}} - https://codelingo.io/flows/codelingo/{{.Name}} ---
 
 
   FLOW HELP
