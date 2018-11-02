@@ -1,0 +1,38 @@
+tenets:
+  - name: looped-vars-outside_loop
+    flows:
+      codelingo/docs:
+        title: Looped vars outside loop
+        body: |
+          In Go, the memory locations of loop variables are reused over iterations. Therefore, these addresses should never be allowed to escape the loop. Doing so may result in unpredictable behavior.
+      codelingo/review:
+        comment: Loop variable {{loopvarname}} is used outside the loop. Make a copy instead if you intend to use its value.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.for_stmt(depth = any):
+          go.assign_stmt:
+            go.lhs:
+              go.ident:
+                name as loopvarname
+          go.block_stmt:
+            go.list:
+              exclude:
+                go.expr_stmt:
+                  include:
+                    @review comment
+                    go.call_expr(depth = any):
+                      any_of:
+                        go.func_lit(depth = any):
+                          go.args(depth = any):
+                            go.ident:
+                              name == loopvarname
+                        go.args:
+                          go.unary_expr:
+                            go.ident:
+                              name == loopvarname
+                      exclude:
+                        go.args:
+                          go.ident:
+                            name == loopvarname
