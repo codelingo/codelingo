@@ -1,0 +1,25 @@
+[
+  {
+   "name": "find-unused-private-funcs",
+   "position": {
+    "start": {
+     "filename": "main.go",
+     "Offset": 188,
+     "Line": 16,
+     "Column": 6
+    },
+    "end": {
+     "filename": "main.go",
+     "Offset": 207,
+     "Line": 16,
+     "Column": 25
+    }
+   },
+   "comment": "This private function is not used in the package.",
+   "ctxBefore": "}\n",
+   "lineText": "func privateUnusedMethod() {",
+   "ctxAfter": "  fmt.Println(\"This private method is not used\");\n}",
+   "newCode": true
+  }
+ ]
+

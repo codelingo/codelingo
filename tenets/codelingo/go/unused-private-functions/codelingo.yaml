@@ -1,0 +1,20 @@
+tenets:
+  - name: find-unused-private-funcs
+    doc: Finds unused private functions.
+    flows:
+      codelingo/review:
+        comment: This private function is not used in the package.
+    query: |
+      import codelingo/ast/go
+      go.dir(depth = any):
+        go.func_decl(depth = any):
+          @review.comment
+          go.ident:
+            private == "true"
+            name as funcName
+            name != "main"
+            name != "init"
+        exclude:
+          go.call_expr(depth = any):
+            go.ident:
+              name as funcName
