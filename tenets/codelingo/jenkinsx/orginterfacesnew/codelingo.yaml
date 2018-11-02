@@ -37,7 +37,7 @@ tenets:
           filename as fnamebad
           isNotInterfaceFile(fnamebad)
           
-          @rewrite cut src
+          @rewrite --cut src
           go.interface_type(depth = any)
 
         exclude:
