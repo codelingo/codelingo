@@ -15,7 +15,6 @@ tenets:
       go.call_expr(depth = any):
         go.selector_expr:
           go.ident:
-            @review.vars.identName
             name as identName
             regex(/^(Sp|P)rint(ln)?$/, identName)
         go.args:
