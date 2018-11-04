@@ -4,7 +4,7 @@ tenets:
       codelingo/docs:
         title: Append Test
         body: "change test names"
-      codelingo/rewrite
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
       @rewrite -pl "// Test is some kind of test"
