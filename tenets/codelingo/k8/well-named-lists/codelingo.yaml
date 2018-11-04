@@ -17,25 +17,23 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      go.file(depth = any):
-        go.decls:
-          go.gen_decl:
-            go.type_spec:
-              @review comment
-              go.ident:
-                name as listName
-                missingListSuffix(listName)
-              go.struct_type:
-                go.field_list:
-                  go.field:
-                    go.selector_expr:
-                      go.ident:
-                        name == "metav1"
-                      go.ident:
-                        name == "TypeMeta"
-                  go.field:
-                    go.selector_expr:
-                      go.ident:
-                        name == "metav1"
-                      go.ident:
-                        name == "ListMeta"
+      go.gen_decl:
+        go.type_spec:
+          @review comment
+          go.ident:
+            name as listName
+            missingListSuffix(listName)
+          go.struct_type:
+            go.field_list:
+              go.field:
+                go.selector_expr:
+                  go.ident:
+                    name == "metav1"
+                  go.ident:
+                    name == "TypeMeta"
+              go.field:
+                go.selector_expr:
+                  go.ident:
+                    name == "metav1"
+                  go.ident:
+                    name == "ListMeta"

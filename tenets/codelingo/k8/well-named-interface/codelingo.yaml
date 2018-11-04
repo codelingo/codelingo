@@ -20,11 +20,10 @@ tenets:
       go.file(depth = any):
         go.ident:
           name as packageName
-        go.decls:
-          go.gen_decl: # this can probably be made depth = any
-            go.type_spec:
-              @review comment
-              go.ident:
-                name as interfaceName
-                beginsWith(packageName, interfaceName)
-              go.interface_type
+        go.gen_decl(depth = 1):
+          go.type_spec:
+            @review comment
+            go.ident:
+              name as interfaceName
+              beginsWith(packageName, interfaceName)
+            go.interface_type
