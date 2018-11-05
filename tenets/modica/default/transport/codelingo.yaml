@@ -1,9 +1,5 @@
 tenets:
   - name: transport-template
-    flows:
-      codelingo/docs:
-        title: Transport Template
-        body: Find transport controllers and actions that violate naming conventions
     query: |
       import codelingo/ast/php
 
@@ -23,6 +19,9 @@ tenets:
                 @filter action
                 name
     flows:
+      codelingo/docs:
+        title: Transport Template
+        body: Find transport controllers and actions that violate naming conventions
       codelingo/review:
         comment: |
           Controller class and method name in files named '<controller_category>/<controller_name>/<actionName>.php', should match :
