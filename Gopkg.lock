@@ -47,7 +47,7 @@
     "dotlingo",
     "inner"
   ]
-  revision = "3dfcfd26ce8c9eb34b17fe22851fe15ddbe5b90e"
+  revision = "45d204b5076b28931a0a0c3556fc22e3d7c681d4"
 
 [[projects]]
   branch = "master"
