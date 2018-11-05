@@ -1,3 +1,22 @@
+funcs:
+  - name: isKind
+    type: asserter
+    body: |
+      function (a) {
+        return a.match(/^`json:.*,name=kind\"`$/)
+      }
+  - name: isNamespace
+    type: asserter
+    body: |
+      function (a) {
+        return a.match(/^`json:.*,name=namespace\"`$/)
+      }
+  - name: isName
+    type: asserter
+    body: |
+      function (a) {
+        return a.match(/^`json:.*,name=name\"`$/)
+      }
 tenets:
   - name: jsonapi-compulsory-fields
     flows:
@@ -8,12 +27,36 @@ tenets:
         comment: This is a JSON object that is returned by an API but it does not have both a 'kind' and 'apiVersion' field.
     query: |
       import codelingo/ast/go
-      
-      @review comment
-      go.func_decl(depth = any):
-        go.func_type:
-          go.field_list:
-            go.field:
-              go.names:
-                go.ident:
-                  type == "bool"
+            
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              @review comment
+              go.struct_type:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident:
+                        type == "string"
+                    go.ident:
+                      name == "string"
+                    go.basic_lit:
+                      kind == "string"
+                      value as propAValue
+                      # isKind(propAValue)
+                  go.field:
+                    go.names:
+                      go.ident:
+                        type == "string"
+                    go.ident:
+                      name == "string"
+                    go.basic_lit:
+                      kind == "string"
+                      value as propBValue
+                      # isName(propBValue)
+                  go.field:
+                    go.basic_lit:
+                      kind == "string"
+                      value as propCValue
+                      # isNamespace(propCValue)

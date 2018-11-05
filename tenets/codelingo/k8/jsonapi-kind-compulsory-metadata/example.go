@@ -2,16 +2,44 @@ package main
 
 import "fmt"
 
-// Is this a kind or an object?
-
-type NetworkPolicy struct {
-	metav1.TypeMeta `json:",inline"`
-	// Standard object's metadata.
-	// More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
-	// +optional
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-
-	// Specification of the desired behavior for this NetworkPolicy.
-	// +optional
-	Spec NetworkPolicySpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+type KindWithoutName struct {
+	UID         types.UID                   `json:"uid" protobuf:"bytes,1,opt,name=uid"`
+	Kind        metav1.GroupVersionKind     `json:"kind" protobuf:"bytes,2,opt,name=kind"`
+	Resource    metav1.GroupVersionResource `json:"resource" protobuf:"bytes,3,opt,name=resource"`
+	SubResource string                      `json:"subResource,omitempty" protobuf:"bytes,4,opt,name=subResource"`
+	Namespace   string                      `json:"namespace,omitempty" protobuf:"bytes,6,opt,name=namespace"`
+	Operation   Operation                   `json:"operation" protobuf:"bytes,7,opt,name=operation"`
+	UserInfo    authenticationv1.UserInfo   `json:"userInfo" protobuf:"bytes,8,opt,name=userInfo"`
+	Object      runtime.RawExtension        `json:"object,omitempty" protobuf:"bytes,9,opt,name=object"`
+	OldObject   runtime.RawExtension        `json:"oldObject,omitempty" protobuf:"bytes,10,opt,name=oldObject"`
+	DryRun      *bool                       `json:"dryRun,omitempty" protobuf:"varint,11,opt,name=dryRun"`
 }
+
+type KindWithoutNamespace struct {
+	UID         types.UID                   `json:"uid" protobuf:"bytes,1,opt,name=uid"`
+	Kind        metav1.GroupVersionKind     `json:"kind" protobuf:"bytes,2,opt,name=kind"`
+	Resource    metav1.GroupVersionResource `json:"resource" protobuf:"bytes,3,opt,name=resource"`
+	SubResource string                      `json:"subResource,omitempty" protobuf:"bytes,4,opt,name=subResource"`
+	Name        string                      `json:"name,omitempty" protobuf:"bytes,5,opt,name=name"`
+	Operation   Operation                   `json:"operation" protobuf:"bytes,7,opt,name=operation"`
+	UserInfo    authenticationv1.UserInfo   `json:"userInfo" protobuf:"bytes,8,opt,name=userInfo"`
+	Object      runtime.RawExtension        `json:"object,omitempty" protobuf:"bytes,9,opt,name=object"`
+	OldObject   runtime.RawExtension        `json:"oldObject,omitempty" protobuf:"bytes,10,opt,name=oldObject"`
+	DryRun      *bool                       `json:"dryRun,omitempty" protobuf:"varint,11,opt,name=dryRun"`
+}
+
+type AdmissionRequest struct {
+	UID         types.UID                   `json:"uid" protobuf:"bytes,1,opt,name=uid"`
+	Kind        metav1.GroupVersionKind     `json:"kind" protobuf:"bytes,2,opt,name=kind"`
+	Resource    metav1.GroupVersionResource `json:"resource" protobuf:"bytes,3,opt,name=resource"`
+	SubResource string                      `json:"subResource,omitempty" protobuf:"bytes,4,opt,name=subResource"`
+	Name        string                      `json:"name,omitempty" protobuf:"bytes,5,opt,name=name"`
+	Namespace   string                      `json:"namespace,omitempty" protobuf:"bytes,6,opt,name=namespace"`
+	Operation   Operation                   `json:"operation" protobuf:"bytes,7,opt,name=operation"`
+	UserInfo    authenticationv1.UserInfo   `json:"userInfo" protobuf:"bytes,8,opt,name=userInfo"`
+	Object      runtime.RawExtension        `json:"object,omitempty" protobuf:"bytes,9,opt,name=object"`
+	OldObject   runtime.RawExtension        `json:"oldObject,omitempty" protobuf:"bytes,10,opt,name=oldObject"`
+	DryRun      *bool                       `json:"dryRun,omitempty" protobuf:"varint,11,opt,name=dryRun"`
+}
+
+// So, look for ~name=kind~ which does not have ~name=namespace~, nor ~name=name~.

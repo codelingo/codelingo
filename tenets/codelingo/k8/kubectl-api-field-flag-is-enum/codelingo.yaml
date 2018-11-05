@@ -1,0 +1,21 @@
+# TODO This tenet is only a mock. The query here needs to be updated.
+
+tenets:
+  - name: kubectl-api-field-flag-is-enum
+    flows:
+      codelingo/docs:
+        title: Title in Docs
+        body: |
+      codelingo/review:
+        comment: The flag {{flagName}} specifies an API field but appears to not be checked strictly as an enum value.
+    query: |
+      import codelingo/ast/go
+      
+      @review comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"
