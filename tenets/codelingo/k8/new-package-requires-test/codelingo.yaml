@@ -30,9 +30,6 @@ tenets:
           filename as packageFileName
           @review comment
           go.ident:
-            # This matches multiple things. Possibly because I am using go.dir.
-            # Because of multiple matches, I believe it thinks I am
-            # making multiple definitions
             name as packageName
       exclude:
         go.dir(depth = any):

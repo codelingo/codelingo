@@ -4,7 +4,11 @@ tenets:
       codelingo/docs:
         title: Shadowed Function Parameter
         body: |
-          Shadowing is considered harmful to your sanity.
+          According to the Three Golang Landmines, "shadowing is considered harmful to your sanity".
+
+          Avoid shadowing your function parameters to make you code easier to read.
+
+          See "https://gist.github.com/lavalamp/4bd23295a9f32706a48f"
       codelingo/review:
         comment: Identifier `{{paraname}}` := shadows parameter `{{paraname}}`. Rename one of them to make the code easier to read.
       codelingo/rewrite:
