@@ -1,0 +1,18 @@
+tenets:
+  - name: use-informer-not-list
+    doc: |
+      Using explicit lists from the API server is expensive. As a rule, use Informer. If using Informer, use shared Informers.
+    flows:
+      codelingo/review:
+        comment: Calls to List(), such as this one, are expensive. If your use case does not look like an Informer, look harder. If at the very end of that it still does not look like an Informer, consider using something else after talking to someone.
+    query: |
+      import codelingo/ast/go
+
+      @ review.comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident:
+                  type == "bool"

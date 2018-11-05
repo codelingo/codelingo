@@ -1,0 +1,46 @@
+funcs:
+  - name: isTestPath
+    type: asserter
+    body: |
+      function (str) {
+        return str.indexOf("test/") == 0
+      }
+  - name: isNotTestPath
+    type: asserter
+    body: |
+      function (str) {
+        return str.indexOf("test/") != 0
+      }
+tenets:
+  - name: new-package-requires-test
+    flows:
+      codelingo/docs:
+        title: New Package Requires Test
+        body: |
+          All new packages must come with unit tests.
+      codelingo/review:
+        comment: The package {{packageName}} is not unit tested. Please write either an integration (test/integration) and/or an end-to-end (test/e2e) test that tests it.
+    query: |
+      import codelingo/ast/go
+
+      go.dir(depth = any):
+        filename as packageDirName
+        isNotTestPath(packageDirName)
+        go.file:
+          filename as packageFileName
+          @review comment
+          go.ident:
+            # This matches multiple things. Possibly because I am using go.dir.
+            # Because of multiple matches, I believe it thinks I am
+            # making multiple definitions
+            name as packageName
+      exclude:
+        go.dir(depth = any):
+          filename as testDirName
+          isTestPath(testDirName)
+          go.file:
+            filename as fileName
+            go.import_spec(depth = any):
+              go.basic_lit:
+                kind == "string"
+                value == packageName

@@ -1,0 +1,46 @@
+funcs:
+  - name: isInvalidLockName
+    type: asserter
+    body: |
+      function (a) {
+        return a.match(/^[a-z]\+\([A-Z][a-z]\+\)*\+Lock$/) === null
+      }
+tenets:
+  - name: well-named-locks
+    flows:
+      codelingo/docs:
+        title: Well Named Locks
+        body: |
+          Locks should be called `lock` and should never be embedded 
+          (always `lock sync.Mutex`). When multiple locks are present, 
+          give each lock a distinct name following Go conventions 
+          - `stateLock`, `mapLock` etc.
+      codelingo/review:
+        comment: Multiple locks are present, give each lock a distinct name following Go conventions - `stateLock`, `mapLock` etc.
+    query: |
+      import codelingo/ast/go
+      
+      go.decls:
+        go.gen_decl:
+          go.type_spec:
+            go.struct_type:
+              go.field_list:
+                go.field:
+                  go.names:
+                    go.ident
+                  go.selector_expr:
+                    go.ident:
+                      name == "sync"
+                    go.ident:
+                      name == "Mutex"
+                go.field:
+                  go.names:
+                    @review comment
+                    go.ident:
+                      name as lockname
+                      isInvalidLockName(lockname)
+                  go.selector_expr:
+                    go.ident:
+                      name == "sync"
+                    go.ident:
+                      name == "Mutex"
