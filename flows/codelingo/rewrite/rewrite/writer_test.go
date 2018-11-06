@@ -30,6 +30,11 @@ func (s *cmdSuite) TestWrite(c *gc.C) {
 
 }
 
+// TODO: implement once rewrite fname is implemented.
+func (s *cmdSuite) TestRewriteFileName(c *gc.C) {
+
+}
+
 func (s *cmdSuite) TestNewFile(c *gc.C) {
 
 	newFile := "new_test.go"
