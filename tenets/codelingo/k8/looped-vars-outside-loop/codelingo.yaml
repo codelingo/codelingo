@@ -1,5 +1,5 @@
 tenets:
-  - name: looped-vars-outside_loop
+  - name: looped-vars-outside-loop
     flows:
       codelingo/docs:
         title: Looped vars outside loop
