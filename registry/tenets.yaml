@@ -53,10 +53,18 @@ codelingo:
     description: Best practices from the kubernetes repository.
     version: 0.0.0
     tenets:
+      - flags-have-underscores
+      - jsonapi-kind-compulsory-metadata
       - looped-vars-outside-loop
+      - misused-nil-interface
+      - new-package-requires-test
+      - shadowed-func-parameter
       - well-formed-lists
       - well-named-interface
       - well-named-lists
+      - well-named-lock
+      - well-named-locks
+      - well-named-package
     tags:
       - kubernetes
       - golang
