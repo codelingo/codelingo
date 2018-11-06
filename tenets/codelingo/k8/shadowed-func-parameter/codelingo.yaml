@@ -21,18 +21,16 @@ tenets:
             go.field_list: # could be a function argument or return parameter
               go.field:
                 go.names: # important to distinguish from type name
-                  @rewrite newname
                   go.ident:
                     name as paraname
           go.block_stmt:
-            go.list:
-              go.list(depth = any):
-                go.assign_stmt:
-                  go.lhs: # important
-                    # @rewrite newname
-                    @review comment
-                    go.ident:
-                      name == paraname
-            # @rewrite newname
+            go.assign_stmt(depth = any):
+              go.lhs:
+                @rewrite "inner{{newname}}"
+                @review comment
+                go.ident:
+                  name == paraname
+            # This is only going to match
+            @rewrite "inner{{newname}}"
             go.ident(depth = any):
               name == paraname
