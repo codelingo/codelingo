@@ -49,6 +49,18 @@ codelingo:
       - jenkins-x
       - golang
       - go
+  kubernetes:
+    description: Best practices from the kubernetes repository.
+    version: 0.0.0
+    tenets:
+      - looped-vars-outside-loop
+      - well-formed-lists
+      - well-named-interface
+      - well-named-lists
+    tags:
+      - kubernetes
+      - golang
+      - go
   php:
     description: Best practices for PHP.
     version: 0.0.0
