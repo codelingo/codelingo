@@ -13,7 +13,7 @@ tenets:
         body: |
           A lock should be called `lock` unless other locks are present.
       codelingo/review:
-        comment: A lock should be called `lock` unless other locks are present.
+        comment: There are no other locks besides '{{nameA}}' here. Rename '{{nameA}}' to 'lock'.
     query: |
       import codelingo/ast/go
       
