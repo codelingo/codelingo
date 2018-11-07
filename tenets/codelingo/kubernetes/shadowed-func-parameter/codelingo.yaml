@@ -4,7 +4,7 @@ tenets:
       codelingo/docs:
         title: Shadowed Function Parameter
         body: |
-          Avoid shadowing your function parameters to make you code easier to read.
+          Avoid shadowing your function parameters to make your code easier to read.
           See "https://gist.github.com/lavalamp/4bd23295a9f32706a48f"
       codelingo/review:
         comment: Identifier `{{paramName}}` := shadows parameter `{{paramName}}`. Rename one of them to make the code easier to read.
