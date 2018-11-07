@@ -6,12 +6,14 @@ tenets:
         body: |
           Find functions with one or more boolean arguments.
       codelingo/review:
-        comment: Boolean arguments can indicate low cohesion. Consider using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.
+        comment: Boolean arguments can indicate low cohesion. Consider refactoring {{ funcName }} by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.
     query: |
       import codelingo/ast/go
 
       @review comment
       go.func_decl(depth = any):
+        go.ident:
+          name as funcName
         go.func_type:
           go.field_list:
             go.field:

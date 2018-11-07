@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring doThisOrThat by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
+   "Filename": "example.go",
+   "Line": 7,
+   "Snippet": "}\n\nfunc doThisOrThat(flag bool) { // Issue\n\tif flag {\n\t\tdoThis()\n\t} else {\n\t\tdoThat()\n\t}\n}\n\nfunc returnsTrue() bool {"
+  }
+ ]
