@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "A lock should be called `lock` unless other locks are present.",
+   "Filename": "example.go",
+   "Line": 10,
+   "Snippet": "\ntype badStruct struct {\n\tbadLock sync.Mutex\n}\n"
+  },
+  {
+   "Comment": "A lock should be called `lock` unless other locks are present.",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "type MockAddresses struct {\n\tlock  int\n\tlockB sync.Mutex\n}"
+  },
+  {
+   "Comment": "A lock should be called `lock` unless other locks are present.",
+   "Filename": "example.go",
+   "Line": 19,
+   "Snippet": "\ntype testStruct2 struct {\n\tlockA sync.Mutex\n\tstr   String \n}"
+  }
+ ]

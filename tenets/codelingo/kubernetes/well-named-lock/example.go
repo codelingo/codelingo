@@ -14,3 +14,13 @@ type MockAddresses struct {
 	lockA sync.Mutex
 	lockB sync.Mutex
 }
+
+type testStruct2 struct {
+	lockA sync.Mutex
+	str   String 
+}
+
+type MockAddresses struct {
+	lock  int
+	lockB sync.Mutex
+}
