@@ -4,33 +4,27 @@ tenets:
       codelingo/docs:
         title: Shadowed Function Parameter
         body: |
-          According to the Three Golang Landmines, "shadowing is considered harmful to your sanity".
-
           Avoid shadowing your function parameters to make you code easier to read.
-
           See "https://gist.github.com/lavalamp/4bd23295a9f32706a48f"
       codelingo/review:
-        comment: Identifier `{{paraname}}` := shadows parameter `{{paraname}}`. Rename one of them to make the code easier to read.
+        comment: Identifier `{{paramName}}` := shadows parameter `{{paramName}}`. Rename one of them to make the code easier to read.
       codelingo/rewrite:
     query: |
       import codelingo/ast/go
       
-      go.decls:
-        go.func_decl:
-          go.func_type:
-            go.field_list: # could be a function argument or return parameter
-              go.field:
-                go.names: # important to distinguish from type name
-                  go.ident:
-                    name as paraname
-          go.block_stmt:
-            go.assign_stmt(depth = any):
-              go.lhs:
-                @rewrite "inner{{newname}}"
-                @review comment
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list: 
+            go.field:
+              go.names:
                 go.ident:
-                  name == paraname
-            # This is only going to match
-            @rewrite "inner{{newname}}"
-            go.ident(depth = any):
-              name == paraname
+                  name as paramName
+        go.block_stmt(depth = any):
+          go.assign_stmt(depth = any):
+            go.lhs:
+              @review comment
+              go.ident:
+                name == paramName
+          @rewrite "inner{{paramName}}"
+          go.ident(depth = any):
+            name == paramName
