@@ -4,12 +4,16 @@ func main() {
 	doThisOrThat(false)
 }
 
-func doThisOrThat(flag bool) {
+func doThisOrThat(flag bool) { // Issue
 	if flag {
 		doThis()
 	} else {
 		doThat()
 	}
+}
+
+func returnsTrue() bool {
+	return true
 }
 
 func doThis() {}
