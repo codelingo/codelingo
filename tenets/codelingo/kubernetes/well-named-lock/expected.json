@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "There are no other locks besides 'lockB' here. Rename 'lockB' to 'lock'.",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "type MockAddresses struct {\n\tlock  int\n\tlockB sync.Mutex\n}"
+  },
+  {
+   "Comment": "There are no other locks besides 'badLock' here. Rename 'badLock' to 'lock'.",
+   "Filename": "example.go",
+   "Line": 10,
+   "Snippet": "\ntype badStruct struct {\n\tbadLock sync.Mutex\n}\n"
+  },
+  {
+   "Comment": "There are no other locks besides 'lockA' here. Rename 'lockA' to 'lock'.",
+   "Filename": "example.go",
+   "Line": 19,
+   "Snippet": "\ntype testStruct2 struct {\n\tlockA sync.Mutex\n\tstr   String \n}"
+  }
+ ]

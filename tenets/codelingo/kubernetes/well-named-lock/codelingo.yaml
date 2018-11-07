@@ -1,3 +1,10 @@
+funcs:
+  - name: notEqual
+    type: asserter
+    body: |
+      function (nameA, nameB) {
+        return nameA != nameB
+      }
 tenets:
   - name: well-named-lock
     flows:
@@ -6,32 +13,33 @@ tenets:
         body: |
           A lock should be called `lock` unless other locks are present.
       codelingo/review:
-        comment: There are no other locks besides '{{lockname}}' here. Rename '{{lockname}}' to 'lock'.
+        comment: There are no other locks besides '{{nameA}}' here. Rename '{{nameA}}' to 'lock'.
     query: |
       import codelingo/ast/go
       
-      go.decls:
-        go.gen_decl:
-          go.type_spec:
-            go.struct_type:
-              go.field_list:
+      go.gen_decl(depth = any):
+        go.type_spec:
+          go.struct_type:
+            go.field_list:
+              @review comment
+              go.field:
+                go.names:
+                  go.ident:
+                    name as nameA
+                    name != "lock"
+                go.selector_expr:
+                  go.ident:
+                    name == "sync"
+                  go.ident:
+                    name == "Mutex"
+              exclude:
                 go.field:
                   go.names:
-                    @review comment
                     go.ident:
-                      name as lockname
-                      name != "lock"
+                      name as nameB
+                      notEqual(nameA, nameB)
                   go.selector_expr:
                     go.ident:
                       name == "sync"
                     go.ident:
                       name == "Mutex"
-                exclude:
-                  go.field:
-                    go.names:
-                      go.ident
-                    go.selector_expr:
-                      go.ident:
-                        name == "sync"
-                      go.ident:
-                        name == "Mutex"
