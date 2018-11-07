@@ -14,6 +14,7 @@ tenets:
       go.func_decl(depth = any):
         go.ident:
           name as funcName
+          # TODO: address constructors for structs with bool fields https://github.com/codelingo/platform/pull/998#discussion_r230685188
         go.func_type:
           go.field_list:
             go.field:
