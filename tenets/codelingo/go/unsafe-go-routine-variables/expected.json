@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "The variable close should be passed in as arguments to go-routines to avoid race conditions.",
+   "Filename": "test.go",
+   "Line": 14,
+   "Snippet": "\tintc := make(chan int)\n\tgo func() {\n\t\tdefer close(intc)\n\t}()\n\treturn intc"
+  },
+  {
+   "Comment": "The variable intc should be passed in as arguments to go-routines to avoid race conditions.",
+   "Filename": "test.go",
+   "Line": 14,
+   "Snippet": "\tintc := make(chan int)\n\tgo func() {\n\t\tdefer close(intc)\n\t}()\n\treturn intc"
+  },
+  {
+   "Comment": "The variable close should be passed in as arguments to go-routines to avoid race conditions.",
+   "Filename": "test.go",
+   "Line": 6,
+   "Snippet": "\tintc := make(chan int)\n\tgo func(intc chan\u003c- int) {\n\t\tdefer close(intc)\n\t}(intc)\n\treturn intc"
+  }
+ ]
