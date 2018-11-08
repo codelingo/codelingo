@@ -1,0 +1,38 @@
+[
+  {
+   "Comment": "protobuf name and json_name are not equal here. Please change their values to match in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 9,
+   "Snippet": "type TestPB struct {\n\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`\n}"
+  },
+  {
+   "Comment": "The protobuf name and json_name must be snake_case. Please change their values in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 9,
+   "Snippet": "type TestPB struct {\n\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`\n}"
+  },
+  {
+   "Comment": "The protobuf name and json_name must be snake_case. Please change their values in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 10,
+   "Snippet": "\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`\n}"
+  },
+  {
+   "Comment": "The protobuf name and json_name must be snake_case. Please change their values in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 8,
+   "Snippet": "\ntype TestPB struct {\n\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`"
+  },
+  {
+   "Comment": "type field does not match the protobuf name and json_names defined here. Please change their values to match in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 9,
+   "Snippet": "type TestPB struct {\n\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`\n}"
+  },
+  {
+   "Comment": "type field does not match the protobuf name and json_names defined here. Please change their values to match in the corresponding .proto file.",
+   "Filename": "example.go",
+   "Line": 10,
+   "Snippet": "\tCorrectName []byte `protobuf:\"bytes,2,opt,name=correct_name,proto3\" json:\"correct_name,omitempty\"`\n\tIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrectname,proto3\" json:\"incorrect_name,omitempty\"`\n\tAnotherIncorrectName []byte `protobuf:\"bytes,2,opt,name=incorrect_name,proto3\" json:\"incorrect_name,omitempty\"`\n}"
+  }
+ ]

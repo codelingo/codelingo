@@ -1,0 +1,106 @@
+funcs:
+  - name: protoNameNotSnakeCase
+    type: asserter
+    body: |
+      function (a) {
+        function notSnakeCase(a) {
+          return a.indexOf(" ") || a.match(/[A-Z]/)
+        }
+        var m = a.match(/^protobuf:"[^"]*name=([^,"]+).+ json:"([^,"]+)/)
+        return m && notSnakeCase(m[1]) && notSnakeCase(m[2])
+      }
+  - name: protoNameNotEqualsJsonName
+    type: asserter
+    body: |
+      function (a) {
+        var m = a.match(/^protobuf:"[^"]*name=([^,"]+).+ json:"([^,"]+)/)
+        return m && m[1] != m[2]
+      }
+  - name: identNameNotMatchesProtoName
+    type: asserter
+    body: |
+      function (ident, a) {
+        function singleCapitalize(str) {
+          function capitalizeFirstLetter(string) {
+              return string.charAt(0).toUpperCase() + string.slice(1);
+          }
+          return capitalizeFirstLetter(str.replace(/_+/g, '').replace(/\s+/g, ''));
+        }
+        function camelize(str) {
+          function capitalizeFirstLetter(string) {
+              return string.charAt(0).toUpperCase() + string.slice(1);
+          }
+          return capitalizeFirstLetter(str.replace(/_+/g, ' ').replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+            return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+          }).replace(/\s+/g, ''));
+        }
+        var m = a.match(/^`protobuf:"[^"]*name=([^,"]+)/)
+        return m && ! ( ident == camelize(m[1]) || ident == singleCapitalize(m[1]) )
+      }
+tenets:
+  - name: rpc-responses-display-uniformly-fields-equal
+    flows:
+      codelingo/docs:
+        title: RPC responses display uniformly with fields equal
+        body: |
+      codelingo/review:
+        comment: protobuf name and json_name are not equal here. Please change their values to match in the corresponding .proto file.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.struct_type:
+                go.field_list:
+                  @review comment
+                  go.field:
+                    go.basic_lit:
+                      value as literalValue
+                      protoNameNotEqualsJsonName(literalValue)
+  - name: rpc-responses-display-uniformly-ident-matches
+    flows:
+      codelingo/docs:
+        title: RPC responses display uniformly with matching ident
+        body: |
+      codelingo/review:
+        comment: type field does not match the protobuf name and json_names defined here. Please change their values to match in the corresponding .proto file.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.struct_type:
+                go.field_list:
+                  @review comment
+                  go.field:
+                    go.names:
+                      go.ident:
+                        name as identName
+                    go.basic_lit:
+                      value as literalValue
+                      identNameNotMatchesProtoName(identName, literalValue)
+  - name: rpc-responses-display-uniformly-snake-case
+    flows:
+      codelingo/docs:
+        title: RPC responses display uniformly with snake case
+        body: |
+      codelingo/review:
+        comment: The protobuf name and json_name must be snake_case. Please change their values in the corresponding .proto file.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.struct_type:
+                go.field_list:
+                  @review comment
+                  go.field:
+                    go.basic_lit:
+                      value as literalValue
+                      protoNameNotSnakeCase(literalValue)
