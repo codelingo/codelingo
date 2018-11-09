@@ -33,6 +33,7 @@ tenets:
           go.interface_type
         go.func_decl:
           go.func_type:
+            go.field_list
             go.field_list:
               go.field:
                 go.ident:
