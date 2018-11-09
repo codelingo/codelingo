@@ -1,0 +1,49 @@
+funcs:
+  - name: isNotAWellFormedLiteral
+    type: asserter
+    body: |
+      function (ident, a) {
+        function notSnakeCase(b) {
+          return b.match(/ /) || b.match(/[A-Z]/)
+        }
+        function singleCapitalize(str) {
+          function capitalizeFirstLetter(string) {
+              return string.charAt(0).toUpperCase() + string.slice(1);
+          }
+          return capitalizeFirstLetter(str.replace(/_+/g, '').replace(/\s+/g, ''));
+        }
+        function camelize(str) {
+          function capitalizeFirstLetter(string) {
+              return string.charAt(0).toUpperCase() + string.slice(1);
+          }
+          return capitalizeFirstLetter(str.replace(/_+/g, ' ').replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+            return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+          }).replace(/\s+/g, ''));
+        }
+        var m = a.match(/protobuf:"[^"]*name=([^,"]+).+ json:"([^,"]+)/)
+        return m && ((m[1] != m[2]) || (notSnakeCase(m[1]) || notSnakeCase(m[2])) || (! ( ident == camelize(m[1]) || ident == singleCapitalize(m[1]) )))
+      }
+tenets:
+  - name: rpc-responses-display-uniformly
+    flows:
+      codelingo/docs:
+        title: RPC responses display uniformly
+        body: |
+      codelingo/review:
+        comment: The protobuf name and json_name must be snake_case and their values must be equal and the type field name must have a matching name. Please change their values in the corresponding .proto file.
+    query: |
+      import codelingo/ast/go
+      
+      go.decls(depth = any):
+        go.gen_decl:
+          go.type_spec:
+            go.struct_type:
+              go.field_list:
+                @review comment
+                go.field:
+                  go.names:
+                    go.ident:
+                      name as identName
+                  go.basic_lit:
+                    value as literalValue
+                    isNotAWellFormedLiteral(identName, literalValue)
