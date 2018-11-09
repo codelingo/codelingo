@@ -34,17 +34,16 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      go.file:
-        go.decls:
-          go.gen_decl:
-            go.type_spec:
-              go.struct_type:
-                go.field_list:
-                  @review comment
-                  go.field:
-                    go.names:
-                      go.ident:
-                        name as identName
-                    go.basic_lit:
-                      value as literalValue
-                      isNotAWellFormedLiteral(identName, literalValue)
+      go.decls(depth = any):
+        go.gen_decl:
+          go.type_spec:
+            go.struct_type:
+              go.field_list:
+                @review comment
+                go.field:
+                  go.names:
+                    go.ident:
+                      name as identName
+                  go.basic_lit:
+                    value as literalValue
+                    isNotAWellFormedLiteral(identName, literalValue)
