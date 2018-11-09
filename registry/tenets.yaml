@@ -70,15 +70,14 @@ codelingo:
       - golang
       - go
   lightning-network-daemon:
-    default:
-      description: Best practices from the lightning network daemon repository.
-      version: 0.0.0
-      tenets:
-        - rpc-responses-display-uniformly
-      tags:
-        - lnd
-        - golang
-        - go
+    description: Best practices from the lightning network daemon repository.
+    version: 0.0.0
+    tenets:
+      - rpc-responses-display-uniformly
+    tags:
+      - lnd
+      - golang
+      - go
   php:
     description: Best practices for PHP.
     version: 0.0.0
