@@ -69,6 +69,15 @@ codelingo:
       - kubernetes
       - golang
       - go
+  lightning-network-daemon:
+    description: Best practices from the lightning network daemon repository.
+    version: 0.0.0
+    tenets:
+      - rpc-responses-display-uniformly
+    tags:
+      - lnd
+      - golang
+      - go
   php:
     description: Best practices for PHP.
     version: 0.0.0
@@ -105,13 +114,3 @@ west:
       - csharp
       - cpp
       - c++      
-lightning-network-daemon:
-  default:
-    description: Best practices from the lightning network daemon repository.
-    version: 0.0.0
-    tenets:
-      - rpc-responses-display-uniformly
-    tags:
-      - lnd
-      - golang
-      - go
