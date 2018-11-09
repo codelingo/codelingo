@@ -1,5 +1,5 @@
-cacophony:
-  default:
+codelingo:
+  cacophony:
     description: Tenets written for The Cacophony Project.
     version: 0.0.0
     tenets:
@@ -14,7 +14,6 @@ cacophony:
       - go
       - python
       - py
-codelingo:
   go:
     description: Best Practices for Golang.
     version: 0.0.0
@@ -78,6 +77,14 @@ codelingo:
       - lnd
       - golang
       - go
+  modica:
+    description: Tenets written for Modica
+    version: 0.0.0
+    tenets:
+      - null-check
+      - transport
+    tags:
+      - php
   php:
     description: Best practices for PHP.
     version: 0.0.0
@@ -92,17 +99,7 @@ codelingo:
       - sql-concats
     tags:
       - php
-modica:
-  default:
-    description: Tenets written for Modica
-    version: 0.0.0
-    tenets:
-      - null-check
-      - transport
-    tags:
-      - php
-west:
-  default:
+  west:
     description: Tenets written for West
     version: 0.0.0
     tenets:
