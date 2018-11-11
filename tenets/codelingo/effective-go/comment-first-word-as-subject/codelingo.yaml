@@ -21,14 +21,12 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.file(depth = any):
-        go.decls:
-          go.func_decl:
-            go.comment_group:
-              @review comment
-              go.comment:
-                sibling_order == 0
-                text as commText
-            go.ident:
-              name as funcName
-              isValid(commText, funcName)
+      go.func_decl(depth = any):
+        go.comment_group:
+          @review comment
+          go.comment:
+            sibling_order == 0
+            text as commText
+        go.ident:
+          name as funcName
+          isValid(commText, funcName)
