@@ -1,0 +1,22 @@
+funcs:
+  - name: containsUnderscores
+    type: asserter
+    body: |
+      function(name) {
+        return name.indexOf("_") !== -1
+      }
+tenets:
+  - name: underscores-in-name
+    flows:
+      codelingo/docs:
+        title: Underscores in Name
+        body: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+      codelingo/review:
+        comment: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.ident(depth = any):
+        name as varName
+        containsUnderscores(varName)

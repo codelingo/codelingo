@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Avoid renaming imports except to avoid a name collision; good package names\nshould not require renaming. In the event of collision, prefer to rename the\nmost local or project-specific import.\n",
+   "Filename": "effective-go/avoid-renaming-imports/example.go",
+   "Line": 5,
+   "Snippet": "import (\n\t\"fmt\"\n\tmath \"math/rand\"\n\t_ \"os\"\n)"
+  }
+ ]

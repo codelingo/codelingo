@@ -1,0 +1,33 @@
+funcs:
+  - name: isInvalid
+    type: asserter
+    body: |
+      function(name) {
+        return name !== "_"
+      }
+tenets:
+  - name: avoid-renaming-imports
+    flows:
+      codelingo/docs:
+        title: Avoid Renaming Imports
+        body: |
+          Avoid renaming imports except to avoid a name collision; good package names
+          should not require renaming. In the event of collision, prefer to rename the
+          most local or project-specific import.
+      codelingo/review:
+        comment: |
+          Avoid renaming imports except to avoid a name collision; good package names
+          should not require renaming. In the event of collision, prefer to rename the
+          most local or project-specific import.
+    query: |
+      import codelingo/ast/go
+
+      go.gen_decl(depth = any):
+        @review comment
+        go.import_spec:
+          go.ident:
+            name as impName
+            isInvalid(impName)
+          go.basic_lit
+
+      
