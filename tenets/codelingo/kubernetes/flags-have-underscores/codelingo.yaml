@@ -18,7 +18,8 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      go.decls:
+      # TODO: target more types of flags that k8 uses.
+      go.decls(depth = any):
         go.import_spec(depth = 1):
           go.basic_lit:
             value == "github.com/spf13/pflag"
@@ -35,12 +36,10 @@ tenets:
                       name == "pflag"
                     go.ident:
                       name == "FlagSet"
-          go.call_expr(depth = 3):
+          go.call_expr(depth = any):
             go.selector_expr:
               go.ident:
                 name == paraname
-              go.ident:
-                name == "StringVar"
             go.args:
               @review comment
               go.ident:
