@@ -1,0 +1,9 @@
+description: Best practices from the lightning network daemon repository.
+version: 0.0.0
+tenets:
+  - rpc-responses-display-uniformly
+  - exported-package-is-tested
+tags:
+  - lnd
+  - golang
+  - go
