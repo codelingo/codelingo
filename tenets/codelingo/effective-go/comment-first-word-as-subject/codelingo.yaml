@@ -17,7 +17,7 @@ tenets:
           The first sentence should be a one-sentence summary that starts with the name being declared.
       codelingo/review:
         comment: |
-          The first sentence should be a one-sentence summary that starts with the name ({{funcName}}) being declared.
+          The first sentence should be a one-sentence summary that starts with the name `{{funcName}}` being declared.
     query: |
       import codelingo/ast/go
 
