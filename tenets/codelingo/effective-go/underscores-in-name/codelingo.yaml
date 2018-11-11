@@ -10,9 +10,9 @@ tenets:
     flows:
       codelingo/docs:
         title: Underscores in Name
-        body: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+        body: The convention in Go is to use PascalCase or camelCase rather than underscores to write multiword names.
       codelingo/review:
-        comment: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+        comment: The convention in Go is to use PascalCase or camelCase rather than underscores to write multiword names.
     query: |
       import codelingo/ast/go
 
