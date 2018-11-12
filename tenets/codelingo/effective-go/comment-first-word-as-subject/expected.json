@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "The first sentence should be a one-sentence summary that starts with the name (bar) being declared.\n",
+   "Filename": "effective-go/comment-first-word-as-subject/example.go",
+   "Line": 16,
+   "Snippet": "func foo() {}\n\n/* This func comment should begin with 'bar'\n*/\nfunc bar() {}"
+  }
+ ]
