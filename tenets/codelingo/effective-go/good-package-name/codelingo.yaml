@@ -1,0 +1,41 @@
+funcs:
+  - name: isInvalid
+    type: asserter
+    body: |
+      function(name) {
+        if (name.indexOf("_") !== -1
+          || name !== name.toLowerCase()
+          || name.length > 15) {
+          return true
+        }
+        return false
+      }
+tenets:
+  - name: good-package-name
+    flows:
+      codelingo/docs:
+        title: Good Package Name
+        body: |
+          It's helpful if everyone using the package can use the same name 
+          to refer to its contents, which implies that the package name should 
+          be good: short, concise, evocative. By convention, packages are 
+          given lower case, single-word names; there should be no need for 
+          underscores or mixedCaps. Err on the side of brevity, since everyone 
+          using your package will be typing that name. And don't worry about 
+          collisions a priori. The package name is only the default name for 
+          imports; it need not be unique across all source code, and in the 
+          rare case of a collision the importing package can choose a different 
+          name to use locally. In any case, confusion is rare because the file 
+          name in the import determines just which package is being used.
+      codelingo/review:
+        comment: |
+          By convention, packages are given lower case, single-word names; 
+          there should be no need for underscores or mixedCaps. Err on the side of brevity.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        @review comment
+        go.ident:
+          name as packageName
+          isInvalid(packageName)
