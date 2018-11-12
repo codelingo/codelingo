@@ -8,7 +8,7 @@ tenets:
   - golint
   - goto
   - marshalling
-  - nil_only_functions
+  - nil-only-functions
   - println-format-strings
   - reallocated-slice
   - sprintf
