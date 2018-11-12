@@ -15,19 +15,14 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.file(depth = any):
-        go.decls:
-          go.func_decl:
+      go.field_list(depth = any):
+        go.field
+        go.field:
+          go.names:
             go.ident
-            go.func_type:
-              go.field_list:
-                go.field
-                go.field:
-                  go.names:
-                    go.ident
-                  @review comment
-                  go.selector_expr:
-                    go.ident:
-                      name == "context"
-                    go.ident:
-                      name == "Context"
+          @review comment
+          go.selector_expr:
+            go.ident:
+              name == "context"
+            go.ident:
+              name == "Context"
