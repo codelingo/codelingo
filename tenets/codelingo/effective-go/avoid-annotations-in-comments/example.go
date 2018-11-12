@@ -1,3 +1,4 @@
+// Main package for tenet examples
 package main
 
 import (
