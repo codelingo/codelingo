@@ -1,2 +1,2 @@
-// Another test package to test tenet
+// Package foo used for tenet testing
 package foo
