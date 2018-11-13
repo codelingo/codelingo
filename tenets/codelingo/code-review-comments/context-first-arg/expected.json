@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Most functions that use a Context should accept it as their first parameter.",
+   "Filename": "effective-go/context-first-arg/example.go",
+   "Line": 9,
+   "Snippet": "func F(ctx context.Context, a int)               {}\nfunc F(b int, ctx context.Context, a int)        {}\nfunc F(c int, b int, ctx context.Context, a int) {}\n"
+  },
+  {
+   "Comment": "Most functions that use a Context should accept it as their first parameter.",
+   "Filename": "effective-go/context-first-arg/example.go",
+   "Line": 8,
+   "Snippet": "\nfunc F(ctx context.Context, a int)               {}\nfunc F(b int, ctx context.Context, a int)        {}\nfunc F(c int, b int, ctx context.Context, a int) {}"
+  }
+ ]
