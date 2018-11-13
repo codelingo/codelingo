@@ -1,0 +1,77 @@
+# TODO This is only a mock. The query here needs to be updated. Delete this line.
+funcs:
+  - name: newConcat
+    type: resolver
+    body: |
+      function (a, b) {
+        return a.concat(b);
+      }
+tenets:
+  - name: interface-too-many-methods
+    flows:
+        codelingo/rewrite:
+          name: mycoolkey
+      codelingo/docs:
+        title: Interface Too Many Methods
+          body: |
+            TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: TODO is the review comment made when this tenet set finds an issue
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)
+  - name: constructor-returns-interface
+    flows:
+        codelingo/rewrite:
+          name: mycoolkey
+      codelingo/docs:
+        title: Constructor Returns Interface
+          body: |
+            TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: TODO is the review comment made when this tenet set finds an issue
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)
+  - name: use-pointer-arg-for-worker
+    flows:
+        codelingo/rewrite:
+          name: mycoolkey
+      codelingo/docs:
+        title: Use Pointer Arg For Worker
+          body: |
+            TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: TODO is the review comment made when this tenet set finds an issue
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)
+  - name: interface-next-to-implementation
+    flows:
+        codelingo/rewrite:
+          name: mycoolkey
+      codelingo/docs:
+        title: Interface Next To Implementation
+          body: |
+            TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: TODO is the review comment made when this tenet set finds an issue
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)
