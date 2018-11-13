@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "If an interface contains only one method, check that the method name appears \nat the beginning of the interface name. Eg. interface Reader with method Read()\n",
+   "Filename": "effective-go/single-method-interface-name/example.go",
+   "Line": 11,
+   "Snippet": "}\n\ntype SomeName interface {\n    Read() []byte\n}\n\ntype Writer interface {"
+  },
+  {
+   "Comment": "If an interface contains only one method, check that the method name appears \nat the beginning of the interface name. Eg. interface Reader with method Read()\n",
+   "Filename": "effective-go/single-method-interface-name/example.go",
+   "Line": 19,
+   "Snippet": "}\n\ntype SomeWriter interface {\n    Write() int\n}\n\ntype DoesntCount interface {"
+  },
+  {
+   "Comment": "If an interface contains only one method, check that the method name appears \nat the beginning of the interface name. Eg. interface Reader with method Read()\n",
+   "Filename": "effective-go/single-method-interface-name/example.go",
+   "Line": 28,
+   "Snippet": "}\n\ntype Read interface {\n    Reader() []byte\n}\n\nfunc main() {"
+  }
+ ]
