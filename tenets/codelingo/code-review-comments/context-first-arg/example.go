@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
-func F(ctx context.Context, a int)               {}
-func F(b int, ctx context.Context, a int)        {}
-func F(c int, b int, ctx context.Context, a int) {}
+func a(ctx context.Context, a int)               {}
+
+func b(b int, ctx context.Context, a int)        {}
+
+func c(c int, b int, ctx context.Context, a int) {}
