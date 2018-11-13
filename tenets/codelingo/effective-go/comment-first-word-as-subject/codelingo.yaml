@@ -1,0 +1,32 @@
+funcs:
+  - name: isValid
+    type: asserter
+    body: |
+      function(text, name) {
+        text = text.substring(2).trim()
+        var words = text.split(" ")
+        return words[0].toLowerCase() !== name.toLowerCase()
+      }
+tenets:
+  - name: comment-first-word-as-subject
+    flows:
+      codelingo/docs:
+        title: Comment First Word as Subject
+        body: |
+          Doc comments work best as complete sentences, which allow a wide variety of automated presentations. 
+          The first sentence should be a one-sentence summary that starts with the name being declared.
+      codelingo/review:
+        comment: |
+          The first sentence should be a one-sentence summary that starts with the name ({{funcName}}) being declared.
+    query: |
+      import codelingo/ast/go
+
+      go.func_decl(depth = any):
+        go.comment_group:
+          @review comment
+          go.comment:
+            sibling_order == 0
+            text as commText
+        go.ident:
+          name as funcName
+          isValid(commText, funcName)
