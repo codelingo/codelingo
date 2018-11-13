@@ -3,12 +3,18 @@ codelingo:
     description: Tenets written for The Cacophony Project.
     version: 0.0.0
     tenets:
-      - caught-generic-exceptions
-      - debug-prints
-      - defer-in-loop
-      - no-fmt-print
-      - raise-generic-exceptions
-      - redundant-defer-wraps
+      caught-generic-exceptions:
+        status: complete
+      debug-prints:
+        status: complete
+      defer-in-loop:
+        status: complete
+      no-fmt-print:
+        status: complete
+      raise-generic-exceptions:
+        status: complete
+      redundant-defer-wraps:
+        status: complete
     tags:
       - golang
       - go
@@ -18,19 +24,32 @@ codelingo:
     description: Best Practices for Golang.
     version: 0.0.0
     tenets:
-      - bool-param
-      - empty-slice
-      - global-var
-      - golint
-      - goto
-      - marshalling
-      - nil-only-functions
-      - println-format-strings
-      - reallocated-slice
-      - sprintf
-      - tested
-      - todo
-      - unconvert
+      bool-param:
+        status: complete
+      empty-slice:
+        status: complete
+      global-var:
+        status: complete
+      golint:
+        status: complete
+      goto:
+        status: complete
+      marshalling:
+        status: complete
+      nil-only-functions:
+        status: complete
+      println-format-strings:
+        status: complete
+      reallocated-slice:
+        status: complete
+      sprintf:
+        status: complete
+      tested:
+        status: complete
+      undo:
+        status: complete
+      unconvert:
+        status: complete
     tags:
       - golang
       - go
@@ -38,11 +57,16 @@ codelingo:
     description: Best practices from the jenkins-x/js repository.
     version: 0.0.0
     tenets:
-      - intformat
-      - orginterfaces
-      - parallel-in-tests
-      - test-package-name
-      - tparallel
+      intformat:
+        status: complete
+      orginterfaces:
+        status: complete
+      parallel-in-tests:
+        status: complete
+      test-package-name:
+        status: complete
+      tparallel:
+        status: complete
     tags:
       - jenkins
       - jenkins-x
@@ -52,18 +76,29 @@ codelingo:
     description: Best practices from the kubernetes repository.
     version: 0.0.0
     tenets:
-      - flags-have-underscores
-      - jsonapi-kind-compulsory-metadata
-      - looped-vars-outside-loop
-      - misused-nil-interface
-      - new-package-requires-test
-      - shadowed-func-parameter
-      - well-formed-lists
-      - well-named-interface
-      - well-named-lists
-      - well-named-lock
-      - well-named-locks
-      - well-named-package
+      flags-have-underscores:
+        status: complete
+      jsonapi-kind-compulsory-metadata:
+        status: complete
+      looped-vars-outside-loop:
+        status: complete
+      misused-nil-interface:
+        status: complete
+      new-package-requires-test:
+        status: complete
+      shadowed-func-parameter:
+      well-formed-lists:
+        status: complete
+      well-named-interface:
+        status: complete
+      well-named-lists:
+        status: complete
+      well-named-lock:
+        status: complete
+      well-named-locks:
+        status: complete
+      well-named-package:
+        status: complete
     tags:
       - kubernetes
       - golang
@@ -72,8 +107,10 @@ codelingo:
     description: Best practices from the lightning network daemon repository.
     version: 0.0.0
     tenets:
-      - rpc-responses-display-uniformly
-      - exported-package-is-tested
+      rpc-responses-display-uniformly:
+        status: complete
+      exported-package-is-tested:
+        status: complete
     tags:
       - lnd
       - golang
@@ -82,31 +119,44 @@ codelingo:
     description: Tenets written for Modica
     version: 0.0.0
     tenets:
-      - null-check
-      - transport
+      null-check:
+        status: complete
+      transport:
+        status: complete
     tags:
       - php
   php:
     description: Best practices for PHP.
     version: 0.0.0
     tenets:
-      - boolean-argument
-      - count-in-loop
-      - empty-catch-block
-      - eval-expression
-      - if-assignment
-      - offsite-redirection
-      - phplint
-      - sql-concats
+      boolean-argument:
+        status: complete
+      count-in-loop:
+        status: complete
+      empty-catch-block:
+        status: complete
+      eval-expression:
+        status: complete
+      if-assignment:
+        status: complete
+      offsite-redirection:
+        status: complete
+      phplint:
+        status: complete
+      sql-concats:
+        status: complete
     tags:
       - php
   west:
     description: Tenets written for West
     version: 0.0.0
     tenets:
-      - allocation
-      - shadowing
-      - switch
+      allocation:
+        status: complete
+      shadowing:
+        status: complete
+      switch:
+        status: complete
     tags:
       - c#
       - csharp
