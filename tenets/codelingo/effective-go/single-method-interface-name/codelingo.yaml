@@ -1,0 +1,31 @@
+funcs:
+  - name: isBadName
+    type: asserter
+    body: |
+      function(ifName, methodName) {
+        return methodName !== ifName.substring(0, methodName.length)
+      }
+tenets:
+  - name: single-method-interface-name
+    flows:
+      codelingo/review:
+        comment: |
+          If an interface contains only one method, the method name should appear 
+          at the beginning of the interface name. Eg. interface "Reader" with method "Read()"
+    query: |
+      import codelingo/ast/go
+
+      go.type_spec(depth = any):
+        go.ident:
+          name as ifName
+        @review comment
+        go.interface_type:
+          go.field_list:
+            child_count == 1
+            go.field:
+              go.names:
+                go.ident:
+                  name as methodName
+                  isBadName(ifName, methodName)
+
+
