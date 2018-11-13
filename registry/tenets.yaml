@@ -46,7 +46,7 @@ codelingo:
         status: complete
       tested:
         status: complete
-      undo:
+      todo:
         status: complete
       unconvert:
         status: complete
