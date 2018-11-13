@@ -161,4 +161,17 @@ codelingo:
       - c#
       - csharp
       - cpp
-      - c++      
+      - c++
+  effective-go:
+    description: Best Practices for Golang from Effective Go.
+    version: 0.0.0
+    tenets:
+      avoid-annotations-in-comments:
+        status: complete
+      comment-first-word-as-subject:
+        status: complete
+      single-method-interface-name:
+        status: complete
+    tags:
+      - golang
+      - go
