@@ -4,17 +4,17 @@ codelingo:
     version: 0.0.0
     tenets:
       caught-generic-exceptions:
-        status: complete
+        issues: false
       debug-prints:
-        status: complete
+        issues: false
       defer-in-loop:
-        status: complete
+        issues: false
       no-fmt-print:
-        status: complete
+        issues: false
       raise-generic-exceptions:
-        status: complete
+        issues: false
       redundant-defer-wraps:
-        status: complete
+        issues: false
     tags:
       - golang
       - go
@@ -25,11 +25,11 @@ codelingo:
     version: 0.0.0
     tenets:
       avoid-annotations-in-comments:
-        status: complete
+        issues: false
       comment-first-word-as-subject:
-        status: complete
+        issues: false
       single-method-interface-name:
-        status: complete
+        issues: false
     tags:
       - golang
       - go
@@ -38,31 +38,31 @@ codelingo:
     version: 0.0.0
     tenets:
       bool-param:
-        status: complete
+        issues: false
       empty-slice:
-        status: complete
+        issues: false
       global-var:
-        status: complete
+        issues: false
       golint:
-        status: complete
+        issues: false
       goto:
-        status: complete
+        issues: false
       marshalling:
-        status: complete
+        issues: false
       nil-only-functions:
-        status: complete
+        issues: false
       println-format-strings:
-        status: complete
+        issues: false
       reallocated-slice:
-        status: complete
+        issues: false
       sprintf:
-        status: complete
+        issues: false
       tested:
-        status: complete
+        issues: false
       todo:
-        status: complete
+        issues: false
       unconvert:
-        status: complete
+        issues: false
     tags:
       - golang
       - go
@@ -71,15 +71,15 @@ codelingo:
     version: 0.0.0
     tenets:
       intformat:
-        status: complete
+        issues: false
       orginterfaces:
-        status: complete
+        issues: false
       parallel-in-tests:
-        status: complete
+        issues: false
       test-package-name:
-        status: complete
+        issues: false
       tparallel:
-        status: complete
+        issues: false
     tags:
       - jenkins
       - jenkins-x
@@ -90,28 +90,28 @@ codelingo:
     version: 0.0.0
     tenets:
       flags-have-underscores:
-        status: complete
+        issues: false
       jsonapi-kind-compulsory-metadata:
-        status: complete
+        issues: false
       looped-vars-outside-loop:
-        status: complete
+        issues: false
       misused-nil-interface:
-        status: complete
+        issues: false
       new-package-requires-test:
-        status: complete
+        issues: false
       shadowed-func-parameter:
       well-formed-lists:
-        status: complete
+        issues: false
       well-named-interface:
-        status: complete
+        issues: false
       well-named-lists:
-        status: complete
+        issues: false
       well-named-lock:
-        status: complete
+        issues: false
       well-named-locks:
-        status: complete
+        issues: false
       well-named-package:
-        status: complete
+        issues: false
     tags:
       - kubernetes
       - golang
@@ -121,9 +121,9 @@ codelingo:
     version: 0.0.0
     tenets:
       rpc-responses-display-uniformly:
-        status: complete
+        issues: false
       exported-package-is-tested:
-        status: complete
+        issues: false
     tags:
       - lnd
       - golang
@@ -133,9 +133,9 @@ codelingo:
     version: 0.0.0
     tenets:
       null-check:
-        status: complete
+        issues: false
       transport:
-        status: complete
+        issues: false
     tags:
       - php
   php:
@@ -143,21 +143,21 @@ codelingo:
     version: 0.0.0
     tenets:
       boolean-argument:
-        status: complete
+        issues: false
       count-in-loop:
-        status: complete
+        issues: false
       empty-catch-block:
-        status: complete
+        issues: false
       eval-expression:
-        status: complete
+        issues: false
       if-assignment:
-        status: complete
+        issues: false
       offsite-redirection:
-        status: complete
+        issues: false
       phplint:
-        status: complete
+        issues: false
       sql-concats:
-        status: complete
+        issues: false
     tags:
       - php
   west:
@@ -165,11 +165,11 @@ codelingo:
     version: 0.0.0
     tenets:
       allocation:
-        status: complete
+        issues: false
       shadowing:
-        status: complete
+        issues: false
       switch:
-        status: complete
+        issues: false
     tags:
       - c#
       - csharp
