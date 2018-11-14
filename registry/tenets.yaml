@@ -4,17 +4,17 @@ codelingo:
     version: 0.0.0
     tenets:
       caught-generic-exceptions:
-        issues: false
+        hasIssues: false
       debug-prints:
-        issues: false
+        hasIssues: false
       defer-in-loop:
-        issues: false
+        hasIssues: false
       no-fmt-print:
-        issues: false
+        hasIssues: false
       raise-generic-exceptions:
-        issues: false
+        hasIssues: false
       redundant-defer-wraps:
-        issues: false
+        hasIssues: false
     tags:
       - golang
       - go
@@ -25,11 +25,11 @@ codelingo:
     version: 0.0.0
     tenets:
       avoid-annotations-in-comments:
-        issues: false
+        hasIssues: false
       comment-first-word-as-subject:
-        issues: false
+        hasIssues: false
       single-method-interface-name:
-        issues: false
+        hasIssues: false
     tags:
       - golang
       - go
@@ -38,31 +38,31 @@ codelingo:
     version: 0.0.0
     tenets:
       bool-param:
-        issues: false
+        hasIssues: false
       empty-slice:
-        issues: false
+        hasIssues: false
       global-var:
-        issues: false
+        hasIssues: false
       golint:
-        issues: false
+        hasIssues: false
       goto:
-        issues: false
+        hasIssues: false
       marshalling:
-        issues: false
+        hasIssues: false
       nil-only-functions:
-        issues: false
+        hasIssues: false
       println-format-strings:
-        issues: false
+        hasIssues: false
       reallocated-slice:
-        issues: false
+        hasIssues: false
       sprintf:
-        issues: false
+        hasIssues: false
       tested:
-        issues: false
+        hasIssues: false
       todo:
-        issues: false
+        hasIssues: false
       unconvert:
-        issues: false
+        hasIssues: false
     tags:
       - golang
       - go
@@ -71,15 +71,15 @@ codelingo:
     version: 0.0.0
     tenets:
       intformat:
-        issues: false
+        hasIssues: false
       orginterfaces:
-        issues: false
+        hasIssues: false
       parallel-in-tests:
-        issues: false
+        hasIssues: false
       test-package-name:
-        issues: false
+        hasIssues: false
       tparallel:
-        issues: false
+        hasIssues: false
     tags:
       - jenkins
       - jenkins-x
@@ -90,28 +90,28 @@ codelingo:
     version: 0.0.0
     tenets:
       flags-have-underscores:
-        issues: false
+        hasIssues: false
       jsonapi-kind-compulsory-metadata:
-        issues: false
+        hasIssues: false
       looped-vars-outside-loop:
-        issues: false
+        hasIssues: false
       misused-nil-interface:
-        issues: false
+        hasIssues: false
       new-package-requires-test:
-        issues: false
+        hasIssues: false
       shadowed-func-parameter:
       well-formed-lists:
-        issues: false
+        hasIssues: false
       well-named-interface:
-        issues: false
+        hasIssues: false
       well-named-lists:
-        issues: false
+        hasIssues: false
       well-named-lock:
-        issues: false
+        hasIssues: false
       well-named-locks:
-        issues: false
+        hasIssues: false
       well-named-package:
-        issues: false
+        hasIssues: false
     tags:
       - kubernetes
       - golang
@@ -121,9 +121,9 @@ codelingo:
     version: 0.0.0
     tenets:
       rpc-responses-display-uniformly:
-        issues: false
+        hasIssues: false
       exported-package-is-tested:
-        issues: false
+        hasIssues: false
     tags:
       - lnd
       - golang
@@ -133,9 +133,9 @@ codelingo:
     version: 0.0.0
     tenets:
       null-check:
-        issues: false
+        hasIssues: false
       transport:
-        issues: false
+        hasIssues: false
     tags:
       - php
   php:
@@ -143,21 +143,21 @@ codelingo:
     version: 0.0.0
     tenets:
       boolean-argument:
-        issues: false
+        hasIssues: false
       count-in-loop:
-        issues: false
+        hasIssues: false
       empty-catch-block:
-        issues: false
+        hasIssues: false
       eval-expression:
-        issues: false
+        hasIssues: false
       if-assignment:
-        issues: false
+        hasIssues: false
       offsite-redirection:
-        issues: false
+        hasIssues: false
       phplint:
-        issues: false
+        hasIssues: false
       sql-concats:
-        issues: false
+        hasIssues: false
     tags:
       - php
   west:
@@ -165,11 +165,11 @@ codelingo:
     version: 0.0.0
     tenets:
       allocation:
-        issues: false
+        hasIssues: false
       shadowing:
-        issues: false
+        hasIssues: false
       switch:
-        issues: false
+        hasIssues: false
     tags:
       - c#
       - csharp
