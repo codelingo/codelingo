@@ -1,0 +1,7 @@
+description: Best Practices for Golang from Code Review Comments.
+version: 0.0.0
+tenets:
+  - go-error-fmt
+tags:
+  - golang
+  - go
