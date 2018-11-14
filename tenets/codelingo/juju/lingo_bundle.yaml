@@ -1,0 +1,11 @@
+description: Best practices from the lightning network daemon repository.
+version: 0.0.0
+tenets:
+  - use-pointer-arg-for-worker
+  - interface-too-many-methods
+  - constructor-returns-interface
+  - interface-next-to-implementation
+tags:
+  - lnd
+  - golang
+  - go

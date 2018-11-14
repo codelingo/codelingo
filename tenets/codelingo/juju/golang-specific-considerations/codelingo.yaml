@@ -37,3 +37,136 @@ tenets:
                   name == "worker"
                 go.ident:
                   name == "Worker"
+  - name: interface-too-many-methods
+    flows:
+      codelingo/docs:
+        title: Interface Has Too Many Methods
+        body: |
+          Awesome interfaces are small. >4 methods is a code smell. Split out large interfaces into semantically grouped methods.
+      codelingo/review:
+        comment: This interface has more than 4 methods. Consider splitting this interface up according to semantically grouped methods.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              @review comment
+              go.ident
+              go.interface_type:
+                go.field_list:
+                  go.field:
+                    go.func_type
+                  go.field:
+                    go.func_type
+                  go.field:
+                    go.func_type
+                  go.field:
+                    go.func_type
+                  go.field:
+                    go.func_type
+  - name: constructor-returns-interface
+    flows:
+      codelingo/docs:
+        title: Constructor Returns An Interface
+        body: |
+          If a constructor returns an interface instead of a concrete type, it's almost certainly wrong.
+      codelingo/review:
+        comment: This constructor returns `{{returnType}}` (`{{interfaceType}}` is defined here) an interface rather than a concrete type. This is probably wrong. Did you intend to make an interface factory method?
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.ident:
+                type as interfaceType
+              go.interface_type
+          #     This constructor returns `/resource/example/constructor-returns-interface.go.Person` an interface rather than a concrete type. This is probably wrong. Did you intend to make an interface factory method?
+          go.func_decl:
+            @review comment
+            go.ident
+            go.func_type:
+              go.field_list
+              go.field_list:
+                go.field:
+                  go.ident:
+                    type as returnType
+  - name: interface-next-to-implementation
+    flows:
+      codelingo/docs:
+        title: Interface Defined Next To Where It Is Implemented
+        body: |
+          Don't define an interface next where it is implemented, or don't implement an interface where it is defined.
+      codelingo/review:
+        comment: This interface should not be be defined at the place of implementation. Either move the definition or move the implementation.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            @playground highlight
+            go.ident
+            go.type_spec:
+              go.interface_type:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident:
+                        name as implementedMethodName
+                    go.func_type:
+                      go.field_list
+                      go.field_list:
+                        go.field:
+                          go.ident:
+                            name as implementedMethodType
+          go.func_decl:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident
+                go.ident:
+                  name as classNameConstraint
+            go.ident:
+              name == implementedMethodName
+            go.func_type:
+              go.field_list
+              go.field_list:
+                go.field:
+                  go.ident:
+                    name == implementedMethodType
+        exclude:
+          go.decls:
+            go.gen_decl:
+              go.type_spec:
+                go.interface_type:
+                  go.field_list:
+                    go.field:
+                      go.names:
+                        go.ident:
+                          name == unimplementedMethodName
+                      go.func_type:
+                        go.field_list
+                        go.field_list:
+                          go.field:
+                            go.ident:
+                              name == unimplementedMethodType
+            exclude:
+              go.func_decl:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident
+                    go.ident:
+                      name == classNameConstraint
+                go.ident:
+                  name == unimplementedMethodName
+                go.func_type:
+                  go.field_list
+                  go.field_list:
+                    go.field:
+                      go.ident:
+                        name == unimplementedMethodType

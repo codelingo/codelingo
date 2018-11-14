@@ -116,6 +116,22 @@ codelingo:
       - kubernetes
       - golang
       - go
+  juju:
+    description: Best practices from the Juju repository.
+    version: 0.0.0
+    tenets:
+      use-pointer-arg-for-worker
+        hasIssues: false
+      interface-too-many-methods
+        hasIssues: true
+      constructor-returns-interface
+        hasIssues: true
+      interface-next-to-implementation
+        hasIssues: true
+    tags:
+      - juju
+      - golang
+      - go
   lightning-network-daemon:
     description: Best practices from the lightning network daemon repository.
     version: 0.0.0
