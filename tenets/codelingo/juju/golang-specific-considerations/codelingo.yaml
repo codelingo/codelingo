@@ -1,0 +1,40 @@
+funcs:
+  - name: namedLikeAWorkerConstructor
+    type: asserter
+    body: |
+      function(text) {
+        var re = new RegExp("New[A-Za-z]\+Worker")
+        return re.test(text)
+      }
+tenets:
+  - name: use-pointer-arg-for-worker
+    flows:
+      codelingo/docs:
+        title: Use Pointers For Workers Passed As Arguments
+        body: |
+          Using a `worker.Worker` as the parameter to a constructor of a worker type is a bad practice.
+          You should use a typed pointer instead.
+          `func NewGoodWorkerGood() (*GoodWorker) {}`
+          `func NewBadWorkerBad() (worker.Worker) {}`
+      codelingo/review:
+        comment: worker.Worker should be rewritten here to use a typed pointer (i.e. *GoodWorker)
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        go.func_decl(depth = any):
+          go.ident:
+            child_count == 0
+            name as funcName
+            namedLikeAWorkerConstructor(funcName)
+            type == "*ast.FuncType"
+          go.func_type:
+            go.field_list
+            go.field_list:
+              go.field:
+                go.selector_expr:
+                  @review comment
+                  go.ident:
+                    name == "worker"
+                  go.ident:
+                    name == "Worker"
