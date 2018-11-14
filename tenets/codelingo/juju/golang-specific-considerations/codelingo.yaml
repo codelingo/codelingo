@@ -21,20 +21,19 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      go.file(depth = any):
-        go.func_decl(depth = any):
-          go.ident:
-            child_count == 0
-            name as funcName
-            namedLikeAWorkerConstructor(funcName)
-            type == "*ast.FuncType"
-          go.func_type:
-            go.field_list
-            go.field_list:
-              go.field:
-                go.selector_expr:
-                  @review comment
-                  go.ident:
-                    name == "worker"
-                  go.ident:
-                    name == "Worker"
+      go.func_decl(depth = any):
+        go.ident:
+          child_count == 0
+          name as funcName
+          namedLikeAWorkerConstructor(funcName)
+          type == "*ast.FuncType"
+        go.func_type:
+          go.field_list
+          go.field_list:
+            go.field:
+              go.selector_expr:
+                @review comment
+                go.ident:
+                  name == "worker"
+                go.ident:
+                  name == "Worker"

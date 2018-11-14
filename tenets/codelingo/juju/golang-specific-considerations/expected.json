@@ -1,0 +1,9 @@
+[
+  {
+   "Comment": "worker.Worker should be rewritten here to use a typed pointer (i.e. *GoodWorker)",
+   "Filename": "example/use-pointer-arg-for-worker.go",
+   "Line": 8,
+   "Snippet": "\n// bad\nfunc NewBadWorkerBad() (worker.Worker) {\n}"
+  }
+ ]
+
