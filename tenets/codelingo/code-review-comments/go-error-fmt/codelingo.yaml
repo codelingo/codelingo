@@ -15,14 +15,15 @@ tenets:
         body: |
           Error strings should not be capitalized (unless beginning with proper nouns 
           or acronyms) or end with punctuation, since they are usually printed following
-           other context. That is, use fmt.Errorf("something bad") not fmt.Errorf("Something bad"),
-            so that log.Printf("Reading %s: %v", filename, err) formats without a spurious 
-            capital letter mid-message. This does not apply to logging, which is implicitly
-             line-oriented and not combined inside other messages.
+          other context. That is, use fmt.Errorf("something bad") not fmt.Errorf("Something bad"),
+          so that log.Printf("Reading %s: %v", filename, err) formats without a spurious 
+          capital letter mid-message. This does not apply to logging, which is implicitly
+          line-oriented and not combined inside other messages.
       codelingo/review:
-        comment: Error strings should not be capitalized (unless beginning with proper nouns 
+        comment: |
+          Error strings should not be capitalized (unless beginning with proper nouns 
           or acronyms) or end with punctuation, since they are usually printed following
-           other context.
+          other context.
     query: |
       import codelingo/ast/go
 
