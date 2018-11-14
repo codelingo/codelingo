@@ -20,6 +20,15 @@ codelingo:
       - go
       - python
       - py
+  code-review-comments:
+    description: Best Practices for Golang from Code Review Comments.
+    version: 0.0.0
+    tenets:
+      go-error-fmt:
+        hasIssues: false
+    tags:
+      - golang
+      - go
   effective-go:
     description: Best Practices for Golang from Effective Go.
     version: 0.0.0
