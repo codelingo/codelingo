@@ -24,8 +24,12 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      context-first-arg:
+        hasIssues: true
       go-error-fmt:
         hasIssues: false
+      use-crypto-rand:
+        hasIssues: true
     tags:
       - golang
       - go
