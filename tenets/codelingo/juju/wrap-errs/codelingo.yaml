@@ -1,0 +1,31 @@
+tenets:
+  - name: wrap-errs
+    flows:
+      codelingo/docs:
+        title: Wrap Errors
+        body: Ensure all errors are handled with the errors package.
+      codelingo/rewrite:
+        comment: "// some new comment" # TODO: support modifiers here e.g. {{toUpper(name)}} where toUpper is a defined function.
+      codelingo/review:
+        comment: Please wrap the error var "{{errname}}" in error.Trace when returning it.
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite --prepend --line comment
+      go.func_decl(depth = any):
+        go.assign_stmt(depth = any):
+          go.lhs:
+            @review comment
+            go.ident:
+              name as errname
+              type == "error"
+        exclude:
+          go.return_stmt(depth = any):
+            go.results:
+              go.call_expr:
+                go.selector_expr:
+                  go.ident:
+                    name == "Trace"
+                go.args:
+                  go.ident:
+                    name == errname

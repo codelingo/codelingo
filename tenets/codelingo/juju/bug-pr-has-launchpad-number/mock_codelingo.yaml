@@ -1,0 +1,35 @@
+# TODO This is only a mock. The query here needs to be updated. Delete this line and rename this file to codelingo.yaml.
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: bug-pr-has-launchpad-number
+    flows:
+      codelingo/rewrite:
+        name: mycoolkey
+      codelingo/docs:
+        title: Bug Pr Has Launchpad Number
+        body: |
+          TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: This PR address a bug but a launchpad bug ID number was not provided. Please add the launchpad ID if one exists.
+    query: |
+      import codelingo/ast/github
+      import codelingo/ast/nlp
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)

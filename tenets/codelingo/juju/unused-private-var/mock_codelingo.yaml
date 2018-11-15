@@ -1,0 +1,34 @@
+# TODO This is only a mock. The query here needs to be updated. Delete this line and rename this file to codelingo.yaml.
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: unused-private-var
+    flows:
+      codelingo/rewrite:
+        name: mycoolkey
+      codelingo/docs:
+        title: Unused Private Var
+        body: |
+          TODO this needs to be a summary of the tenet, usually taken from the docs
+      codelingo/review:
+        comment: TODO The variable {{varName}} is global. This is a bad practice.
+    query: |
+      import codelingo/ast/go
+      
+      @rewrite name
+      @review comment
+      go.func_decl(depth = any):
+        go.ident(depth = any)
