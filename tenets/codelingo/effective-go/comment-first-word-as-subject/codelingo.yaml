@@ -29,4 +29,5 @@ tenets:
             text as commText
         go.ident:
           name as funcName
+          public == "true"
           isValid(commText, funcName)
