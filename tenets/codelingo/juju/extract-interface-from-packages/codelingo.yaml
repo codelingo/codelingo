@@ -1,0 +1,37 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: extract-interface-from-packages
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Extract Interface From Packages
+        body: |
+          It's like pattern mining: when a whole bunch of packages declare
+          the same interfaces with the same semantics, that's a strong indication
+          that it's a *super*-awesome abstraction and it might be a good idea to
+          promote it.
+      codelingo/review:
+        comment: Consider promoting these method definitions to an interface as the same interface pattern is used in multiple packages.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

@@ -1,0 +1,53 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: func-accepts-interface-but-returns-concrete-type
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Func Accepts Interface but Returns Concrete Type
+        body: |
+          Depend on abstractions, not concretions: that is to say, basically, only
+          accept *capabilities* via interfaces. Certain parts of the codebase have
+          been written so as to make it as difficult as possible to rewrite them
+          to conform to this principle; please chip away at the problem as you
+          can, all the same.
+      codelingo/review:
+        comment: This function accepts capabilities not via interfaces. You should be depending on abstractions, not concretions.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      go.file:
+        go.func_decl: // or method decl
+          go.function_signature:
+            go.param_list:
+              <go.param: 
+                go.type:
+                  package_name: $paramPackageName
+                  identifier_token: $typeName
+        go.import:
+          name: /.*$paramPackageName$/
+          name: $packageName
+      
+      go.file[:]:
+        go.package_decl:
+          name: $packageName
+        go.type_def:
+          go.struct:
+            name: $typeName

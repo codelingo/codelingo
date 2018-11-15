@@ -1,0 +1,62 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: arg-name-proper-noun
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Arg Name Proper Noun
+        body: |
+          Also, take a couple of minutes to see if you're rediscovering a
+          widely-used type; and make an effort to give it a name that's a proper
+          noun: `FrobnosticateParams`  or -`Args` is generally a pretty terrible
+          choice, it's super-context-specific and betrays very little intent. For
+          example:
+          
+              type CreateMachineArgs struct {
+                  Cloud       string
+                  Placement   string
+                  Constraints constraints.Value
+              }
+          
+              func CreateMachine(args CreateMachineArgs) (Machine, error)
+          
+          ...is, ehh, comprehensible enough, I suppose. But that's an *awful
+          name*! You can immediately make it a bit better by just calling the type
+          what it really is:
+          
+              type MachineSpec struct {
+                  Cloud       string
+                  Placement   string
+                  Constraints constraints.Value
+              }
+          
+              func CreateMachine(spec MachineSpec) (Machine, error)
+          
+          ...and then, as a bonus, you get a type that doesn't hurt your eyes when
+          it ends up being a generally useful concept and passed around elsewhere.
+      codelingo/review:
+        comment: Give this type a name that is a proper noun.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/nlp
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

@@ -1,0 +1,42 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: interface-needs-package
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Interface Needs Package
+        body: |
+          If you've created an interface, or a few, with the pure clarity of, say,
+          `io.Reader` et al, it's probably worth building a package around them.
+          It'd be a good place for funcs that manipulate those types, and for
+          documentation and discussion of best practice when implementing... and
+          it *might* even have a couple of useful implementations...
+          
+          But you're not going to write something as generally useful as
+          `io.Reader` -- or, at least, you're not going to get it right first
+          time.
+      codelingo/review:
+        comment: This is a clearly implemented interface. It's probably worth building a package around it.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

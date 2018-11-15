@@ -1,0 +1,36 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: dont-shadow-enclosing-scope
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Dont Shadow Enclosing Scope
+        body: |
+                * don't shadow vars that mean something in the enclosing scope:
+                  maybe *you* will never screw up `=` vs `:=` but the rest of us
+                  aren't so smart.
+      codelingo/review:
+        comment: This variable is shadowed. Please rename it.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

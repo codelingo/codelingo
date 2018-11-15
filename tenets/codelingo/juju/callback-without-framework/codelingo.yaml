@@ -1,0 +1,38 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: callback-without-framework
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Callback Without Framework
+        body: |
+                * Callbacks are for frameworks, try not to write frameworks until
+                  the need is clear and present (i.e. when you are extracting an
+                  implicit framework that's proven its value and isn't amenable to
+                  a more direct implementation. Please don't try to write them
+                  from scratch).
+      codelingo/review:
+        comment: Avoid implementing a callback here, unless you are implementing a framework from scratch, which is also a bad idea.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

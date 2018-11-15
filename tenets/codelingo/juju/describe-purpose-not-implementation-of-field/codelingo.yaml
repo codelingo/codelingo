@@ -1,0 +1,35 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: describe-purpose-not-implementation-of-field
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Describe Purpose Not Implementation of Field
+        body: |
+          Describe the purpose, not the implementation of fields.
+      codelingo/review:
+        comment: This comment describes the field's implementation, but it should describe its purpose.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/nlp
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

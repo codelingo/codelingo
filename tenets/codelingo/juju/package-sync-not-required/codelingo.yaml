@@ -1,0 +1,41 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: package-sync-not-required
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Package Sync Not Required
+        body: |
+          Of course, *sometimes* you'll need to use one of the package sync
+          constructs, but... probably not as a first resort, please. And talk to
+          someone about it first -- it's certainly *possible* that you're in a
+          situation where you really do want to synchronise rather than
+          orchestrate, and where a judiciously deployed sync type *can*
+          significantly simplify convoluted channel usage, but it's rare. (And be
+          sure you really are simplifying: if you're not careful, the
+          interactions between locks and channels can be... entertaining.)
+      codelingo/review:
+        comment: Please check if `package sync` is really required here. It should not be used as a first resort.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

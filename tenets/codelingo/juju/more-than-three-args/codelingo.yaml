@@ -1,0 +1,39 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: more-than-three-args
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: More Than Three Args
+        body: |
+          Multiple parameters are pretty nice at times, but the weight of evidence
+          leans in favour of making *most* of your funcs accept either 0 args or
+          1. The sensible limit is probably, uh, 3 maybe? ...but even then, it's
+          actually depressingly rare to nail a 3-param signature such that you
+          never need to update it; and callables tend to accumulate parameters,
+          anyway.
+      codelingo/review:
+        comment: This method has more than three arguments. Try to reduce the number of arguments.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

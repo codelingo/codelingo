@@ -1,0 +1,45 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: global-var
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Global Var
+        body: |
+          Seriously, please, **DO NOT USE GLOBAL VARIABLES**.
+          
+          Do not even use *one* little unexported package-global variable, unless
+          you have explored the issue *in detail* with a *technical lead* and
+          determined that it's the *least* harmful approach.
+          
+          One might think that one would not need to stress this in a group of
+          professional software developers. One would be heartbreakingly wrong.
+      codelingo/review:
+        comment: \`{{varName}}` is a global variable. Please do not use global variables.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      go.project:
+        go.file[:]:
+          go.decls:
+            go.gen_decl:
+              go.value_spec:
+                go.names:
+                  <go.ident

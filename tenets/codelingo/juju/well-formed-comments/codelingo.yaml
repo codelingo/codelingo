@@ -1,0 +1,44 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: well-formed-comments
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Well Formed Comments
+        body: |
+            * comment your code
+                * explain what problem you're solving
+                * ideally, also explain what associated problems you're not, and
+                  why, and how/where they should probably be addressed
+                * point out the tricky bits in the implementation
+                * if you did something bad, or inherited something bad, add a note
+                  making clear that it's bad -- that way there's half a chance
+                  people won't see it and unthinkingly duplicate it, and maybe a
+                  1-in-2^16 chance that they'll spot an opportunity to fix it
+                * oh, and, *read* existing comments and **update them**
+      codelingo/review:
+        comment: TODO Describe this a little better.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/nlp
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

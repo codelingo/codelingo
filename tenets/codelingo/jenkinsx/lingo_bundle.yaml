@@ -1,4 +1,4 @@
-description: Best practices from the jenkins-x/js repository.
+description: Best practices for the jenkins-x/js repository.
 version: 0.0.0
 tenets:
   - intformat

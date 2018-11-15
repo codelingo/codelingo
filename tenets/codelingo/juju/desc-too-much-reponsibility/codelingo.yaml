@@ -1,0 +1,37 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: desc-too-much-reponsibility
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Desc Too Much Reponsibility
+        body: |
+          Do one thing, do it well. If some exported unit is described as doing "X
+          and Y", or "X or Y", it's failing SRP unless its *sole purpose* is the
+          concatenation of, or choice between, X and Y.
+      codelingo/review:
+        comment: This unit is desicribed as doing multiple things. Do one thing and do it well.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/nlp
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

@@ -1,0 +1,46 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: funcs-with-nonexplicit-deps
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Funcs With Nonexplicit Deps
+        body: |
+          Our most fundamental limitation as software developers is in the number
+          of things we can consider simultaneously. We all know how hard it is to
+          deal with a func that takes 7 params -- that's a *lot* to think about at
+          once -- but it's far superior to a func that takes 5 params and uses 2
+          global variables, because the dependencies have been made explicit and
+          the code has been decoupled from the rolling maelstrom of secret
+          collaborators -- i.e. *everything else* that might *ever* read or write
+          that global variable.
+      codelingo/review:
+        comment: Identifier `{{identName}}` is a non-explicit dependency of the function `{{funcName}}`. Consider adding an argument to this function to make the dependency explicit.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      go.func_decl[:]: // or method decl
+        go.variable_value[:]: // supposing this fact exists
+          !id: $varName
+          !id: $argName
+        go.variable_declaration:
+          $varName
+        go.param:
+          $argName

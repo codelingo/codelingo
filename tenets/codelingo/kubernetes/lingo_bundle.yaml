@@ -1,4 +1,4 @@
-description: Best practices from the kubernetes repository.
+description: Best practices for the kubernetes repository.
 version: 0.0.0
 tenets:
   - flags-have-underscores

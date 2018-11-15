@@ -1,0 +1,50 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: interface-returns-concrete-type
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Interface Returns Concrete Type
+        body: |
+          #### Awesome Interfaces Return Interfaces
+          
+          ...or fully-exported structs, at any rate. But the moment you define an
+          *interface* method to return anything that can't be fully swapped out by
+          an alternative implementation, you lose the freedom that interfaces give
+          you. (And kinda miss the point of using interfaces in the first place.)
+          
+          But wait! Earlier, you said that constructors should return concrete
+          types; I can think of 100 methods that are essentially doing just the
+          same thing a constructor would. Is that really a bad idea?
+          
+          I'm not *sure*, but: yes, I think it is. Constructors want to be free
+          funcs that explicitly accept all the context they need; *if* you later
+          discover a situation where you need to pass around a construction
+          capability, either on a factory interface or just as a factory func that
+          returns an interface, it's trivial to implement a shim that calls the
+          constructor you need -- and which is verifiably correct by inspection.
+      codelingo/review:
+        comment: This interface method does not return an interface, so it can't be can't be fully swapped out by an alternative implementation. Please ensure the method returns an interface.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

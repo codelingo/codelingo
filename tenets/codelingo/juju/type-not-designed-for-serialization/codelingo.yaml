@@ -1,0 +1,41 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: type-not-designed-for-serialization
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Type Not Designed for Serialization
+        body: |
+          In particular, don't *ever* serialize types that aren't *explicitly*
+          designed for exactly the serialization you're performing. Once you
+          serialize, you open up the likelihood that it'll be deserialized by a
+          different version of the code; it is *unsafe* to read it into any type
+          that even *could*  be different. The juju codebase has serious problems
+          here -- various api params types and mongodb doc types still include,
+          e.g., structs defined in the charm package that could change at any
+          time.
+      codelingo/review:
+        comment: This type was not explicitly designed to be serialised. Therefore, do not serialise it.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

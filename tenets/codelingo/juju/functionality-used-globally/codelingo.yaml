@@ -1,0 +1,36 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: functionality-used-globally
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Functionality Used Globally
+        body: |
+          And that means you should write **unit tests**: *tests* for each *unit*
+          of functionality that will interact with other parts of the program.
+      codelingo/review:
+        comment: This unit of functionality is accessed globally but does not have a test. Please write one.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/coverage
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident
