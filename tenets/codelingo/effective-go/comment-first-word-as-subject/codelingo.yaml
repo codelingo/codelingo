@@ -21,6 +21,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
+      # Only look at exported functions
       go.func_decl(depth = any):
         go.comment_group:
           @review comment
