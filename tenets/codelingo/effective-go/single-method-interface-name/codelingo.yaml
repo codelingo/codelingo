@@ -3,7 +3,7 @@ funcs:
     type: asserter
     body: |
       function(ifName, methodName) {
-        return methodName !== ifName.substring(0, methodName.length)
+        return methodName.toLowerCase() !== ifName.toLowerCase().substring(0, methodName.length)
       }
 tenets:
   - name: single-method-interface-name
