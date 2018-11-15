@@ -117,7 +117,7 @@ codelingo:
       - golang
       - go
   juju:
-    description: Best practices for juju
+    description: Best practices for the juju/juju repository
     version: 0.0.0
     tenets:
       global-var:
