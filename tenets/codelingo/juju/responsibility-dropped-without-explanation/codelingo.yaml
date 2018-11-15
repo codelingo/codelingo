@@ -1,0 +1,37 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: responsibility-dropped-without-explanation
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Responsibility Dropped Without Explanation
+        body: |
+          And if you *don't* hand on some responsibility/capability, and you don't
+          leave a comment explaining why, there's local evidence to suggest that
+          you done goofed; either by handing too many capabilities into the
+          context to begin with, or by dropping a responsibility on the floor. 
+      codelingo/review:
+        comment: TODO You are not managing your capabilities and reposnsibilities very well here.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

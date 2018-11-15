@@ -1,0 +1,36 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: export-only-for-test
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Export Only for Test
+        body: |
+            * do not export something just to test it, unless you give clients the
+              exact same degree of control that your tests have *and require them
+              to exercise it*.
+      codelingo/review:
+        comment: This is exported only for testing. Testing is not reason enough to export this.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

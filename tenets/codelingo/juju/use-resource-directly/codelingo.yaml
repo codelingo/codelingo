@@ -1,0 +1,37 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: use-resource-directly
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Use Resource Directly
+        body: |
+          Also, think about what you really depend on. If you just *use* some
+          resource, accept that `Resource` directly, and don't muck about with
+          `ResourceFactory` or `NewResourceFunc` unless you really *need* to defer
+          that logic.
+      codelingo/review:
+        comment: TODO This violates the Dependency Inversion Principle
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

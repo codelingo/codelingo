@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: covers-one-concern
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Covers One Concern
+        body: |
+          Group your interfaces' capabilities so that they cover one concern, and
+          cover it well. Your underlying types might not -- when working with any
+          sort of legacy code, they surely will not -- but you don't have to care:
+          it's far better to supply the same bloated type via 3 separate interface
+          params than it is to accept a single bloated interface just because you
+          need to consume a badly-written type.
+      codelingo/review:
+        comment: This interface's capabilities do not cover one concern alone. Consider dividing it into multiple interfaces.
+    query: |
+      import codelingo/ast/go
+      import codelingo/ast/nlp
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

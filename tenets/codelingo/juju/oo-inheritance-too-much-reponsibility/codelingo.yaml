@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: oo-inheritance-too-much-reponsibility
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Oo Inheritance Too Much Reponsibility
+        body: |
+          Types should be open for extension but closed for modification. Golang
+          is designed to make it easy to do the right thing here, so just follow
+          community practice, and embrace the limitations of embedding -- it
+          really is helping you to write better code.
+          
+          In particular, if you're planning to do anything that reminds you of
+          OO-style inheritance, you're almost certainly failing here.
+      codelingo/review:
+        comment: This type appears to be open for modification and as such violates the Open/Closed Principle.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

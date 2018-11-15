@@ -1,0 +1,64 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: struct-has-default-vals
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Struct Has Default Vals
+        body: |
+          "OK", you think, "I will write a config struct, but it's a *terrible*
+          hassle for the client to supply all these values, we *know* what task
+          we're really doing, so we'll just accept nil values and insert
+          `clock.WallClock`, or `"/var/lib/juju"`, or `defaultAttemptStrategy`, or
+          whatever, as appropriate".
+          
+          This is wrong for several reasons:
+          
+            * you're smearing the client's responsibilities into what should be a
+              context-agnostic tool
+            * you're making it harder to validate client code, because it
+              specifies a bare minimum and just trusts the implementation to do
+              what it meant
+            * you're privileging one use case (runtime, in the context you're
+              currently imagining) over another current one (the tests)... *and*
+              over all future uses to which your system might be put
+          
+          ...and it only rarely even aids readability, because the vast majority
+          of types where it's easy to make this mistake are only constructed once
+          or twice anyway. (When a type has many clients, the folly of defaults is
+          more clearly pronounced, so they tend to slip away. Or, quite often, to
+          remain in place, waiting to trip up someone who underconfigures the type
+          in some new context and would *really* have appreciated an immediate
+          "you didn't say how long to wait" error rather than discovering that
+          you've picked a wildly inappropriate default.)
+          
+          Note that zero values are fine, encouraged even -- *so long as they are
+          valid as such*. The go proverb is "make the zero value useful", and so
+          you should: but a zero value that's magically interpreted as a non-zero
+          value is *not* a "useful zero value", it's just in-band signalling and
+          comes with all the usual drawbacks. Know the difference.
+      codelingo/review:
+        comment: This struct method accepts nil values in order to set defaults. Do not do this.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: write-off-channelled-items
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Write Off Channelled Items
+        body: |
+          If you even think about sharing memory, you're in the wrong paradigm.
+          Channels excel at *transferring responsibility*: you should consider
+          whatever you put in a channel to be *gone*, and whatever you received to
+          be *yours*. If you want to be literal, yes, memory is being shared; but
+          that can happen safely as a side-effect of the robust communication via
+          channel. Focus on getting the communication right, and you get safe
+          memory-sharing for free.
+      codelingo/review:
+        comment: TODO This is not well-written concurrency code.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

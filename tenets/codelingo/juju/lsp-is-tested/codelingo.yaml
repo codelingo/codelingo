@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: lsp-is-tested
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Lsp Is Tested
+        body: |
+          Roughly speaking, anywhere you can use a type, you should be able to use
+          a subtype of same without breaking; and I'm pretty sure golang basically
+          gives us this for free by eschewing inheritance. You still have to pay
+          some attention to the semantics of any interface you're claiming some
+          type implements, but that's an irreducible problem (given the context)
+          and seems to have relatively minor impact in practice. I wave my hands
+          and move on.
+      codelingo/review:
+        comment: This type has subtypes that are not tested for the Liskov Substitution Principle. Create a test that uses a subtype in a function that has this type as a parameter.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

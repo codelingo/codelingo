@@ -105,7 +105,7 @@ codelingo:
       - golang
       - go
   jenkinsx:
-    description: Best practices from the jenkins-x/js repository.
+    description: Best practices for the jenkins-x/js repository.
     version: 0.0.0
     tenets:
       intformat:
@@ -124,7 +124,7 @@ codelingo:
       - golang
       - go
   kubernetes:
-    description: Best practices from the kubernetes repository.
+    description: Best practices for the kubernetes repository.
     version: 0.0.0
     tenets:
       flags-have-underscores:
@@ -155,8 +155,148 @@ codelingo:
       - kubernetes
       - golang
       - go
+  juju:
+    description: Best practices for the juju/juju repository
+    version: 0.0.0
+    tenets:
+      global-var:
+        hasIssues: false
+      exported-var-outside-export-test:
+        hasIssues: false
+      private-var:
+        hasIssues: false
+      funcs-with-nonexplicit-deps:
+        hasIssues: false
+      env-vars:
+        hasIssues: false
+      functionality-used-globally:
+        hasIssues: false
+      well-named-test-file-and-package:
+        hasIssues: false
+      no-export-test-mechanism:
+        hasIssues: false
+      tests-unexported-things:
+        hasIssues: false
+      export-only-for-test:
+        hasIssues: false
+      desc-too-much-reponsibility:
+        hasIssues: false
+      func-if-else-too-much-responsibility:
+        hasIssues: false
+      oo-inheritance-too-much-reponsibility:
+        hasIssues: false
+      lsp-is-tested:
+        hasIssues: false
+      covers-one-concern:
+        hasIssues: false
+      func-accepts-interface-but-returns-concrete-type:
+        hasIssues: false
+      use-resource-directly:
+        hasIssues: false
+      struct-passed-but-barely-used:
+        hasIssues: false
+      excessively-long-names:
+        hasIssues: false
+      vague-names:
+        hasIssues: false
+      shorten-receivers-and-loop-index-vars:
+        hasIssues: false
+      name-of-error-should-be-err:
+        hasIssues: false
+      consistent-name-for-receivers-of-same-object:
+        hasIssues: false
+      return-early-on-failure:
+        hasIssues: false
+      use-intermediate-variables:
+        hasIssues: false
+      max-two-nested-function-definitions:
+        hasIssues: false
+      extract-internal-functions:
+        hasIssues: false
+      indirect-without-abstraction:
+        hasIssues: false
+      callback-without-framework:
+        hasIssues: false
+      type-not-responsible-for-dependencies:
+        hasIssues: false
+      avoid-named-returns:
+        hasIssues: false
+      no-magic-naked-return:
+        hasIssues: false
+      dont-shadow-enclosing-scope:
+        hasIssues: false
+      well-formed-comments:
+        hasIssues: false
+      describe-purpose-not-implementation-of-func:
+        hasIssues: false
+      describe-purpose-not-implementation-of-field:
+        hasIssues: false
+      write-off-channelled-items:
+        hasIssues: false
+      locks-indicate-sharing-memory:
+        hasIssues: false
+      correct-lock-ordering:
+        hasIssues: false
+      package-sync-not-required:
+        hasIssues: false
+      file-not-closed:
+        hasIssues: false
+      api-not-closed:
+        hasIssues: false
+      mongo-not-closed:
+        hasIssues: false
+      db-doc-not-closed:
+        hasIssues: false
+      capabilities-are-used:
+        hasIssues: false
+      responsibility-dropped-without-explanation:
+        hasIssues: false
+      invalid-data-without-error:
+        hasIssues: false
+      channel-assured-but-closed:
+        hasIssues: false
+      method-calls-ordered-incorrectly:
+        hasIssues: false
+      more-than-three-args:
+        hasIssues: false
+      use-struct-not-exported-signature:
+        hasIssues: false
+      arg-named-spec:
+        hasIssues: false
+      arg-named-config:
+        hasIssues: false
+      arg-named-context:
+        hasIssues: false
+      arg-named-request:
+        hasIssues: false
+      arg-named-selector:
+        hasIssues: false
+      arg-name-proper-noun:
+        hasIssues: false
+      struct-has-default-vals:
+        hasIssues: false
+      local-version-of-func:
+        hasIssues: false
+      type-not-designed-for-serialization:
+        hasIssues: false
+      interface-returns-concrete-type:
+        hasIssues: false
+      interface-needs-package:
+        hasIssues: false
+      extract-interface-from-packages:
+        hasIssues: false
+      hidden-nil-interface-values:
+        hasIssues: false
+    tags:
+      - coverage
+      - git
+      - github
+      - go
+      - golang
+      - juju
+      - nlp
   lightning-network-daemon:
-    description: Best practices from the lightning network daemon repository.
+    description: Best practices for the lightning network daemon repository.
     version: 0.0.0
     tenets:
       rpc-responses-display-uniformly:

@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: local-version-of-func
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Local Version of Func
+        body: |
+          (Sometimes you will create Foos over and over again in the same context,
+          such that you only want to specify the important parameters at the point
+          of use. It's fine to write a local `newFoo(params, subset)` func: just
+          don't pollute the Foo implementation with your concerns. Similarly, if
+          you're really sure that you *can* supply useful defaults: expose them as
+          a package func returning a pre-filled config, and make it the client's
+          *explicit* choice to defer configuration elsewhere.)
+      codelingo/review:
+        comment: The function `{{funcName}}` contains parameters only used in one section of the code. Don't pollute its implementation with your concerns. Write a local, curried version of the function.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

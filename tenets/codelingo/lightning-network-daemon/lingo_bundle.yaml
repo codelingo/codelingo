@@ -1,4 +1,4 @@
-description: Best practices from the lightning network daemon repository.
+description: Best practices for the lightning network daemon repository.
 version: 0.0.0
 tenets:
   - rpc-responses-display-uniformly

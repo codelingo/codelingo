@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: use-struct-not-exported-signature
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Use Struct Not Exported Signature
+        body: |
+          So, when you're exporting any callable that you expect to churn a bit in
+          its lifetime (i.e., pretty much always) just take the few extra seconds
+          to represent the params as a type. There's a howto wiki page somewhere.
+          If you defer it until the first instance of actual churn, that's fine,
+          it's a judgment call; but if you find yourself rewriting an exported
+          signature even once, just take the time to replace it with a struct.
+          (And then future changes will be much easier.)
+      codelingo/review:
+        comment: TODO Use a config struct here.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

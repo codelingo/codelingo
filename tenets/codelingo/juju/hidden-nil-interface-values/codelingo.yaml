@@ -1,0 +1,109 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: hidden-nil-interface-values
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Hidden Nil Interface Values
+        body: |
+          #### Hidden-Nil Interface Values Will Ruin Your Day
+          
+          Smallest self-contained code sample I could think of (would have posted
+          a playground link, but, huh, share button apparently not there):
+          
+              package main
+              
+              import (
+                  "fmt"
+              )
+              
+              // Things have Names.
+              type Thing interface {
+                  Name() string
+              }
+              
+              // thing is a Thing.
+              type thing struct {
+                  name string
+              }
+              
+              func (thing *thing) Name() string {
+                  return thing.name
+              }
+              
+              // SafePrint prints Thing Names safely. (Har har.)
+              func SafePrint(thing Thing) {
+                  if thing != nil {
+                      fmt.Println(thing.Name())
+                  } else {
+                      fmt.Println("oops")
+                  }
+              }
+              
+              func main() {
+                  var thing0 = &thing{"bob"}
+                  var thing1 Thing
+                  var thing2 *thing
+              
+                  SafePrint(thing0) // not nil, fine
+                  SafePrint(thing1) // nil, but fine
+                  SafePrint(thing2) // nil pointer, but non-nil interface: panic!
+              }
+          
+          This is a strong reason to be unimaginatively verbose and avoid directly
+          returning multiple results -- for example, if you're writing a shim for:
+          
+              func New() (*ThingWorker, error)
+          
+          ... to expose it as a worker.Worker:
+          
+              func NewWorker() (worker.Worker, error) {
+                  return New()
+              }
+          
+          ...is a minor unexploded bomb just waiting for someone to make decisions
+          based on `w != nil` rather than `err == nil` and, yay, panic. And, sure,
+          they shouldn't do that: but you shouldn't introduce hidden nils. Always
+          just go with the blandly verbose approach:
+          
+              func NewWorker() (worker.Worker, error) {
+                  worker, err := New()
+                  if err != nil {
+                      return nil, errors.Trace(err)
+                  }
+                  return worker, nil
+              }
+          
+          ...and, honestly, don't even take the shortcut when you're "sure" the
+          func you're calling returns an interface. People change things, and the
+          compiler won't protect you when someone fixes that constructor, far from
+          your code.
+          
+          And for the same reason, *never* declare a func returning a concrete
+          error type, it's ludicrously likely to get missed and wreck someone's
+          day. Probably your own.
+      codelingo/review:
+        comment: This nil pointer is being used in a function with a non-nil interface type. This will cause a panic. Please fix.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

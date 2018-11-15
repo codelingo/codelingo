@@ -1,0 +1,38 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: type-not-responsible-for-dependencies
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Type Not Responsible for Dependencies
+        body: |
+                * DI *doesn't* mean you pass factories around -- making a type
+                  repsonsible for *creating* all its dependencies (as well as
+                  *using* them) violates SRP.
+                    * DI infrastructure code probably will use some factories, this
+                      is not the same thing, leaking them unnecessarily is bad
+      codelingo/review:
+        comment: TODO The indirection here is making this hard to understand
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

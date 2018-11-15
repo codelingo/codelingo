@@ -1,0 +1,36 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: well-named-test-file-and-package
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Well Named Test File and Package
+        body: |
+            * Do not write tests in package `foo`, write them in package `foo_test`.
+            * Unit tests should import "juju/testing".
+            * The name of the file containing unit tests should end in `_test.go`.
+      codelingo/review:
+        comment: TODO You should write a unit test for this.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

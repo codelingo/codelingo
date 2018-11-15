@@ -1,0 +1,36 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: indirect-without-abstraction
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Indirect Without Abstraction
+        body: |
+                * indirection in service of abstraction is the noblest form; but
+                  be sure you know the difference, and that you really *have*
+                  abstracted something and not just made it less direct
+      codelingo/review:
+        comment: It looks like you are using indirection not for the sake of truly abstracting something. Consider making this more direct if you don't need the abstraction.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

@@ -1,0 +1,40 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: capabilities-are-used
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Capabilities Are Used
+        body: |
+          When framed in these terms, it seems clear that the fewer capabilities
+          we expose to a component, the easier it is to analyse that component,
+          and hopefully that's reason enough to narrow your interfaces as you
+          go; but if you embrace the concept, you can take it one step further, by
+          treating every *capability exposure* as a *responsibility transfer*.
+          That is to say, you *only* supply a capability to a thing you *know* will
+          use it.
+      codelingo/review:
+        comment: This interface does not use the capability `{{capabilityName}}`. Consider not exposing this capability to the interface.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

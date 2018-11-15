@@ -1,0 +1,42 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: correct-lock-ordering
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Correct Lock Ordering
+        body: |
+          Locks etc embody the opposite approach -- two components each have
+          direct access to the same memory at the same time, and they have to
+          directly manage the synchronisation and be mindful of lock-ordering
+          concerns, and it's *really* easy to screw up. Responsibility transfer via
+          channel is still quite screwable, don't get me wrong, but it's much
+          easier to detect mistakes locally: so ideally you *always* own *all* the
+          data in scope, but *only* until you hand it on to someone else, and it's
+          relatively easy to check that invariant by inspection (for example, vars
+          not zeroed after they're sent are suspect).
+      codelingo/review:
+        comment: These locks are not ordered correctly.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident

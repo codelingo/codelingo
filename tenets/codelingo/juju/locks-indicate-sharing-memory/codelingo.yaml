@@ -1,0 +1,37 @@
+funcs:
+  - name: appendIntegrationTest
+    type: resolver
+    body: |
+      function (fname) {
+        fname.replace(/\.go$/, "")
+        fname.replace(/_test$/, "")
+        return fname + "_integration_test.go"
+      }
+  - name: doesNotMatch
+    type: asserter
+    body: |
+      function (reg, str) {
+        return !str.match(reg)
+      }
+tenets:
+  - name: locks-indicate-sharing-memory
+    vars:
+      pName: {{ protoName(literalValue) }}
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Locks Indicate Sharing Memory
+        body: |
+          Luckily, there's a Go Proverb to fit the situation: "don't communicate
+          by sharing memory, share memory by communicating".
+          
+          Locks indicate you're communicating by sharing memory.
+      codelingo/review:
+        comment: It looks like you are using locks to share memory in order to communicate. Don't do this. Instead, share memory by communicating.
+    query: |
+      import codelingo/ast/go
+      
+      # TODO Write query. This is a stub query.
+      @rewrite name
+      @review comment
+      go.ident
