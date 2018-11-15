@@ -8,6 +8,14 @@ funcs:
 tenets:
   - name: use-crypto-rand
     flows:
+      codelingo/docs:
+        title: Use Crypto rand
+        body: |
+          Do not use package math/rand to generate keys, even 
+          throwaway ones. Unseeded, the generator is completely predictable. 
+          Seeded with time.Nanoseconds(), there are just a few bits of entropy. 
+          Instead, use crypto/rand's Reader, and if you need text, print to 
+          hexadecimal or base64
       codelingo/review:
         comment: |
           Do not use package math/rand to generate keys, even 
@@ -18,9 +26,13 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.import_spec(depth = any):     
-        go.basic_lit:
-          value == "math/rand"
+      go.import_spec(depth = any):
+        any_of:
+          go.ident
+          go.basic_lit:
+            value == "math/rand"
+          go.basic_lit:
+            value == "math/rand"
       any_of:
         @review comment
         go.func_decl(depth = any):
