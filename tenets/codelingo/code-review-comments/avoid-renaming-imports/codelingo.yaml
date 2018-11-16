@@ -35,6 +35,3 @@ tenets:
           go.basic_lit:
             value as importTwo
         diffNameImport(importOne, importTwo)
-
-
-      
