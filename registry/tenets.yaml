@@ -42,8 +42,11 @@ codelingo:
       comment-first-word-as-subject:
         hasIssues: false
       package-comment:
+      good-package-name:
         hasIssues: false
       single-method-interface-name:
+        hasIssues: false
+      underscores-in-name:
         hasIssues: false
     tags:
       - golang
