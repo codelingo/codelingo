@@ -3,6 +3,7 @@ version: 0.0.0
 tenets:
   - avoid-annotations-in-comments
   - comment-first-word-as-subject
+  - package-comment
   - single-method-interface-name
 tags:
   - golang
