@@ -41,6 +41,8 @@ codelingo:
         hasIssues: false
       comment-first-word-as-subject:
         hasIssues: false
+      package-comment:
+        hasIssues: false
       single-method-interface-name:
         hasIssues: false
     tags:
