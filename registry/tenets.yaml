@@ -24,6 +24,10 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      avoid-renaming-imports:
+        hasIssues: true
+      context-first-arg:
+        hasIssues: true
       go-error-fmt:
         hasIssues: false
     tags:
