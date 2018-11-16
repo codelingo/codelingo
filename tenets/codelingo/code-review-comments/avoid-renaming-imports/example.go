@@ -1,10 +1,11 @@
+// Package main is an example package
 package main
 
 import (
 	badfmt "fmt"
 	otherrand "math/rand"
-    "path/to/different/rand"
 	_ "os"
+	"path/to/different/rand"
 )
 
 func main() {
