@@ -18,7 +18,7 @@ tenets:
           most local or project-specific import.
       codelingo/review:
         comment: |
-          This import is renamed but this is a bad practice. 
+          This import is renamed to `{{importName}}` but this is a bad practice. 
           Import without specifying a new name.
     query: |
       import codelingo/ast/go
@@ -28,7 +28,6 @@ tenets:
         go.import_spec(depth = 0:2):
           go.ident: # Ident is the rename and absent if not named
             name != "_"
-            name as importName
           go.basic_lit: # Basic_lit is the "import/path"
             value as importOne
         go.import_spec:
