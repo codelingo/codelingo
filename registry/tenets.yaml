@@ -44,7 +44,6 @@ codelingo:
       good-package-name:
         hasIssues: false
       package-comment:
-      good-package-name:
         hasIssues: false
       single-method-interface-name:
         hasIssues: false
