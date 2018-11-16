@@ -117,6 +117,7 @@ codelingo:
       new-package-requires-test:
         hasIssues: false
       shadowed-func-parameter:
+        hasIssues: false
       well-formed-lists:
         hasIssues: false
       well-named-interface:
