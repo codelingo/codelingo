@@ -18,7 +18,7 @@ tenets:
           most local or project-specific import.
       codelingo/review:
         comment: |
-          This import is renamed to `{{importName}}` but this is a bad practice. 
+          This import is renamed but this is a bad practice. 
           Import without specifying a new name.
     query: |
       import codelingo/ast/go
