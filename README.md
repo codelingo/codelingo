@@ -101,7 +101,7 @@ See the [getting started guide](https://www.codelingo.io/docs/#getting-started) 
 
 <!-- TODO slack numbers -->
 
- - [slack](https://join.slack.com/t/codelingo/shared_invite/enQtNDI5MjUzMDI3ODc4LWI3OGZiNWY1NTBkNGNiMmI3YTRmMjUwMzAyMzZlMDA5NDg0NGI0ZDAzOTFiZmQ5ZDg3ZjhkNDgyNmNlOGJhYzk)
+ - [slack](https://join.slack.com/t/codelingo/shared_invite/enQtNDYxOTYyNTI5NjUwLWFiNjFjOTM3YzgzMjA4NjNiNDhmN2RkZWNlODM0ZTM5NTkzOThhZjczN2ZlYmNkMjhkNDBkYjBlMjQ1NDk2NTQ)
  - [codelingo.io/discuss](http://codelingo.io/discuss)
  - [hello@codelingo.io](mailto:hello@codelingo.io)
 
