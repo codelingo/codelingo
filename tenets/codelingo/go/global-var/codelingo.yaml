@@ -4,9 +4,11 @@ tenets:
       codelingo/docs:
         title: Global Variable
         body: |
-          Check that no globals are present in Go code.
+          Global variables are an input to functions that is not visible in 
+          the functions signature, complicate testing, reduces readability 
+          and increase the complexity of code.
       codelingo/review:
-        comment: Global variables are an input to functions that is not visible in the functions signature, complicate testing, reduces readability and increase the complexity of code.
+        comment: Avoid global variables to improve readability and reduce complexity
     query: |
       import codelingo/ast/go
       
