@@ -3,6 +3,13 @@ funcs:
     type: asserter
     body: |
       function(name) {
+        // Ignore test packages using _test convention
+        if (name.length >= 5) {
+          if (name.substring(name.length - 5) === "_test") {
+            return false
+          }
+        }
+        
         if (name.indexOf("_") !== -1
           || name !== name.toLowerCase()
           || name.length > 15) {
