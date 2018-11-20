@@ -1,14 +1,6 @@
 tenets:
   - name: package-comment
     flows:
-      codelingo/docs:
-        name: Package comment
-        body: |
-          Every package should have a package comment, a block comment preceding the package clause. 
-          For multi-file packages, the package comment only needs to be present in one file, and any 
-          one will do. The package comment should introduce the package and provide information 
-          relevant to the package as a whole. It will appear first on the godoc page and should set up 
-          the detailed documentation that follows.
       codelingo/review:
         comment: |
           Every package should have a package comment, a block comment preceding the package clause.
@@ -18,7 +10,15 @@ tenets:
 
       @review comment
       go.file(depth = any):
+        go.ident:
+          name as packageName
         exclude:
+          go.comment(depth = any):
+            start_offset == 0
+      exclude:
+        go.file:
+          go.ident:
+            name == packageName
           go.comment(depth = any):
             start_offset == 0
 
