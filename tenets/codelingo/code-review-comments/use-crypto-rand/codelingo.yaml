@@ -26,34 +26,34 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.import_spec(depth = any):
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            any_of:
+              go.import_spec:
+                go.ident:
+                  name as importName
+                go.basic_lit:
+                  value == "math/rand"
+              go.import_spec:
+                go.basic_lit:
+                  value == "math/rand"
         any_of:
-          {
-            go.ident:
-              name as importName
-            go.basic_lit:
-              value == "math/rand"
-          }
-          {
-            go.basic_lit:
-              value == "math/rand"
-          }
-      any_of:
-        go.func_decl(depth = any):
-          @review comment
-          go.ident:
-            name as funcName
-            isKeyName(funcName)
-        go.assign_stmt(depth = any):
-          go.lhs:
+          go.func_decl(depth = any):
             @review comment
             go.ident:
-              name as lhsName
-              isKeyName(lhsName)
-          go.rhs:
-            any_of:
+              name as funcName
+              isKeyName(funcName)
+          go.assign_stmt(depth = any):
+            go.lhs:
+              @review comment
               go.ident:
-                name == "rand"
-              go.ident:
-                name == importName
+                name as lhsName
+                isKeyName(lhsName)
+            go.rhs:
+              any_of:
+                go.ident:
+                  name == "rand"
+                go.ident:
+                  name == importName
         
