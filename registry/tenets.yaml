@@ -24,6 +24,10 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      avoid-renaming-imports:
+        hasIssues: true
+      context-first-arg:
+        hasIssues: true
       go-error-fmt:
         hasIssues: false
     tags:
@@ -37,7 +41,11 @@ codelingo:
         hasIssues: false
       comment-first-word-as-subject:
         hasIssues: false
+      good-package-name:
+        hasIssues: false
       single-method-interface-name:
+        hasIssues: false
+      underscores-in-name:
         hasIssues: false
     tags:
       - golang
@@ -109,6 +117,7 @@ codelingo:
       new-package-requires-test:
         hasIssues: false
       shadowed-func-parameter:
+        hasIssues: false
       well-formed-lists:
         hasIssues: false
       well-named-interface:
