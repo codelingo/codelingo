@@ -1,39 +1,25 @@
 tenets:
-  - name: avoid-bool-params
-    flows:
-      codelingo/docs:
-        title: Avoid Bool Parameters
-        body: |
-          bool arguments to functions are often dubious things, as they hint to code that essentially reads like:
+  - import: codelingo/go/bool-param
+    #
+    #   Uncomment this section when we are able to override flows
+    #
+    # flows:
+    #   codelingo/docs:
+    #     title: Avoid Bool Parameters
+    #     body: |
+    #       bool arguments to functions are often dubious things, as they hint to code that essentially reads like:
           
-          func doSomething(shouldDoX bool) {
-            if shouldDoX {
-              doX()
-            } else {
-              doY()
-            }
-          }
+    #       func doSomething(shouldDoX bool) {
+    #         if shouldDoX {
+    #           doX()
+    #         } else {
+    #           doY()
+    #         }
+    #       }
 
-          This is not always the case. However, in cases where that is a fair assessment of the situation, consider 
-          whether the doSomething function should exist at all.
-          In cases where the bool in question, along with other arguments, acts as a "knob" to the function consider 
-          replacing it with some type of "configuration" struct (for examples, see Dave Cheney's treatment of the topic). 
-          In situations where there's a single bool param or the situation is less clear-cut, consider replacing the 
-          bool in question with an enum.
-      codelingo/review:
-        comment: |
-          Avoid bool arguments to functions as they are often dubious
-    query: |
-      import codelingo/ast/go
-
-      @review comment
-      go.func_decl(depth = any):
-        go.ident:
-          name as funcName
-          # TODO: address constructors for structs with bool fields https://github.com/codelingo/platform/pull/998#discussion_r230685188
-        go.func_type:
-          go.field_list:
-            go.field:
-              go.names:
-                go.ident:
-                  type == "bool"
+    #       This is not always the case. However, in cases where that is a fair assessment of the situation, consider 
+    #       whether the doSomething function should exist at all.
+    #       In cases where the bool in question, along with other arguments, acts as a "knob" to the function consider 
+    #       replacing it with some type of "configuration" struct (for examples, see Dave Cheney's treatment of the topic). 
+    #       In situations where there's a single bool param or the situation is less clear-cut, consider replacing the 
+    #       bool in question with an enum.
