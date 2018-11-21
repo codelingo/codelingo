@@ -43,6 +43,8 @@ codelingo:
         hasIssues: false
       good-package-name:
         hasIssues: false
+      package-comment:
+        hasIssues: true
       single-method-interface-name:
         hasIssues: false
       underscores-in-name:

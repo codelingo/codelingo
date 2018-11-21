@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Every package should have a package comment, a block comment preceding the package clause.\nFor multi-file packages, the package comment only needs to be present in one file, and any one will do.\n",
+   "Filename": "effective-go/package-comment/example-good2.go",
+   "Line": 1,
+   "Snippet": "\npackage main\n\nimport ("
+  }
+ ]
