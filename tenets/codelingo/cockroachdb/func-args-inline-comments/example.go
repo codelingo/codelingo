@@ -17,7 +17,7 @@ func main() {
 	)
 
 	// Missing comments
-	monitor := mon.MakeMonitor(
+	mon := mon.MakeMonitor(
 		"in-mem temp storage",
 		mon.MemoryResource,
 		nil,
