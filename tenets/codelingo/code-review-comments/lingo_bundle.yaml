@@ -1,6 +1,7 @@
 description: Best Practices for Golang from Code Review Comments.
 version: 0.0.0
 tenets:
+  - avoid-renaming-imports
   - context-first-arg
   - go-error-fmt
   - use-crypto-rand
