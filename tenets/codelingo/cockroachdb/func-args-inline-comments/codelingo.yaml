@@ -2,7 +2,7 @@ tenets:
   - name: func-args-inline-comments
     flows:
       codelingo/docs:
-        title: Context as First Argument
+        title: Function Arguments Inline Comments
         body: |
           A code reader encountering a function call should be able to 
           intuit what all the arguments to the call represent. Whenever
