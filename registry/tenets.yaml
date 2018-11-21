@@ -29,6 +29,8 @@ codelingo:
     tags:
       - golang
       - go
+      - cockroach
+      - cockroachdb
   code-review-comments:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
