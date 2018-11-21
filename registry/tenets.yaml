@@ -25,7 +25,7 @@ codelingo:
     version: 0.0.0
     tenets:
       avoid-bool-params:
-        hasIssues: false
+        hasIssues: true
     tags:
       - golang
       - go
