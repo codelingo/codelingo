@@ -20,7 +20,7 @@ codelingo:
       - go
       - python
       - py
-    cockroachdb:
+  cockroachdb:
     description: Best Practices for CockroachDB from their contributor docs.
     version: 0.0.0
     tenets:

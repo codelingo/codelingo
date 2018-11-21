@@ -4,7 +4,6 @@ tenets:
   - avoid-renaming-imports
   - context-first-arg
   - go-error-fmt
-  - use-crypto-rand
 tags:
   - golang
   - go
