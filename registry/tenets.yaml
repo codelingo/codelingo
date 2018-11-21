@@ -39,8 +39,6 @@ codelingo:
         hasIssues: false
       go-error-fmt:
         hasIssues: false
-      use-crypto-rand:
-        hasIssues: true
     tags:
       - golang
       - go
