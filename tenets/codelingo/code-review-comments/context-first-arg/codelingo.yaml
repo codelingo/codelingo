@@ -17,10 +17,10 @@ tenets:
     query: |
       import codelingo/ast/go
       
-      # TODO use macro fact to ensure this is not a return parameter
       go.field_list(depth = any):
-        go.field
+        sibling_order == 0
         go.field:
+          sibling_order == 0
           go.names:
             go.ident
           @review comment

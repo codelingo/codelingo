@@ -27,7 +27,7 @@ codelingo:
       avoid-renaming-imports:
         hasIssues: true
       context-first-arg:
-        hasIssues: true
+        hasIssues: false
       go-error-fmt:
         hasIssues: false
     tags:
