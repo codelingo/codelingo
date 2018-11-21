@@ -17,16 +17,11 @@ tenets:
 
       @review comment
       go.file(depth = any):
-        go.ident:
-          name as packageName
         exclude:
-          go.comment(depth = any):
-            start_offset == 0
-      exclude:
-        go.file:
-          go.ident:
-            name == packageName
-          go.comment(depth = any):
-            start_offset == 0
+          go.comment_group:
+            go.comment
+
+
+
 
 
