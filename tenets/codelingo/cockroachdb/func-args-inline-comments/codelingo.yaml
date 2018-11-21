@@ -1,3 +1,10 @@
+funcs:
+  - name: isNotCommented
+    type: asserter
+    body: |
+      function(identOffset, commentOffset) {
+        return 
+      }
 tenets:
   - name: func-args-inline-comments
     flows:
@@ -31,7 +38,7 @@ tenets:
             @review comment
             go.ident(depth = any):
               name == "nil"
-              start_line == line       
+              start_line as line       
       go.comment_group(depth = any):
         go.comment:
           start_line == line
