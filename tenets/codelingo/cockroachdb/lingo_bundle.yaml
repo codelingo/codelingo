@@ -2,6 +2,7 @@ description: Best Practices for CockroachDB from their contributor docs.
 version: 0.0.0
 tenets:
   - avoid-bool-params
+  - func-args-inline-comments
   - line-length-limit
   - wrapping-func-signatures
 tags:
