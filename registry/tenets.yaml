@@ -26,6 +26,8 @@ codelingo:
     tenets:
       avoid-bool-params:
         hasIssues: true
+      wrapping-func-signatures:
+        hasIssues: true
     tags:
       - golang
       - go
