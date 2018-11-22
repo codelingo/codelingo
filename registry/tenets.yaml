@@ -26,6 +26,8 @@ codelingo:
     tenets:
       avoid-bool-params:
         hasIssues: true
+      line-length-limit:
+        hasIssues: true
     tags:
       - golang
       - go
