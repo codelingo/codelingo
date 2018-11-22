@@ -1,26 +1,32 @@
 [
   {
-   "Comment": "type should use -appropriate verb such as",
+   "Comment": "type should use an appropriate verb such as `%%g` for `float32`",
    "Filename": "cockroachdb/fmt-verbs/example.go",
-   "Line": 10,
-   "Snippet": "    var s string = \"Hello, world!\"\n    var i int = 42\n    fmt.Println(\"%v\", s)\n    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)"
+   "Line": 17,
+   "Snippet": "\tfmt.Println(\"%v is a string\", s)\n\tfmt.Println(\"%g\", f)\n\tfmt.Println(\"%v\", f)\n\n\tfmt.Println(\"%s%v\", s, i)"
   },
   {
-   "Comment": "type should use -appropriate verb such as",
+   "Comment": "type should use an appropriate verb such as `%%s` for `string`",
    "Filename": "cockroachdb/fmt-verbs/example.go",
-   "Line": 12,
-   "Snippet": "    fmt.Println(\"%v\", s)\n    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)"
+   "Line": 11,
+   "Snippet": "\tvar i int = 42\n\tvar f float32 = 42.24\n\tfmt.Println(\"%v\", s)\n\tfmt.Println(\"%s\", s)\n\tfmt.Println(\"%v%v\", s, i)"
   },
   {
-   "Comment": "type should use -appropriate verb such as",
+   "Comment": "type should use an appropriate verb such as `%%s` for `string`",
    "Filename": "cockroachdb/fmt-verbs/example.go",
-   "Line": 14,
-   "Snippet": "    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)\n}"
+   "Line": 15,
+   "Snippet": "\tfmt.Println(\"%v%v\", s, i)\n\tfmt.Println(\"%v\", i)\n\tfmt.Println(\"%v is a string\", s)\n\tfmt.Println(\"%g\", f)\n\tfmt.Println(\"%v\", f)"
   },
   {
-   "Comment": "type should use -appropriate verb such as",
+   "Comment": "type should use an appropriate verb such as `%%s` for `string`",
    "Filename": "cockroachdb/fmt-verbs/example.go",
    "Line": 13,
-   "Snippet": "    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)\n}"
+   "Snippet": "\tfmt.Println(\"%v\", s)\n\tfmt.Println(\"%s\", s)\n\tfmt.Println(\"%v%v\", s, i)\n\tfmt.Println(\"%v\", i)\n\tfmt.Println(\"%v is a string\", s)"
+  },
+  {
+   "Comment": "type should use an appropriate verb such as `%%d` for `int`",
+   "Filename": "cockroachdb/fmt-verbs/example.go",
+   "Line": 14,
+   "Snippet": "\tfmt.Println(\"%s\", s)\n\tfmt.Println(\"%v%v\", s, i)\n\tfmt.Println(\"%v\", i)\n\tfmt.Println(\"%v is a string\", s)\n\tfmt.Println(\"%g\", f)"
   }
  ]
