@@ -1,3 +1,4 @@
+//Package main is an example package
 package main
 
 import (
@@ -5,8 +6,8 @@ import (
 )
 
 func main() {
-	var s string = "Hello, world!"
-	var i int = 42
+	var s = "Hello, world!"
+	var i = 42
 	var f float32 = 42.24
 	fmt.Println("%v", s)
 	fmt.Println("%s", s)
