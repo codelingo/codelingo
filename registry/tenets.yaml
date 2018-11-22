@@ -28,6 +28,8 @@ codelingo:
         hasIssues: true
       fmt-verbs:
         hasIssues: true
+      func-args-inline-comments:
+        hasIssues: true
       line-length-limit:
         hasIssues: true
       wrapping-func-signatures:
