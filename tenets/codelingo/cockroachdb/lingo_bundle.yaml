@@ -3,6 +3,7 @@ version: 0.0.0
 tenets:
   - avoid-bool-params
   - fmt-verbs
+  - func-args-inline-comments
   - line-length-limit
   - wrapping-func-signatures
 tags:
