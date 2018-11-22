@@ -1,0 +1,26 @@
+[
+  {
+   "Comment": "type should use -appropriate verb such as",
+   "Filename": "cockroachdb/fmt-verbs/example.go",
+   "Line": 10,
+   "Snippet": "    var s string = \"Hello, world!\"\n    var i int = 42\n    fmt.Println(\"%v\", s)\n    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)"
+  },
+  {
+   "Comment": "type should use -appropriate verb such as",
+   "Filename": "cockroachdb/fmt-verbs/example.go",
+   "Line": 12,
+   "Snippet": "    fmt.Println(\"%v\", s)\n    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)"
+  },
+  {
+   "Comment": "type should use -appropriate verb such as",
+   "Filename": "cockroachdb/fmt-verbs/example.go",
+   "Line": 14,
+   "Snippet": "    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)\n}"
+  },
+  {
+   "Comment": "type should use -appropriate verb such as",
+   "Filename": "cockroachdb/fmt-verbs/example.go",
+   "Line": 13,
+   "Snippet": "    fmt.Println(\"%s\", s)\n    fmt.Println(\"%v%v\", s, i)\n    fmt.Println(\"%v\", i)\n    fmt.Println(\"%v is a string\", s)\n}"
+  }
+ ]
