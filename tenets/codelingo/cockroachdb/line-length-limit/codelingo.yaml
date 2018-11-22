@@ -22,6 +22,9 @@ tenets:
       import codelingo/ast/go
       
       # Blocked. See issues.yaml
+
+      # Need to add a check for comments
+      # and wrap them at 80
       @review comment
       go.call_expr(depth = any):
         end_offset as eo
