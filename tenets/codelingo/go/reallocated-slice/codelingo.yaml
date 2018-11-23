@@ -1,11 +1,12 @@
 tenets:
   - name: reallocated-slice
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Reallocated Slice
         body: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313
       codelingo/review:
-        comment: This pointer may become invalid as the slice it comes from is reallocated.
+        comment: structType {{structType}}, fieldName {{fieldName}}, structName {{structName}}, updatingFunction {{updatingFunction}}  This pointer may become invalid as the slice it comes from is reallocated.
     query: |
       import codelingo/ast/go
 
@@ -23,16 +24,16 @@ tenets:
                         name as fieldName
                     go.array_type
           go.func_decl(depth = any):
-            go.field_list: # This refers to method reciever fields, not generic fields
+            go.field_list: # This refers to method receiver fields, not generic fields
               go.field:
                 go.names:
                   go.ident:
                     name as structName
                 any_of:
                   go.star_expr:
-                    go.ident: # Handle pointer reciever
+                    go.ident: # Handle pointer receiver
                       name == structType
-                  go.ident: # Handle non-pointer reciever
+                  go.ident: # Handle non-pointer receiver
                     name == structType
             go.ident:
               name as updatingFunction

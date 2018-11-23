@@ -94,7 +94,7 @@ codelingo:
       reallocated-slice:
         hasIssues: false
       sprintf:
-        hasIssues: false
+        hasIssues: true
       tested:
         hasIssues: false
       todo:
