@@ -3,6 +3,7 @@ version: 0.0.0
 tenets:
   - avoid-renaming-imports
   - context-first-arg
+  - do-not-discard-errors
   - go-error-fmt
 tags:
   - golang
