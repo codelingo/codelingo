@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: type-not-responsible-for-dependencies
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

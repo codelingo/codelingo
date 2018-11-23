@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: write-off-channelled-items
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

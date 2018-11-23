@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: lsp-is-tested
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

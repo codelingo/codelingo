@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: consistent-name-for-receivers-of-same-object
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

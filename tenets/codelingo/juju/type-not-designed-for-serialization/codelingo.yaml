@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: type-not-designed-for-serialization
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

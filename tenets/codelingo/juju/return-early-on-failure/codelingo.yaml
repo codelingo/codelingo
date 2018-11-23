@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: return-early-on-failure
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

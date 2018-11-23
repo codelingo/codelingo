@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: struct-has-default-vals
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

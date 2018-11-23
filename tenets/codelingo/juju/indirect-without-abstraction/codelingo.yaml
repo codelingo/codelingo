@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: indirect-without-abstraction
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:
