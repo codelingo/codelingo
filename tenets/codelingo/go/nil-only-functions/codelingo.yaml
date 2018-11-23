@@ -8,6 +8,7 @@ funcs:
 tenets:
   - name: nil-only-functions
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Nil Only Functions
         body: |
@@ -26,10 +27,12 @@ tenets:
 
         # only include functions with at least one return value
         go.func_type:
-          go.field_list  # function has 0 or more parameters
-          go.field_list  # function has 1 or more return value
+          @rewrite --replace ""
+          go.field_list:
+            sibling_count == 1 # The 2nd field list is the return parameters
 
         # include functions with any "return nil"
+        @rewrite --replace ""
         go.return_stmt(depth = any):
           go.results:
             go.ident:
