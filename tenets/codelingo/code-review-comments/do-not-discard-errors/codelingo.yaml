@@ -1,0 +1,25 @@
+funcs:
+  - name: hasErrorComment
+    type: asserter
+    body: |
+      function(comment) {
+        return comment.toLowerCase().indexOf("error") !== -1
+      }
+tenets:
+  - name: do-not-discard-errors
+    flows:
+      codelingo/review:
+        comment: |
+          Do not discard errors using _ variables. If a function returns an error, 
+          check it to make sure the function succeeded. Handle the error, return it, or, 
+          in truly exceptional situations, panic.
+    query: |
+      import codelingo/ast/go
+      @review comment
+      go.block_stmt(depth = any):
+        go.assign_stmt(depth = any):
+          go.lhs:
+            go.ident:
+              name == "_"
+              type == "error"
+            
