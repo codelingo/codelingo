@@ -279,6 +279,8 @@ codelingo:
         hasIssues: false
       type-not-designed-for-serialization:
         hasIssues: false
+      interface-next-to-implementation:
+        hasIssues: true
       interface-returns-concrete-type:
         hasIssues: false
       interface-needs-package:

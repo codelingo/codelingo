@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "This constructor returns an interface instead of a concrete type. This is probably not what you want to do.",
+   "Filename": "example.go",
+   "Line": 15,
+   "Snippet": "}\n\nfunc (p person) Greet() {\n\tfmt.Printf(\"Hi! My name is %s\", p.name)\n}"
+  }
+ ]

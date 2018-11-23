@@ -1,0 +1,110 @@
+tenets:
+  - name: interface-next-to-implementation
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Interface Next to Implementation
+        body: |
+          If the above is too abstract: don't define an interface next to an
+          implementation of that interface, otherwise you force people to import
+          the implementation when all they need is the interface... (or, they just
+          take the easier route and define their own interface, rendering yours
+          useless).
+          
+          Aside: you will occasionally find yourself needing factory types or even
+          funcs, which exist purely to *abstract* the construction of concrete
+          types. These are not *quite* the same as constructors, so the advice
+          doesn't apply; and it's boring but easy to wrap a constructor to return
+          an interface anyway, and these sorts of funcs are verifiable by
+          inspection:
+          
+              func NewFacade(apiCaller base.APICaller) (Facade, error) {
+                  facade, err := apithing.NewFacade(apiCaller)
+                  if err != nil {
+                      return nil, errors.Trace(err)
+                  }
+                  return facade, nil
+              }
+          
+              func NewWorker(config Config) (worker.Worker, error) {
+                  worker, err := New(config)
+                  if err != nil {
+                      return nil, errors.Trace(err)
+                  }
+                  return worker, nil
+              }
+          
+          ...to the point where you'll often see this sort of func deployed
+          alongside a `dependency.Manifold`, tucked away in an untested `shim.go`
+          to satisfy the higher goal of rendering the manifold functionality
+          testable in complete isolation.
+      codelingo/review:
+        comment: This interface is implemented next to its definition. Please separate them.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        go.decls:
+          go.gen_decl:
+            @review comment
+            go.ident
+            go.type_spec:
+              go.interface_type:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident:
+                        name as implementedMethodName
+                    go.func_type:
+                      go.field_list
+                      go.field_list:
+                        go.field:
+                          go.ident:
+                            name as implementedMethodType
+          go.func_decl:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident
+                go.ident:
+                  name as classNameConstraint
+            go.ident:
+              name == implementedMethodName
+            go.func_type:
+              go.field_list
+              go.field_list:
+                go.field:
+                  go.ident:
+                    name == implementedMethodType
+        exclude:
+          go.decls:
+            go.gen_decl:
+              go.type_spec:
+                go.interface_type:
+                  go.field_list:
+                    go.field:
+                      go.names:
+                        go.ident:
+                          name == unimplementedMethodName
+                      go.func_type:
+                        go.field_list
+                        go.field_list:
+                          go.field:
+                            go.ident:
+                              name == unimplementedMethodType
+            exclude:
+              go.func_decl:
+                go.field_list:
+                  go.field:
+                    go.names:
+                      go.ident
+                    go.ident:
+                      name == classNameConstraint
+                go.ident:
+                  name == unimplementedMethodName
+                go.func_type:
+                  go.field_list
+                  go.field_list:
+                    go.field:
+                      go.ident:
+                        name == unimplementedMethodType

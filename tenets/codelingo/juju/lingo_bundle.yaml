@@ -61,6 +61,7 @@ tenets:
   - struct-has-default-vals
   - local-version-of-func
   - type-not-designed-for-serialization
+  - interface-next-to-implementation
   - interface-returns-concrete-type
   - interface-needs-package
   - extract-interface-from-packages
