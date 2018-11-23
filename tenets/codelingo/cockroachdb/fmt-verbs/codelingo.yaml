@@ -1,0 +1,89 @@
+funcs:
+  - name: hasGeneralVerb
+    type: asserter
+    body: |
+      function (str, order) {
+        order--
+        var matches = str.match(/%[A-Za-z]/g)
+        if (matches.length <= order) return false
+        var result = matches[order]
+        return result === "%v"
+      }
+  - name: verbForType
+    type: resolver
+    body: |
+      function (type) {
+        var types = {
+        "string":     "%%s", 
+        "bool":       "%%t",
+        "int":        "%%d",
+        "int8":       "%%d",
+        "int16":      "%%d",
+        "int32":      "%%d",
+        "int64":      "%%d",
+        "uint":       "%%d",
+        "uint8":      "%%d",
+        "uint16":     "%%d",
+        "uint32":     "%%d",
+        "uint64":     "%%d",
+        "uintptr":    "%%p",
+        "byte":       "%%d",
+        "rune":       "%%q",
+        "float32":    "%%g", 
+        "float64":    "%%g",
+        "complex32":  "%%g",
+        "complex64":  "%%g",
+        }
+
+        var result = types[type]
+
+        return typeof result == 'undefined' ? "" : result
+      }
+tenets:
+  - name: fmt-verbs
+    vars:
+      result: "{{verbForType(argType)}}"
+    flows:
+      codelingo/docs:
+        title: Use Appropriate Verbs in Format
+        body: |
+          Prefer the most specific verb for your use. In other words, 
+          prefer to avoid %v when possible. However, %v is to be used 
+          when formatting bindings which might be nil and which do not 
+          already handle nil formatting. Notably, nil errors formatted 
+          as %s will render as "%!s()" while nil errors formatted as %v 
+          will render as "". Therefore, prefer %v when formatting errors 
+          which are not known to be non-nil.
+      codelingo/review:
+        comment:  type should use an appropriate verb such as `{{result}}` for `{{argType}}`
+    query: |
+
+      import codelingo/ast/go
+
+      # Currently only works for the first arg to fmt
+      # The JS function is ready when we have a good
+      # solution to handling star expression arg types.
+      # eg. we want:
+      #
+      # any_of:
+      #   go.ident:
+      #     name as typeName
+      #   go.star_expr:
+      #     go.ident:
+      #       name as typeName
+
+      go.call_expr(depth = any):
+        go.selector_expr:
+          @review comment
+          go.ident:
+            name == "fmt"
+        go.args:   
+          go.basic_lit:
+            sibling_order == 0
+            value as formatString
+            kind == "string"
+          go.ident:
+            type as argType
+            sibling_order as so
+            hasGeneralVerb(formatString, so)
+            result != ""

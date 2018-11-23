@@ -26,6 +26,8 @@ codelingo:
     tenets:
       avoid-bool-params:
         hasIssues: true
+      fmt-verbs:
+        hasIssues: true
       func-args-inline-comments:
         hasIssues: true
       line-length-limit:
