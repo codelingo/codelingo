@@ -47,6 +47,8 @@ codelingo:
         hasIssues: true
       context-first-arg:
         hasIssues: false
+      do-not-discard-errors:
+        hasIssues: false
       go-error-fmt:
         hasIssues: false
     tags:
