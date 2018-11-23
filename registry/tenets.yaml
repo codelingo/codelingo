@@ -88,7 +88,7 @@ codelingo:
       marshalling:
         hasIssues: false
       nil-only-functions:
-        hasIssues: false
+        hasIssues: true
       println-format-strings:
         hasIssues: false
       reallocated-slice:

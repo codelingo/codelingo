@@ -1,12 +1,11 @@
 tenets:
   - name: reallocated-slice
     flows:
-      codelingo/rewrite:
       codelingo/docs:
         title: Reallocated Slice
         body: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313
       codelingo/review:
-        comment: structType {{structType}}, fieldName {{fieldName}}, structName {{structName}}, updatingFunction {{updatingFunction}}  This pointer may become invalid as the slice it comes from is reallocated.
+        comment: This pointer may become invalid as the slice it comes from is reallocated.
     query: |
       import codelingo/ast/go
 

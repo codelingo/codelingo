@@ -29,7 +29,7 @@ tenets:
         go.func_type:
           @rewrite --replace ""
           go.field_list:
-            sibling_count = 1 # The 2nd field list is the return parameters
+            sibling_count == 1 # The 2nd field list is the return parameters
 
         # include functions with any "return nil"
         @rewrite --replace ""
