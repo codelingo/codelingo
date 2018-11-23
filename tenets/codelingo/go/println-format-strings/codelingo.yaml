@@ -15,9 +15,9 @@ tenets:
       @review comment
       go.call_expr(depth = any):
         go.selector_expr:
+          @rewrite --replace "{{identName}}f"
           go.ident:
             name as identName
-            @rewrite --replace "{{identName}}f"
             regex(/^(Sp|P)rint(ln)?$/, identName)
         go.args:
           go.basic_lit:
