@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: name-of-error-should-be-err
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

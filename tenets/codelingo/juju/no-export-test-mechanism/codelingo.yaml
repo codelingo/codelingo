@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: no-export-test-mechanism
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

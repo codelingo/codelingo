@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: max-two-nested-function-definitions
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: db-doc-not-closed
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

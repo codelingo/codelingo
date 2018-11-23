@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: arg-name-proper-noun
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:

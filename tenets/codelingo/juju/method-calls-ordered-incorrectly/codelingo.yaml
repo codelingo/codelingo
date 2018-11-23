@@ -16,7 +16,7 @@ funcs:
 tenets:
   - name: method-calls-ordered-incorrectly
     vars:
-      pName: {{ protoName(literalValue) }}
+      pName: "{{ protoName(literalValue) }}"
     flows:
       codelingo/rewrite:
       codelingo/docs:
