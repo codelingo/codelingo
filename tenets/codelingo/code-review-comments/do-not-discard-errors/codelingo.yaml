@@ -1,10 +1,3 @@
-funcs:
-  - name: hasErrorComment
-    type: asserter
-    body: |
-      function(comment) {
-        return comment.toLowerCase().indexOf("error") !== -1
-      }
 tenets:
   - name: do-not-discard-errors
     flows:
@@ -19,6 +12,11 @@ tenets:
           Do not discard errors using _ variables
     query: |
       import codelingo/ast/go
+
+      # This tenet should also check if the error
+      # discarding is mentioned in a comment above.
+      # See issues.yaml for more info
+
       @review comment
       go.block_stmt(depth = any):
         go.assign_stmt(depth = any):
