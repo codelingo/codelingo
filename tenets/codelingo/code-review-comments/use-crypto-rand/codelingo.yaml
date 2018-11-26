@@ -28,12 +28,6 @@ tenets:
           name as importName
         go.basic_lit:
           value == "math/rand"
-      # any_of:
-      #   go.func_decl(depth = any):
-      #     @review comment
-      #     go.ident:
-      #       name as funcName
-      #       isKeyName(funcName)
       go.assign_stmt(depth = any):
         go.lhs:
           @review comment
