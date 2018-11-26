@@ -4,6 +4,7 @@ tenets:
   - avoid-renaming-imports
   - context-first-arg
   - go-error-fmt
+  - named-result-params
 tags:
   - golang
   - go

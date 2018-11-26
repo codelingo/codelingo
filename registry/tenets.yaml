@@ -49,6 +49,8 @@ codelingo:
         hasIssues: false
       go-error-fmt:
         hasIssues: false
+      named-result-params:
+        hasIssues: true
     tags:
       - golang
       - go
