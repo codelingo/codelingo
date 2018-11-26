@@ -1,0 +1,46 @@
+funcs:
+  - name: isEqual
+    type: asserter
+    body: |
+      function(param, type) {
+        if (param === "err" && type === "error") {
+          return true
+        }
+        return param.toLowerCase() === type.toLowerCase()
+      }
+tenets:
+  - name: named-result-params
+    flows:
+      codelingo/docs:
+        title: Named Result Parameters
+        body: |
+        Consider what it will look like in godoc. Named result parameters like:
+
+        func (n *Node) Parent1() (node *Node)
+        func (n *Node) Parent2() (node *Node, err error)
+        will stutter in godoc; better to use:
+
+        func (n *Node) Parent1() *Node
+        func (n *Node) Parent2() (*Node, error)
+        On the other hand, if a function returns two or three parameters of the same type, 
+        or if the meaning of a result isn't clear from context, adding names may be useful 
+        in some contexts. Don't name result parameters just to avoid declaring a var inside 
+        the function; that trades off a minor implementation brevity at the cost of 
+        unnecessary API verbosity.
+      codelingo/review:
+        comment:  Parameter `{{paramName}}` has the same name as its type `{{typeName}}`. This causes the godocs to stutter. Consider removing the name of the return parameter.
+    query: |
+      import codelingo/ast/go
+
+      go.func_decl(depth = any):
+        go.func_type:
+          go.field_list:
+            sibling_order == 1
+            @review comment
+            go.field:
+              go.names:
+                go.ident:
+                  name as paramName
+              go.ident:
+                name as typeName
+                isEqual(paramName, typeName)
