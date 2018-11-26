@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Do not use package math/rand to generate keys, even \nthrowaway ones. Unseeded, the generator is completely predictable. \nSeeded with time.Nanoseconds(), there are just a few bits of entropy. \nInstead, use crypto/rand's Reader, and if you need text, print to \nhexadecimal or base64\n",
+   "Filename": "effective-go/use-crypto-rand/example-bad.go",
+   "Line": 4,
+   "Snippet": "\nimport (\n    \"math/rand\"\n    // \"encoding/base64\"\n    // \"encoding/hex\""
+  }
+ ]
