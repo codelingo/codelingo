@@ -1,6 +1,7 @@
 tenets:
   - name: sprintf-error
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Sprintf Error
         body: |
@@ -15,12 +16,19 @@ tenets:
         go.selector_expr:
           go.ident:
             name == "errors"
+          @rewrite -r "Errorf"
           go.ident:
             name == "New"
         go.args:
+          @rewrite -r "\"{{formatString}}\""
           go.call_expr:
             go.selector_expr:
               go.ident:
                 name == "fmt"
               go.ident:
                 name == "Sprintf"
+            go.args:
+              go.basic_lit:
+                child_count == 0
+                kind == "string"
+                value as formatString

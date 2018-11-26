@@ -1,6 +1,7 @@
 tenets:
   - name: unconvert
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Unconvert
         body: |
@@ -10,10 +11,14 @@ tenets:
     query: |
       import codelingo/ast/go
       go.file(depth = any):
+        @rewrite -r "{{varName}}"
         go.call_expr(depth = any):
           go.ident:
             name as typeName
           go.args:
+            child_count == 1
+            @rewrite name
             @review comment
             go.ident:
+              name == varName
               type == typeName
