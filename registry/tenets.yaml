@@ -51,6 +51,8 @@ codelingo:
         hasIssues: false
       named-result-params:
         hasIssues: true
+      use-crypto-rand:
+        hasIssues: true
     tags:
       - golang
       - go
