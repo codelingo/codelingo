@@ -14,19 +14,19 @@ tenets:
       codelingo/docs:
         title: Named Result Parameters
         body: |
-        Consider what it will look like in godoc. Named result parameters like:
+          Consider what it will look like in godoc. Named result parameters like:
 
-        func (n *Node) Parent1() (node *Node)
-        func (n *Node) Parent2() (node *Node, err error)
-        will stutter in godoc; better to use:
+          func (n *Node) Parent1() (node *Node)
+          func (n *Node) Parent2() (node *Node, err error)
+          will stutter in godoc; better to use:
 
-        func (n *Node) Parent1() *Node
-        func (n *Node) Parent2() (*Node, error)
-        On the other hand, if a function returns two or three parameters of the same type, 
-        or if the meaning of a result isn't clear from context, adding names may be useful 
-        in some contexts. Don't name result parameters just to avoid declaring a var inside 
-        the function; that trades off a minor implementation brevity at the cost of 
-        unnecessary API verbosity.
+          func (n *Node) Parent1() *Node
+          func (n *Node) Parent2() (*Node, error)
+          On the other hand, if a function returns two or three parameters of the same type, 
+          or if the meaning of a result isn't clear from context, adding names may be useful 
+          in some contexts. Don't name result parameters just to avoid declaring a var inside 
+          the function; that trades off a minor implementation brevity at the cost of 
+          unnecessary API verbosity.
       codelingo/review:
         comment:  Parameter `{{paramName}}` has the same name as its type `{{typeName}}`. This causes the godocs to stutter. Consider removing the name of the return parameter.
     query: |
