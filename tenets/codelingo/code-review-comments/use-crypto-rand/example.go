@@ -1,3 +1,4 @@
+//Package main is an example package
 package main
 
 import (
@@ -7,6 +8,7 @@ import (
 	"fmt"
 )
 
+// Key is an example function
 func Key() string {
 	buf := make([]byte, 16)
 	_, err := rand.Read(buf)
