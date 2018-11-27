@@ -51,8 +51,6 @@ codelingo:
         hasIssues: true
       go-error-fmt:
         hasIssues: false
-      named-result-params:
-        hasIssues: true
       use-crypto-rand:
         hasIssues: true
     tags:
