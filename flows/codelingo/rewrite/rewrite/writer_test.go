@@ -124,6 +124,15 @@ func <NEW CODE>() {
 }
 `[1:]),
 	}, {
+		decOpts: "rewrite --replace --line name",
+		newSRC: []byte(`
+package test
+
+<NEW CODE>
+
+}
+`[1:]),
+	}, {
 		decOpts: "rewrite --replace --start-to-end-offset name",
 		newSRC: []byte(`
 package test
