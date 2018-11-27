@@ -1,12 +1,4 @@
 funcs:
-  - name: appendIntegrationTest
-    type: resolver
-    body: |
-      function (fname) {
-        fname.replace(/\.go$/, "")
-        fname.replace(/_test$/, "")
-        return fname + "_integration_test.go"
-      }
   - name: doesNotMatch
     type: asserter
     body: |

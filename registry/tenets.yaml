@@ -166,133 +166,133 @@ codelingo:
     version: 0.0.0
     tenets:
       global-var:
-        hasIssues: false
+        hasIssues: true
       exported-var-outside-export-test:
-        hasIssues: false
+        hasIssues: true
       private-var:
-        hasIssues: false
+        hasIssues: true
       funcs-with-nonexplicit-deps:
-        hasIssues: false
+        hasIssues: true
       env-vars:
-        hasIssues: false
+        hasIssues: true
       functionality-used-globally:
-        hasIssues: false
+        hasIssues: true
       well-named-test-file-and-package:
-        hasIssues: false
+        hasIssues: true
       no-export-test-mechanism:
-        hasIssues: false
+        hasIssues: true
       tests-unexported-things:
-        hasIssues: false
+        hasIssues: true
       export-only-for-test:
-        hasIssues: false
+        hasIssues: true
       desc-too-much-reponsibility:
-        hasIssues: false
+        hasIssues: true
       func-if-else-too-much-responsibility:
-        hasIssues: false
+        hasIssues: true
       oo-inheritance-too-much-reponsibility:
-        hasIssues: false
+        hasIssues: true
       lsp-is-tested:
-        hasIssues: false
+        hasIssues: true
       covers-one-concern:
-        hasIssues: false
+        hasIssues: true
       func-accepts-interface-but-returns-concrete-type:
-        hasIssues: false
+        hasIssues: true
       use-resource-directly:
-        hasIssues: false
+        hasIssues: true
       struct-passed-but-barely-used:
-        hasIssues: false
+        hasIssues: true
       excessively-long-names:
-        hasIssues: false
+        hasIssues: true
       vague-names:
-        hasIssues: false
+        hasIssues: true
       shorten-receivers-and-loop-index-vars:
-        hasIssues: false
+        hasIssues: true
       name-of-error-should-be-err:
-        hasIssues: false
+        hasIssues: true
       consistent-name-for-receivers-of-same-object:
-        hasIssues: false
+        hasIssues: true
       return-early-on-failure:
-        hasIssues: false
+        hasIssues: true
       use-intermediate-variables:
-        hasIssues: false
+        hasIssues: true
       max-two-nested-function-definitions:
-        hasIssues: false
+        hasIssues: true
       extract-internal-functions:
-        hasIssues: false
+        hasIssues: true
       indirect-without-abstraction:
-        hasIssues: false
+        hasIssues: true
       callback-without-framework:
-        hasIssues: false
+        hasIssues: true
       type-not-responsible-for-dependencies:
-        hasIssues: false
+        hasIssues: true
       avoid-named-returns:
-        hasIssues: false
+        hasIssues: true
       no-magic-naked-return:
-        hasIssues: false
+        hasIssues: true
       dont-shadow-enclosing-scope:
-        hasIssues: false
+        hasIssues: true
       well-formed-comments:
-        hasIssues: false
+        hasIssues: true
       describe-purpose-not-implementation-of-func:
-        hasIssues: false
+        hasIssues: true
       describe-purpose-not-implementation-of-field:
-        hasIssues: false
+        hasIssues: true
       write-off-channelled-items:
-        hasIssues: false
+        hasIssues: true
       locks-indicate-sharing-memory:
-        hasIssues: false
+        hasIssues: true
       correct-lock-ordering:
-        hasIssues: false
+        hasIssues: true
       package-sync-not-required:
-        hasIssues: false
+        hasIssues: true
       file-not-closed:
-        hasIssues: false
+        hasIssues: true
       api-not-closed:
-        hasIssues: false
+        hasIssues: true
       mongo-not-closed:
-        hasIssues: false
+        hasIssues: true
       db-doc-not-closed:
-        hasIssues: false
+        hasIssues: true
       capabilities-are-used:
-        hasIssues: false
+        hasIssues: true
       responsibility-dropped-without-explanation:
-        hasIssues: false
+        hasIssues: true
       invalid-data-without-error:
-        hasIssues: false
+        hasIssues: true
       channel-assured-but-closed:
-        hasIssues: false
+        hasIssues: true
       method-calls-ordered-incorrectly:
-        hasIssues: false
+        hasIssues: true
       more-than-three-args:
-        hasIssues: false
+        hasIssues: true
       use-struct-not-exported-signature:
-        hasIssues: false
+        hasIssues: true
       arg-named-spec:
-        hasIssues: false
+        hasIssues: true
       arg-named-config:
-        hasIssues: false
+        hasIssues: true
       arg-named-context:
-        hasIssues: false
+        hasIssues: true
       arg-named-request:
-        hasIssues: false
+        hasIssues: true
       arg-named-selector:
-        hasIssues: false
+        hasIssues: true
       arg-name-proper-noun:
-        hasIssues: false
+        hasIssues: true
       struct-has-default-vals:
-        hasIssues: false
+        hasIssues: true
       local-version-of-func:
-        hasIssues: false
+        hasIssues: true
       type-not-designed-for-serialization:
-        hasIssues: false
+        hasIssues: true
       interface-returns-concrete-type:
-        hasIssues: false
+        hasIssues: true
       interface-needs-package:
-        hasIssues: false
+        hasIssues: true
       extract-interface-from-packages:
-        hasIssues: false
+        hasIssues: true
       hidden-nil-interface-values:
-        hasIssues: false
+        hasIssues: true
     tags:
       - coverage
       - git
