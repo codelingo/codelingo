@@ -5,7 +5,33 @@ funcs:
       function(text, name) {
         text = text.substring(2).trim()
         var words = text.split(" ")
+        if (words[0].toLowerCase() === "deprecated") {
+          return false
+        }
         return words[0].toLowerCase() !== name.toLowerCase()
+      }
+  - name: fixComment
+    type: resolver
+    body: |
+      function(text, name) {
+        var commentChar = text.substring(0, 2)
+        text = text.substring(2).trim()
+        var words = text.split(" ")
+        var result
+        var firstWord = words[0].split(/(?=[A-Z])/)
+        firstWord.forEach(function(word) {
+          if (word.length < 4) return
+          // If start of comment smells like an old name
+          if (word.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+              name.toLowerCase().indexOf(word.toLowerCase()) !== -1) {              
+            words[0] = name
+            result = words.join(" ")
+          }  
+        })
+        if (result == undefined) {
+          return commentChar + " " + name + " " + words.join(" ")
+        }
+        return commentChar + " " + result
       }
 tenets:
   - name: comment-first-word-as-subject
@@ -25,6 +51,7 @@ tenets:
       go.func_decl(depth = any):
         go.comment_group:
           @review comment
+          @rewrite --replace --line "{{fixComment(commText, funcName)}}"
           go.comment:
             sibling_order == 0
             text as commText
