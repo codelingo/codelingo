@@ -1,38 +1,32 @@
 [
   {
+   "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring doThisOrThat by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
+   "Filename": "example.go",
+   "Line": 8,
+   "Snippet": "}\n\nfunc doThisOrThat(flag bool) bool { // Issue\n\tif flag {\n\t\tdoThis()\n\t} else {\n\t\tdoThat()\n\t}\n\n\treturn false\n}\n\nfunc doThisOrThatNoArg() bool { // Issue"
+  },
+  {
    "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring someFuncB by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 25,
+   "Filename": "example.go",
+   "Line": 37,
    "Snippet": "\nfunc someFuncA(a string, b bool)           {}\nfunc someFuncB(b bool, a string)           {}\nfunc someFuncC(a string, b bool, c string) {}\nfunc someFuncD(b bool, c string, d bool)   {}"
   },
   {
    "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring someFuncD by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 27,
+   "Filename": "example.go",
+   "Line": 39,
    "Snippet": "func someFuncB(b bool, a string)           {}\nfunc someFuncC(a string, b bool, c string) {}\nfunc someFuncD(b bool, c string, d bool)   {}\n"
   },
   {
    "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring someFuncA by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 24,
+   "Filename": "example.go",
+   "Line": 36,
    "Snippet": "func doThat() {}\n\nfunc someFuncA(a string, b bool)           {}\nfunc someFuncB(b bool, a string)           {}\nfunc someFuncC(a string, b bool, c string) {}"
   },
   {
    "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring someFuncC by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 26,
+   "Filename": "example.go",
+   "Line": 38,
    "Snippet": "func someFuncA(a string, b bool)           {}\nfunc someFuncB(b bool, a string)           {}\nfunc someFuncC(a string, b bool, c string) {}\nfunc someFuncD(b bool, c string, d bool)   {}"
-  },
-  {
-   "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring doThisOrThat by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 8,
-   "Snippet": "}\n\nfunc doThisOrThat(flag bool) { // Issue\n\tif flag {\n\t\tdoThis()\n\t} else {\n\t\tdoThat()\n\t}\n}\n\nfunc returnsTrue() bool {"
-  },
-  {
-   "Comment": "Boolean arguments can indicate low cohesion. Consider refactoring doThis by using a separate function for each case and helper functions for repeated code. This will make each function clearer and more modular, leading to easier maintainability.",
-   "Filename": "go/bool-param/example.go",
-   "Line": 20,
-   "Snippet": "}\n\nfunc doThis() (flag bool) {}\n\nfunc doThat() {}"
   }
  ]

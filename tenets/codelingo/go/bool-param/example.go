@@ -5,12 +5,24 @@ func main() {
 	doThisOrThat(false)
 }
 
-func doThisOrThat(flag bool) { // Issue
+func doThisOrThat(flag bool) bool { // Issue
 	if flag {
 		doThis()
 	} else {
 		doThat()
 	}
+
+	return false
+}
+
+func doThisOrThatNoArg() bool { // Issue
+	if flag {
+		doThis()
+	} else {
+		doThat()
+	}
+
+	return false
 }
 
 func returnsTrue() bool {
