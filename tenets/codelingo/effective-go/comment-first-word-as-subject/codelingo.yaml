@@ -18,7 +18,7 @@ funcs:
         text = text.substring(2).trim()
         var words = text.split(" ")
         var result
-        var firstWord = words[0].split(/(?=[A-Z])/)
+        var firstWord = words[0].split(/([A-Z][a-z]*)/)
         firstWord.forEach(function(word) {
           if (word.length < 4) return
           // If start of comment smells like an old name
@@ -44,6 +44,8 @@ tenets:
       codelingo/review:
         comment: |
           The first sentence should be a one-sentence summary that starts with the name ({{funcName}}) being declared.
+      codelingo/rewrite:
+        place: holder
     query: |
       import codelingo/ast/go
 
@@ -51,7 +53,7 @@ tenets:
       go.func_decl(depth = any):
         go.comment_group:
           @review comment
-          @rewrite --replace --line "{{fixComment(commText, funcName)}}"
+          @rewrite --replace "{{fixComment(commText, funcName)}}"
           go.comment:
             sibling_order == 0
             text as commText
