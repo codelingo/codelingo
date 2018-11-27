@@ -1,3 +1,5 @@
+ignored = ["github.com/codelingo/codelingo/tenets*"]
+
 [[constraint]]
   name = "github.com/codelingo/lingo"
   branch = "master"
