@@ -5,7 +5,6 @@ tenets:
   - context-first-arg
   - do-not-discard-errors
   - go-error-fmt
-  - named-result-params
   - use-crypto-rand
 tags:
   - golang
