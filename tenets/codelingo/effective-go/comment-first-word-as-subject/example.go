@@ -21,3 +21,9 @@ func bar() {}
 // This func comment should begin with 'baz'
 // and we should not worry about this line
 func baz() {}
+
+// This is called by a xyz
+func qux() {}
+
+// The quux will handle xyz
+func quux() {}

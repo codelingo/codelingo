@@ -13,7 +13,7 @@ funcs:
   - name: fixComment
     type: resolver
     body: |
-      function (text, name) {
+      function(text, name) {
         var commentChar = text.substring(0, 2)
         text = text.substring(2).trim().replace(new RegExp("^The " + name + " ", "i"), '')
         var words = text.split(" ")
