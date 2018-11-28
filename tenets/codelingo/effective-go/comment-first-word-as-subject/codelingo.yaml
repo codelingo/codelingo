@@ -13,9 +13,9 @@ funcs:
   - name: fixComment
     type: resolver
     body: |
-      function(text, name) {
+      function (text, name) {
         var commentChar = text.substring(0, 2)
-        text = text.substring(2).trim()
+        text = text.substring(2).trim().replace(new RegExp("^The " + name + " ", "i"), '')
         var words = text.split(" ")
         var result
         var firstWord = words[0].split(/([A-Z][a-z]*)/)
@@ -29,7 +29,7 @@ funcs:
           }  
         })
         if (result == undefined) {
-          var joinedWords = words.join(" ").replace(/^This /, '')
+          var joinedWords = words.join(" ").replace(/^(This) /, '')
           return commentChar + " " + name + " " + joinedWords
         }
         return commentChar + " " + result
