@@ -29,7 +29,8 @@ funcs:
           }  
         })
         if (result == undefined) {
-          return commentChar + " " + name + " " + words.join(" ")
+          var joinedWords = words.join(" ").replace(/^This /, '')
+          return commentChar + " " + name + " " + joinedWords
         }
         return commentChar + " " + result
       }
