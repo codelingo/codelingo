@@ -20,7 +20,7 @@ tenets:
       go.field_list(depth = any):
         sibling_order == 0
         go.field:
-          sibling_order == 0
+          sibling_order > 0
           go.names:
             go.ident
           @review comment

@@ -2,7 +2,7 @@
 package main
 
 import (
-	"fmt"
+    "fmt"
 )
 
 func aFunc(ctx context.Context, a int) {
