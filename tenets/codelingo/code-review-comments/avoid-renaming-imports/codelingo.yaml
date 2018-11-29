@@ -1,11 +1,17 @@
 funcs:
-  - name: importNamesAreDifferent
+  - name: importNamesEqual
     type: asserter
     body: |
       function(a, b) {
         var aSplit = a.toLowerCase().split("/")
         var bSplit = b.toLowerCase().split("/")
-        return a[a.length - 1] !== b[b.length - 1]
+        return a[a.length - 1] === b[b.length - 1]
+      }
+  - name: neq
+    type: asserter
+    body: |
+      function(a, b) {
+        return a !== b
       }
 tenets:
   - name: avoid-renaming-imports
@@ -25,13 +31,17 @@ tenets:
 
       go.gen_decl(depth = any):
         @review comment
-        go.import_spec(depth = 0:2):
+        go.import_spec:
+          start_offset as soOne # stand in for UID
           go.ident: # Ident is the rename and absent if not named
             name as importName
             name != "_"
           go.basic_lit: # Basic_lit is the "import/path"
             value as importOne
-        go.import_spec:
-          go.basic_lit:
-            value as importTwo
-        importNamesAreDifferent(importOne, importTwo)
+        exclude:
+          go.import_spec:
+            start_offset as soTwo
+            neq(soOne, soTwo)
+            go.basic_lit:
+              value as importTwo
+              importNamesEqual(importOne, importTwo)
