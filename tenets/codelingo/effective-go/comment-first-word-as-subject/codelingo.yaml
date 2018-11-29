@@ -23,13 +23,14 @@ funcs:
           if (word.length < 4) return
           // If start of comment smells like an old name
           if (word.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-              name.toLowerCase().indexOf(word.toLowerCase()) !== -1) {              
+              name.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
             words[0] = name
             result = words.join(" ")
-          }  
+          }
         })
         if (result == undefined) {
-          return commentChar + " " + name + " " + words.join(" ")
+          var joinedWords = words.join(" ").replace(/^This /, '')
+          return commentChar + " " + name + " " + joinedWords
         }
         return commentChar + " " + result
       }
@@ -39,7 +40,7 @@ tenets:
       codelingo/docs:
         title: Comment First Word as Subject
         body: |
-          Doc comments work best as complete sentences, which allow a wide variety of automated presentations. 
+          Doc comments work best as complete sentences, which allow a wide variety of automated presentations.
           The first sentence should be a one-sentence summary that starts with the name being declared.
       codelingo/review:
         comment: |
