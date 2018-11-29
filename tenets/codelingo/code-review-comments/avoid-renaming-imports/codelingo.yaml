@@ -27,6 +27,7 @@ tenets:
         @review comment
         go.import_spec(depth = 0:2):
           go.ident: # Ident is the rename and absent if not named
+            name as importName
             name != "_"
           go.basic_lit: # Basic_lit is the "import/path"
             value as importOne
