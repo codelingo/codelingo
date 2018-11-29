@@ -44,7 +44,7 @@ codelingo:
     version: 0.0.0
     tenets:
       avoid-renaming-imports:
-        hasIssues: true
+        hasIssues: false
       context-first-arg:
         hasIssues: false
       do-not-discard-errors:
