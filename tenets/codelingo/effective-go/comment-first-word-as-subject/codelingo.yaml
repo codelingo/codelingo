@@ -74,7 +74,7 @@ tenets:
       import codelingo/ast/go
 
       @review comment
-      @rewrite --prepend --line "// {{funcName}} is a function"
+      @rewrite --prepend --line "// {{funcName}} is a function."
       go.func_decl(depth = any):
         exclude:
           go.comment_group
