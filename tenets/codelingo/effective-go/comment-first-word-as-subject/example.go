@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func  main() {
+func main() {
 	fmt.Println("Hello, playground")
 	// This comment not on a func decl
 }
