@@ -62,4 +62,3 @@ tenets:
           name as funcName
           public == "true"
           isValid(commText, funcName)
-          
