@@ -26,6 +26,7 @@ func ReadDotLingo(ctx *cli.Context) (string, error) {
 	return string(dotlingo), nil
 }
 
+// TODO: variadic fan in - read only
 func ErrFanIn(err1c, err2c chan error) chan error {
 	errc := make(chan error)
 	go func() {
