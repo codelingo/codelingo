@@ -33,13 +33,11 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	replyc, runErrc, cancel, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
+	replyc, runErrc, _, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
 	util.Logger.Debug("...request to flow server sent. Received reply channel.")
-
-	_ = cancel
 
 	issuec := make(chan proto.Message)
 	errc := make(chan error)

@@ -37,7 +37,7 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 	}
 
 	// TODO: send setter chan higher
-	replyc, _, setterErrc := splitSetters(allReplyc, rpcReqC)
+	replyc, _, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
 
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
 	return itemc, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
@@ -95,10 +95,10 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 	return itemc, errc
 }
 
-// splitSetters puts user variable setters on their own channel
-func splitSetters(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *Setter, chan error) {
+// fanOutUserVars puts user variable setters on their own channel
+func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *UserVar, chan error) {
 	outgoingc := make(chan *grpcflow.Reply)
-	clientsetterc := make(chan *Setter)
+	clientsetterc := make(chan *UserVar)
 	errc := make(chan error)
 
 	go func() {
@@ -133,19 +133,4 @@ func splitSetters(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.
 	}()
 
 	return outgoingc, clientsetterc, errc
-}
-
-// A Setter allows users and other external agents to set variable values while a query
-// is being executed.
-// TODO: setter code is copied from the Platform
-type Setter struct {
-	VarC         chan<- string
-	Name         string
-	DefaultValue string
-}
-
-// SetAsDefault sets the variable to its default value
-func (s *Setter) SetAsDefault() {
-	s.VarC <- s.DefaultValue
-	close(s.VarC)
 }
