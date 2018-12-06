@@ -16,7 +16,6 @@ import (
 )
 
 func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {
-
 	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
@@ -24,25 +23,34 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 		return nil, nil, nil, errors.Trace(err)
 	}
 
-	rpcReq := &grpcflow.Request{
-		Flow:    flowName,
-		Payload: payload,
-	}
+	rpcReqC := make(chan *grpcflow.Request)
+	go func() {
+		rpcReqC <- &grpcflow.Request{
+			Flow:    flowName,
+			Payload: payload,
+		}
+	}()
 
-	replyc, runErrc, err := Request(ctx, rpcReq)
+	allReplyc, runErrc, err := Request(ctx, rpcReqC)
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
 
+	// TODO: send setter chan higher
+	replyc, _, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
+
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
-	return itemc, ErrFanIn(runErrc, marshalErrc), cancel, nil
+	return itemc, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }
 
-func Request(ctx context.Context, req *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {
+func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {
+	util.Logger.Debug("opening connection to flow server ...")
 	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, true)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
+	util.Logger.Debug("...connection to flow server opened")
+
 	c := client.NewFlowClient(conn)
 
 	// Create context with metadata
@@ -51,7 +59,7 @@ func Request(ctx context.Context, req *grpcflow.Request) (chan *grpcflow.Reply, 
 		return nil, nil, errors.Trace(err)
 	}
 
-	replyc, runErrc, err := c.Run(ctx, req)
+	replyc, runErrc, err := c.Run(ctx, reqC)
 	return replyc, runErrc, errors.Trace(err)
 }
 
@@ -85,4 +93,44 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 	}()
 
 	return itemc, errc
+}
+
+// fanOutUserVars puts user variable setters on their own channel
+func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *UserVar, chan error) {
+	outgoingc := make(chan *grpcflow.Reply)
+	clientsetterc := make(chan *UserVar)
+	errc := make(chan error)
+
+	go func() {
+		defer func() {
+			close(outgoingc)
+			close(clientsetterc)
+			close(errc)
+			close(flowsetterc)
+		}()
+
+		for msg := range incoming {
+			setter := &grpcflow.UserVariableSetter{}
+			err := ptypes.UnmarshalAny(msg.Payload, setter)
+			if err == nil {
+				// Currently immediately sets the variable to its default value
+				// TODO: pass setter along the chan
+				inner, err := ptypes.MarshalAny(&grpcflow.UserVariableValue{
+					Value: setter.Default,
+					Id:    setter.Id,
+				})
+				if err != nil {
+					errc <- errors.Trace(err)
+				}
+
+				flowsetterc <- &grpcflow.Request{
+					Payload: inner,
+				}
+			} else {
+				outgoingc <- msg
+			}
+		}
+	}()
+
+	return outgoingc, clientsetterc, errc
 }

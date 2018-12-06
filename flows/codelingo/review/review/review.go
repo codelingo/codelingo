@@ -9,11 +9,10 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/util"
-	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	"github.com/codelingo/rpc/flow"
-	"github.com/codelingo/rpc/flow/client"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 	"github.com/urfave/cli"
@@ -21,16 +20,9 @@ import (
 
 func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, chan error, error) {
 	defer util.Logger.Sync()
-	util.Logger.Debug("opening connection to flow server ...")
-	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, insecure)
-	if err != nil {
-		return nil, nil, errors.Trace(err)
-	}
-	util.Logger.Debug("...connection to flow server opened")
-	c := client.NewFlowClient(conn)
 
 	// Create context with metadata
-	ctx, err = grpcclient.AddUsernameToCtx(ctx)
+	ctx, err := grpcclient.AddUsernameToCtx(ctx)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
@@ -41,7 +33,7 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	replyc, runErrc, err := c.Run(ctx, &flow.Request{Flow: "review", Payload: payload})
+	replyc, runErrc, _, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
@@ -60,7 +52,9 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 	}()
 
 	go func() {
-		for reply := range replyc {
+		for genericReply := range replyc {
+			reply := genericReply.(*flow.Reply)
+
 			if reply.IsHeartbeat {
 				continue
 			}
