@@ -2,7 +2,6 @@ package flow
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
 
@@ -17,7 +16,6 @@ import (
 )
 
 func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {
-
 	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
@@ -39,17 +37,20 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 	}
 
 	// TODO: send setter chan higher
-	replyc, _, setterErrc := SplitSetters(allReplyc, rpcReqC)
+	replyc, _, setterErrc := splitSetters(allReplyc, rpcReqC)
 
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
 	return itemc, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }
 
 func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {
+	util.Logger.Debug("opening connection to flow server ...")
 	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, true)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
+	util.Logger.Debug("...connection to flow server opened")
+
 	c := client.NewFlowClient(conn)
 
 	// Create context with metadata
@@ -58,7 +59,7 @@ func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow
 		return nil, nil, errors.Trace(err)
 	}
 
-	replyc, runErrc, err := c.Run(ctx, reqC, nil)
+	replyc, runErrc, err := c.Run(ctx, reqC)
 	return replyc, runErrc, errors.Trace(err)
 }
 
@@ -94,16 +95,19 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 	return itemc, errc
 }
 
-// SplitSetters puts user variable setters on their own channel
-func SplitSetters(incoming <-chan *grpcflow.Reply, flowsetterc chan *grpcflow.Request) (chan *grpcflow.Reply, <-chan *Setter, chan error) {
+// splitSetters puts user variable setters on their own channel
+func splitSetters(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *Setter, chan error) {
 	outgoingc := make(chan *grpcflow.Reply)
 	clientsetterc := make(chan *Setter)
 	errc := make(chan error)
 
 	go func() {
-		defer close(outgoingc)
-		defer close(clientsetterc)
-		defer close(errc)
+		defer func() {
+			close(outgoingc)
+			close(clientsetterc)
+			close(errc)
+			close(flowsetterc)
+		}()
 
 		for msg := range incoming {
 			setter := &grpcflow.UserVariableSetter{}
@@ -119,12 +123,10 @@ func SplitSetters(incoming <-chan *grpcflow.Reply, flowsetterc chan *grpcflow.Re
 					errc <- errors.Trace(err)
 				}
 
-				fmt.Println("setting value of", setter.Name, "to", setter.Default)
 				flowsetterc <- &grpcflow.Request{
 					Payload: inner,
 				}
 			} else {
-				fmt.Println("GOT ERROR")
 				outgoingc <- msg
 			}
 		}
