@@ -116,7 +116,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e68fc49dcf918725ffe15ee3619ca805f27330c07ffc59cd6e93c6c7a9f17ec4"
+  digest = "1:024ce54277643551252894c93b614769d36280f0e120488f8e4178dcc35cc184"
   name = "github.com/codelingo/rpc"
   packages = [
     "flow",
@@ -124,7 +124,7 @@
     "service",
   ]
   pruneopts = "UT"
-  revision = "7b2791905445e15a2ddb59ee823eb8c6d44a52a9"
+  revision = "f39e23524fe300b14877d7e18e4113ce66185d9b"
 
 [[projects]]
   branch = "master"
