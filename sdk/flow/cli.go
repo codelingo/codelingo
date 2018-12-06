@@ -40,7 +40,7 @@ type flowRunner struct {
 
 type CLIApp struct {
 	cli.App
-	Request func(*cli.Context) (chan proto.Message, chan error, func(), error)
+	Request func(*cli.Context) (chan proto.Message, <-chan *UserVar, chan error, func(), error)
 
 	// Help data
 	Tagline string
@@ -218,10 +218,16 @@ func (f *flowRunner) command(ctx *cli.Context) (err error) {
 	}()
 	defer wg.Done()
 
-	resultc, errc, cancel, err := f.RunCLI()
+	resultc, userVarC, errc, cancel, err := f.RunCLI()
 	if err != nil {
 		return errors.Trace(err)
 	}
+
+	go func() {
+		for v := range userVarC {
+			v.Set("as some val")
+		}
+	}()
 
 	// If user is manually confirming results, set a long timeout.
 	timeout := time.After(time.Hour * 1)
@@ -304,15 +310,15 @@ func (f *flowRunner) CliCtx() (*cli.Context, error) {
 }
 
 // TODO(waicmdgani) move this to codelingo/sdk/flow
-func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
+func (f *flowRunner) RunCLI() (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, err := f.CliCtx()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 	if ctx.Bool("debug") {
 		err := util.SetDebugLogger()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 	}
 

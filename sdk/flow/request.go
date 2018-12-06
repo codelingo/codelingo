@@ -37,14 +37,7 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
-	// TODO: send setter chan higher
 	replyc, userVarC, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
-	go func() {
-		for v := range userVarC {
-			v.Set("no memes plz")
-		}
-	}()
-
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
 	return itemc, userVarC, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }

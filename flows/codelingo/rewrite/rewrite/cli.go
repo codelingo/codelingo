@@ -67,11 +67,11 @@ func rewriteRequire() error {
 	return nil
 }
 
-func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), error) {
+func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.UserVar, chan error, func(), error) {
 	err := rewriteRequire()
 	if err != nil {
 		util.FatalOSErr(err)
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
 	defer util.Logger.Sync()
@@ -81,56 +81,56 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(),
 	dir := cliCtx.String("directory")
 	if dir != "" {
 		if err := os.Chdir(dir); err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 	}
 
 	dotlingo, err := flowutil.ReadDotLingo(cliCtx)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 	vcsType, repo, err := vcs.New()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	// TODO: replace this system with nfs-like communication.
 	fmt.Println("Syncing your repo...")
 	if err = vcs.SyncRepo(vcsType, repo); err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	owner, name, err := repo.OwnerAndNameFromRemote()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	sha, err := repo.CurrentCommitId()
 	if err != nil {
 		if flowutil.NoCommitErr(err) {
-			return nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
+			return nil, nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
 		}
 
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	patches, err := repo.Patches()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	workingDir, err := repo.WorkingDir()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	cfg, err := config.Platform()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 	vcsTypeStr, err := vcs.TypeToString(vcsType)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	req := &rewriterpc.Request{
@@ -145,11 +145,11 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(),
 	case vcsGit:
 		addr, err := cfg.GitServerAddr()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 		hostname, err := cfg.GitRemoteName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 
 		req.Host = addr
@@ -158,15 +158,15 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(),
 	case vcsP4:
 		addr, err := cfg.P4ServerAddr()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 		hostname, err := cfg.P4RemoteName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 		depot, err := cfg.P4RemoteDepotName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 		name = owner + "/" + name
 
@@ -175,7 +175,7 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(),
 		req.OwnerOrDepot = &rewriterpc.Request_Depot{depot}
 		req.Repo = name
 	default:
-		return nil, nil, nil, errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
+		return nil, nil, nil, nil, errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
 	}
 
 	fmt.Println("Running rewrite flow...")
