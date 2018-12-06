@@ -223,12 +223,6 @@ func (f *flowRunner) command(ctx *cli.Context) (err error) {
 		return errors.Trace(err)
 	}
 
-	go func() {
-		for v := range userVarC {
-			v.Set("as some val")
-		}
-	}()
-
 	// If user is manually confirming results, set a long timeout.
 	timeout := time.After(time.Hour * 1)
 l:
@@ -242,6 +236,13 @@ l:
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
 			return errors.Trace(err)
+		case v, ok := <-userVarC:
+			if !ok {
+				userVarC = nil
+				break
+			}
+
+			v.Set("as top level result")
 		case result, ok := <-resultc:
 			if !ok {
 				resultc = nil
@@ -290,7 +291,7 @@ l:
 			cancel()
 			return errors.New("timed out waiting for issue")
 		}
-		if resultc == nil && errc == nil {
+		if resultc == nil && errc == nil && userVarC == nil {
 			break l
 		}
 	}
