@@ -15,12 +15,13 @@ import (
 	"github.com/juju/errors"
 )
 
-func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {
+// RunFlow calls a given flow on the flow server and marshalls replies as a given type
+func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	rpcReqC := make(chan *grpcflow.Request)
@@ -33,14 +34,19 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 
 	allReplyc, runErrc, err := Request(ctx, rpcReqC)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	// TODO: send setter chan higher
-	replyc, _, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
+	replyc, userVarC, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
+	go func() {
+		for v := range userVarC {
+			v.Set("no memes plz")
+		}
+	}()
 
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
-	return itemc, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
+	return itemc, userVarC, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }
 
 func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {

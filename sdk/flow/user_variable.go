@@ -29,13 +29,13 @@ func (s *UserVar) SetAsDefault() {
 // fanOutUserVars puts user variable setters on their own channel
 func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *UserVar, chan error) {
 	outgoingc := make(chan *grpcflow.Reply)
-	clientsetterc := make(chan *UserVar)
+	userVarc := make(chan *UserVar)
 	errc := make(chan error)
 
 	go func() {
 		defer func() {
 			close(outgoingc)
-			close(clientsetterc)
+			close(userVarc)
 			close(errc)
 			close(flowsetterc)
 		}()
@@ -45,15 +45,13 @@ func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflo
 			err := ptypes.UnmarshalAny(msg.Payload, setRequest)
 			if err == nil {
 				varC := make(chan string)
-				userVar := UserVar{
+				userVar := &UserVar{
 					VarC:         varC,
 					Name:         setRequest.Name,
 					DefaultValue: setRequest.Default,
 				}
 
-				go func() {
-					userVar.SetAsDefault()
-				}()
+				userVarc <- userVar
 
 				// Currently immediately sets the variable to its default value
 				// TODO: pass setter along the chan
@@ -74,5 +72,5 @@ func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflo
 		}
 	}()
 
-	return outgoingc, clientsetterc, errc
+	return outgoingc, userVarc, errc
 }
