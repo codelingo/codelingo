@@ -41,14 +41,25 @@ func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflo
 		}()
 
 		for msg := range incoming {
-			setter := &grpcflow.UserVariableSetter{}
-			err := ptypes.UnmarshalAny(msg.Payload, setter)
+			setRequest := &grpcflow.UserVariableSetter{}
+			err := ptypes.UnmarshalAny(msg.Payload, setRequest)
 			if err == nil {
+				varC := make(chan string)
+				userVar := UserVar{
+					VarC:         varC,
+					Name:         setRequest.Name,
+					DefaultValue: setRequest.Default,
+				}
+
+				go func() {
+					userVar.SetAsDefault()
+				}()
+
 				// Currently immediately sets the variable to its default value
 				// TODO: pass setter along the chan
 				inner, err := ptypes.MarshalAny(&grpcflow.UserVariableValue{
-					Value: setter.Default,
-					Id:    setter.Id,
+					Value: <-varC,
+					Id:    setRequest.Id,
 				})
 				if err != nil {
 					errc <- errors.Trace(err)
