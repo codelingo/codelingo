@@ -7,9 +7,28 @@ funcs:
         var cap = a.charAt(0) >= "A" && a.charAt(0) <= "Z"
         return dot || cap
       }
+  - name: fixErrorFormat
+    type: resolver
+    body: |
+      function(text) {
+        function escapeGoFormat(text) {
+          return text.replace(new RegExp("([\\\"])", "g"), "\\$1")
+        }
+        
+        function surroundWithQuotes(text) {
+          return "\"" + text + "\""
+        }
+        
+        function uncapitalizeFirstLetter(text) {
+          return text.charAt(0).toLowerCase() + text.slice(1);
+        }
+
+        return surroundWithQuotes(escapeGoFormat(uncapitalizeFirstLetter(text)))
+      }
 tenets:
   - name: go-error-fmt
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Go Error Format
         body: |
@@ -35,6 +54,7 @@ tenets:
             name == "Errorf"
         go.args:
           @review comment
+          @rewrite --replace "{{fixErrorFormat(strValue)}}"
           go.basic_lit:
             kind == "string"
             value as strValue
