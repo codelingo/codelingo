@@ -1,6 +1,10 @@
 package flow
 
 import (
+	"bufio"
+	"fmt"
+	"os"
+
 	grpcflow "github.com/codelingo/rpc/flow"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/juju/errors"
@@ -15,15 +19,29 @@ type UserVar struct {
 	DefaultValue string
 }
 
-// Set sets the value of the variable
-func (s *UserVar) Set(val string) {
-	s.VarC <- val
-	close(s.VarC)
+// Set sets a variable from user input
+func (s *UserVar) Set() {
+	fmt.Printf("%s [%s]: ", s.Name, s.DefaultValue)
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		line := scanner.Text()
+		if line != "" {
+			s.set(line)
+			return
+		}
+	}
+	s.SetAsDefault()
 }
 
 // SetAsDefault sets the variable to its default value
 func (s *UserVar) SetAsDefault() {
-	s.Set(s.DefaultValue)
+	s.set(s.DefaultValue)
+}
+
+// Set sets the value of the variable
+func (s *UserVar) set(val string) {
+	s.VarC <- val
+	close(s.VarC)
 }
 
 // fanOutUserVars puts user variable setters on their own channel

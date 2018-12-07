@@ -49,6 +49,7 @@ type CLIApp struct {
 type DecoratorApp struct {
 	cli.App
 	ConfirmDecorated func(*cli.Context, proto.Message) (bool, error)
+	SetUserVar       func(*UserVar)
 
 	// Help info
 	DecoratorUsage   string
@@ -242,7 +243,7 @@ l:
 				break
 			}
 
-			v.Set("as top level result")
+			f.SetUserVar(v)
 		case result, ok := <-resultc:
 			if !ok {
 				resultc = nil
@@ -310,7 +311,6 @@ func (f *flowRunner) CliCtx() (*cli.Context, error) {
 	return f.cliCtx, nil
 }
 
-// TODO(waicmdgani) move this to codelingo/sdk/flow
 func (f *flowRunner) RunCLI() (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, err := f.CliCtx()
 	if err != nil {
@@ -333,6 +333,10 @@ func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (
 	}
 
 	return f.decoratorApp.ConfirmDecorated(ctx, payload)
+}
+
+func (f *flowRunner) SetUserVar(userVar *UserVar) {
+	f.decoratorApp.SetUserVar(userVar)
 }
 
 func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {
