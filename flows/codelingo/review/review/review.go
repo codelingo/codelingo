@@ -27,13 +27,8 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 		return nil, nil, nil, errors.Trace(err)
 	}
 
-	payload, err := ptypes.MarshalAny(req)
-	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
-	}
-
 	util.Logger.Debug("sending request to flow server...")
-	replyc, userVarc, runErrc, _, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
+	replyc, userVarc, runErrc, _, err := flowutil.RunFlow("review", req, func() proto.Message { return &flow.Reply{} })
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
