@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"sync"
-
-	"github.com/golang/protobuf/ptypes"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/util"
@@ -28,54 +25,11 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	replyc, userVarc, runErrc, _, err := flowutil.RunFlow("review", req, func() proto.Message { return &flow.Reply{} })
+	issuec, userVarc, errc, _, err := flowutil.RunFlow("review", req, func() proto.Message { return &flow.Issue{} })
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
 	util.Logger.Debug("...request to flow server sent. Received reply channel.")
-
-	issuec := make(chan proto.Message)
-	errc := make(chan error)
-	wg := sync.WaitGroup{}
-	wg.Add(2)
-
-	go func() {
-		for err := range runErrc {
-			errc <- err
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for genericReply := range replyc {
-			reply := genericReply.(*flow.Reply)
-
-			if reply.IsHeartbeat {
-				continue
-			}
-			if reply.Error != "" {
-				errc <- errors.New(reply.Error)
-				continue
-			}
-
-			issue := &flow.Issue{}
-			err := ptypes.UnmarshalAny(reply.Payload, issue)
-			if err != nil {
-				errc <- err
-				continue
-			}
-
-			issuec <- issue
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		wg.Wait()
-		close(issuec)
-		close(errc)
-	}()
-
 	return issuec, userVarc, errc, nil
 }
 
