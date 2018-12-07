@@ -40,7 +40,7 @@ type flowRunner struct {
 
 type CLIApp struct {
 	cli.App
-	Request func(*cli.Context) (chan proto.Message, chan error, func(), error)
+	Request func(*cli.Context) (chan proto.Message, <-chan *UserVar, chan error, func(), error)
 
 	// Help data
 	Tagline string
@@ -49,6 +49,7 @@ type CLIApp struct {
 type DecoratorApp struct {
 	cli.App
 	ConfirmDecorated func(*cli.Context, proto.Message) (bool, error)
+	SetUserVar       func(*UserVar)
 
 	// Help info
 	DecoratorUsage   string
@@ -218,7 +219,7 @@ func (f *flowRunner) command(ctx *cli.Context) (err error) {
 	}()
 	defer wg.Done()
 
-	resultc, errc, cancel, err := f.RunCLI()
+	resultc, userVarC, errc, cancel, err := f.RunCLI()
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -236,6 +237,13 @@ l:
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
 			return errors.Trace(err)
+		case v, ok := <-userVarC:
+			if !ok {
+				userVarC = nil
+				break
+			}
+
+			f.SetUserVar(v)
 		case result, ok := <-resultc:
 			if !ok {
 				resultc = nil
@@ -284,7 +292,7 @@ l:
 			cancel()
 			return errors.New("timed out waiting for issue")
 		}
-		if resultc == nil && errc == nil {
+		if resultc == nil && errc == nil && userVarC == nil {
 			break l
 		}
 	}
@@ -303,16 +311,15 @@ func (f *flowRunner) CliCtx() (*cli.Context, error) {
 	return f.cliCtx, nil
 }
 
-// TODO(waicmdgani) move this to codelingo/sdk/flow
-func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {
+func (f *flowRunner) RunCLI() (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, err := f.CliCtx()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 	if ctx.Bool("debug") {
 		err := util.SetDebugLogger()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 	}
 
@@ -326,6 +333,10 @@ func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (
 	}
 
 	return f.decoratorApp.ConfirmDecorated(ctx, payload)
+}
+
+func (f *flowRunner) SetUserVar(userVar *UserVar) {
+	f.decoratorApp.SetUserVar(userVar)
 }
 
 func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {

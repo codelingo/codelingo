@@ -59,6 +59,9 @@ var DecoratorApp = &flowutil.DecoratorApp{
 		},
 	},
 	ConfirmDecorated: decoratorAction,
+	SetUserVar: func(v *flowutil.UserVar) {
+		v.Set()
+	},
 	DecoratorUsage:   "[options] <new code>",
 	DecoratorExample: `--prepend --line "// new comment on a Golang function`,
 }

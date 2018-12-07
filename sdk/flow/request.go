@@ -15,12 +15,13 @@ import (
 	"github.com/juju/errors"
 )
 
-func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {
+// RunFlow calls a given flow on the flow server and marshalls replies as a given type
+func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	rpcReqC := make(chan *grpcflow.Request)
@@ -33,14 +34,12 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 
 	allReplyc, runErrc, err := Request(ctx, rpcReqC)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
-	// TODO: send setter chan higher
-	replyc, _, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
-
+	replyc, userVarC, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
 	itemc, marshalErrc := MarshalChan(replyc, newItem)
-	return itemc, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
+	return itemc, userVarC, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }
 
 func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {
@@ -93,44 +92,4 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 	}()
 
 	return itemc, errc
-}
-
-// fanOutUserVars puts user variable setters on their own channel
-func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *UserVar, chan error) {
-	outgoingc := make(chan *grpcflow.Reply)
-	clientsetterc := make(chan *UserVar)
-	errc := make(chan error)
-
-	go func() {
-		defer func() {
-			close(outgoingc)
-			close(clientsetterc)
-			close(errc)
-			close(flowsetterc)
-		}()
-
-		for msg := range incoming {
-			setter := &grpcflow.UserVariableSetter{}
-			err := ptypes.UnmarshalAny(msg.Payload, setter)
-			if err == nil {
-				// Currently immediately sets the variable to its default value
-				// TODO: pass setter along the chan
-				inner, err := ptypes.MarshalAny(&grpcflow.UserVariableValue{
-					Value: setter.Default,
-					Id:    setter.Id,
-				})
-				if err != nil {
-					errc <- errors.Trace(err)
-				}
-
-				flowsetterc <- &grpcflow.Request{
-					Payload: inner,
-				}
-			} else {
-				outgoingc <- msg
-			}
-		}
-	}()
-
-	return outgoingc, clientsetterc, errc
 }
