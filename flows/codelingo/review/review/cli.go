@@ -83,10 +83,10 @@ func reviewRequire() error {
 	return nil
 }
 
-func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), error) {
+func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.UserVar, chan error, func(), error) {
 	err := reviewRequire()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
 	defer util.Logger.Sync()
@@ -96,7 +96,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	dir := cliCtx.String("directory")
 	if dir != "" {
 		if err := os.Chdir(dir); err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 		}
 	}
 
@@ -105,41 +105,41 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 
 	dotlingo, err := ReadDotLingo(cliCtx)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 	vcsType, repo, err := vcs.New()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
 	// TODO: replace this system with nfs-like communication.
 	fmt.Println("Syncing your repo...")
 	if err = vcs.SyncRepo(vcsType, repo); err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
 	owner, name, err := repo.OwnerAndNameFromRemote()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
 	sha, err := repo.CurrentCommitId()
 	if err != nil {
 		if flowutil.NoCommitErr(err) {
-			return nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
+			return nil, nil, nil, nil, errors.New(flowutil.NoCommitErrMsg)
 		}
 
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
 	patches, err := repo.Patches()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 	var patchesSize int64
@@ -152,18 +152,18 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 
 	workingDir, err := repo.WorkingDir()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
 	cfg, err := config.Platform()
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 	vcsTypeStr, err := vcs.TypeToString(vcsType)
 	if err != nil {
-		return nil, nil, nil, errors.Trace(err)
+		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
 
@@ -180,12 +180,12 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	case vcsGit:
 		addr, err := cfg.GitServerAddr()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 
 		}
 		hostname, err := cfg.GitRemoteName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 
 		}
 
@@ -195,17 +195,17 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 	case vcsP4:
 		addr, err := cfg.P4ServerAddr()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 
 		}
 		hostname, err := cfg.P4RemoteName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 
 		}
 		depot, err := cfg.P4RemoteDepotName()
 		if err != nil {
-			return nil, nil, nil, errors.Trace(err)
+			return nil, nil, nil, nil, errors.Trace(err)
 
 		}
 		name = owner + "/" + name
@@ -215,10 +215,10 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), 
 		req.OwnerOrDepot = &flow.ReviewRequest_Depot{depot}
 		req.Repo = name
 	default:
-		return nil, nil, nil, errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
+		return nil, nil, nil, nil, errors.Errorf("Invalid VCS '%s'", vcsTypeStr)
 	}
 
 	fmt.Println("Running review flow...")
-	resultc, errc, err := RequestReview(ctx, req, insecure)
-	return resultc, errc, cancel, errors.Trace(err)
+	resultc, userVarc, errc, err := RequestReview(ctx, req, insecure)
+	return resultc, userVarc, errc, cancel, errors.Trace(err)
 }

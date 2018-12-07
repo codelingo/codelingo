@@ -18,24 +18,24 @@ import (
 	"github.com/urfave/cli"
 )
 
-func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, chan error, error) {
+func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, <-chan *flowutil.UserVar, chan error, error) {
 	defer util.Logger.Sync()
 
 	// Create context with metadata
 	ctx, err := grpcclient.AddUsernameToCtx(ctx)
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	payload, err := ptypes.MarshalAny(req)
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	replyc, runErrc, _, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
+	replyc, userVarc, runErrc, _, err := flowutil.RunFlow("review", payload, func() proto.Message { return &flow.Reply{} })
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 	util.Logger.Debug("...request to flow server sent. Received reply channel.")
 
@@ -81,7 +81,7 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 		close(errc)
 	}()
 
-	return issuec, errc, nil
+	return issuec, userVarc, errc, nil
 }
 
 type ReportStrt struct {

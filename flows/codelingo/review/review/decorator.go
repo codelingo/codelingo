@@ -19,7 +19,9 @@ var DecoratorApp = &flowutil.DecoratorApp{
 		Flags: []cli.Flag{},
 	},
 	ConfirmDecorated: decoratorAction,
-
+	SetUserVar: func(v *flowutil.UserVar) {
+		v.SetAsDefault()
+	},
 	// help info
 	DecoratorUsage:   "<comment>",
 	DecoratorExample: `"this is a review comment"`,
