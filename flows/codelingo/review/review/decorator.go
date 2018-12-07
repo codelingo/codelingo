@@ -20,7 +20,7 @@ var DecoratorApp = &flowutil.DecoratorApp{
 	},
 	ConfirmDecorated: decoratorAction,
 	SetUserVar: func(v *flowutil.UserVar) {
-		v.SetAsDefault()
+		v.Set()
 	},
 	// help info
 	DecoratorUsage:   "<comment>",

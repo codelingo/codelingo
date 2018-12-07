@@ -59,7 +59,9 @@ var DecoratorApp = &flowutil.DecoratorApp{
 		},
 	},
 	ConfirmDecorated: decoratorAction,
-	SetUserVar:       userVarAction,
+	SetUserVar: func(v *flowutil.UserVar) {
+		v.Set()
+	},
 	DecoratorUsage:   "[options] <new code>",
 	DecoratorExample: `--prepend --line "// new comment on a Golang function`,
 }
@@ -114,8 +116,4 @@ func indent(str string, add, remove bool) string {
 		replace = "\n  - "
 	}
 	return strings.Replace(str, "\n", replace, -1)
-}
-
-func userVarAction(userVar *flowutil.UserVar) {
-	userVar.Set()
 }
