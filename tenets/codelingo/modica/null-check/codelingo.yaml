@@ -12,7 +12,7 @@ tenets:
       path(repeat = 0:):
         php.dir:
           pathcontinue
-          php.file
+          php.file:
             any_of:
               @review comment
               php.expr_funccall(depth = any):
