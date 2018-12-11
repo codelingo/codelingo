@@ -9,13 +9,16 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      php.file(depth = any):
-        any_of:
-          @review comment
-          php.expr_funccall(depth = any):
-            php.name_fullyqualified:
-              name == "is_null"
-          @review comment
-          php.expr_funccall(depth = any):
-            php.name:
-              name == "is_null"
+      path(repeat = 0:):
+        php.dir:
+          pathcontinue
+          php.file:
+            any_of:
+              @review comment
+              php.expr_funccall(depth = any):
+                php.name_fullyqualified:
+                  name == "is_null"
+              @review comment
+              php.expr_funccall(depth = any):
+                php.name:
+                  name == "is_null"
