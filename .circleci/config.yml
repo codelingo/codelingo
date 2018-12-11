@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.10
+    working_directory: /go/src/github.com/codelingo/clql
+    steps:
+      - checkout
+      - run: go get -u github.com/golang/dep/cmd/dep
+      - run: dep ensure -v
+      - run: go test $(go list ./flows/... | grep -v /vendor/ | grep -v /syntax_spec)
