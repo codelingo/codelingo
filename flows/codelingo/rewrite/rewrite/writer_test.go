@@ -39,7 +39,7 @@ func (s *cmdSuite) TestNewFile(c *gc.C) {
 
 	newFile := "new_test.go"
 
-	ctx, err := flowutil.NewCtx(DecoratorCMD.Command, "--new-file", newFile, "--new-file-perm", "0755")
+	ctx, err := flowutil.NewCtx(&DecoratorApp.App, "--new-file", newFile, "--new-file-perm", "0755")
 	c.Assert(err, jc.ErrorIsNil)
 
 	results := []*flowutil.DecoratedResult{
