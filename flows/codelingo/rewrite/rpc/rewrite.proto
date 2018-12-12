@@ -40,10 +40,7 @@ package rpc;
 message Request {
     string host = 1;
     string hostname = 2;
-    oneof ownerOrDepot {
-        string owner = 12;
-        string depot= 13;
-    }
+    bool generateComments = 3;
     string repo= 4;
     string sha = 5;
     repeated string Patches = 6;
@@ -52,6 +49,10 @@ message Request {
     string vcs = 9;
     string dotlingo = 10;
     string dir = 11; 
+    oneof ownerOrDepot {
+        string owner = 12;
+        string depot= 13;
+    }
 }
 
 message Hunk {
@@ -59,5 +60,6 @@ message Hunk {
     int32 startOffset =2;
     int32 endOffset =3;
     string SRC =4;
+    string comment =4;
     string decoratorOptions =5;
 }
