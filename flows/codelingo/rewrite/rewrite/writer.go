@@ -76,7 +76,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 				continue
 			}
 
-			fileSRC, err = newFileSRC(ctx, hunk, fileSRC)
+			fileSRC, _, err = newFileSRC(ctx, hunk, fileSRC)
 			if err != nil {
 				return errors.Trace(err)
 			}
@@ -114,11 +114,16 @@ func lineOffsets(src []byte, offset int32) []int32 {
 	return []int32{start, end}
 }
 
-func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, error) {
+type comment struct {
+	content string
+	line    int
+}
+
+func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {
 
 	opts, err := option.New(ctx)
 	if err != nil {
-		return nil, errors.Trace(err)
+		return nil, nil, errors.Trace(err)
 	}
 
 	newSRC := []byte(hunk.SRC)
@@ -202,7 +207,7 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 		fileSRC = append(fileSRC[0:startLineOffsets[1]+1], append(newLineAfter, srcAfterStartLine...)...)
 	}
 
-	return fileSRC, nil
+	return fileSRC, nil, nil
 }
 
 type byOffset []*flowutil.DecoratedResult
