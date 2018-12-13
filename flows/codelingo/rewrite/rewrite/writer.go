@@ -114,100 +114,131 @@ func lineOffsets(src []byte, offset int32) []int32 {
 	return []int32{start, end}
 }
 
+type partitionedFile struct {
+	srcBeforeStartOffset []byte
+	srcAfterStartOffset  []byte
+	srcBeforeEndOffset   []byte
+	srcAfterEndOffset    []byte
+
+	srcBeforeStartLine []byte
+	srcAfterStartLine  []byte
+	srcBeforeEndLine   []byte
+	srcAfterEndLine    []byte
+
+	startLineOffsets []int32
+	endLineOffsets   []int32
+}
+
+func splitSRC(hunk *rewriterpc.Hunk, fileSRC []byte) partitionedFile {
+	startLineOffsets := lineOffsets(fileSRC, hunk.StartOffset)
+	endLineOffsets := lineOffsets(fileSRC, hunk.EndOffset)
+
+	return partitionedFile{
+		srcBeforeStartOffset: fileSRC[0:hunk.StartOffset],
+		srcAfterStartOffset:  fileSRC[hunk.StartOffset+1:],
+		srcBeforeEndOffset:   fileSRC[0 : hunk.EndOffset-1],
+		srcAfterEndOffset:    fileSRC[hunk.EndOffset:],
+
+		srcBeforeStartLine: fileSRC[0:startLineOffsets[0]],
+		srcAfterStartLine:  fileSRC[startLineOffsets[1]+1:],
+		srcBeforeEndLine:   fileSRC[0:endLineOffsets[0]],
+		srcAfterEndLine:    fileSRC[endLineOffsets[1]+1:],
+
+		startLineOffsets: startLineOffsets,
+		endLineOffsets:   endLineOffsets,
+	}
+}
+
 type comment struct {
 	content string
-	line    int
+	// TODO: comments should span multiple lines, but github doesn't allow that https://github.community/t5/How-to-use-Git-and-GitHub/Feature-request-Multiline-reviews-in-pull-requests/m-p/9850#M3225
+	line int
 }
 
 func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {
+	parts := splitSRC(hunk, fileSRC)
 
-	opts, err := option.New(ctx)
+	fileSRC, err := rewriteFile(ctx, fileSRC, []byte(hunk.SRC), parts, hunk)
 	if err != nil {
 		return nil, nil, errors.Trace(err)
 	}
 
-	newSRC := []byte(hunk.SRC)
+	return fileSRC, nil, nil
+}
+
+func rewriteFile(ctx *cli.Context, fileSRC, newSRC []byte, parts partitionedFile, hunk *rewriterpc.Hunk) ([]byte, error) {
+	opts, err := option.New(ctx)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
 	newLine := append(newSRC, '\n')
 	newLineAfter := append([]byte{'\n'}, newSRC...)
-
-	startLineOffsets := lineOffsets(fileSRC, hunk.StartOffset)
-	endLineOffsets := lineOffsets(fileSRC, hunk.EndOffset)
-
-	srcBeforeStartOffset := fileSRC[0:hunk.StartOffset]
-	srcAfterStartOffset := fileSRC[hunk.StartOffset+1:]
-	srcBeforeEndOffset := fileSRC[0 : hunk.EndOffset-1]
-	srcAfterEndOffset := fileSRC[hunk.EndOffset:]
-
-	srcBeforeStartLine := fileSRC[0:startLineOffsets[0]]
-	srcAfterStartLine := fileSRC[startLineOffsets[1]+1:]
-	srcBeforeEndLine := fileSRC[0:endLineOffsets[0]]
-	srcAfterEndLine := fileSRC[endLineOffsets[1]+1:]
 
 	switch {
 	case opts.IsReplace() && opts.IsStartToEndOffset() && opts.IsByte():
 		// replace between start and end bytes
-		fileSRC = append(srcBeforeStartOffset, append(newSRC, srcAfterEndOffset...)...)
+		fileSRC = append(parts.srcBeforeStartOffset, append(newSRC, parts.srcAfterEndOffset...)...)
 
 	case opts.IsReplace() && opts.IsStartOffset() && opts.IsByte():
 		// replace only the start byte
-		fileSRC = append(srcBeforeStartOffset, append(newSRC, fileSRC[hunk.StartOffset+1:]...)...)
+		fileSRC = append(parts.srcBeforeStartOffset, append(newSRC, parts.srcAfterStartOffset...)...)
 
 	case opts.IsReplace() && opts.IsEndOffset() && opts.IsByte():
 		// replace only the end byte
-		fileSRC = append(fileSRC[0:hunk.EndOffset-1], append(newSRC, srcAfterEndOffset...)...)
+		fileSRC = append(parts.srcBeforeEndOffset, append(newSRC, parts.srcAfterEndOffset...)...)
 
 	case opts.IsReplace() && opts.IsStartToEndOffset() && opts.IsLine():
-		fileSRC = append(srcBeforeStartLine, append(newSRC, srcAfterEndLine...)...)
+		fileSRC = append(parts.srcBeforeStartLine, append(newSRC, parts.srcAfterEndLine...)...)
 
 	case opts.IsReplace() && opts.IsStartOffset() && opts.IsLine():
-		fileSRC = append(srcBeforeStartLine, append(newSRC, srcAfterStartLine...)...)
+		fileSRC = append(parts.srcBeforeStartLine, append(newSRC, parts.srcAfterStartLine...)...)
 
 	case opts.IsReplace() && opts.IsEndOffset() && opts.IsLine():
 		// replace whole line
-		fileSRC = append(srcBeforeEndLine, append(newSRC, srcAfterEndLine...)...)
+		fileSRC = append(parts.srcBeforeEndLine, append(newSRC, parts.srcAfterEndLine...)...)
 
 	case opts.IsPrepend() && opts.IsStartToEndOffset() && opts.IsByte():
 		fallthrough
 	case opts.IsPrepend() && opts.IsStartOffset() && opts.IsByte():
 		// insert before startoffset
-		fileSRC = append(srcBeforeStartOffset, append(newSRC, fileSRC[hunk.StartOffset:]...)...)
-
+		// TODO: remove reference to hunk
+		fileSRC = append(parts.srcBeforeStartOffset, append(newSRC, fileSRC[hunk.StartOffset:]...)...)
 	case opts.IsPrepend() && opts.IsEndOffset() && opts.IsByte():
 		// insert before endoffset
-		fileSRC = append(srcBeforeEndOffset, append(newSRC, fileSRC[hunk.EndOffset-1:]...)...)
+		fileSRC = append(parts.srcBeforeEndOffset, append(newSRC, fileSRC[hunk.EndOffset-1:]...)...)
 
 	case opts.IsPrepend() && opts.IsStartToEndOffset() && opts.IsLine():
 		fallthrough
 	case opts.IsPrepend() && opts.IsStartOffset() && opts.IsLine():
 		// insert on new line above startoffset
-		fileSRC = append(srcBeforeStartLine, append(newLine, fileSRC[startLineOffsets[0]:]...)...)
+		fileSRC = append(parts.srcBeforeStartLine, append(newLine, fileSRC[parts.startLineOffsets[0]:]...)...)
 
 	case opts.IsPrepend() && opts.IsEndOffset() && opts.IsLine():
 		// insert on new line above endoffset
-		fileSRC = append(srcBeforeEndLine, append(newLine, fileSRC[endLineOffsets[0]:]...)...)
+		fileSRC = append(parts.srcBeforeEndLine, append(newLine, fileSRC[parts.endLineOffsets[0]:]...)...)
 
 	case opts.IsAppend() && opts.IsStartToEndOffset() && opts.IsByte():
 		fallthrough
 	case opts.IsAppend() && opts.IsEndOffset() && opts.IsByte():
 		// insert after endoffset
-		fileSRC = append(fileSRC[0:hunk.EndOffset], append(newSRC, srcAfterEndOffset...)...)
+		fileSRC = append(fileSRC[0:hunk.EndOffset], append(newSRC, parts.srcAfterEndOffset...)...)
 
 	case opts.IsAppend() && opts.IsStartOffset() && opts.IsByte():
 		// insert after startoffset
-		fileSRC = append(fileSRC[0:hunk.StartOffset+1], append(newSRC, srcAfterStartOffset...)...)
+		fileSRC = append(fileSRC[0:hunk.StartOffset+1], append(newSRC, parts.srcAfterStartOffset...)...)
 
 	case opts.IsAppend() && opts.IsStartToEndOffset() && opts.IsLine():
 		fallthrough
 	case opts.IsAppend() && opts.IsEndOffset() && opts.IsLine():
 		// insert on new line after endoffset
-		fileSRC = append(fileSRC[0:endLineOffsets[1]+1], append(newLineAfter, srcAfterEndLine...)...)
+		fileSRC = append(fileSRC[0:parts.endLineOffsets[1]+1], append(newLineAfter, parts.srcAfterEndLine...)...)
 
 	case opts.IsAppend() && opts.IsStartOffset() && opts.IsLine():
 		// insert on new line after startoffset
-		fileSRC = append(fileSRC[0:startLineOffsets[1]+1], append(newLineAfter, srcAfterStartLine...)...)
+		fileSRC = append(fileSRC[0:parts.startLineOffsets[1]+1], append(newLineAfter, parts.srcAfterStartLine...)...)
 	}
 
-	return fileSRC, nil, nil
+	return fileSRC, nil
 }
 
 type byOffset []*flowutil.DecoratedResult
