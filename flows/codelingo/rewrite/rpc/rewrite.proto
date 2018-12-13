@@ -60,6 +60,6 @@ message Hunk {
     int32 startOffset =2;
     int32 endOffset =3;
     string SRC =4;
-    string comment =4;
-    string decoratorOptions =5;
+    string comment =5;
+    string decoratorOptions =6;
 }
