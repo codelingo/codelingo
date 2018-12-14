@@ -33,6 +33,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 	seenNewFile := make(map[string]bool)
 	var comments []*comment
+	var commentOutputFile string
 
 	for filename, results := range resultMap {
 
@@ -56,6 +57,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 			ctx := result.Ctx
 			hunk := result.Payload.(*rewriterpc.Hunk)
+			commentOutputFile = hunk.CommentOutputFile
 
 			if ctx.IsSet("new-file") {
 
@@ -102,7 +104,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 		}
 
 		// TODO: read filepath from flag
-		err = ioutil.WriteFile("~/.codelingo/latestcomments", output, 0644)
+		err = ioutil.WriteFile(commentOutputFile, output, 0644)
 		if err != nil {
 			return errors.Trace(err)
 		}

@@ -138,8 +138,10 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 	}
 
 	var generateComments bool
+	commentOutputFile := ""
 	if cliCtx.IsSet("dump-comments") {
 		generateComments = true
+		commentOutputFile = cliCtx.String("dump-commments")
 	}
 
 	req := &rewriterpc.Request{
@@ -191,5 +193,9 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 	fmt.Println("Running rewrite flow...")
 
 	// proto.RegisterType((*rewriterpc.Hunk)(nil), "rpc.Hunk")
-	return flowutil.RunFlow("rewrite", req, func() proto.Message { return &rewriterpc.Hunk{} })
+	return flowutil.RunFlow("rewrite", req, func() proto.Message {
+		return &rewriterpc.Hunk{
+			CommentOutputFile: commentOutputFile,
+		}
+	})
 }

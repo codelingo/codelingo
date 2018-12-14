@@ -61,5 +61,7 @@ message Hunk {
     int32 endOffset =3;
     string SRC =4;
     string comment =5;
-    string decoratorOptions =6;
+    // Hack to pass flag from CLIApp to writer
+    string commentOutputFile = 6;
+    string decoratorOptions =7;
 }
