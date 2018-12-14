@@ -171,12 +171,13 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 		}
 
 		// Find updated line in new rewrittenFile
-		for lineNumber, updatedLine := range rewrittenFile {
+		commentedLines := strings.Split(string(commentedSRC), "\n")
+		for lineNumber, updatedLine := range strings.Split(string(rewrittenFile), "\n") {
 			if len(commentedSRC) <= lineNumber {
 				return nil, nil, errors.New("reached end of commented file before finding updated line")
 			}
 
-			commentedLine := commentedSRC[lineNumber]
+			commentedLine := commentedLines[lineNumber]
 			if updatedLine != commentedLine {
 				c = &comment{
 					content: string(commentedLine),
