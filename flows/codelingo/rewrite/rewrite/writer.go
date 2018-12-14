@@ -1,6 +1,7 @@
 package rewrite
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -31,6 +32,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 	}
 
 	seenNewFile := make(map[string]bool)
+	var comments []*comment
 
 	for filename, results := range resultMap {
 
@@ -76,11 +78,14 @@ func Write(results []*flowutil.DecoratedResult) error {
 				continue
 			}
 
-			fileSRC, _, err = newFileSRC(ctx, hunk, fileSRC)
+			var comment *comment
+			fileSRC, comment, err = newFileSRC(ctx, hunk, fileSRC)
 			if err != nil {
 				return errors.Trace(err)
 			}
 
+			comment.Path = fullPath
+			comments = append(comments, comment)
 		}
 
 		if err := ioutil.WriteFile(fullPath, []byte(fileSRC), 0644); err != nil {
@@ -88,6 +93,19 @@ func Write(results []*flowutil.DecoratedResult) error {
 		}
 		fmt.Printf("%d modifications made to file %s\n", i+1, fullPath)
 
+	}
+
+	if len(comments) > 0 {
+		output, err := json.Marshal(comments)
+		if err != nil {
+			return errors.Trace(err)
+		}
+
+		// TODO: read filepath from flag
+		err = ioutil.WriteFile("~/.codelingo/latestcomments", output, 0644)
+		if err != nil {
+			return errors.Trace(err)
+		}
 	}
 
 	return nil
@@ -150,9 +168,10 @@ func splitSRC(hunk *rewriterpc.Hunk, fileSRC []byte) partitionedFile {
 }
 
 type comment struct {
-	content string
+	Content string `json:"content"`
 	// TODO: comments should span multiple lines, but github doesn't allow that https://github.community/t5/How-to-use-Git-and-GitHub/Feature-request-Multiline-reviews-in-pull-requests/m-p/9850#M3225
-	line int
+	Line int    `json:"line"`
+	Path string `json:"path"`
 }
 
 func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {
@@ -180,8 +199,8 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			commentedLine := commentedLines[lineNumber]
 			if updatedLine != commentedLine {
 				c = &comment{
-					content: string(commentedLine),
-					line:    lineNumber,
+					Content: string(commentedLine),
+					Line:    lineNumber,
 				}
 				break
 			}
