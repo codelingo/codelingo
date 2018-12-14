@@ -56,6 +56,11 @@ type DecoratorApp struct {
 	DecoratorExample string
 }
 
+// NewFlow creates a flowRunner from a CLIApp.
+// For flows that query the flow server it overrides the action with command function, which
+// runs the cliApp's Request function and listens on the channels it returns.
+// TODO: move away from flowRunner model by explicitly defining the command function as the
+// action in the flow.
 func NewFlow(cliApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {
 
 	// setBaseApp overrides Action with the help action. We don't want this
@@ -190,6 +195,10 @@ func setBaseApp(cliApp *CLIApp) {
 
 // TODO(waigani) incorrect usage func
 
+// Run runs the CLI app. We assume that cliApp's uses f.command as its action to query
+// the flow server and stream back decorated/confirmed results on f.decoratedResultc.
+// Special cliApps that don't use the flow server have their own custom actions, in which
+// case the chans returned from here will not be closed.
 func (f *flowRunner) Run() (chan *DecoratedResult, chan error) {
 
 	go func() {

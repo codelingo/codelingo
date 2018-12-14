@@ -50,6 +50,10 @@ var CLIApp = &flowutil.CLIApp{
 				Name:  "debug",
 				Usage: "Display debug messages",
 			},
+			cli.StringFlag{
+				Name:  "dump-comments, g",
+				Usage: "Output JSON dump of interactive comments to a given file.",
+			},
 		},
 	},
 	Request: rewriteAction,
@@ -133,13 +137,19 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 		return nil, nil, nil, nil, errors.Trace(err)
 	}
 
+	var generateComments bool
+	if cliCtx.IsSet("dump-comments") {
+		generateComments = true
+	}
+
 	req := &rewriterpc.Request{
-		Repo:     name,
-		Sha:      sha,
-		Patches:  patches,
-		Vcs:      vcsTypeStr,
-		Dir:      workingDir,
-		Dotlingo: dotlingo,
+		Repo:             name,
+		Sha:              sha,
+		Patches:          patches,
+		Vcs:              vcsTypeStr,
+		Dir:              workingDir,
+		Dotlingo:         dotlingo,
+		GenerateComments: generateComments,
 	}
 	switch vcsTypeStr {
 	case vcsGit:
