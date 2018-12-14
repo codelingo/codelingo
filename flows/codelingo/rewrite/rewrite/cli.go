@@ -51,8 +51,8 @@ var CLIApp = &flowutil.CLIApp{
 				Usage: "Display debug messages",
 			},
 			cli.StringFlag{
-				Name:  "github-comments, g",
-				Usage: "Output JSON dump of interactive github comments to a given file.",
+				Name:  "dump-comments, g",
+				Usage: "Output JSON dump of interactive comments to a given file.",
 			},
 		},
 	},
@@ -138,7 +138,7 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 	}
 
 	var generateComments bool
-	if cliCtx.IsSet("github-comments") {
+	if cliCtx.IsSet("dump-comments") {
 		generateComments = true
 	}
 
