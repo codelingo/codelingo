@@ -3,20 +3,18 @@ package flow
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes"
-
-	"github.com/golang/protobuf/proto"
-
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	grpcflow "github.com/codelingo/rpc/flow"
 	"github.com/codelingo/rpc/flow/client"
+	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/juju/errors"
 )
 
 // RunFlow calls a given flow on the flow server and marshalls replies as a given type
-func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
+func RunFlow(flowName string, req proto.Message, newItem func() proto.Message, setDefaults func(proto.Message) proto.Message) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
 	ctx, cancel := util.UserCancelContext(context.Background())
 
 	payload, err := ptypes.MarshalAny(req)
@@ -38,7 +36,7 @@ func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (
 	}
 
 	replyc, userVarC, setterErrc := fanOutUserVars(allReplyc, rpcReqC)
-	itemc, marshalErrc := MarshalChan(replyc, newItem)
+	itemc, marshalErrc := MarshalChan(replyc, newItem, setDefaults)
 	return itemc, userVarC, ErrFanIn(ErrFanIn(runErrc, marshalErrc), setterErrc), cancel, nil
 }
 
@@ -62,7 +60,7 @@ func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow
 	return replyc, runErrc, errors.Trace(err)
 }
 
-func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (chan proto.Message, chan error) {
+func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message, setDefaults func(proto.Message) proto.Message) (chan proto.Message, chan error) {
 	itemc := make(chan proto.Message)
 	errc := make(chan error)
 
@@ -84,6 +82,8 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (cha
 				errc <- err
 				continue
 			}
+
+			item = setDefaults(item)
 
 			itemc <- item
 		}

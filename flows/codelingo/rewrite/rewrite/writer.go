@@ -97,7 +97,8 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 	}
 
-	if len(comments) > 0 {
+	if commentOutputFile != "" && len(comments) > 0 {
+		fmt.Println("writing file to", commentOutputFile)
 		output, err := json.Marshal(comments)
 		if err != nil {
 			return errors.Trace(err)

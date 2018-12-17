@@ -25,7 +25,9 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	issuec, userVarc, errc, _, err := flowutil.RunFlow("review", req, func() proto.Message { return &flow.Issue{} })
+	issuec, userVarc, errc, _, err := flowutil.RunFlow("review", req,
+		func() proto.Message { return &flow.Issue{} },
+		func(m proto.Message) proto.Message { return m })
 	if err != nil {
 		return nil, nil, nil, errors.Trace(err)
 	}
