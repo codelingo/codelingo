@@ -83,9 +83,7 @@ func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message, setD
 				continue
 			}
 
-			item = setDefaults(item)
-
-			itemc <- item
+			itemc <- setDefaults(item)
 		}
 		close(errc)
 		close(itemc)
