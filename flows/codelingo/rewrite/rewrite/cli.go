@@ -51,7 +51,7 @@ var CLIApp = &flowutil.CLIApp{
 				Usage: "Display debug messages",
 			},
 			cli.StringFlag{
-				Name:  "dump-comments, g",
+				Name:  "dump-comments, c",
 				Usage: "Output JSON dump of interactive comments to a given file.",
 			},
 		},
@@ -138,8 +138,10 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 	}
 
 	var generateComments bool
+	commentOutputFile := ""
 	if cliCtx.IsSet("dump-comments") {
 		generateComments = true
+		commentOutputFile = cliCtx.String("dump-comments")
 	}
 
 	req := &rewriterpc.Request{
@@ -190,6 +192,12 @@ func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Us
 
 	fmt.Println("Running rewrite flow...")
 
-	// proto.RegisterType((*rewriterpc.Hunk)(nil), "rpc.Hunk")
-	return flowutil.RunFlow("rewrite", req, func() proto.Message { return &rewriterpc.Hunk{} })
+	return flowutil.RunFlow("rewrite", req,
+		func() proto.Message { return &rewriterpc.Hunk{} },
+		func(unmarshalled proto.Message) proto.Message {
+			hunk := unmarshalled.(*rewriterpc.Hunk)
+			hunk.CommentOutputFile = commentOutputFile
+			return hunk
+		},
+	)
 }

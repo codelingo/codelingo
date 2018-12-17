@@ -33,6 +33,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 	seenNewFile := make(map[string]bool)
 	var comments []*comment
+	var commentOutputFile string
 
 	for filename, results := range resultMap {
 
@@ -56,6 +57,7 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 			ctx := result.Ctx
 			hunk := result.Payload.(*rewriterpc.Hunk)
+			commentOutputFile = hunk.CommentOutputFile
 
 			if ctx.IsSet("new-file") {
 
@@ -95,14 +97,15 @@ func Write(results []*flowutil.DecoratedResult) error {
 
 	}
 
-	if len(comments) > 0 {
+	if commentOutputFile != "" && len(comments) > 0 {
+		fmt.Println("writing file to", commentOutputFile)
 		output, err := json.Marshal(comments)
 		if err != nil {
 			return errors.Trace(err)
 		}
 
 		// TODO: read filepath from flag
-		err = ioutil.WriteFile("~/.codelingo/latestcomments", output, 0644)
+		err = ioutil.WriteFile(commentOutputFile, output, 0644)
 		if err != nil {
 			return errors.Trace(err)
 		}
@@ -200,7 +203,7 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			if updatedLine != commentedLine {
 				c = &comment{
 					Content: string(commentedLine),
-					Line:    lineNumber,
+					Line:    lineNumber + 1,
 				}
 				break
 			}
