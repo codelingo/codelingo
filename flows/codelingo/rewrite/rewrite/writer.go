@@ -202,14 +202,19 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			commentedLine := commentedLines[lineNumber]
 			if updatedLine != commentedLine {
 				c = &comment{
-					Content: string(commentedLine),
-					Line:    lineNumber,
+					Content: fullSuggestion(string(commentedLine)),
+					Line:    lineNumber + 1,
 				}
 				break
 			}
 		}
 	}
 	return rewrittenFile, c, nil
+}
+
+// TODO: add review/rewrite comment to template
+func fullSuggestion(newContent string) string {
+	return fmt.Sprintf("```suggestion\n%s\n```\nEdit the suggestion to use an alternative", newContent)
 }
 
 func rewriteFile(ctx *cli.Context, inputSRC, newSRC []byte, parts partitionedFile, hunk *rewriterpc.Hunk) ([]byte, error) {
