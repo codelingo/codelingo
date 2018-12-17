@@ -97,7 +97,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a82d56e2e856ac6247acb3ad3066ee3227e83cc7492cb882f270e38d674bb454"
+  digest = "1:1a5ac00623e34f7f6a2293aaf55ff3f105760c513fe3f6cceef2e83e079a117b"
   name = "github.com/codelingo/lingo"
   packages = [
     "app/commands/verify",
@@ -112,7 +112,7 @@
     "vcs/p4",
   ]
   pruneopts = "UT"
-  revision = "fc18bb8b8a83c483aa58606f0695de1e1cd55f1b"
+  revision = "299656113649d54923cc9b6c0872248c115450dd"
 
 [[projects]]
   branch = "master"
