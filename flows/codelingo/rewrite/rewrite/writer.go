@@ -86,8 +86,10 @@ func Write(results []*flowutil.DecoratedResult) error {
 				return errors.Trace(err)
 			}
 
-			comment.Path = fullPath
-			comments = append(comments, comment)
+			if comment != nil {
+				comment.Path = fullPath
+				comments = append(comments, comment)
+			}
 		}
 
 		if err := ioutil.WriteFile(fullPath, []byte(fileSRC), 0644); err != nil {
