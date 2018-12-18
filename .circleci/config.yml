@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.10
-    working_directory: /go/src/github.com/codelingo/clql
+    working_directory: /go/src/github.com/codelingo/codelingo
     steps:
       - checkout
       - run: go get -u github.com/golang/dep/cmd/dep
