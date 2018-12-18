@@ -8,4 +8,4 @@ jobs:
       - checkout
       - run: go get -u github.com/golang/dep/cmd/dep
       - run: dep ensure -v
-      - run: go test $(go list ./flows/... | grep -v /vendor/ | grep -v /syntax_spec)
+      - run: go test $(go list ./... 2>/dev/null  | grep -v /tenets/ | grep -v /vendor)
