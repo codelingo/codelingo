@@ -2,7 +2,7 @@ tenets:
   - name: package-comment
     flows:
       codelingo/docs:
-        title: Package comment
+        title: Package Comment
         body: |
           Every package should have a package comment, a block comment preceding the package clause. 
           For multi-file packages, the package comment only needs to be present in one file, and any one will do. 
