@@ -348,6 +348,35 @@ func (f *flowRunner) SetUserVar(userVar *UserVar) {
 	f.decoratorApp.SetUserVar(userVar)
 }
 
+// DecoratorArgs parses a decorator string and returns the CLI arguments
+func DecoratorArgs(decStr string) []string {
+	return strings.Split(decStr, " ")[1:]
+}
+
+// ParseArgs formats args for urfave/cli
+// urfave/cli doesn't distinguish between literal and variable args e.g. "this
+// arg" vs thisArg. "this arg" gets parsed as two args. The function below
+// takes all args as the input. The cli lib pads {} chars which we undo below.
+// A better cli lib should be used.
+func ParseArgs(args []string) string {
+	var finalArg string
+	noSpace := map[string]bool{
+		"{": true,
+		"}": true,
+	}
+
+	for _, arg := range args {
+
+		finalArg += arg
+
+		if !noSpace[arg] {
+			finalArg += " "
+		}
+
+	}
+	return strings.TrimRight(finalArg, " ")
+}
+
 func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {
 
 	fSet := flag.NewFlagSet(app.Name, flag.ContinueOnError)
