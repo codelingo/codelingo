@@ -348,6 +348,11 @@ func (f *flowRunner) SetUserVar(userVar *UserVar) {
 	f.decoratorApp.SetUserVar(userVar)
 }
 
+// DecoratorArgs parses a decorator string and returns the CLI arguments
+func DecoratorArgs(decStr string) []string {
+	return strings.Split(decStr, " ")[1:]
+}
+
 func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {
 
 	fSet := flag.NewFlagSet(app.Name, flag.ContinueOnError)

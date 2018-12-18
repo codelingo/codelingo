@@ -65,3 +65,28 @@ var decoratorCMD = &DecoratorApp{
 		},
 	},
 }
+
+func (s *flowSuite) TestDecoratorArgs(c *gc.C) {
+	for _, test := range decoratorArgsTest {
+		result := DecoratorArgs(test.input)
+		c.Assert(result, jc.DeepEquals, test.expected)
+	}
+}
+
+var decoratorArgsTest = []struct {
+	input    string
+	expected []string
+}{
+	{
+		input:    "review -f -someflag",
+		expected: []string{"-f", "-someflag"},
+	},
+	{
+		input:    "review -f \"{{something}}\"",
+		expected: []string{"-f", "\"{{something}}\""},
+	},
+	{
+		input:    `rewrite -r "errors.Errorf(\"{{formatString}})\""`,
+		expected: []string{"-r", `"errors.Errorf(\"{{formatString}})\""`},
+	},
+}
