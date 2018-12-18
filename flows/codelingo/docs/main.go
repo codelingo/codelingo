@@ -32,7 +32,16 @@ var docsApp = &flowutil.CLIApp{
 			cli.StringFlag{
 				Name:  "template, t",
 				Value: "default",
-				Usage: "The template file to use when generating docs.",
+				Usage: `
+The template file to use when generating docs. Default template:
+
+			# Contributor Guide
+			{{range .}}
+			## {{.title}}
+			{{.body}}
+			{{end}}
+			
+`[1:],
 			},
 			cli.StringFlag{
 				Name:  "format, f",
