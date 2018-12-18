@@ -1,5 +1,8 @@
 tenets:
   - name: sprintf-error
+    vars:
+      newline: |
+        errors.Errorf("{{formatString}}")
     flows:
       codelingo/rewrite:
       codelingo/docs:
@@ -12,15 +15,14 @@ tenets:
       import codelingo/ast/go
   
       @review comment
+      @rewrite -r "{{newline}}"
       go.call_expr(depth = any):
         go.selector_expr:
           go.ident:
             name == "errors"
-          @rewrite -r "Errorf"
           go.ident:
             name == "New"
         go.args:
-          @rewrite -r "\"{{formatString}}\""
           go.call_expr:
             go.selector_expr:
               go.ident:
