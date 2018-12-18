@@ -9,7 +9,7 @@ tenets:
   - name: use-crypto-rand
     flows:
       codelingo/docs:
-        title: Use Crypto rand
+        title: Use Crypto Rand
         body: |
           Do not use package math/rand to generate keys, even 
           throwaway ones. Unseeded, the generator is completely predictable. 
