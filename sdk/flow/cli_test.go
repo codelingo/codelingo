@@ -40,8 +40,8 @@ var cliCMD = &CLIApp{
 			},
 		},
 	},
-	Request: func(*cli.Context) (chan proto.Message, chan error, func(), error) {
-		return nil, nil, nil, nil
+	Request: func(*cli.Context) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
+		return nil, nil, nil, nil, nil
 	},
 }
 
