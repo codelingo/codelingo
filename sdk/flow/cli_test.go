@@ -90,3 +90,20 @@ var decoratorArgsTest = []struct {
 		expected: []string{"-r", `"errors.Errorf(\"{{formatString}})\""`},
 	},
 }
+
+func (s *flowSuite) TestParseArgs(c *gc.C) {
+	for _, test := range parseArgsTest {
+		result := ParseArgs(test.input)
+		c.Assert(result, jc.DeepEquals, test.expected)
+	}
+}
+
+var parseArgsTest = []struct {
+	input    []string
+	expected string
+}{
+	{
+		input:    []string{"-r", `"errors.Errorf(\"{{formatString}})\""`},
+		expected: `-r "errors.Errorf(\"{{formatString}})\""`,
+	},
+}
