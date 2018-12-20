@@ -64,6 +64,8 @@ codelingo:
         hasIssues: false
       comment-first-word-as-subject:
         hasIssues: false
+      comment-first-word-when-empty:
+        hasIssues: false
       good-package-name:
         hasIssues: false
       package-comment:
