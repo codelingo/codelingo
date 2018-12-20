@@ -13,7 +13,7 @@ funcs:
   - name: fixComment
     type: resolver
     body: |
-      function(text, name) {
+      function (text, name) {
         function testre(pat, text) {
           var re = new RegExp(pat)
           return re.test(text)
@@ -88,31 +88,38 @@ funcs:
           return words.join(" ")
         }
         
-        function rewordComment(s, name, commentChar) {
-          var verbs = ["test", "ensure", "replace",
-                       "validate", "demonstrate",
-                       "declare", "check", "retrieve"];
-          var nouns = ["test", "function", "method"];
-          var adjectives = ["various"];
+        var verbs = ["test", "ensure", "replace", "get",
+                     "validate", "demonstrate", "compare",
+                     "declare", "check", "retrieve", "render"];
+        var nouns = ["test", "function", "method"];
+        var adjectives = ["various"];
+
+        function fixLeadingVerb(s) {
+            // Make these replacements before removing from the front
+            verbs.forEach(function(verb) {
+                var pverb = verb + "s"
+                s = s.replace(new RegExp("^" + verb + "s\? +", "i"), pverb + " ")
+
+                adjectives.forEach(function(adjective) {
+                    s = s.replace(new RegExp("^" + pverb + " " + adjective + " ", "i"), pverb + " " + lc(adjective) + " ")
+                })
+            })
+            return s
+        }
         
+        function rewordComment(s, name, commentChar) {
           s = s.replace(new RegExp("^(The|This) " + name + " ", "i"), "")
         
           // Make these replacements before removing from the front
-          verbs.forEach(function(verb) {
-            var pverb = verb + "s"
-            s = s.replace(new RegExp("^" + verb + "s\? +", "i"), pverb + " ")
-        
-            adjectives.forEach(function(adjective) {
-              s = s.replace(new RegExp("^" + pverb + " " + adjective + " ", "i"), pverb + " " + lc(adjective) + " ")
-            })
-          })
+          s = fixLeadingVerb(s)
         
           nouns.forEach(function(noun) {
             s = s.replace(new RegExp("^(This) " + noun + " ", "i"), "")
           })
         
           s = updateOld(s, name)
-          s = s.replace(new RegExp("^" + name + " ?", "i"), "")    // Remove name from start including space if exists
+          s = s.replace(new RegExp("^" + name + "[a-z]* ?", "i"), "")    // Remove name from start including extra alphas and space if exists
+          s = fixLeadingVerb(s)
           s = s.replace(new RegExp("^[a-z]+([A-Z]+[a-z]+)+ "), "") // Remove leading camelCase
           s = s.replace(new RegExp("^([A-Z]+[a-z]+){2,} "), "")    // Remove leading PascalCase. Must come after remove name
           s = s.replace(new RegExp("^This( example)? ", "i"), "")
