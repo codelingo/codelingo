@@ -16,16 +16,16 @@ tenets:
           Consider moving Context to the front.
     query: |
       import codelingo/ast/go
-      
-      go.field_list(depth = any):
-        sibling_order == 0
-        go.field:
-          sibling_order > 0
-          go.names:
-            go.ident
-          @review comment
-          go.selector_expr:
-            go.ident:
-              name == "context"
-            go.ident:
-              name == "Context"
+      go.func_type(depth = any):
+        go.field_list:
+          sibling_order == 0
+          go.field:
+            sibling_order > 0
+            go.names:
+              go.ident
+            @review comment
+            go.selector_expr:
+              go.ident:
+                name == "context"
+              go.ident:
+                name == "Context"
