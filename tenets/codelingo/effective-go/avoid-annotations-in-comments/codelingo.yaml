@@ -5,8 +5,9 @@ funcs:
       function(text) {
         var words = text.split(" ")
         for (var i = 0; i < words.length; i++) {
-          if ((words[i].charAt(0) === "_" && words[i].charAt(words[i].length - 1) === "_") ||
-              (words[i].charAt(0) === "<" && words[i].charAt(words[i].length - 1) === ">")) {
+          if (((words[i].charAt(0) === "_" && words[i].charAt(words[i].length - 1) === "_") || 
+               (words[i].charAt(0) === "<" && words[i].charAt(words[i].length - 1) === ">")) && 
+                words[i].length !== 1) {
             return true
           }
         }
