@@ -4,9 +4,17 @@ import (
 	"fmt"
 )
 
-func F(ctx context.Context, a int)               {}
-func G(b int, ctx context.Context, a int)        {}
-func H(c int, b int, ctx context.Context, a int) {}
+func aFunc(ctx context.Context, a int) {
+	// Do something
+}
+
+func bFunc(b int, ctx context.Context, a int) {
+	// Do something
+}
+
+func cFunc(c int, b int, ctx context.Context, a int) {
+	// Do something
+}
 
 // Don't catch them in structs
 type IsTypeOfParams struct {
