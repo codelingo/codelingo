@@ -103,6 +103,8 @@ codelingo:
         hasIssues: true
       tested:
         hasIssues: false
+      ticker-in-for-switch:
+        hasIssues: false
       todo:
         hasIssues: false
       unconvert:
