@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Method names MUST be declared in camelCase",
+   "Filename": "example.php",
+   "Line": 7,
+   "Snippet": "  }\n\n  function HelloOtherWorld() {\n    print \"another hello\";\n  }"
+  }
+ ]

@@ -1,0 +1,17 @@
+tenets:
+  - name: camel-case-method-name
+    flows:
+      codelingo/docs:
+        title: Camel Case Method Name
+        body: Method names MUST be declared in camelCase
+      codelingo/review:
+        comment: Method names MUST be declared in camelCase
+    query: |
+      import codelingo/ast/php
+
+      php.stmt_class(depth = any):
+        php.stmt_classmethod:
+          @review comment
+          php.identifier:
+            name as methodName
+            regex(/^[A-Z]/, methodName)
