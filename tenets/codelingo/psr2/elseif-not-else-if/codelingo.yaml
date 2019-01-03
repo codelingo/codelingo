@@ -23,6 +23,10 @@ tenets:
       import codelingo/ast/php
 
       @review comment
+      # This does not work as intended.
+      # It removes everything after 'if'
+      # and before closing brace.
+      # Waiting on ability to edit raw file.
       @rewrite --replace "elseif"
       php.stmt_else(depth = any):
         php.stmt_if
