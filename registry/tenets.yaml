@@ -213,6 +213,10 @@ codelingo:
     tenets:
       elseif-not-else-if:
         hasIssues: true
+    tags:
+    - php
+    - psr
+    - psr2
   west:
     description: Tenets written for West
     version: 0.0.0
