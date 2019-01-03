@@ -27,6 +27,10 @@ funcs:
       }
 tenets:
   - name: go-error-fmt
+    vars:
+      default: |
+        {{fixErrorFormat(strValue)}}
+      templateVariableName: funcComment
     flows:
       codelingo/rewrite:
       codelingo/docs:
@@ -54,7 +58,7 @@ tenets:
             name == "Errorf"
         go.args:
           @review comment
-          @rewrite --replace "{{fixErrorFormat(strValue)}}"
+          @rewrite --replace "{{userInput(templateVariableName, default)}}"
           go.basic_lit:
             kind == "string"
             value as strValue
