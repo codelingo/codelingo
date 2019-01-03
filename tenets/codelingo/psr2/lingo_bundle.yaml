@@ -1,0 +1,8 @@
+description: Best practices for PHP from PSR-2.
+version: 0.0.0
+tenets:
+  - elseif-not-else-if
+tags:
+  - php
+  - psr
+  - psr2
