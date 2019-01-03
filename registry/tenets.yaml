@@ -207,6 +207,12 @@ codelingo:
         hasIssues: false
     tags:
       - php
+  psr2:
+    description: Best practices for PHP from PSR-2.
+    version: 0.0.0
+    tenets:
+      elseif-not-else-if:
+        hasIssues: true
   west:
     description: Tenets written for West
     version: 0.0.0
