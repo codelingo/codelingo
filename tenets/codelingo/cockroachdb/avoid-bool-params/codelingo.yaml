@@ -1,4 +1,5 @@
 tenets:
+  - name: avoidBoolParams
   - import: codelingo/go/bool-param
     #
     #   Uncomment this section when we are able to override flows
