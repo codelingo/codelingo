@@ -81,14 +81,15 @@ funcs:
           words[0].split(/([A-Z][a-z]*)/).forEach(function(word) {
             if (word.length < 4) return
             // If start of comment smells like an old name
-            if (lc(word).indexOf(lc(name)) !== -1) {
+            if (lc(word).indexOf(lc(name)) !== -1 ||
+                lc(name).indexOf(lc(word)) !== -1) {
               words[0] = name
             }
           })
           return words.join(" ")
         }
         
-        var verbs = ["test", "ensure", "replace", "get",
+        var verbs = ["test", "ensure", "replace", "get", "start"
                      "validate", "demonstrate", "compare",
                      "declare", "check", "retrieve", "render"];
         var nouns = ["test", "function", "method"];
