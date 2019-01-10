@@ -89,8 +89,8 @@ funcs:
           return words.join(" ")
         }
         
-        var verbs = ["test", "ensure", "replace", "get", "start"
-                     "validate", "demonstrate", "compare", "hook"
+        var verbs = ["test", "ensure", "replace", "get", "start",
+                     "validate", "demonstrate", "compare", "hook",
                      "declare", "check", "retrieve", "render"];
         var nouns = ["test", "function", "method"];
         var adjectives = ["various"];
