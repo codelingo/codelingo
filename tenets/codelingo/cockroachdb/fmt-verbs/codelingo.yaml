@@ -5,6 +5,7 @@ funcs:
       function (str, order) {
         order--
         var matches = str.match(/%[A-Za-z]/g)
+        if (matches == null) return false
         if (matches.length <= order) return false
         var result = matches[order]
         return result === "%v"
