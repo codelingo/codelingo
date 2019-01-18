@@ -4,11 +4,11 @@ class Hello {
       print "hello world!";
   }
 
-  function HelloOtherWorld() {
+  function helloOtherWorldd() {
     print "another hello";
   }
+
+  function andOneMoree() {
+    print "hello";
+  }
 }
-
-helloWorld();
-
-?>
