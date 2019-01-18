@@ -103,6 +103,8 @@ codelingo:
         hasIssues: true
       tested:
         hasIssues: false
+      ticker-in-for-switch:
+        hasIssues: false
       todo:
         hasIssues: false
       unconvert:
@@ -215,6 +217,16 @@ codelingo:
       - php
       - psr
       - psr1
+  psr2:
+    description: Best practices for PHP from PSR-2.
+    version: 0.0.0
+    tenets:
+      elseif-not-else-if:
+        hasIssues: true
+    tags:
+    - php
+    - psr
+    - psr2
   west:
     description: Tenets written for West
     version: 0.0.0

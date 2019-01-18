@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.",
+   "Filename": "example.php",
+   "Line": 10,
+   "Snippet": "    } elseif ($thing \u003e 5) {\n        print('World');\n    } else if ($thing \u003e 2) {\n        print('!');\n    }\n}"
+  }
+ ]

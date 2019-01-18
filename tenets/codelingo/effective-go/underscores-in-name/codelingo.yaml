@@ -3,6 +3,9 @@ funcs:
     type: asserter
     body: |
       function(name) {
+        if (name.length === 1) {
+          return false
+        }
         return name.indexOf("_") !== -1
       }
   - name: isNotProto
