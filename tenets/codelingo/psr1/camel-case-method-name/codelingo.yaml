@@ -1,0 +1,48 @@
+funcs:
+  - name: isInvalid
+    type: asserter
+    body: |
+      function(methodName) {
+        if (methodName.indexOf("_") !== -1) {
+          return true
+        }
+        if (methodName.charAt(0) >= 'A' && methodName.charAt(0) <= 'Z') {
+          return true
+        }
+        return false
+      }
+  - name: fixName
+    type: resolver
+    body: |
+      function(methodName) {
+        if (methodName.indexOf("_") === -1) {
+          return methodName[0].toLowerCase() + methodName.substring(1)
+        } 
+        methodName = methodName.toLowerCase()
+        var splitName = methodName.split("_")
+        var newName = []
+        newName.push(splitName[0])
+        for (var i = 1; i < splitName.length; i++) {
+          newName.push(splitName[i].charAt(0).toUpperCase() + splitName[i].substring(1))
+        }
+        return newName.join('')
+      }
+tenets:
+  - name: camel-case-method-name
+    flows:
+      codelingo/docs:
+        title: Camel Case Method Name
+        body: Method names MUST be declared in camelCase
+      codelingo/review:
+        comment: Method names MUST be declared in camelCase
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/php
+
+      php.stmt_class(depth = any):
+        php.stmt_classmethod:
+          @rewrite --replace "{{fixName(methodName)}}"
+          @review comment
+          php.identifier:
+            name as methodName
+            isInvalid(methodName)

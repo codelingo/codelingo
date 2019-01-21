@@ -207,6 +207,16 @@ codelingo:
         hasIssues: false
     tags:
       - php
+  psr1:
+    description: Best practices for PHP from PSR-1.
+    version: 0.0.0
+    tenets:
+      camel-case-method-name:
+        hasIssues: false
+    tags:
+      - php
+      - psr
+      - psr1
   psr2:
     description: Best practices for PHP from PSR-2.
     version: 0.0.0
