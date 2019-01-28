@@ -421,7 +421,7 @@ dpo	tenets/codelingo/jenkinsx/intformat/src/dpo/dpo.go	/^package dpo$/;"	p
 dpo_test	tenets/codelingo/jenkinsx/intformat/src/dpo/dpoinvalid.go	/^package dpo_test$/;"	p
 e1	tenets/codelingo/go/golint/errors.go	/^	e1 = fmt.Errorf("blah %d", 4) \/\/ MATCH \/error var.*e1.*errFoo\/$/;"	v
 emphasisStyles	flows/codelingo/docs/render/terminal.go	/^var emphasisStyles = [...]string{$/;"	v
-example	tenets/codelingo/go/nil_only_functions/example.go	/^type example struct {$/;"	t
+example	tenets/codelingo/go/nil-only-functions/example.go	/^type example struct {$/;"	t
 exampleFunc	tenets/codelingo/php/phplint/BadExample.php	/^   function exampleFunc() {$/;"	f
 exampleFunc	tenets/codelingo/php/phplint/GoodExample.php	/^    function exampleFunc()$/;"	f
 exported_to_c	tenets/codelingo/go/golint/names.go	/^func exported_to_c() {} \/\/ okay: https:\/\/github.com\/golang\/lint\/issues\/144$/;"	f
@@ -573,7 +573,7 @@ init	util/mdgen/cmd/write.go	/^func init() {$/;"	f
 initConfig	util/mdgen/cmd/root.go	/^func initConfig() {$/;"	f
 inner	tenets/west/default/shadowing/project.cpp	/^    Object* inner;$/;"	m	class:Object	file:
 int	tenets/codelingo/go/golint/unexp-return.go	/^type int struct{}$/;"	t
-intFunc	tenets/codelingo/go/nil_only_functions/example.go	/^func (example) intFunc() error {$/;"	f
+intFunc	tenets/codelingo/go/nil-only-functions/example.go	/^func (example) intFunc() error {$/;"	f
 invalidator	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^var invalidator = "invalid"$/;"	v
 inverse	tenets/codelingo/php/empty-catch-block/test.php	/^function inverse($x) {$/;"	f
 isLingoFile	flows/codelingo/docs/docs/docs.go	/^func isLingoFile(file string) bool {$/;"	f
@@ -635,8 +635,8 @@ main	tenets/codelingo/go/goto/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/goto/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/marshalling/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/marshalling/example.go	/^package main$/;"	p
-main	tenets/codelingo/go/nil_only_functions/example.go	/^func main() {$/;"	f
-main	tenets/codelingo/go/nil_only_functions/example.go	/^package main$/;"	p
+main	tenets/codelingo/go/nil-only-functions/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/go/nil-only-functions/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/println-format-strings/main.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/println-format-strings/main.go	/^package main$/;"	p
 main	tenets/codelingo/go/sprintf/example.go	/^func main() {$/;"	f
@@ -706,7 +706,7 @@ o	tenets/codelingo/go/golint/error-return.go	/^func o() (int, error, int, error)
 offset	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) offset() option {$/;"	f
 offsiteCheck	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^function offsiteCheck($url) {$/;"	f
 oldSRC	flows/codelingo/rewrite/rewrite/writer_test.go	/^var oldSRC string = `$/;"	v
-onlyReturnsNil	tenets/codelingo/go/nil_only_functions/example.go	/^func onlyReturnsNil() error {$/;"	f
+onlyReturnsNil	tenets/codelingo/go/nil-only-functions/example.go	/^func onlyReturnsNil() error {$/;"	f
 oof	tenets/codelingo/jenkinsx/intformat/src/oof/oof.go	/^func oof() {}$/;"	f
 oof	tenets/codelingo/jenkinsx/intformat/src/oof/oof.go	/^package oof$/;"	p
 oofinvalid	tenets/codelingo/jenkinsx/intformat/src/oof/oof_integration_test.go	/^package oofinvalid$/;"	p
@@ -774,14 +774,14 @@ req	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^$req = ne
 requestBundle	flows/codelingo/docs/docs/parse/parse.go	/^func requestBundle(owner, bundleName string) (map[string]string, error) {$/;"	f
 requestDotLingo	flows/codelingo/docs/docs/parse/parse.go	/^func requestDotLingo(owner, bundle, name string) (string, error) {$/;"	f
 resolveImports	flows/codelingo/docs/docs/parse/parse.go	/^func resolveImports(parentQuery *dotlingo.Dotlingo) ([]*dotlingo.Dotlingo, error) {$/;"	f
-returnCallAndNil	tenets/codelingo/go/nil_only_functions/example.go	/^func returnCallAndNil() (int, error) {$/;"	f
-returnMultipleMixed	tenets/codelingo/go/nil_only_functions/example.go	/^func returnMultipleMixed() (*example, error) {$/;"	f
-returnMultipleOnlyNil	tenets/codelingo/go/nil_only_functions/example.go	/^func returnMultipleOnlyNil() (*example, error) {$/;"	f
-returnNilHasComment	tenets/codelingo/go/nil_only_functions/example.go	/^func returnNilHasComment() error {$/;"	f
-returnNonNil	tenets/codelingo/go/nil_only_functions/example.go	/^func returnNonNil() (int, error) {$/;"	f
-returnNum	tenets/codelingo/go/nil_only_functions/example.go	/^func returnNum() int {$/;"	f
-returnPointerAndNil	tenets/codelingo/go/nil_only_functions/example.go	/^func returnPointerAndNil() (*example, error) {$/;"	f
-returnsMixed	tenets/codelingo/go/nil_only_functions/example.go	/^func returnsMixed() error {$/;"	f
+returnCallAndNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnCallAndNil() (int, error) {$/;"	f
+returnMultipleMixed	tenets/codelingo/go/nil-only-functions/example.go	/^func returnMultipleMixed() (*example, error) {$/;"	f
+returnMultipleOnlyNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnMultipleOnlyNil() (*example, error) {$/;"	f
+returnNilHasComment	tenets/codelingo/go/nil-only-functions/example.go	/^func returnNilHasComment() error {$/;"	f
+returnNonNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnNonNil() (int, error) {$/;"	f
+returnNum	tenets/codelingo/go/nil-only-functions/example.go	/^func returnNum() int {$/;"	f
+returnPointerAndNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnPointerAndNil() (*example, error) {$/;"	f
+returnsMixed	tenets/codelingo/go/nil-only-functions/example.go	/^func returnsMixed() error {$/;"	f
 review	flows/codelingo/review/review/checksyntax.go	/^package review$/;"	p
 review	flows/codelingo/review/review/cli.go	/^package review$/;"	p
 review	flows/codelingo/review/review/decorator.go	/^package review$/;"	p
