@@ -203,11 +203,11 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			}
 
 			commentedLine := commentedLines[lineNumber]
-			originalLine := fileSRC[lineNumber]
+			//originalLine := parts[lineNumber]
 			if updatedLine != commentedLine {
 				c = &comment{
 					Content:  string(commentedLine),
-					Original: string(originalLine),
+					Original: string(fileSRC[lineNumber+1]),
 					Line:     lineNumber + 1,
 				}
 				break
