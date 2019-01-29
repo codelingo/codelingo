@@ -182,6 +182,7 @@ type comment struct {
 
 func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {
 	parts := splitSRC(hunk, fileSRC)
+	fileSRClines := strings.Split(string(fileSRC), "\n")
 
 	rewrittenFile, err := rewriteFile(ctx, fileSRC, []byte(hunk.SRC), parts, hunk)
 	if err != nil {
@@ -207,7 +208,7 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			if updatedLine != commentedLine {
 				c = &comment{
 					Content:  string(commentedLine),
-					Original: string(fileSRC),
+					Original: fileSRClines[lineNumber],
 					Line:     lineNumber + 1,
 				}
 				break
