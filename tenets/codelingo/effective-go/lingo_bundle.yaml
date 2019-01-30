@@ -5,7 +5,7 @@ tenets:
   - comment-first-word-as-subject
   - comment-first-word-when-empty
   - good-package-name
-  - package-comment
+  # - package-comment
   - single-method-interface-name
   - underscores-in-name
 tags:
