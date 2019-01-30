@@ -173,7 +173,8 @@ func splitSRC(hunk *rewriterpc.Hunk, fileSRC []byte) partitionedFile {
 }
 
 type comment struct {
-	Content string `json:"content"`
+	Content  string `json:"content"`
+	Original string `json:"original"`
 	// TODO: comments should span multiple lines, but github doesn't allow that https://github.community/t5/How-to-use-Git-and-GitHub/Feature-request-Multiline-reviews-in-pull-requests/m-p/9850#M3225
 	Line int    `json:"line"`
 	Path string `json:"path"`
@@ -181,6 +182,7 @@ type comment struct {
 
 func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {
 	parts := splitSRC(hunk, fileSRC)
+	fileSRClines := strings.Split(string(fileSRC), "\n")
 
 	rewrittenFile, err := rewriteFile(ctx, fileSRC, []byte(hunk.SRC), parts, hunk)
 	if err != nil {
@@ -204,8 +206,9 @@ func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte
 			commentedLine := commentedLines[lineNumber]
 			if updatedLine != commentedLine {
 				c = &comment{
-					Content: string(commentedLine),
-					Line:    lineNumber + 1,
+					Content:  string(commentedLine),
+					Original: fileSRClines[lineNumber],
+					Line:     lineNumber + 1,
 				}
 				break
 			}
