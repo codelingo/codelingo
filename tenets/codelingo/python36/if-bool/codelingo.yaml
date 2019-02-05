@@ -1,0 +1,29 @@
+funcs:
+  - name: trimTabs
+    type: resolver
+    body: |
+      function (someCode) {
+        someCode.replace(/\n\t/, "\n")
+      }
+tenets:
+  - name: stupid-boolean-stuff
+    flows:
+      codelingo/review:
+        comment: You're fired!
+      codelingo/rewrite:
+        comment: You're fired!
+    query: |
+      import codelingo/ast/python36
+      
+      python36.if(depth = any):
+        raw as if_children
+        any_of:
+          @review comment
+          @rewrite ""
+          python36.name_constant:
+            value == false
+          @review "{{ trimTabs(if_children) }}"
+          python36.name_constant:
+            value == true
+
+      
