@@ -8,9 +8,6 @@ funcs:
         }
 
         var first = a.split(" ")[0]
-        if (first === "I") {
-          return false
-        }
         if (first.substring === first.toUpperCase()) {
           return false
         }
@@ -52,7 +49,7 @@ funcs:
         }
 
         var first = a.split(" ")[0]
-        if (first === first.toUpperCase()) {
+        if (first === first.toUpperCase() || (first === "I")) {
           return surroundWithQuotes(escapeGoFormat(removeTrailingPunctuation(text)))
         }
 
