@@ -8,6 +8,9 @@ funcs:
         }
 
         var first = a.split(" ")[0]
+        if (first === "I") {
+          return false
+        }
         if (first.substring === first.toUpperCase()) {
           return false
         }
