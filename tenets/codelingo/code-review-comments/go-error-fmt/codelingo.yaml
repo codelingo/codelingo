@@ -3,9 +3,26 @@ funcs:
     type: asserter
     body: |
       function (a) {
-        var dot = a.charAt(a.length - 1) === '.'
-        var cap = a.charAt(0) >= "A" && a.charAt(0) <= "Z"
-        return dot || cap
+        if (a.charAt(a.length - 1) === '.') {
+          return true
+        }
+
+        var first = a.split(" ")[0]
+        if (first.substring === first.toUpperCase()) {
+          return false
+        }
+
+        // We ignore errors with words containing capitals anywhere in first word
+        // unless the only capital is at the start. This prevents acronyms or
+        // (most) code-related words being caught
+        first = first.substring(1)
+        for (var i = 0; i < first.length; i++) {
+          if (first.charAt(i) === first.charAt(i).toUpperCase()) {
+            return false
+          }
+        }
+        
+        return a.charAt(0) >= "A" && a.charAt(0) <= "Z"
       }
   - name: fixErrorFormat
     type: resolver
@@ -29,6 +46,18 @@ funcs:
             text = text.substring(0, text.length - 1)
           }
           return text
+        }
+
+        var first = a.split(" ")[0]
+        if (first === first.toUpperCase()) {
+          return surroundWithQuotes(escapeGoFormat(removeTrailingPunctuation(text)))
+        }
+
+        first = first.substring(1)
+        for (var i = 0; i < first.length; i++) {
+          if (first.charAt(i) === first.charAt(i).toUpperCase()) {
+            return surroundWithQuotes(escapeGoFormat(removeTrailingPunctuation(text)))
+          }
         }
 
         return surroundWithQuotes(escapeGoFormat(uncapitalizeFirstLetter(removeTrailingPunctuation(text))))
@@ -67,3 +96,4 @@ tenets:
             kind == "string"
             value as strValue
             isInvalidErrName(strValue)
+
