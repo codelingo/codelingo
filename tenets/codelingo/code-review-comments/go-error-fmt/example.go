@@ -8,5 +8,6 @@ func main() {
 	fmt.Errorf("this is okay")
 	fmt.Errorf("This is not okay")
 	fmt.Errorf("THIS is okay")
+	fmt.Errorf("API call thing.")
 	fmt.Errorf("THIS is not okay.")
 }
