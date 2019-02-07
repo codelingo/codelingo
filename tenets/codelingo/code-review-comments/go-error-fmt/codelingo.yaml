@@ -93,6 +93,7 @@ tenets:
           @review comment
           @rewrite --replace "{{fixErrorFormat(strValue)}}"
           go.basic_lit:
+            sibling_order == 0
             kind == "string"
             value as strValue
             isInvalidErrName(strValue)
