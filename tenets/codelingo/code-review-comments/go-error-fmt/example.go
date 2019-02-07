@@ -10,4 +10,5 @@ func main() {
 	fmt.Errorf("THIS is okay")
 	fmt.Errorf("API call thing.")
 	fmt.Errorf("THIS is not okay.")
+	fmt.Errorf("this should not be caught: %q. Expecting %q", req.Header.Method(), "POST")
 }
