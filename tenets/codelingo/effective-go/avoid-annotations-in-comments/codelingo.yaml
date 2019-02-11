@@ -27,8 +27,8 @@ tenets:
           The package comment for the fmt package uses this to good effect.
       codelingo/review:
         comment: |
-          The comments are uninterpreted plain text, so HTML and other 
-          annotations such as _this_ and <this> will reproduce verbatim and should not be used.
+          Go comments are uninterpreted plain text, so HTML and other 
+          annotations such as _this_ will reproduce verbatim and should not be used.
     query: |
 
       import codelingo/ast/go
