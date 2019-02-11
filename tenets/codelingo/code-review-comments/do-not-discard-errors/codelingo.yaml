@@ -9,7 +9,7 @@ tenets:
           in truly exceptional situations, panic.
       codelingo/review:
         comment: |
-          Do not discard errors using _ variables. If ignoring the err is intentional, add a justification in a comment.
+          Do not discard errors using _ variables. If ignoring the error is intentional, add a justification in a comment.
     query: |
       import codelingo/ast/go
 
