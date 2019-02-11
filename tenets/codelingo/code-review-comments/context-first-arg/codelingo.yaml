@@ -14,6 +14,7 @@ tenets:
         comment: |
           Most functions that use a Context should accept it as their first parameter. 
           Consider moving Context to the front.
+          From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#contexts).
     query: |
       import codelingo/ast/go
       go.func_type(depth = any):

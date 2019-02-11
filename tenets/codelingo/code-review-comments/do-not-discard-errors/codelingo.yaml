@@ -10,6 +10,7 @@ tenets:
       codelingo/review:
         comment: |
           Do not discard errors using _ variables. If ignoring the error is intentional, add a justification in a comment.
+          From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).
     query: |
       import codelingo/ast/go
 

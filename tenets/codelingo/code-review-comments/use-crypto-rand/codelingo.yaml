@@ -19,6 +19,7 @@ tenets:
       codelingo/review:
         comment: |
           Do not use package math/rand to generate keys. Instead, use crypto/rand.
+          From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#crypto-rand).
     query: |
       import codelingo/ast/go
 

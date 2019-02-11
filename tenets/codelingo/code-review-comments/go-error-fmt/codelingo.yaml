@@ -80,6 +80,7 @@ tenets:
           Error strings should not be capitalized (unless beginning with proper nouns 
           or acronyms) or end with punctuation, since they are usually printed following
           other context.
+          From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#error-strings).
     query: |
       import codelingo/ast/go
 
