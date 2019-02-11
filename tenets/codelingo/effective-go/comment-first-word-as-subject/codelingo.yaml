@@ -18,67 +18,81 @@ funcs:
           var re = new RegExp(pat)
           return re.test(text)
         }
-        
+
+        function uc(s) {
+          return s.toUpperCase();
+        }
+
         function lc(s) {
           return s.toLowerCase();
         }
-        
+
+        function capitalize(s) {
+          return uc(s.charAt(0)) + s.slice(1);
+        }
+
         function uncapitalize(s) {
           return lc(s.charAt(0)) + s.slice(1);
         }
-        
+
         function removeInitialWhitespace(s) {
           return s.replace(new RegExp("^ *", "i"), "")
         }
-        
-        // 'TODO' statements, et.
-        function prependLineToLabel(s, commentChar) {
-          if (testre("^[a-zA-Z]+:", s)) {
-            if (commentChar === "//") {
-              return "\n" + commentChar + " " + s
-            }
-            return "\n" + s
-          }
-          return s
-        }
-        
-        function prependChecksACase(s, funcName, verbs) {
-          startsWithVerb = false
-        
-          verbs.forEach(function(verb) {
-            if (testre("^" + verb, lc(s))) {
-              startsWithVerb = true
+
+        function colonify(s) {
+          plurifiable_verbs.forEach(function(verb) {
+            if (testre("^" + lc(verb) + "s", lc(s))) {
+              s = " " + s;
             }
           })
-        
-          if (! (startsWithVerb || testre("(case|test)", lc(s))) && testre("^test", lc(funcName))) {
-            return "checks a case when " + s
+
+          verbs.forEach(function(verb) {
+            if (testre("^" + lc(verb), lc(s))) {
+              s = " " + s;
+            }
+          })
+
+          if (testre("^ ", s)) {
+            return s;
           }
-          return s
+
+          return ": " + s;
         }
-        
-        function colonify(s) {
-          if (testre("^[A-Z][a-z]* ", s)) {
-            return "; " + s
-          }
-        
-          if (testre("^[a-zA-Z]*s ", s)) {
-            return " " + s
-          }
-        
-          if (testre("^(will|does)", s)) {
-            return " " + s
-          }
-        
-          return "; " + s
+
+        function setDifference(A, B) {
+          A.filter(function(x) { return B.indexOf(x) < 0 })
         }
-        
+
+        function firstWord(s) {
+          return s.split(" ")[0]
+        }
+
+        function filterEmpty(arr) {
+          // ES6: subwords = subwords.filter(Boolean)
+          return arr.filter(function(v){return v!==''});
+        }
+
+        // Makes an educated guess to whether or not the first word is an old
+        // function name and fixes it.
         function updateOld(s, name) {
           var result = s
           var words = s.split(" ")
-        
+
+          firstword=words[0]
+
+          // Ignore when there are special characters. Allow a couple of () though so it can be rewritten
+          if (testre("[^A-Za-z()]", s)) {
+            return s;
+          }
+
+          subwords = firstword.split(/([A-Z][a-z]*)/);
+          subwords = filterEmpty(subwords)
+
+          // Ignore words without camel case. Sometimes the 'new' first word is not on old function name
+          if (subwords.length === 1) return s
+
           //Split first word into camel-cased subwords
-          words[0].split(/([A-Z][a-z]*)/).forEach(function(word) {
+          subwords.forEach(function(word) {
             if (word.length < 4) return
             // If start of comment smells like an old name
             if (lc(word).indexOf(lc(name)) !== -1 ||
@@ -88,63 +102,119 @@ funcs:
           })
           return words.join(" ")
         }
-        
-        var verbs = ["test", "ensure", "replace", "get", "start",
-                     "validate", "demonstrate", "compare", "hook",
-                     "declare", "check", "retrieve", "render"];
+
+        // modal_verbs etc.
+        var verbs = ["will", "does", "is", "exist"];
+        var plurifiable_verbs = ["split", "purge", "remove", "test", "ensure", "replace", "get", "start",
+                     "validate", "execute", "demonstrate", "compare", "hook", "report", "take", "clear",
+                     "handle", "decode", "unregister", "capture", "retrieve", "declare", "check", "retrieve", "render", "add", "read", "write"];
+
+        // If one of these tokens appear followed by an s, it should NOT be treated as a verb
+        var verb_plural_blacklist = ["lot", "alia", "arg", "resource",
+                     "event", "GET"];
+
         var nouns = ["test", "function", "method"];
-        var adjectives = ["various"];
+        var adjectives = ["various", "exists"];
+        var determiners = ["the", "this"];
+
+        function capitalizeLeadingDeterminer(s) {
+          determiners.forEach(function(determiner) {
+            s = s.replace(new RegExp("^" + determiner + " +", "i"), capitalize(determiner) + " ")
+          })
+          return s
+        }
 
         function fixLeadingVerb(s) {
-            // Make these replacements before removing from the front
-            verbs.forEach(function(verb) {
-                var pverb = verb + "s"
-                s = s.replace(new RegExp("^" + verb + "s\? +", "i"), pverb + " ")
+          // Make these replacements before removing from the front
+          plurifiable_verbs.forEach(function(verb) {
+            if (! includes(verb_plural_blacklist, firstWord(s))) {
+              var pverb = verb + "s"
 
-                adjectives.forEach(function(adjective) {
-                    s = s.replace(new RegExp("^" + pverb + " " + adjective + " ", "i"), pverb + " " + lc(adjective) + " ")
-                })
-            })
-            return s
+              s = s.replace(new RegExp("^" + verb + "s\? +", "i"), pverb + " ")
+
+              adjectives.forEach(function(adjective) {
+                s = s.replace(new RegExp("^" + pverb + " " + adjective + " ", "i"), pverb + " " + lc(adjective) + " ")
+              })
+            }
+          })
+
+          return s
         }
-        
+
+        function includes(arr,obj) {
+          // As of ECMAScript 2016 you can use includes()
+          return (arr.indexOf(obj) != -1);
+        }
+
+        function removeNameFromStart(s, name) {
+          if (! includes(verbs, lc(name))) {
+            s = s.replace(new RegExp("^" + name + "[a-z]* ?", "i"), "")  // Remove name from start including extra alphas and space if exists
+          }
+        }
+
+        function setUnion (x, y) {
+          var obj = {};
+          for (var i = x.length-1; i >= 0; -- i)
+            obj[x[i]] = x[i];
+          for (var i = y.length-1; i >= 0; -- i)
+            obj[y[i]] = y[i];
+          var res = []
+          for (var k in obj) {
+           if (obj.hasOwnProperty(k)) // <-- optional
+            res.push(obj[k]);
+          }
+          return res;
+        }
+
+        function removeThisIfVerb(s) {
+          setUnion(verbs, plurifiable_verbs).forEach(function(verb) {
+            s = s.replace(new RegExp("^This " + verb + " ", "i"), verb + " ")
+          })
+          return s
+        }
+
         function rewordComment(s, name, commentChar) {
-          s = s.replace(new RegExp("^(The|This) " + name + " ", "i"), "")
-        
+          if (testre("^[a-zA-Z]+:", s) || testre("^TODO ", s)) {
+              return s
+          }
+
+          // Removing 'The' is fine, unless it is replaced by something
+          // without a capital letter because that may be a common noun, such
+          // as 'distance', there the function comment is on a 'Distance'
+          // function.
+          // s = s.replace(new RegExp("^(This) " + name + " "), "")
+          s = s.replace(new RegExp("^(The) " + capitalize(name) + " "), "")
+
           // Make these replacements before removing from the front
           s = fixLeadingVerb(s)
-        
+          s = capitalizeLeadingDeterminer(s)
+
           nouns.forEach(function(noun) {
             s = s.replace(new RegExp("^(This) " + noun + " ", "i"), "")
           })
-        
+
           s = updateOld(s, name)
-          s = s.replace(new RegExp("^" + name + "[a-z]* ?", "i"), "")    // Remove name from start including extra alphas and space if exists
+          removeNameFromStart(s, name)
           s = fixLeadingVerb(s)
           s = s.replace(new RegExp("^[a-z]+([A-Z]+[a-z]+)+ "), "") // Remove leading camelCase
           s = s.replace(new RegExp("^([A-Z]+[a-z]+){2,} "), "")    // Remove leading PascalCase. Must come after remove name
-          s = s.replace(new RegExp("^This( example)? ", "i"), "")
-          s = prependChecksACase(s, name, verbs)
+          s = removeThisIfVerb(s)
           s = s.replace(new RegExp("^Purpose ", "i"), "The purpose ")
-          if (testre("^[A-Z][a-z]+s ", s)) {
-            s = uncapitalize(s)
-          }
-        
+
           return name + colonify(s)
         }
 
         var commentChar = text.substring(0, 2)
         var commentString = text.substring(2).trim()
-      
+
         commentString = commentString.replace(new RegExp("^[/*]* ", "i"), " ") // Remove extra leading comment chars
-      
+
         // Do nothing if comment does not start with alphanumerics
         if (! testre("^ ?[A-Za-z]", commentString)) {
           return text
         }
-      
+
         commentString = removeInitialWhitespace(commentString)
-        commentString = prependLineToLabel(commentString, commentChar)
         return commentChar + " " + rewordComment(commentString, name, commentChar)
       }
 tenets:
@@ -173,5 +243,6 @@ tenets:
             sibling_order == 0
             text as commText
         go.ident:
+          public == "true"
           name as funcName
           isValid(commText, funcName)
