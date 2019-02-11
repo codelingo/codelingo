@@ -24,8 +24,7 @@ tenets:
           most local or project-specific import.
       codelingo/review:
         comment: |
-          Avoid renaming imports. In the event of a collision, prefer to rename the
-          most local or project-specific import.
+          Avoid renaming imports, unless there is a collision, in which case prefer to rename the most local or project-specific import.
           From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#imports).
     query: |
       import codelingo/ast/go
