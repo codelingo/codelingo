@@ -22,8 +22,6 @@ func bar() {}
 // and we should not worry about this line
 func baz() {}
 
-// This is called by a xyz
-func qux() {}
+func Thing() {}
 
-// The quux will handle xyz
-func quux() {}
+func ThingAgain() {}

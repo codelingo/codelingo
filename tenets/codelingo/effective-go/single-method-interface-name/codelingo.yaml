@@ -19,6 +19,7 @@ tenets:
           don't give your method one of those names unless it has the same signature and meaning. Conversely, 
           if your type implements a method with the same meaning as a method on a well-known type, give it the 
           same name and signature; call your string-converter method String not ToString.
+          From [Effective Go](https://golang.org/doc/effective_go.html#interface-names).    
       codelingo/review:
         comment: |
           If an interface contains only one method, the method name should appear 

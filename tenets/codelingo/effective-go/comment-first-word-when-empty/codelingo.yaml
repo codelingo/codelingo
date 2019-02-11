@@ -4,7 +4,7 @@ tenets:
       codelingo/review:
         comment: |
           Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name ({{funcName}}) being declared.
-          From [effective go](https://golang.org/doc/effective_go.html#commentary).
+          From [Effective Go](https://golang.org/doc/effective_go.html#commentary).
       codelingo/rewrite:
         place: holder
     query: |

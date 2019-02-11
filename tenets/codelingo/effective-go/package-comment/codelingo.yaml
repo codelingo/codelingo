@@ -12,6 +12,7 @@ tenets:
         comment: |
           Every package should have a package comment, a block comment preceding the package clause.
           For multi-file packages, the package comment only needs to be present in one file, and any one will do.
+          From [Effective Go](https://golang.org/doc/effective_go.html#commentary).
     query: |
       import codelingo/ast/go
 

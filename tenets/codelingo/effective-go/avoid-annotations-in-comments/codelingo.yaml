@@ -29,6 +29,7 @@ tenets:
         comment: |
           Go comments are uninterpreted plain text, so HTML and other 
           annotations such as _this_ will reproduce verbatim and should not be used.
+          From [Effective Go](https://golang.org/doc/effective_go.html#commentary).
     query: |
 
       import codelingo/ast/go

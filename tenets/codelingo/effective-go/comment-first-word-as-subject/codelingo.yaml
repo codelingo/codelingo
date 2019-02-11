@@ -94,13 +94,11 @@ funcs:
                      "declare", "check", "retrieve", "render"];
         var nouns = ["test", "function", "method"];
         var adjectives = ["various"];
-
         function fixLeadingVerb(s) {
             // Make these replacements before removing from the front
             verbs.forEach(function(verb) {
                 var pverb = verb + "s"
                 s = s.replace(new RegExp("^" + verb + "s\? +", "i"), pverb + " ")
-
                 adjectives.forEach(function(adjective) {
                     s = s.replace(new RegExp("^" + pverb + " " + adjective + " ", "i"), pverb + " " + lc(adjective) + " ")
                 })
@@ -132,7 +130,6 @@ funcs:
         
           return name + colonify(s)
         }
-
         var commentChar = text.substring(0, 2)
         var commentString = text.substring(2).trim()
       
@@ -158,12 +155,11 @@ tenets:
       codelingo/review:
         comment: |
           Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name ({{funcName}}) being declared.
-          From [effective go](https://golang.org/doc/effective_go.html#commentary).
+          From [Effective Go](https://golang.org/doc/effective_go.html#commentary).
       codelingo/rewrite:
         place: holder
     query: |
       import codelingo/ast/go
-
       # Only look at exported functions
       go.func_decl(depth = any):
         go.comment_group:
