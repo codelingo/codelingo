@@ -19,7 +19,6 @@ tenets:
       codelingo/review:
         comment: |
           Do not use package math/rand to generate keys. Instead, use crypto/rand.
-          hexadecimal or base64
     query: |
       import codelingo/ast/go
 
