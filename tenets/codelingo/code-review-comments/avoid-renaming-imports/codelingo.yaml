@@ -19,13 +19,13 @@ tenets:
       codelingo/docs:
         title: Avoid Renaming Imports
         body: |
-          Avoid renaming imports except to avoid a name collision; good package names
-          should not require renaming. In the event of collision, prefer to rename the
+          Avoid renaming imports except to avoid a name collision. Good package names
+          should not require renaming. In the event of a collision, prefer to rename the
           most local or project-specific import.
       codelingo/review:
         comment: |
-          This import is renamed to `{{importName}}` but this is a bad practice. 
-          Import without specifying a new name.
+          Avoid renaming imports. In the event of a collision, prefer to rename the
+          most local or project-specific import.
     query: |
       import codelingo/ast/go
 
