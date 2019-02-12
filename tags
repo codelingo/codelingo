@@ -10,6 +10,8 @@ Alpha	tenets/codelingo/go/golint/const-block.go	/^	Alpha = "a"$/;"	c
 AnotherKind	tenets/codelingo/k8/well-named-lists/example.go	/^type AnotherKind struct {$/;"	t
 AnotherKindOfList	tenets/codelingo/k8/well-formed-lists/example.go	/^type AnotherKindOfList struct {$/;"	t
 AutoLink	flows/codelingo/docs/render/terminal.go	/^func (options *Console) AutoLink(out *bytes.Buffer, link []byte, kind int) {$/;"	f
+Bar	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Bar() {}$/;"	f
+Baz	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Baz() {}$/;"	f
 Beta	tenets/codelingo/go/golint/const-block.go	/^	Beta  = "b"$/;"	c
 BlockCode	flows/codelingo/docs/render/terminal.go	/^func (options *Console) BlockCode(out *bytes.Buffer, text []byte, lang string) {$/;"	f
 BlockHtml	flows/codelingo/docs/render/terminal.go	/^func (options *Console) BlockHtml(out *bytes.Buffer, text []byte) {$/;"	f
@@ -77,6 +79,7 @@ ExportedIntReturner	tenets/codelingo/go/golint/unexp-return.go	/^func ExportedIn
 F	tenets/codelingo/go/golint/4.go	/^func (T) F() {} \/\/ MATCH \/exported method T\\.F.*should.*comment.*or.*unexport\/$/;"	f
 FalseController	tenets/modica/default/transport/wrong_controller_name/something.php	/^class FalseController extends Controller {$/;"	c
 Foo	tenets/cacophony/default/redundant-defer-wraps/example.go	/^type Foo struct {$/;"	t
+Foo	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Foo() {}$/;"	f
 Foo	tenets/codelingo/go/golint/broken.go	/^func () Foo() {}$/;"	f
 FootnoteItem	flows/codelingo/docs/render/terminal.go	/^func (options *Console) FootnoteItem(out *bytes.Buffer, name, text []byte, flags int)          {}$/;"	f
 FootnoteRef	flows/codelingo/docs/render/terminal.go	/^func (options *Console) FootnoteRef(out *bytes.Buffer, ref []byte, id int) {$/;"	f
@@ -190,6 +193,7 @@ ProperlyDeleted	tenets/west/default/allocation/variable_allocation.cpp	/^void Pr
 ProtoMessage	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Hunk) ProtoMessage()               {}$/;"	f
 ProtoMessage	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Request) ProtoMessage()               {}$/;"	f
 Q	tenets/codelingo/go/golint/var-decl.go	/^type Q bool$/;"	t
+Qux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Qux() {}$/;"	f
 RawHtmlTag	flows/codelingo/docs/render/terminal.go	/^func (options *Console) RawHtmlTag(out *bytes.Buffer, tag []byte) {$/;"	f
 Read	tenets/codelingo/go/golint/common-methods.go	/^func (T) Read(p []byte) (n int, err error)                 { return 0, nil }$/;"	f
 ReadDotLingo	flows/codelingo/review/review/review.go	/^func ReadDotLingo(ctx *cli.Context) (string, error) {$/;"	f
@@ -347,8 +351,10 @@ badPerim	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^fu
 badRect	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^type badRect struct {$/;"	t
 badStruct	tenets/codelingo/k8/well-named-lock/example.go	/^type badStruct struct {$/;"	t
 badStruct	tenets/codelingo/k8/well-named-locks/example.go	/^type badStruct struct {$/;"	t
+bar	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func bar() {}$/;"	f
 bar	tenets/codelingo/go/golint/receiver-names.go	/^type bar struct{}$/;"	t
 bar	tenets/codelingo/k8/well-named-package/foo/example-bad.go	/^package bar$/;"	p
+baz	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func baz() {}$/;"	f
 baz	tenets/codelingo/k8/well-named-package/baz/example-good.go	/^package baz$/;"	p
 buildTenetList	util/mdgen/cmd/listTenets.go	/^func buildTenetList(hubtenets dataStruct.HubTenets) []*TenetDesc {$/;"	f
 bundleURL	flows/codelingo/docs/docs/parse/parse.go	/^const bundleURL = "https:\/\/raw.githubusercontent.com\/codelingo\/codelingo\/master\/tenets\/%s\/%s\/lingo_bundle.yaml"$/;"	c
@@ -470,6 +476,7 @@ flowSuite	sdk/flow/package_test.go	/^type flowSuite struct {$/;"	t
 flows	flows/codelingo/pull-request/main.go	/^package flows$/;"	p
 flush	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) flush() {$/;"	f
 flush	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) flush() {$/;"	f
+foo	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func foo() {}$/;"	f
 foo	tenets/codelingo/go/golint/blank-import-lib.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/blank-import-lib_test.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/const-block.go	/^package foo$/;"	p
@@ -623,6 +630,8 @@ main	tenets/cacophony/default/no-fmt-print/example.go	/^package main$/;"	p
 main	tenets/cacophony/default/raise-generic-exceptions/example.py	/^def main():$/;"	f
 main	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func main() {$/;"	f
 main	tenets/cacophony/default/redundant-defer-wraps/example.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/bool-param/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/bool-param/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/empty-slice/example.go	/^func main() {$/;"	f
@@ -763,6 +772,8 @@ q	tenets/codelingo/go/golint/var-decl.go	/^type q int$/;"	t
 query	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^        $this->query = new Query();$/;"	v
 queueChange	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
 queueChange	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
+quux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func quux() {}$/;"	f
+qux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func qux() {}$/;"	f
 rawLingoBundle	flows/codelingo/docs/docs/parse/parse.go	/^type rawLingoBundle struct {$/;"	t
 receiveEvent	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
 receiveEvent	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
