@@ -146,12 +146,6 @@ funcs:
           return (arr.indexOf(obj) != -1);
         }
 
-        function removeNameFromStart(s, name) {
-          if (! includes(verbs, lc(name))) {
-            s = s.replace(new RegExp("^" + name + "[a-z]* ?", "i"), "")  // Remove name from start including extra alphas and space if exists
-          }
-        }
-
         function setUnion (x, y) {
           var obj = {};
           for (var i = x.length-1; i >= 0; -- i)
@@ -182,7 +176,6 @@ funcs:
           // without a capital letter because that may be a common noun, such
           // as 'distance', there the function comment is on a 'Distance'
           // function.
-          // s = s.replace(new RegExp("^(This) " + name + " "), "")
           s = s.replace(new RegExp("^(The) " + capitalize(name) + " "), "")
 
           // Make these replacements before removing from the front
@@ -194,7 +187,6 @@ funcs:
           })
 
           s = updateOld(s, name)
-          removeNameFromStart(s, name)
           s = fixLeadingVerb(s)
           s = s.replace(new RegExp("^[a-z]+([A-Z]+[a-z]+)+ "), "") // Remove leading camelCase
           s = s.replace(new RegExp("^([A-Z]+[a-z]+){2,} "), "")    // Remove leading PascalCase. Must come after remove name
