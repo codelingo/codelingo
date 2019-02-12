@@ -4,15 +4,17 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-AddFlags	tenets/codelingo/k8/flags-have-underscores/example.go	/^func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {$/;"	f
-AdmissionRequest	tenets/codelingo/k8/jsonapi-kind-compulsory-metadata/example.go	/^type AdmissionRequest struct {$/;"	t
+AddFlags	tenets/codelingo/kubernetes/flags-have-underscores/example.go	/^func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {$/;"	f
+AdmissionRequest	tenets/codelingo/kubernetes/jsonapi-kind-compulsory-metadata/example.go	/^type AdmissionRequest struct {$/;"	t
 Alpha	tenets/codelingo/go/golint/const-block.go	/^	Alpha = "a"$/;"	c
-AnotherKind	tenets/codelingo/k8/well-named-lists/example.go	/^type AnotherKind struct {$/;"	t
-AnotherKindOfList	tenets/codelingo/k8/well-formed-lists/example.go	/^type AnotherKindOfList struct {$/;"	t
+AnotherKind	tenets/codelingo/kubernetes/well-named-lists/example.go	/^type AnotherKind struct {$/;"	t
+AnotherKindOfList	tenets/codelingo/kubernetes/well-formed-lists/example.go	/^type AnotherKindOfList struct {$/;"	t
 AutoLink	flows/codelingo/docs/render/terminal.go	/^func (options *Console) AutoLink(out *bytes.Buffer, link []byte, kind int) {$/;"	f
+Bad_Interface	tenets/codelingo/effective-go/underscores-in-name/example.go	/^type Bad_Interface interface {$/;"	t
 Bar	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Bar() {}$/;"	f
 Baz	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Baz() {}$/;"	f
 Beta	tenets/codelingo/go/golint/const-block.go	/^	Beta  = "b"$/;"	c
+BetterInterface	tenets/codelingo/effective-go/underscores-in-name/example.go	/^type BetterInterface interface {$/;"	t
 BlockCode	flows/codelingo/docs/render/terminal.go	/^func (options *Console) BlockCode(out *bytes.Buffer, text []byte, lang string) {$/;"	f
 BlockHtml	flows/codelingo/docs/render/terminal.go	/^func (options *Console) BlockHtml(out *bytes.Buffer, text []byte) {$/;"	f
 BlockQuote	flows/codelingo/docs/render/terminal.go	/^func (options *Console) BlockQuote(out *bytes.Buffer, text []byte) {$/;"	f
@@ -22,46 +24,48 @@ CLIApp	flows/codelingo/review/review/cli.go	/^var CLIApp = &flowutil.CLIApp{$/;"
 CLIApp	flows/codelingo/rewrite/rewrite/cli.go	/^var CLIApp = &flowutil.CLIApp{$/;"	v
 CLIApp	sdk/flow/cli.go	/^type CLIApp struct {$/;"	t
 CPP_CONST	tenets/codelingo/go/golint/names.go	/^	CPP_CONST   = 1 \/\/ MATCH \/ALL_CAPS.*CamelCase\/$/;"	c
-Cat	tenets/codelingo/k8/misused-nil-interface/example.go	/^type Cat interface {$/;"	t
+Cat	tenets/codelingo/landmines/misused-nil-interface/example.go	/^type Cat interface {$/;"	t
 CliCtx	sdk/flow/cli.go	/^func (f *flowRunner) CliCtx() (*cli.Context, error) {$/;"	f
 ClientData	tenets/codelingo/go/marshalling/example.go	/^type ClientData struct {$/;"	t
 CodeSpan	flows/codelingo/docs/render/terminal.go	/^func (options *Console) CodeSpan(out *bytes.Buffer, text []byte) {$/;"	f
-Combine	tenets/west/default/shadowing/project.cpp	/^bool Combine(Object* object, Something* something) {$/;"	f
-ConfigFlags	tenets/codelingo/k8/flags-have-underscores/example.go	/^type ConfigFlags struct {$/;"	t
+Combine	tenets/codelingo/west/shadowing/project.cpp	/^bool Combine(Object* object, Something* something) {$/;"	f
+ConfigFlags	tenets/codelingo/kubernetes/flags-have-underscores/example.go	/^type ConfigFlags struct {$/;"	t
 Confirm	sdk/flow/confirm.go	/^func (item *ConfirmerItem) Confirm(ctx *cli.Context) (bool, error) {$/;"	f
 ConfirmDecorated	sdk/flow/cli.go	/^func (f *flowRunner) ConfirmDecorated(decorator string, payload proto.Message) (bool, error) {$/;"	f
 ConfirmerItem	sdk/flow/confirm.go	/^type ConfirmerItem struct {$/;"	t
 Console	flows/codelingo/docs/render/terminal.go	/^type Console struct {$/;"	t
 Controller	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^class Controller$/;"	c
-D	tenets/west/default/allocation/variable_allocation.cpp	/^void D ()$/;"	f
+D	tenets/codelingo/west/allocation/variable_allocation.cpp	/^void D ()$/;"	f
 DECAPPHELPTMP	sdk/flow/help.go	/^var DECAPPHELPTMP = `$/;"	v
 Data	util/mdgen/dataStruct/tenets.go	/^type Data struct {$/;"	t
-Dead	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Dead() <-chan struct{} {$/;"	f
-Dead	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Dead() <-chan struct{} {$/;"	f
+Dead	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Dead() <-chan struct{} {$/;"	f
+Dead	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Dead() <-chan struct{} {$/;"	f
 DecoratedResult	sdk/flow/cli.go	/^type DecoratedResult struct {$/;"	t
 DecoratorApp	flows/codelingo/review/review/decorator.go	/^var DecoratorApp = &flowutil.DecoratorApp{$/;"	v
 DecoratorApp	flows/codelingo/rewrite/rewrite/decorator.go	/^var DecoratorApp = &flowutil.DecoratorApp{$/;"	v
 DecoratorApp	sdk/flow/cli.go	/^type DecoratorApp struct {$/;"	t
-DeletedArray	tenets/west/default/allocation/variable_allocation.cpp	/^void DeletedArray(){$/;"	f
+DecoratorArgs	sdk/flow/cli.go	/^func DecoratorArgs(decStr string) []string {$/;"	f
+DeletedArray	tenets/codelingo/west/allocation/variable_allocation.cpp	/^void DeletedArray(){$/;"	f
 Descriptor	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Hunk) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }$/;"	f
 Descriptor	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Request) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }$/;"	f
+Descriptor	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (*HelloReply) Descriptor() ([]byte, []int) {$/;"	f
+Descriptor	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (*HelloRequest) Descriptor() ([]byte, []int) {$/;"	f
 DoAuthStuff	tenets/codelingo/jenkinsx/tparallel/auth.go	/^func DoAuthStuff() {}$/;"	f
-DoTheThing	tenets/codelingo/k8/shadowed-func-parameter/example.go	/^func DoTheThing(reallyDoIt bool) (err error) {$/;"	f
 DocumentFooter	flows/codelingo/docs/render/terminal.go	/^func (options *Console) DocumentFooter(out *bytes.Buffer) {$/;"	f
 DocumentHeader	flows/codelingo/docs/render/terminal.go	/^func (options *Console) DocumentHeader(out *bytes.Buffer) {$/;"	f
+DoesntCount	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type DoesntCount interface {$/;"	t
 Donut	tenets/codelingo/go/golint/stutter.go	/^type Donut struct{} \/\/ ok because it is the whole name$/;"	t
 DonutMaker	tenets/codelingo/go/golint/stutter.go	/^type DonutMaker struct{} \/\/ MATCH \/donut\\.DonutMaker.*stutter\/$/;"	t
 DonutMass	tenets/codelingo/go/golint/stutter.go	/^func (d *Donut) DonutMass() (grams int) { \/\/ okay because it is a method$/;"	f
 DonutRank	tenets/codelingo/go/golint/stutter.go	/^func DonutRank(d Donut) int { \/\/ MATCH \/donut\\.DonutRank.*stutter\/$/;"	f
 Donuts	tenets/codelingo/go/golint/stutter.go	/^type Donuts []Donut \/\/ ok because it didn't start a new word$/;"	t
 DoubleEmphasis	flows/codelingo/docs/render/terminal.go	/^func (options *Console) DoubleEmphasis(out *bytes.Buffer, text []byte) {$/;"	f
-E	tenets/west/default/allocation/variable_allocation.cpp	/^void E ()$/;"	f
+E	tenets/codelingo/west/allocation/variable_allocation.cpp	/^void E ()$/;"	f
 E2	tenets/codelingo/go/golint/errors.go	/^	E2 = fmt.Errorf("blah %d", 5) \/\/ MATCH \/error var.*E2.*ErrFoo\/$/;"	v
 Emphasis	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Emphasis(out *bytes.Buffer, text []byte) {$/;"	f
 Entity	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Entity(out *bytes.Buffer, entity []byte) {$/;"	f
-Err	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Err() error {$/;"	f
-Err	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Err() error {$/;"	f
-ErrDidNotWork	tenets/codelingo/k8/shadowed-func-parameter/example.go	/^var ErrDidNotWork = errors.New("did not work")$/;"	v
+Err	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Err() error {$/;"	f
+Err	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Err() error {$/;"	f
 ErrFanIn	sdk/flow/util.go	/^func ErrFanIn(err1c, err2c chan error) chan error {$/;"	f
 Error	tenets/codelingo/go/golint/common-methods.go	/^func (T) Error() string                                    { return "" }$/;"	f
 Example	tenets/codelingo/php/phplint/BadExample.php	/^class Example$/;"	c
@@ -77,18 +81,19 @@ ExpT	tenets/codelingo/go/golint/unexp-return.go	/^func ExpT() T { \/\/ ok$/;"	f
 Exported	tenets/codelingo/go/golint/unexp-return.go	/^func Exported() hidden { \/\/ MATCH \/Exported.*unexported.*hidden\/$/;"	f
 ExportedIntReturner	tenets/codelingo/go/golint/unexp-return.go	/^func ExportedIntReturner() int { \/\/ MATCH \/ExportedIntReturner.*unexported.*int\/$/;"	f
 F	tenets/codelingo/go/golint/4.go	/^func (T) F() {} \/\/ MATCH \/exported method T\\.F.*should.*comment.*or.*unexport\/$/;"	f
-FalseController	tenets/modica/default/transport/wrong_controller_name/something.php	/^class FalseController extends Controller {$/;"	c
-Foo	tenets/cacophony/default/redundant-defer-wraps/example.go	/^type Foo struct {$/;"	t
+FalseController	tenets/codelingo/modica/transport/wrong_controller_name/something.php	/^class FalseController extends Controller {$/;"	c
+Foo	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^type Foo struct {$/;"	t
 Foo	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Foo() {}$/;"	f
 Foo	tenets/codelingo/go/golint/broken.go	/^func () Foo() {}$/;"	f
 FootnoteItem	flows/codelingo/docs/render/terminal.go	/^func (options *Console) FootnoteItem(out *bytes.Buffer, name, text []byte, flags int)          {}$/;"	f
 FootnoteRef	flows/codelingo/docs/render/terminal.go	/^func (options *Console) FootnoteRef(out *bytes.Buffer, ref []byte, id int) {$/;"	f
 Footnotes	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Footnotes(out *bytes.Buffer, text func() bool)                         {}$/;"	f
-FreedObject	tenets/west/default/allocation/variable_allocation.cpp	/^void FreedObject() {$/;"	f
-Func	tenets/west/default/allocation/variable_allocation.cpp	/^ObjectOnHeap Func ()$/;"	f
+FreedObject	tenets/codelingo/west/allocation/variable_allocation.cpp	/^void FreedObject() {$/;"	f
+Func	tenets/codelingo/west/allocation/variable_allocation.cpp	/^ObjectOnHeap Func ()$/;"	f
 G	tenets/codelingo/go/golint/4.go	/^func (U) G() {}$/;"	f
 Gamma	tenets/codelingo/go/golint/const-block.go	/^	Gamma = "g"$/;"	c
-GetACat	tenets/codelingo/k8/misused-nil-interface/example.go	/^func GetACat() Cat {$/;"	f
+GetComment	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetComment() string {$/;"	f
+GetCommentOutputFile	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetCommentOutputFile() string {$/;"	f
 GetDecoratorOptions	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetDecoratorOptions() string {$/;"	f
 GetDepot	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetDepot() string {$/;"	f
 GetDir	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetDir() string {$/;"	f
@@ -96,10 +101,13 @@ GetDotlingo	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetDot
 GetEndOffset	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetEndOffset() int32 {$/;"	f
 GetFilename	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetFilename() string {$/;"	f
 GetFlags	flows/codelingo/docs/render/terminal.go	/^func (options *Console) GetFlags() int {$/;"	f
+GetGenerateComments	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetGenerateComments() bool {$/;"	f
 GetHost	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetHost() string {$/;"	f
 GetHostname	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetHostname() string {$/;"	f
 GetIsPullRequest	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetIsPullRequest() bool {$/;"	f
 GetLingoFiles	flows/codelingo/docs/docs/docs.go	/^func GetLingoFiles(workingDir string) (map[string][]byte, error) {$/;"	f
+GetMessage	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) GetMessage() string {$/;"	f
+GetName	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) GetName() string {$/;"	f
 GetOwner	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetOwner() string {$/;"	f
 GetOwnerOrDepot	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetOwnerOrDepot() isRequest_OwnerOrDepot {$/;"	f
 GetPatches	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetPatches() []string {$/;"	f
@@ -110,20 +118,25 @@ GetSha	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetSha() st
 GetStartOffset	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) GetStartOffset() int32 {$/;"	f
 GetVcs	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) GetVcs() string {$/;"	f
 GitCMD	sdk/flow/git.go	/^func GitCMD(args ...string) (out string, err error) {$/;"	f
+GreeterClient	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^type GreeterClient interface {$/;"	t
+GreeterServer	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^type GreeterServer interface {$/;"	t
 H	tenets/codelingo/go/golint/4.go	/^func (*V) H() {} \/\/ MATCH \/exported method V\\.H.*should.*comment.*or.*unexport\/$/;"	f
 H	tenets/codelingo/go/golint/5_test.go	/^type H int$/;"	t
 HRule	flows/codelingo/docs/render/terminal.go	/^func (options *Console) HRule(out *bytes.Buffer) {$/;"	f
 HTML	tenets/codelingo/go/golint/names.go	/^	HTML  = 3 \/\/ okay; no underscore$/;"	c
 HandleErr	sdk/flow/util.go	/^func HandleErr(err error) {$/;"	f
-Hash	tenets/west/default/shadowing/project.cpp	/^int Hash(Object* object) {$/;"	f
+Hash	tenets/codelingo/west/shadowing/project.cpp	/^int Hash(Object* object) {$/;"	f
 Header	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Header(out *bytes.Buffer, text func() bool, level int, id string) {$/;"	f
 Hello	tenets/codelingo/jenkinsx/parallel-in-tests/hello.go	/^func Hello(str string) {$/;"	f
 Hello	tenets/codelingo/jenkinsx/test-package-name/hello.go	/^func Hello(str string) {$/;"	f
-HubSource	tenets/codelingo/go/reallocated_slice/broken.go	/^type HubSource interface {$/;"	t
-HubSource	tenets/codelingo/go/reallocated_slice/fixed.go	/^type HubSource interface {$/;"	t
+Hello	tenets/codelingo/psr1/camel-case-method-name/example.php	/^class Hello {$/;"	c
+HelloReply	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^type HelloReply struct {$/;"	t
+HelloRequest	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^type HelloRequest struct {$/;"	t
+HubSource	tenets/codelingo/go/reallocated-slice/broken.go	/^type HubSource interface {$/;"	t
+HubSource	tenets/codelingo/go/reallocated-slice/fixed.go	/^type HubSource interface {$/;"	t
 HubTenets	util/mdgen/dataStruct/tenets.go	/^type HubTenets struct {$/;"	t
-HubWatcher	tenets/codelingo/go/reallocated_slice/broken.go	/^type HubWatcher struct {$/;"	t
-HubWatcher	tenets/codelingo/go/reallocated_slice/fixed.go	/^type HubWatcher struct {$/;"	t
+HubWatcher	tenets/codelingo/go/reallocated-slice/broken.go	/^type HubWatcher struct {$/;"	t
+HubWatcher	tenets/codelingo/go/reallocated-slice/fixed.go	/^type HubWatcher struct {$/;"	t
 Hunk	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^type Hunk struct {$/;"	t
 INFOTMP	sdk/flow/help.go	/^var INFOTMP = `$/;"	v
 Image	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Image(out *bytes.Buffer, link []byte, title []byte, alt []byte) {$/;"	f
@@ -136,12 +149,14 @@ IsPrepend	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) IsP
 IsReplace	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) IsReplace() bool {$/;"	f
 IsStartOffset	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) IsStartOffset() bool {$/;"	f
 IsStartToEndOffset	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) IsStartToEndOffset() bool {$/;"	f
-Kill	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Kill() {$/;"	f
-Kill	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Kill() {$/;"	f
-KindOfList	tenets/codelingo/k8/well-formed-lists/example.go	/^type KindOfList struct {$/;"	t
-KindOfList	tenets/codelingo/k8/well-named-lists/example.go	/^type KindOfList struct {$/;"	t
-KindWithoutName	tenets/codelingo/k8/jsonapi-kind-compulsory-metadata/example.go	/^type KindWithoutName struct {$/;"	t
-KindWithoutNamespace	tenets/codelingo/k8/jsonapi-kind-compulsory-metadata/example.go	/^type KindWithoutNamespace struct {$/;"	t
+IsTypeOfParams	tenets/codelingo/code-review-comments/context-first-arg/example.go	/^type IsTypeOfParams struct {$/;"	t
+Key	tenets/codelingo/code-review-comments/use-crypto-rand/example.go	/^func Key() string {$/;"	f
+Kill	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Kill() {$/;"	f
+Kill	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Kill() {$/;"	f
+KindOfList	tenets/codelingo/kubernetes/well-formed-lists/example.go	/^type KindOfList struct {$/;"	t
+KindOfList	tenets/codelingo/kubernetes/well-named-lists/example.go	/^type KindOfList struct {$/;"	t
+KindWithoutName	tenets/codelingo/kubernetes/jsonapi-kind-compulsory-metadata/example.go	/^type KindWithoutName struct {$/;"	t
+KindWithoutNamespace	tenets/codelingo/kubernetes/jsonapi-kind-compulsory-metadata/example.go	/^type KindWithoutNamespace struct {$/;"	t
 LastInsertId	tenets/codelingo/go/golint/names.go	/^func (t) LastInsertId() (int64, error) { return 0, nil } \/\/ okay because it matches a known style violation$/;"	f
 Len	flows/codelingo/rewrite/rewrite/writer.go	/^func (o byOffset) Len() int {$/;"	f
 Len	tenets/codelingo/go/golint/sort.go	/^func (t T) Len() int { return len(t) } \/\/ MATCH \/exported method T\\.Len.*should.*comment\/$/;"	f
@@ -155,29 +170,30 @@ Link	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Link(out 
 List	flows/codelingo/docs/render/terminal.go	/^func (options *Console) List(out *bytes.Buffer, text func() bool, flags int) {$/;"	f
 ListItem	flows/codelingo/docs/render/terminal.go	/^func (options *Console) ListItem(out *bytes.Buffer, text []byte, flags int) {$/;"	f
 Location	tenets/codelingo/go/golint/4.go	/^var Location, _ = time.LoadLocation("Europe\/Istanbul") \/\/ not Constantinople$/;"	v
-MadeUpController	tenets/modica/default/transport/made_up/something.php	/^class MadeUpController extends Controller {$/;"	c
+MadeUpController	tenets/codelingo/modica/transport/made_up/something.php	/^class MadeUpController extends Controller {$/;"	c
 Main	tenets/codelingo/php/sql-concats/example.php	/^function Main() {$/;"	f
 MakeInvalidJSONRequest	tenets/codelingo/go/marshalling/example.go	/^func MakeInvalidJSONRequest(s *Server) ([]byte, error) {$/;"	f
 MakeReport	flows/codelingo/review/review/review.go	/^func MakeReport(cliCtx *cli.Context, issues []*ReportStrt) (string, error) {$/;"	f
 MakeValidJSONRequest	tenets/codelingo/go/marshalling/example.go	/^func MakeValidJSONRequest(s *Server) ([]byte, error) {$/;"	f
-MarshalChan	sdk/flow/request.go	/^func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message) (chan proto.Message, chan error) {$/;"	f
-Meow	tenets/codelingo/k8/misused-nil-interface/example.go	/^func (*Tabby) Meow() { fmt.Println("meow") }$/;"	f
+MarshalChan	sdk/flow/request.go	/^func MarshalChan(replyc chan *grpcflow.Reply, newItem func() proto.Message, setDefaults func(proto.Message) proto.Message) (chan proto.Message, chan error) {$/;"	f
+Meow	tenets/codelingo/landmines/misused-nil-interface/example.go	/^func (*Tabby) Meow() {$/;"	f
 MethodOnT	tenets/codelingo/go/golint/unexp-return.go	/^func (T) MethodOnT() hidden { \/\/ MATCH \/method MethodOnT.*unexported.*hidden\/$/;"	f
-MockAddresses	tenets/codelingo/k8/well-named-lock/example.go	/^type MockAddresses struct {$/;"	t
-MockAddresses	tenets/codelingo/k8/well-named-locks/example.go	/^type MockAddresses struct {$/;"	t
+MockAddresses	tenets/codelingo/kubernetes/well-named-lock/example.go	/^type MockAddresses struct {$/;"	t
+MockAddresses	tenets/codelingo/kubernetes/well-named-locks/example.go	/^type MockAddresses struct {$/;"	t
 New	flows/codelingo/rewrite/rewrite/option/option.go	/^func New(ctx *cli.Context) (option, error) {$/;"	f
 NewCtx	sdk/flow/cli.go	/^func NewCtx(app *cli.App, input ...string) (*cli.Context, error) {$/;"	f
 NewFlow	sdk/flow/cli.go	/^func NewFlow(cliApp *CLIApp, decoratorApp *DecoratorApp) *flowRunner {$/;"	f
-NewHubWatcher	tenets/codelingo/go/reallocated_slice/broken.go	/^func NewHubWatcher(hub HubSource, logger Logger) *HubWatcher {$/;"	f
-NewHubWatcher	tenets/codelingo/go/reallocated_slice/fixed.go	/^func NewHubWatcher(hub HubSource, logger Logger) *HubWatcher {$/;"	f
+NewGreeterClient	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func NewGreeterClient(cc *grpc.ClientConn) GreeterClient {$/;"	f
+NewHubWatcher	tenets/codelingo/go/reallocated-slice/broken.go	/^func NewHubWatcher(hub HubSource, logger Logger) *HubWatcher {$/;"	f
+NewHubWatcher	tenets/codelingo/go/reallocated-slice/fixed.go	/^func NewHubWatcher(hub HubSource, logger Logger) *HubWatcher {$/;"	f
 NewRange	flows/codelingo/review/review/review.go	/^func NewRange(filename string, startLine, endLine int) *flow.IssueRange {$/;"	f
 NoCommitErr	sdk/flow/util.go	/^func NoCommitErr(err error) bool {$/;"	f
 NoCommitErrMsg	sdk/flow/util.go	/^const NoCommitErrMsg = "This looks like a new repository. Please make an initial commit before running `lingo review`. This is only Required for the initial commit, subsequent changes to your repo will be picked up by lingo without committing."$/;"	c
 NormalText	flows/codelingo/docs/render/terminal.go	/^func (options *Console) NormalText(out *bytes.Buffer, text []byte) {$/;"	f
 ORDERED	flows/codelingo/docs/render/terminal.go	/^	ORDERED$/;"	c
-Obj	tenets/west/default/allocation/variable_allocation.cpp	/^Obj::Obj() {$/;"	f	class:Obj
-Obj	tenets/west/default/allocation/variable_allocation.cpp	/^class Obj {$/;"	c	file:
-Object	tenets/west/default/shadowing/project.cpp	/^class Object {$/;"	c	file:
+Obj	tenets/codelingo/west/allocation/variable_allocation.cpp	/^Obj::Obj() {$/;"	f	class:Obj
+Obj	tenets/codelingo/west/allocation/variable_allocation.cpp	/^class Obj {$/;"	c	file:
+Object	tenets/codelingo/west/shadowing/project.cpp	/^class Object {$/;"	c	file:
 OpenFileConfirmAction	sdk/flow/confirm.go	/^func OpenFileConfirmAction(filename string, line int64) (bool, bool, error) {$/;"	f
 Options	flows/codelingo/review/review/review.go	/^type Options struct {$/;"	t
 Other	tenets/codelingo/go/golint/sort.go	/^func (u U) Other() {} \/\/ MATCH \/exported method U\\.Other.*should.*comment\/$/;"	f
@@ -185,49 +201,65 @@ OutputResults	flows/codelingo/search/main.go	/^func OutputResults(results []*flo
 PROpts	flows/codelingo/review/review/reviewpr.go	/^type PROpts struct {$/;"	t
 Paragraph	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Paragraph(out *bytes.Buffer, text func() bool) {$/;"	f
 Parse	flows/codelingo/docs/docs/parse/parse.go	/^func Parse(dl string) ([]*dotlingo.Dotlingo, error) {$/;"	f
+ParseArgs	sdk/flow/cli.go	/^func ParseArgs(args []string) string {$/;"	f
 ParsePR	flows/codelingo/review/review/reviewpr.go	/^func ParsePR(urlStr string) (*PROpts, error) {$/;"	f
 PkgName	tenets/codelingo/go/golint/pkg-caps.go	/^package PkgName \/\/ MATCH \/don't use MixedCaps in package name\/$/;"	p
-Print	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func (f *Foo) Print() {$/;"	f
+Print	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^func (f *Foo) Print() {$/;"	f
 Print	tenets/codelingo/go/tested/main.go	/^func Print() {}$/;"	f
-ProperlyDeleted	tenets/west/default/allocation/variable_allocation.cpp	/^void ProperlyDeleted() {$/;"	f
+ProperlyDeleted	tenets/codelingo/west/allocation/variable_allocation.cpp	/^void ProperlyDeleted() {$/;"	f
 ProtoMessage	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Hunk) ProtoMessage()               {}$/;"	f
 ProtoMessage	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Request) ProtoMessage()               {}$/;"	f
+ProtoMessage	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (*HelloReply) ProtoMessage()    {}$/;"	f
+ProtoMessage	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (*HelloRequest) ProtoMessage()    {}$/;"	f
 Q	tenets/codelingo/go/golint/var-decl.go	/^type Q bool$/;"	t
 Qux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func Qux() {}$/;"	f
 RawHtmlTag	flows/codelingo/docs/render/terminal.go	/^func (options *Console) RawHtmlTag(out *bytes.Buffer, tag []byte) {$/;"	f
+Read	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type Read interface {$/;"	t
 Read	tenets/codelingo/go/golint/common-methods.go	/^func (T) Read(p []byte) (n int, err error)                 { return 0, nil }$/;"	f
 ReadDotLingo	flows/codelingo/review/review/review.go	/^func ReadDotLingo(ctx *cli.Context) (string, error) {$/;"	f
 ReadDotLingo	sdk/flow/util.go	/^func ReadDotLingo(ctx *cli.Context) (string, error) {$/;"	f
+Reader	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type Reader interface {$/;"	t
+RegisterGreeterServer	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func RegisterGreeterServer(s *grpc.Server, srv GreeterServer) {$/;"	f
 ReportStrt	flows/codelingo/review/review/review.go	/^type ReportStrt struct {$/;"	t
 Request	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^type Request struct {$/;"	t
-Request	sdk/flow/request.go	/^func Request(ctx context.Context, req *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {$/;"	f
+Request	sdk/flow/request.go	/^func Request(ctx context.Context, reqC <-chan *grpcflow.Request) (chan *grpcflow.Reply, chan error, error) {$/;"	f
 Request	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^class Request$/;"	c
-RequestReview	flows/codelingo/review/review/review.go	/^func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, chan error, error) {$/;"	f
+RequestReview	flows/codelingo/review/review/review.go	/^func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, <-chan *flowutil.UserVar, chan error, error) {$/;"	f
 Request_Depot	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^type Request_Depot struct {$/;"	t
 Request_Owner	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^type Request_Owner struct {$/;"	t
 Reset	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) Reset()                    { *m = Hunk{} }$/;"	f
 Reset	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) Reset()                    { *m = Request{} }$/;"	f
+Reset	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) Reset()         { *m = HelloReply{} }$/;"	f
+Reset	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) Reset()         { *m = HelloRequest{} }$/;"	f
 Run	sdk/flow/cli.go	/^func (f *flowRunner) Run() (chan *DecoratedResult, chan error) {$/;"	f
-RunCLI	sdk/flow/cli.go	/^func (f *flowRunner) RunCLI() (chan proto.Message, chan error, func(), error) {$/;"	f
-RunFlow	sdk/flow/request.go	/^func RunFlow(flowName string, req proto.Message, newItem func() proto.Message) (chan proto.Message, chan error, func(), error) {$/;"	f
+RunCLI	sdk/flow/cli.go	/^func (f *flowRunner) RunCLI() (chan proto.Message, <-chan *UserVar, chan error, func(), error) {$/;"	f
+RunFlow	sdk/flow/request.go	/^func RunFlow(flowName string, req proto.Message, newItem func() proto.Message, setDefaults func(proto.Message) proto.Message) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {$/;"	f
 S	tenets/codelingo/go/init/example.go	/^type S struct{}$/;"	t
 SayA	tenets/codelingo/go/tested/example.go	/^func (a *aStruct) SayA() string {$/;"	f
 SayB	tenets/codelingo/go/tested/example.go	/^func (b *bStruct) SayB() string {$/;"	f
+SayHello	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {$/;"	f
 SecondPrint	tenets/codelingo/go/tested/main.go	/^func SecondPrint() {}$/;"	f
 SendData	tenets/codelingo/go/marshalling/example.go	/^func SendData() error {$/;"	f
 ServeHTTP	tenets/codelingo/go/golint/common-methods.go	/^func (T) ServeHTTP(w http.ResponseWriter, r *http.Request) {}$/;"	f
 Server	tenets/codelingo/go/golint/var-decl.go	/^type Server interface{}$/;"	t
 Server	tenets/codelingo/go/marshalling/example.go	/^type Server struct {$/;"	t
 ServerData	tenets/codelingo/go/marshalling/example.go	/^type ServerData struct {$/;"	t
-Set	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func (f *Foo) Set(bar int) {$/;"	f
+Set	sdk/flow/user_variable.go	/^func (s *UserVar) Set() {$/;"	f
+Set	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^func (f *Foo) Set(bar int) {$/;"	f
+SetAsDefault	sdk/flow/user_variable.go	/^func (s *UserVar) SetAsDefault() {$/;"	f
+SetUserVar	sdk/flow/cli.go	/^func (f *flowRunner) SetUserVar(userVar *UserVar) {$/;"	f
+SomeName	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type SomeName interface {$/;"	t
 SomeUndocumented	tenets/codelingo/go/golint/const-block.go	/^	SomeUndocumented = 7 \/\/ MATCH \/SomeUndocumented.*should have comment.*block\/$/;"	c
-Something	tenets/west/default/shadowing/project.cpp	/^class Something {$/;"	c	file:
-Stop	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Stop() error {$/;"	f
-Stop	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Stop() error {$/;"	f
+SomeWriter	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type SomeWriter interface {$/;"	t
+Something	tenets/codelingo/west/shadowing/project.cpp	/^class Something {$/;"	c	file:
+Stop	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Stop() error {$/;"	f
+Stop	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Stop() error {$/;"	f
 StrikeThrough	flows/codelingo/docs/render/terminal.go	/^func (options *Console) StrikeThrough(out *bytes.Buffer, text []byte) {$/;"	f
 String	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) String() string {$/;"	f
 String	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Hunk) String() string            { return proto.CompactTextString(m) }$/;"	f
 String	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (m *Request) String() string            { return proto.CompactTextString(m) }$/;"	f
+String	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) String() string { return proto.CompactTextString(m) }$/;"	f
+String	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) String() string { return proto.CompactTextString(m) }$/;"	f
 String	tenets/codelingo/go/golint/common-methods.go	/^func (T) String() string                                   { return "" }$/;"	f
 String	tenets/codelingo/go/golint/var-decl.go	/^func (q) String() string { return "I'm a q" }$/;"	f
 Swap	flows/codelingo/rewrite/rewrite/writer.go	/^func (o byOffset) Swap(i, j int) {$/;"	f
@@ -237,12 +269,12 @@ T	tenets/codelingo/go/golint/4.go	/^type T int \/\/ MATCH \/exported type T.*sho
 T	tenets/codelingo/go/golint/common-methods.go	/^type T int$/;"	t
 T	tenets/codelingo/go/golint/sort.go	/^type T []int$/;"	t
 T	tenets/codelingo/go/golint/unexp-return.go	/^type T struct{}$/;"	t
-Tabby	tenets/codelingo/k8/misused-nil-interface/example.go	/^type Tabby struct{}$/;"	t
+Tabby	tenets/codelingo/landmines/misused-nil-interface/example.go	/^type Tabby struct{}$/;"	t
 Table	flows/codelingo/docs/render/terminal.go	/^func (options *Console) Table(out *bytes.Buffer, header []byte, body []byte, columnData []int) {}$/;"	f
 TableCell	flows/codelingo/docs/render/terminal.go	/^func (options *Console) TableCell(out *bytes.Buffer, text []byte, flags int)                   {}$/;"	f
 TableHeaderCell	flows/codelingo/docs/render/terminal.go	/^func (options *Console) TableHeaderCell(out *bytes.Buffer, text []byte, flags int)             {}$/;"	f
 TableRow	flows/codelingo/docs/render/terminal.go	/^func (options *Console) TableRow(out *bytes.Buffer, text []byte)                               {}$/;"	f
-TelcoNetworksController	tenets/modica/default/transport/telco_networks/list.php	/^class TelcoNetworksController extends Controller {$/;"	c
+TelcoNetworksController	tenets/codelingo/modica/transport/telco_networks/list.php	/^class TelcoNetworksController extends Controller {$/;"	c
 Tenet	util/mdgen/dataStruct/tenets.go	/^type Tenet struct {$/;"	t
 TenetDesc	util/mdgen/cmd/listTenets.go	/^type TenetDesc struct {$/;"	t
 TenetsOwner	util/mdgen/dataStruct/tenets.go	/^type TenetsOwner struct {$/;"	t
@@ -252,16 +284,19 @@ Test	flows/codelingo/rewrite/rewrite/package_test.go	/^func Test(t *testing.T) {
 Test	sdk/flow/package_test.go	/^func Test(t *testing.T) {$/;"	f
 TestAuthConfig	tenets/codelingo/jenkinsx/tparallel/auth_integration_test.go	/^func TestAuthConfig(t *testing.T) {$/;"	f
 TestAuthConfigParallel	tenets/codelingo/jenkinsx/tparallel/auth_integration_test.go	/^func TestAuthConfigParallel(t *testing.T) {$/;"	f
+TestDecoratorArgs	sdk/flow/cli_test.go	/^func (s *flowSuite) TestDecoratorArgs(c *gc.C) {$/;"	f
 TestDecoratorInput	sdk/flow/cli_test.go	/^func (s *flowSuite) TestDecoratorInput(c *gc.C) {$/;"	f
 TestF	tenets/codelingo/go/golint/errorf.go	/^func TestF(t *testing.T) error {$/;"	f
-TestGetACat	tenets/codelingo/k8/misused-nil-interface/example.go	/^func TestGetACat(t *testing.T) {$/;"	f
 TestHelloCorrect	tenets/codelingo/jenkinsx/parallel-in-tests/hello_test.go	/^func TestHelloCorrect(t *testing.T) {$/;"	f
 TestHelloIncorrect	tenets/codelingo/jenkinsx/parallel-in-tests/hello_test.go	/^func TestHelloIncorrect(t *testing.T) { \/\/ ISSUE$/;"	f
 TestHelloIntegration	tenets/codelingo/jenkinsx/parallel-in-tests/hello_integration_test.go	/^func TestHelloIntegration(t *testing.T) { \/\/ Shouldn't match$/;"	f
 TestNewFile	flows/codelingo/rewrite/rewrite/writer_test.go	/^func (s *cmdSuite) TestNewFile(c *gc.C) {$/;"	f
 TestNewFileSRC	flows/codelingo/rewrite/rewrite/writer_test.go	/^func (s *cmdSuite) TestNewFileSRC(c *gc.C) {$/;"	f
+TestPB	tenets/codelingo/lightning-network-daemon/rpc-responses-display-uniformly/example.go	/^type TestPB struct {$/;"	t
+TestParseArgs	sdk/flow/cli_test.go	/^func (s *flowSuite) TestParseArgs(c *gc.C) {$/;"	f
 TestParseURL	flows/codelingo/review/review/review_test.go	/^func (s *reviewSuite) TestParseURL(c *C) {$/;"	f
 TestPrint	tenets/codelingo/go/tested/main_test.go	/^func TestPrint() {$/;"	f
+TestRewriteFileName	flows/codelingo/rewrite/rewrite/writer_test.go	/^func (s *cmdSuite) TestRewriteFileName(c *gc.C) {$/;"	f
 TestSayB	tenets/codelingo/go/tested/example_test.go	/^func TestSayB(t *testing.T) {$/;"	f
 TestSomething	tenets/codelingo/go/golint/5_test.go	/^func TestSomething(t *testing.T) {$/;"	f
 TestSomething_suffix	tenets/codelingo/go/golint/5_test.go	/^func TestSomething_suffix(t *testing.T) {$/;"	f
@@ -274,6 +309,8 @@ Testoof	tenets/codelingo/jenkinsx/intformat/src/oof/oof_integration_test.go	/^fu
 Testooo	tenets/codelingo/jenkinsx/intformat/src/ooo/oooinvalid.go	/^func Testooo() {$/;"	f
 Testopf	tenets/codelingo/jenkinsx/intformat/src/opf/opf_integration_test.go	/^func Testopf() {$/;"	f
 Testopo	tenets/codelingo/jenkinsx/intformat/src/opo/opoinvalid.go	/^func Testopo() {$/;"	f
+Thing	tenets/codelingo/effective-go/package-comment/example-good.go	/^func Thing() {$/;"	f
+Thing	tenets/codelingo/effective-go/package-comment/example1.go	/^func Thing() {$/;"	f
 Thing	tenets/codelingo/go/golint/4.go	/^const Thing = "wonderful"$/;"	c
 TitleBlock	flows/codelingo/docs/render/terminal.go	/^func (options *Console) TitleBlock(out *bytes.Buffer, text []byte) {$/;"	f
 TripleEmphasis	flows/codelingo/docs/render/terminal.go	/^func (options *Console) TripleEmphasis(out *bytes.Buffer, text []byte) {$/;"	f
@@ -281,33 +318,46 @@ U	tenets/codelingo/go/golint/4.go	/^type U string$/;"	t
 U	tenets/codelingo/go/golint/sort.go	/^type U []int$/;"	t
 UNORDERED	flows/codelingo/docs/render/terminal.go	/^	UNORDERED = 1 << iota$/;"	c
 UndocAgain	tenets/codelingo/go/golint/const-block.go	/^const UndocAgain = 6 \/\/ MATCH \/UndocAgain.*should have comment\/$/;"	c
-Unwatch	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Unwatch(collection string, id interface{}, ch chan<- Change) {$/;"	f
-Unwatch	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Unwatch(collection string, id interface{}, ch chan<- Change) {$/;"	f
-UnwatchCollection	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) UnwatchCollection(collection string, ch chan<- Change) {$/;"	f
-UnwatchCollection	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) UnwatchCollection(collection string, ch chan<- Change) {$/;"	f
-Update	tenets/west/default/shadowing/project.cpp	/^int Update(Object* object, std::vector<Something*> somethings) {$/;"	f
+Unnamed	tenets/codelingo/effective-go/comment-first-word-when-empty/example.go	/^func Unnamed() {}$/;"	f
+Unwatch	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Unwatch(collection string, id interface{}, ch chan<- Change) {$/;"	f
+Unwatch	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Unwatch(collection string, id interface{}, ch chan<- Change) {$/;"	f
+UnwatchCollection	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) UnwatchCollection(collection string, ch chan<- Change) {$/;"	f
+UnwatchCollection	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) UnwatchCollection(collection string, ch chan<- Change) {$/;"	f
+Update	tenets/codelingo/west/shadowing/project.cpp	/^int Update(Object* object, std::vector<Something*> somethings) {$/;"	f
+UserVar	sdk/flow/user_variable.go	/^type UserVar struct {$/;"	t
 V	tenets/codelingo/go/golint/4.go	/^type V string$/;"	t
 W	tenets/codelingo/go/golint/4.go	/^var W = "foo" \/\/ MATCH \/exported var W.*should.*comment.*or.*unexport\/$/;"	v
-Wait	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Wait() error {$/;"	f
-Wait	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Wait() error {$/;"	f
-Watch	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) Watch(collection string, id interface{}, revno int64, ch chan<- Change) {$/;"	f
-Watch	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) Watch(collection string, id interface{}, revno int64, ch chan<- Change) {$/;"	f
-WatchCollection	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) WatchCollection(collection string, ch chan<- Change) {$/;"	f
-WatchCollection	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) WatchCollection(collection string, ch chan<- Change) {$/;"	f
-WatchCollectionWithFilter	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) WatchCollectionWithFilter(collection string, ch chan<- Change, filter func(interface{}) bool) {$/;"	f
-WatchCollectionWithFilter	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) WatchCollectionWithFilter(collection string, ch chan<- Change, filter func(interface{}) bool) {$/;"	f
+Wait	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Wait() error {$/;"	f
+Wait	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Wait() error {$/;"	f
+Watch	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) Watch(collection string, id interface{}, revno int64, ch chan<- Change) {$/;"	f
+Watch	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) Watch(collection string, id interface{}, revno int64, ch chan<- Change) {$/;"	f
+WatchCollection	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) WatchCollection(collection string, ch chan<- Change) {$/;"	f
+WatchCollection	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) WatchCollection(collection string, ch chan<- Change) {$/;"	f
+WatchCollectionWithFilter	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) WatchCollectionWithFilter(collection string, ch chan<- Change, filter func(interface{}) bool) {$/;"	f
+WatchCollectionWithFilter	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) WatchCollectionWithFilter(collection string, ch chan<- Change, filter func(interface{}) bool) {$/;"	f
 WhatDoesHeDo	tenets/codelingo/go/golint/const-block.go	/^	WhatDoesHeDo = "it's not a tumor!"$/;"	c
 Whatsit	tenets/codelingo/go/golint/const-block.go	/^	Whatsit = "missing_comment" \/\/ MATCH \/Whatsit.*should have comment.*block\/$/;"	c
 WhosYourDaddy	tenets/codelingo/go/golint/const-block.go	/^	WhosYourDaddy = "another_missing_one"$/;"	c
 WhyAreYouUsingCapitalLetters_InACFunctionName	tenets/codelingo/go/golint/names.go	/^func WhyAreYouUsingCapitalLetters_InACFunctionName() {} \/\/ MATCH \/underscore.*func.*Why.*CFunctionName\/$/;"	f
 Write	flows/codelingo/rewrite/rewrite/writer.go	/^func Write(results []*flowutil.DecoratedResult) error {$/;"	f
 Write	tenets/codelingo/go/golint/common-methods.go	/^func (T) Write(p []byte) (n int, err error)                { return 0, nil }$/;"	f
-WrongActionController	tenets/modica/default/transport/wrong_action_name/something.php	/^class WrongActionController extends Controller {$/;"	c
-WrongFilenameController	tenets/modica/default/transport/wrong_filename/asdf.php	/^class WrongFilenameController extends Controller {$/;"	c
-WrongNamespaceController	tenets/modica/default/transport/wrong_namespace/something.php	/^class WrongNamespaceController extends Controller {$/;"	c
+Writer	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^type Writer interface {$/;"	t
+WrongActionController	tenets/codelingo/modica/transport/wrong_action_name/something.php	/^class WrongActionController extends Controller {$/;"	c
+WrongFilenameController	tenets/codelingo/modica/transport/wrong_filename/asdf.php	/^class WrongFilenameController extends Controller {$/;"	c
+WrongNamespaceController	tenets/codelingo/modica/transport/wrong_namespace/something.php	/^class WrongNamespaceController extends Controller {$/;"	c
 X	tenets/codelingo/go/golint/4.go	/^const X = "bar" \/\/ MATCH \/exported const X.*should.*comment.*or.*unexport\/$/;"	c
 X509B	tenets/codelingo/go/golint/names.go	/^	X509B = 4 \/\/ ditto$/;"	c
+XXX_DiscardUnknown	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) XXX_DiscardUnknown() {$/;"	f
+XXX_DiscardUnknown	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) XXX_DiscardUnknown() {$/;"	f
+XXX_Marshal	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {$/;"	f
+XXX_Marshal	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {$/;"	f
+XXX_Merge	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (dst *HelloReply) XXX_Merge(src proto.Message) {$/;"	f
+XXX_Merge	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (dst *HelloRequest) XXX_Merge(src proto.Message) {$/;"	f
 XXX_OneofFuncs	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func (*Request) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {$/;"	f
+XXX_Size	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) XXX_Size() int {$/;"	f
+XXX_Size	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) XXX_Size() int {$/;"	f
+XXX_Unmarshal	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloReply) XXX_Unmarshal(b []byte) error {$/;"	f
+XXX_Unmarshal	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func (m *HelloRequest) XXX_Unmarshal(b []byte) error {$/;"	f
 Y	tenets/codelingo/go/golint/4.go	/^var Y, Z int \/\/ MATCH \/exported var Z.*own declaration\/$/;"	v
 Z	tenets/codelingo/go/golint/4.go	/^var Y, Z int \/\/ MATCH \/exported var Z.*own declaration\/$/;"	v
 _	flows/codelingo/review/review/review_test.go	/^var _ = Suite(&reviewSuite{})$/;"	v
@@ -317,6 +367,13 @@ _	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^var _ = fmt.Errorf$/;"	v
 _	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^var _ = math.Inf$/;"	v
 _	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^var _ = proto.Marshal$/;"	v
 _	sdk/flow/package_test.go	/^var _ = gc.Suite(&flowSuite{})$/;"	v
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^const _ = grpc.SupportPackageIsVersion4$/;"	c
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^const _ = proto.ProtoPackageIsVersion2 \/\/ please upgrade the proto package$/;"	c
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _ = fmt.Errorf$/;"	v
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _ = math.Inf$/;"	v
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _ = proto.Marshal$/;"	v
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _ context.Context$/;"	v
+_	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _ grpc.ClientConn$/;"	v
 _	tenets/codelingo/go/golint/4.go	/^var Location, _ = time.LoadLocation("Europe\/Istanbul") \/\/ not Constantinople$/;"	v
 _	tenets/codelingo/go/golint/blank-import-lib.go	/^	_ ast.Node     \/\/ for "go\/ast"$/;"	v
 _	tenets/codelingo/go/golint/blank-import-lib.go	/^	_ fmt.Stringer \/\/ for "fmt"$/;"	v
@@ -326,20 +383,29 @@ _	tenets/codelingo/go/golint/blank-import-main.go	/^var _ os.File \/\/ for "os"$
 _	tenets/codelingo/go/golint/import-dot.go	/^var _ Stringer \/\/ from "fmt"$/;"	v
 _	tenets/codelingo/go/golint/var-decl.go	/^var _ Server = (*serverImpl)(nil)$/;"	v
 _	tenets/codelingo/go/init/example.go	/^var _ = 0/;"	v
+_Greeter_SayHello_Handler	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {$/;"	f
+_Greeter_serviceDesc	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var _Greeter_serviceDesc = grpc.ServiceDesc{$/;"	v
 _Request_OneofMarshaler	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func _Request_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {$/;"	f
 _Request_OneofSizer	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func _Request_OneofSizer(msg proto.Message) (n int) {$/;"	f
 _Request_OneofUnmarshaler	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func _Request_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {$/;"	f
 __construct	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^    public function __construct() {$/;"	f
+aFunc	tenets/codelingo/code-review-comments/context-first-arg/example.go	/^func aFunc(ctx context.Context, a int) {$/;"	f
+aFunction	tenets/codelingo/effective-go/underscores-in-name/example.go	/^func aFunction() {$/;"	f
 aStruct	tenets/codelingo/go/tested/example.go	/^type aStruct struct {$/;"	t
+a_bad_function	tenets/codelingo/effective-go/underscores-in-name/example.go	/^func a_bad_function() {$/;"	f
+a_really_long_and_bad_package_name	tenets/codelingo/effective-go/good-package-name/a_really_long_and_bad_package_name/example-bad.go	/^package a_really_long_and_bad_package_name$/;"	p
 action	sdk/flow/cli.go	/^func (f *flowRunner) action(ctx *cli.Context) {$/;"	f
 action	sdk/flow/confirm.go	/^func (c *ConfirmerItem) action(option string) (func() (bool, bool, error), error) {$/;"	f
 addOne	tenets/codelingo/go/golint/inc.go	/^func addOne(x int) int {$/;"	f
 addOption	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o *option) addOption(opt option) {$/;"	f
-anyStruct	tenets/codelingo/k8/well-named-lock/example.go	/^type anyStruct struct {$/;"	t
-anyStruct	tenets/codelingo/k8/well-named-locks/example.go	/^type anyStruct struct {$/;"	t
+andOneMoree	tenets/codelingo/psr1/camel-case-method-name/example.php	/^  function andOneMoree() {$/;"	f
+anotherTestFunc	tenets/codelingo/landmines/shadowed-func-parameter/example.go	/^func anotherTestFunc(strA string) string {$/;"	f
+anyStruct	tenets/codelingo/kubernetes/well-named-lock/example.go	/^type anyStruct struct {$/;"	t
+anyStruct	tenets/codelingo/kubernetes/well-named-locks/example.go	/^type anyStruct struct {$/;"	t
 area	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^func (c circle) area() float64 {$/;"	f
 area	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^func (r rect) area() float64 {$/;"	f
-asdfffsAction	tenets/modica/default/transport/wrong_action_name/something.php	/^    public function asdfffsAction(){} \/\/ ISSUE$/;"	f
+asdfffsAction	tenets/codelingo/modica/transport/wrong_action_name/something.php	/^    public function asdfffsAction(){} \/\/ ISSUE$/;"	f
+bFunc	tenets/codelingo/code-review-comments/context-first-arg/example.go	/^func bFunc(b int, ctx context.Context, a int) {$/;"	f
 bStruct	tenets/codelingo/go/tested/example.go	/^type bStruct struct {$/;"	t
 badArea	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^func (c badCircle) badArea() float64 {$/;"	f
 badArea	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^func (r badRect) badArea() float64 {$/;"	f
@@ -349,13 +415,14 @@ badMeasure	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^
 badPerim	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^func (c badCircle) badPerim() float64 {$/;"	f
 badPerim	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^func (r badRect) badPerim() float64 {$/;"	f
 badRect	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^type badRect struct {$/;"	t
-badStruct	tenets/codelingo/k8/well-named-lock/example.go	/^type badStruct struct {$/;"	t
-badStruct	tenets/codelingo/k8/well-named-locks/example.go	/^type badStruct struct {$/;"	t
+badStruct	tenets/codelingo/kubernetes/well-named-lock/example.go	/^type badStruct struct {$/;"	t
+badStruct	tenets/codelingo/kubernetes/well-named-locks/example.go	/^type badStruct struct {$/;"	t
+badpack	tenets/codelingo/lightning-network-daemon/exported-package-is-tested/badpack/example-bad.go	/^package badpack$/;"	p
 bar	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func bar() {}$/;"	f
 bar	tenets/codelingo/go/golint/receiver-names.go	/^type bar struct{}$/;"	t
-bar	tenets/codelingo/k8/well-named-package/foo/example-bad.go	/^package bar$/;"	p
+bar	tenets/codelingo/kubernetes/well-named-package/foo/example-bad.go	/^package bar$/;"	p
 baz	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func baz() {}$/;"	f
-baz	tenets/codelingo/k8/well-named-package/baz/example-good.go	/^package baz$/;"	p
+baz	tenets/codelingo/kubernetes/well-named-package/baz/example-good.go	/^package baz$/;"	p
 buildTenetList	util/mdgen/cmd/listTenets.go	/^func buildTenetList(hubtenets dataStruct.HubTenets) []*TenetDesc {$/;"	f
 bundleURL	flows/codelingo/docs/docs/parse/parse.go	/^const bundleURL = "https:\/\/raw.githubusercontent.com\/codelingo\/codelingo\/master\/tenets\/%s\/%s\/lingo_bundle.yaml"$/;"	c
 byOffset	flows/codelingo/rewrite/rewrite/writer.go	/^type byOffset []*flowutil.DecoratedResult$/;"	t
@@ -363,6 +430,7 @@ byUserPriority	util/mdgen/cmd/listTenets.go	/^type byUserPriority []*TenetDesc$/
 c1	tenets/codelingo/go/global-var/example.go	/^const c1 = 0$/;"	c
 c2	tenets/codelingo/go/global-var/example.go	/^  c2 = 1$/;"	c
 c3	tenets/codelingo/go/global-var/example.go	/^  c3 = 2$/;"	c
+cFunc	tenets/codelingo/code-review-comments/context-first-arg/example.go	/^func cFunc(c int, b int, ctx context.Context, a int) {$/;"	f
 case1_1	tenets/codelingo/go/golint/names.go	/^const case1_1 = 1$/;"	c
 case2_1	tenets/codelingo/go/golint/names.go	/^type case2_1 struct {$/;"	t
 case3_1	tenets/codelingo/go/golint/names.go	/^func case3_1(case3_2 int) (case3_3 string) {$/;"	f
@@ -380,19 +448,20 @@ cmd	util/mdgen/cmd/write.go	/^package cmd$/;"	p
 cmdSuite	flows/codelingo/rewrite/rewrite/package_test.go	/^type cmdSuite struct {$/;"	t
 code	tenets/codelingo/go/init/example.go	/^package code$/;"	p
 command	sdk/flow/cli.go	/^func (f *flowRunner) command(ctx *cli.Context) (err error) {$/;"	f
+comment	flows/codelingo/rewrite/rewrite/writer.go	/^type comment struct {$/;"	t
 constant	tenets/codelingo/go/init/example.go	/^const constant = 0$/;"	c
 contextKeyTypeTests	tenets/codelingo/go/golint/contextkeytypes.go	/^func contextKeyTypeTests() {$/;"	f
 contextkeytypes	tenets/codelingo/go/golint/contextkeytypes.go	/^package contextkeytypes$/;"	p
 copyFlag	sdk/flow/cli.go	/^func copyFlag(name string, ff *flag.Flag, set *flag.FlagSet) {$/;"	f
-correct	tenets/cacophony/default/caught-generic-exceptions/example.py	/^def correct():$/;"	f
-correct	tenets/cacophony/default/debug-prints/example.py	/^def correct(a, b):$/;"	f
-correct	tenets/cacophony/default/no-fmt-print/example.go	/^func correct() {$/;"	f
-correct	tenets/cacophony/default/raise-generic-exceptions/example.py	/^def correct():$/;"	f
-correct	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func correct() {$/;"	f
+correct	tenets/codelingo/cacophony/caught-generic-exceptions/example.py	/^def correct():$/;"	f
+correct	tenets/codelingo/cacophony/debug-prints/example.py	/^def correct(a, b):$/;"	f
+correct	tenets/codelingo/cacophony/no-fmt-print/example.go	/^func correct() {$/;"	f
+correct	tenets/codelingo/cacophony/raise-generic-exceptions/example.py	/^def correct():$/;"	f
+correct	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^func correct() {$/;"	f
 correct	tenets/codelingo/go/println-format-strings/main.go	/^func correct() {$/;"	f
-correct1	tenets/cacophony/default/defer-in-loop/example.go	/^func correct1() {$/;"	f
-correct2	tenets/cacophony/default/defer-in-loop/example.go	/^func correct2() {$/;"	f
-correctAliased	tenets/cacophony/default/no-fmt-print/example-aliased.go	/^func correctAliased() {$/;"	f
+correct1	tenets/codelingo/cacophony/defer-in-loop/example.go	/^func correct1() {$/;"	f
+correct2	tenets/codelingo/cacophony/defer-in-loop/example.go	/^func correct2() {$/;"	f
+correctAliased	tenets/codelingo/cacophony/no-fmt-print/example-aliased.go	/^func correctAliased() {$/;"	f
 crazyID	tenets/codelingo/go/golint/var-decl.go	/^var crazyID int64 = -(-(-(-9)))$/;"	v
 ctrl	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^$ctrl = new Controller();$/;"	v
 ctxKey	tenets/codelingo/go/golint/contextkeytypes.go	/^type ctxKey struct{}$/;"	t
@@ -401,11 +470,15 @@ dataStruct	util/mdgen/dataStruct/tenets.go	/^package dataStruct$/;"	p
 decHelp	sdk/flow/help.go	/^type decHelp struct {$/;"	t
 decoratorAction	flows/codelingo/review/review/decorator.go	/^func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {$/;"	f
 decoratorAction	flows/codelingo/rewrite/rewrite/decorator.go	/^func decoratorAction(ctx *cli.Context, payload proto.Message) (bool, error) {$/;"	f
+decoratorArgsTest	sdk/flow/cli_test.go	/^var decoratorArgsTest = []struct {$/;"	v
 decoratorCMD	sdk/flow/cli_test.go	/^var decoratorCMD = &DecoratorApp{$/;"	v
 defaultTemplate	flows/codelingo/docs/main.go	/^var defaultTemplate string = `$/;"	v
-doStuff	tenets/codelingo/go/sprintf/example.go	/^func doStuff(param string) error {$/;"	f
-doThis	tenets/codelingo/go/bool-param/example.go	/^func doThis() {}$/;"	f
-doThisOrThat	tenets/codelingo/go/bool-param/example.go	/^func doThisOrThat(flag bool) {$/;"	f
+doStuffA	tenets/codelingo/go/sprintf/example.go	/^func doStuffA(param string) error {$/;"	f
+doStuffN	tenets/codelingo/go/sprintf/example.go	/^func doStuffN(param string) error {$/;"	f
+doThat	tenets/codelingo/go/bool-param/example.go	/^func doThat() {}$/;"	f
+doThis	tenets/codelingo/go/bool-param/example.go	/^func doThis() (flag bool) {}$/;"	f
+doThisOrThat	tenets/codelingo/go/bool-param/example.go	/^func doThisOrThat(flag bool) bool { \/\/ Issue$/;"	f
+doThisOrThatNoArg	tenets/codelingo/go/bool-param/example.go	/^func doThisOrThatNoArg() bool { \/\/ Issue$/;"	f
 docMaps	flows/codelingo/docs/main.go	/^func docMaps(ctx *cli.Context) ([]map[string]string, error) {$/;"	f
 docs	flows/codelingo/docs/docs/docs.go	/^package docs$/;"	p
 docsAction	flows/codelingo/docs/main.go	/^func docsAction(ctx *cli.Context) {$/;"	f
@@ -427,6 +500,7 @@ dpo	tenets/codelingo/jenkinsx/intformat/src/dpo/dpo.go	/^package dpo$/;"	p
 dpo_test	tenets/codelingo/jenkinsx/intformat/src/dpo/dpoinvalid.go	/^package dpo_test$/;"	p
 e1	tenets/codelingo/go/golint/errors.go	/^	e1 = fmt.Errorf("blah %d", 4) \/\/ MATCH \/error var.*e1.*errFoo\/$/;"	v
 emphasisStyles	flows/codelingo/docs/render/terminal.go	/^var emphasisStyles = [...]string{$/;"	v
+example	tenets/codelingo/code-review-comments/do-not-discard-errors/example.go	/^func example() (int, error) {$/;"	f
 example	tenets/codelingo/go/nil-only-functions/example.go	/^type example struct {$/;"	t
 exampleFunc	tenets/codelingo/php/phplint/BadExample.php	/^   function exampleFunc() {$/;"	f
 exampleFunc	tenets/codelingo/php/phplint/GoodExample.php	/^    function exampleFunc()$/;"	f
@@ -457,9 +531,11 @@ f6	tenets/codelingo/go/golint/receiver-names.go	/^func (bar) f6() {$/;"	f
 f7	tenets/codelingo/go/golint/receiver-names.go	/^func (_ *bar) f7() { \/\/ MATCH \/receiver name should not be an underscore\/$/;"	f
 f8	tenets/codelingo/go/golint/receiver-names.go	/^func (me multiError) f8() {$/;"	f
 f_it	tenets/codelingo/go/golint/names.go	/^func f_it() { \/\/ MATCH \/underscore.*func.*f_it\/$/;"	f
+fanOutUserVars	sdk/flow/user_variable.go	/^func fanOutUserVars(incoming <-chan *grpcflow.Reply, flowsetterc chan<- *grpcflow.Request) (chan *grpcflow.Reply, <-chan *UserVar, chan error) {$/;"	f
 fileDescriptor0	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^var fileDescriptor0 = []byte{$/;"	v
-flagBadName	tenets/codelingo/k8/flags-have-underscores/example.go	/^    flagBadName     = "bad_name"$/;"	c
-flagGoodName	tenets/codelingo/k8/flags-have-underscores/example.go	/^    flagGoodName      = "good-name"$/;"	c
+fileDescriptor_helloworld_71e208cbdc16936b	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var fileDescriptor_helloworld_71e208cbdc16936b = []byte{$/;"	v
+flagBadName	tenets/codelingo/kubernetes/flags-have-underscores/example.go	/^	flagBadName  = "bad_name"$/;"	c
+flagGoodName	tenets/codelingo/kubernetes/flags-have-underscores/example.go	/^	flagGoodName = "good-name"$/;"	c
 flags	tenets/codelingo/go/golint/var-decl.go	/^var flags uint32 = num$/;"	v
 floatT	tenets/codelingo/go/golint/var-decl.go	/^type floatT float64$/;"	t
 floatV	tenets/codelingo/go/golint/var-decl.go	/^var floatV floatT = 123.45$/;"	v
@@ -470,13 +546,15 @@ flow	sdk/flow/git.go	/^package flow$/;"	p
 flow	sdk/flow/help.go	/^package flow$/;"	p
 flow	sdk/flow/package_test.go	/^package flow$/;"	p
 flow	sdk/flow/request.go	/^package flow$/;"	p
+flow	sdk/flow/user_variable.go	/^package flow$/;"	p
 flow	sdk/flow/util.go	/^package flow$/;"	p
 flowRunner	sdk/flow/cli.go	/^type flowRunner struct {$/;"	t
 flowSuite	sdk/flow/package_test.go	/^type flowSuite struct {$/;"	t
 flows	flows/codelingo/pull-request/main.go	/^package flows$/;"	p
-flush	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) flush() {$/;"	f
-flush	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) flush() {$/;"	f
+flush	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) flush() {$/;"	f
+flush	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) flush() {$/;"	f
 foo	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func foo() {}$/;"	f
+foo	tenets/codelingo/effective-go/good-package-name/main/example-good.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/blank-import-lib.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/blank-import-lib_test.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/const-block.go	/^package foo$/;"	p
@@ -495,8 +573,9 @@ foo	tenets/codelingo/go/golint/receiver-names.go	/^type foo struct{}$/;"	t
 foo	tenets/codelingo/go/golint/time.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/unexp-return.go	/^package foo$/;"	p
 foo	tenets/codelingo/go/golint/var-decl.go	/^package foo$/;"	p
-foo	tenets/modica/default/null-check/example.php	/^$foo = NULL;$/;"	v
+foo	tenets/codelingo/modica/null-check/example.php	/^$foo = NULL;$/;"	v
 fooId	tenets/codelingo/go/golint/names.go	/^const fooId = "blah" \/\/ MATCH \/fooId.*fooID\/$/;"	c
+foo_test	tenets/codelingo/effective-go/good-package-name/main/example-test-package.go	/^package foo_test$/;"	p
 formattedDocsFromTenets	flows/codelingo/docs/main.go	/^func formattedDocsFromTenets(ctx *cli.Context) (string, error) {$/;"	f
 function	tenets/codelingo/go/init/example.go	/^func function() {$/;"	f
 function	tenets/codelingo/go/init/example.go	/^func function(arg string) bool {$/;"	f
@@ -514,6 +593,7 @@ genLexiconCmd	util/mdgen/cmd/genLexicon.go	/^var genLexiconCmd = &cobra.Command{
 genTenetsCmd	util/mdgen/cmd/genTenets.go	/^var genTenetsCmd = &cobra.Command{$/;"	v
 geometry	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^type geometry interface {$/;"	t
 get	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^    public function get () {$/;"	f
+getACat	tenets/codelingo/landmines/misused-nil-interface/example.go	/^func getACat() Cat {$/;"	f
 getLingoFilepaths	flows/codelingo/docs/docs/docs.go	/^func getLingoFilepaths(workingDir string) ([]string, error) {$/;"	f
 getUserFromSession	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^    public function getUserFromSession() {$/;"	f
 gitCMD	flows/codelingo/docs/docs/docs.go	/^func gitCMD(args ...string) (out string, err error) {$/;"	f
@@ -521,6 +601,7 @@ github404	flows/codelingo/docs/docs/parse/parse.go	/^const github404 = "404: Not
 goodArea	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^func (c goodCircle) goodArea() float64 {$/;"	f
 goodArea	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^func (r goodRect) goodArea() float64 {$/;"	f
 goodCircle	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^type goodCircle struct {$/;"	t
+goodFunc	tenets/codelingo/landmines/shadowed-func-parameter/example.go	/^func goodFunc(strA string) string {$/;"	f
 goodGeometry	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^type goodGeometry interface {$/;"	t
 goodGoodArea	tenets/codelingo/jenkinsx/orginterfaces/interface.go	/^func (c goodGoodCircle) goodGoodArea() float64 {$/;"	f
 goodGoodArea	tenets/codelingo/jenkinsx/orginterfaces/interface.go	/^func (r goodGoodRect) goodGoodArea() float64 {$/;"	f
@@ -534,21 +615,27 @@ goodMeasure	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^func 
 goodPerim	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^func (c goodCircle) goodPerim() float64 {$/;"	f
 goodPerim	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^func (r goodRect) goodPerim() float64 {$/;"	f
 goodRect	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^type goodRect struct {$/;"	t
-goodpack	tenets/codelingo/k8/new-package-requires-test/badpack/example-bad.go	/^package goodpack$/;"	p
-goodpack	tenets/codelingo/k8/new-package-requires-test/goodpack/example-good.go	/^package goodpack$/;"	p
+goodpack	tenets/codelingo/kubernetes/new-package-requires-test/badpack/example-bad.go	/^package goodpack$/;"	p
+goodpack	tenets/codelingo/kubernetes/new-package-requires-test/goodpack/example-good.go	/^package goodpack$/;"	p
+goodpack	tenets/codelingo/lightning-network-daemon/exported-package-is-tested/goodpack/example-good.go	/^package goodpack$/;"	p
 googleIPs	tenets/codelingo/go/golint/var-decl.go	/^var googleIPs []int$/;"	v
+greeterClient	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^type greeterClient struct {$/;"	t
 h	tenets/codelingo/go/golint/error-return.go	/^func h() int { \/\/ ok$/;"	f
 h	tenets/codelingo/go/golint/iferr.go	/^func h() error {$/;"	f
-handle	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) handle(req interface{}) {$/;"	f
-handle	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) handle(req interface{}) {$/;"	f
+handle	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) handle(req interface{}) {$/;"	f
+handle	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) handle(req interface{}) {$/;"	f
 hasOption	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) hasOption(opt option) bool {$/;"	f
 headerStyles	flows/codelingo/docs/render/terminal.go	/^var headerStyles = [...]string{$/;"	v
 hello	tenets/codelingo/jenkinsx/parallel-in-tests/hello.go	/^package hello$/;"	p
 hello	tenets/codelingo/jenkinsx/test-package-name/hello.go	/^package hello$/;"	p
 hello	tenets/codelingo/jenkinsx/test-package-name/hello_incorrect_test.go	/^package hello \/\/ ISSUE$/;"	p
+helloOtherWorldd	tenets/codelingo/psr1/camel-case-method-name/example.php	/^  function helloOtherWorldd() {$/;"	f
+helloWorld	tenets/codelingo/psr1/camel-case-method-name/example.php	/^  function helloWorld() {$/;"	f
+helloWorld	tenets/codelingo/psr2/elseif-not-else-if/example.php	/^function helloWorld() {$/;"	f
 hello_test	tenets/codelingo/jenkinsx/parallel-in-tests/hello_integration_test.go	/^package hello_test$/;"	p
 hello_test	tenets/codelingo/jenkinsx/parallel-in-tests/hello_test.go	/^package hello_test$/;"	p
 hello_test	tenets/codelingo/jenkinsx/test-package-name/hello_test.go	/^package hello_test$/;"	p
+helloworld	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^package helloworld$/;"	p
 helpData	sdk/flow/help.go	/^type helpData struct {$/;"	t
 hidden	tenets/codelingo/go/golint/unexp-return.go	/^type hidden struct{}$/;"	t
 hubFrontend	util/serve/main.go	/^const hubFrontend = "http:\/\/localhost:8080"$/;"	c
@@ -556,18 +643,20 @@ i	tenets/codelingo/go/golint/error-return.go	/^func i() (int, error) { \/\/ ok$/
 i	tenets/codelingo/go/golint/iferr.go	/^func i() error {$/;"	f
 i	tenets/codelingo/go/golint/names.go	/^type i interface {$/;"	t
 i	tenets/codelingo/php/count-in-loop/test.php	/^$i = 0;$/;"	v
-incorrect	tenets/cacophony/default/debug-prints/example.py	/^def incorrect(a, b):$/;"	f
-incorrect	tenets/cacophony/default/defer-in-loop/example.go	/^func incorrect() {$/;"	f
-incorrect	tenets/cacophony/default/no-fmt-print/example.go	/^func incorrect() {$/;"	f
-incorrect	tenets/cacophony/default/raise-generic-exceptions/example.py	/^def incorrect():$/;"	f
-incorrect	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func incorrect() {$/;"	f
+incorrect	tenets/codelingo/cacophony/debug-prints/example.py	/^def incorrect(a, b):$/;"	f
+incorrect	tenets/codelingo/cacophony/defer-in-loop/example.go	/^func incorrect() {$/;"	f
+incorrect	tenets/codelingo/cacophony/no-fmt-print/example.go	/^func incorrect() {$/;"	f
+incorrect	tenets/codelingo/cacophony/raise-generic-exceptions/example.py	/^def incorrect():$/;"	f
+incorrect	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^func incorrect() {$/;"	f
 incorrect	tenets/codelingo/go/println-format-strings/main.go	/^func incorrect() {$/;"	f
-incorrect1	tenets/cacophony/default/caught-generic-exceptions/example.py	/^def incorrect1():$/;"	f
-incorrect2	tenets/cacophony/default/caught-generic-exceptions/example.py	/^def incorrect2():$/;"	f
-incorrectAliased	tenets/cacophony/default/no-fmt-print/example-aliased.go	/^func incorrectAliased() {$/;"	f
+incorrect1	tenets/codelingo/cacophony/caught-generic-exceptions/example.py	/^def incorrect1():$/;"	f
+incorrect2	tenets/codelingo/cacophony/caught-generic-exceptions/example.py	/^def incorrect2():$/;"	f
+incorrectAliased	tenets/codelingo/cacophony/no-fmt-print/example-aliased.go	/^func incorrectAliased() {$/;"	f
 indent	flows/codelingo/review/review/decorator.go	/^func indent(str string, add, remove bool) string {$/;"	f
 indent	flows/codelingo/rewrite/rewrite/decorator.go	/^func indent(str string, add, remove bool) string {$/;"	f
 init	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^func init() {$/;"	f
+init	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func init() { proto.RegisterFile("helloworld.proto", fileDescriptor_helloworld_71e208cbdc16936b) }$/;"	f
+init	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^func init() {$/;"	f
 init	tenets/codelingo/go/init/example.go	/^func (s S) init(arg string) bool {$/;"	f
 init	tenets/codelingo/go/init/example.go	/^func init() {$/;"	f
 init	util/mdgen/cmd/genAll.go	/^func init() {$/;"	f
@@ -578,7 +667,7 @@ init	util/mdgen/cmd/listTenets.go	/^func init() {$/;"	f
 init	util/mdgen/cmd/root.go	/^func init() {$/;"	f
 init	util/mdgen/cmd/write.go	/^func init() {$/;"	f
 initConfig	util/mdgen/cmd/root.go	/^func initConfig() {$/;"	f
-inner	tenets/west/default/shadowing/project.cpp	/^    Object* inner;$/;"	m	class:Object	file:
+inner	tenets/codelingo/west/shadowing/project.cpp	/^    Object* inner;$/;"	m	class:Object	file:
 int	tenets/codelingo/go/golint/unexp-return.go	/^type int struct{}$/;"	t
 intFunc	tenets/codelingo/go/nil-only-functions/example.go	/^func (example) intFunc() error {$/;"	f
 invalidator	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^var invalidator = "invalid"$/;"	v
@@ -600,13 +689,13 @@ lexInfo	util/mdgen/cmd/genLexicon.go	/^type lexInfo struct {$/;"	t
 lineOffsets	flows/codelingo/rewrite/rewrite/writer.go	/^func lineOffsets(src []byte, offset int32) []int32 {$/;"	f
 linkStyle	flows/codelingo/docs/render/terminal.go	/^var linkStyle = ansi.ColorCode("015+u")$/;"	v
 list	flows/codelingo/docs/render/terminal.go	/^type list struct {$/;"	t
-listAction	tenets/modica/default/transport/telco_networks/list.php	/^    public function listAction(){} \/\/ Fits Template$/;"	f
+listAction	tenets/codelingo/modica/transport/telco_networks/list.php	/^    public function listAction(){} \/\/ Fits Template$/;"	f
 listFacts	util/mdgen/cmd/genLexicon.go	/^func listFacts(owner, lexName string) (map[string][]string, error) {$/;"	f
 listLexs	util/mdgen/cmd/genLexicon.go	/^func listLexs() ([]*lexInfo, error) {$/;"	f
 listTenetsCmd	util/mdgen/cmd/listTenets.go	/^var listTenetsCmd = &cobra.Command{$/;"	v
 logoutUrl	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^        $logoutUrl = "\/logout";$/;"	v
-loop	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) loop() error {$/;"	f
-loop	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) loop() error {$/;"	f
+loop	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) loop() error {$/;"	f
+loop	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) loop() error {$/;"	f
 m	tenets/codelingo/go/golint/error-return.go	/^func m() (x int, err error, y int) { \/\/ MATCH \/error should be the last type\/$/;"	f
 m	tenets/codelingo/go/golint/iferr.go	/^func m() error {$/;"	f
 main	flows/codelingo/docs/main.go	/^func main() {$/;"	f
@@ -619,19 +708,45 @@ main	flows/codelingo/rewrite/main.go	/^package main$/;"	p
 main	flows/codelingo/rewrite/rewrite/test/mock.go	/^func main() {$/;"	f
 main	flows/codelingo/search/main.go	/^func main() {$/;"	f
 main	flows/codelingo/search/main.go	/^package main$/;"	p
-main	tenets/cacophony/default/caught-generic-exceptions/example.py	/^def main():$/;"	f
-main	tenets/cacophony/default/debug-prints/example.py	/^def main():$/;"	f
-main	tenets/cacophony/default/defer-in-loop/example.go	/^func main() {$/;"	f
-main	tenets/cacophony/default/defer-in-loop/example.go	/^package main$/;"	p
-main	tenets/cacophony/default/no-fmt-print/example-aliased.go	/^func main() {$/;"	f
-main	tenets/cacophony/default/no-fmt-print/example-aliased.go	/^package main$/;"	p
-main	tenets/cacophony/default/no-fmt-print/example.go	/^func main() {$/;"	f
-main	tenets/cacophony/default/no-fmt-print/example.go	/^package main$/;"	p
-main	tenets/cacophony/default/raise-generic-exceptions/example.py	/^def main():$/;"	f
-main	tenets/cacophony/default/redundant-defer-wraps/example.go	/^func main() {$/;"	f
-main	tenets/cacophony/default/redundant-defer-wraps/example.go	/^package main$/;"	p
+main	tenets/codelingo/cacophony/caught-generic-exceptions/example.py	/^def main():$/;"	f
+main	tenets/codelingo/cacophony/debug-prints/example.py	/^def main():$/;"	f
+main	tenets/codelingo/cacophony/defer-in-loop/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cacophony/defer-in-loop/example.go	/^package main$/;"	p
+main	tenets/codelingo/cacophony/no-fmt-print/example-aliased.go	/^func main() {$/;"	f
+main	tenets/codelingo/cacophony/no-fmt-print/example-aliased.go	/^package main$/;"	p
+main	tenets/codelingo/cacophony/no-fmt-print/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cacophony/no-fmt-print/example.go	/^package main$/;"	p
+main	tenets/codelingo/cacophony/raise-generic-exceptions/example.py	/^def main():$/;"	f
+main	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cacophony/redundant-defer-wraps/example.go	/^package main$/;"	p
+main	tenets/codelingo/cockroachdb/fmt-verbs/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cockroachdb/fmt-verbs/example.go	/^package main$/;"	p
+main	tenets/codelingo/cockroachdb/func-args-inline-comments/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cockroachdb/func-args-inline-comments/example.go	/^package main$/;"	p
+main	tenets/codelingo/cockroachdb/line-length-limit/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/cockroachdb/line-length-limit/example.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/avoid-renaming-imports/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/code-review-comments/avoid-renaming-imports/example.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/avoid-renaming-imports/example2.go	/^func main() {$/;"	f
+main	tenets/codelingo/code-review-comments/avoid-renaming-imports/example2.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/context-first-arg/example.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/do-not-discard-errors/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/code-review-comments/do-not-discard-errors/example.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/go-error-fmt/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/code-review-comments/go-error-fmt/example.go	/^package main$/;"	p
+main	tenets/codelingo/code-review-comments/use-crypto-rand/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/code-review-comments/use-crypto-rand/example.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/avoid-annotations-in-comments/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/effective-go/avoid-annotations-in-comments/example.go	/^package main$/;"	p
 main	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/comment-first-word-when-empty/example.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/package-comment/example-good.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/package-comment/example1.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/effective-go/single-method-interface-name/example.go	/^package main$/;"	p
+main	tenets/codelingo/effective-go/underscores-in-name/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/effective-go/underscores-in-name/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/bool-param/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/bool-param/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/empty-slice/example.go	/^func main() {$/;"	f
@@ -655,10 +770,13 @@ main	tenets/codelingo/go/tested/example_test.go	/^package main$/;"	p
 main	tenets/codelingo/go/tested/main.go	/^func main() {}$/;"	f
 main	tenets/codelingo/go/tested/main.go	/^package main$/;"	p
 main	tenets/codelingo/go/tested/main_test.go	/^package main$/;"	p
+main	tenets/codelingo/go/ticker-in-for-switch/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/go/ticker-in-for-switch/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/todo/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/todo/example.go	/^package main$/;"	p
 main	tenets/codelingo/go/unconvert/example.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/unconvert/example.go	/^package main$/;"	p
+main	tenets/codelingo/go/unsafe-go-routine-variables/test.go	/^package main$/;"	p
 main	tenets/codelingo/go/unused-private-functions/main/main.go	/^func main() {$/;"	f
 main	tenets/codelingo/go/unused-private-functions/main/main.go	/^package main$/;"	p
 main	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^func main() {$/;"	f
@@ -668,18 +786,20 @@ main	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^package main$/;"
 main	tenets/codelingo/jenkinsx/orginterfaces/example/bad-interface-2.go	/^package main$/;"	p
 main	tenets/codelingo/jenkinsx/orginterfaces/example/interface.go	/^package main$/;"	p
 main	tenets/codelingo/jenkinsx/orginterfaces/interface.go	/^package main$/;"	p
-main	tenets/codelingo/k8/flags-have-underscores/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/jsonapi-kind-compulsory-metadata/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/looped-vars-outside-loop/example.go	/^func main() {$/;"	f
-main	tenets/codelingo/k8/looped-vars-outside-loop/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/misused-nil-interface/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/shadowed-func-parameter/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/well-formed-lists/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/well-named-lists/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/well-named-lock/example.go	/^package main$/;"	p
-main	tenets/codelingo/k8/well-named-locks/example.go	/^package main$/;"	p
-main	tenets/west/default/shadowing/project.cpp	/^int main() {$/;"	f
-main	tenets/west/default/switch/switch.cpp	/^int main() {$/;"	f
+main	tenets/codelingo/kubernetes/flags-have-underscores/example.go	/^package main$/;"	p
+main	tenets/codelingo/kubernetes/jsonapi-kind-compulsory-metadata/example.go	/^package main$/;"	p
+main	tenets/codelingo/kubernetes/well-formed-lists/example.go	/^package main$/;"	p
+main	tenets/codelingo/kubernetes/well-named-lists/example.go	/^package main$/;"	p
+main	tenets/codelingo/kubernetes/well-named-lock/example.go	/^package main$/;"	p
+main	tenets/codelingo/kubernetes/well-named-locks/example.go	/^package main$/;"	p
+main	tenets/codelingo/landmines/looped-vars-outside-loop/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/landmines/looped-vars-outside-loop/example.go	/^package main$/;"	p
+main	tenets/codelingo/landmines/misused-nil-interface/example.go	/^func main() {$/;"	f
+main	tenets/codelingo/landmines/misused-nil-interface/example.go	/^package main$/;"	p
+main	tenets/codelingo/landmines/shadowed-func-parameter/example.go	/^package main$/;"	p
+main	tenets/codelingo/lightning-network-daemon/rpc-responses-display-uniformly/example.go	/^package main$/;"	p
+main	tenets/codelingo/west/shadowing/project.cpp	/^int main() {$/;"	f
+main	tenets/codelingo/west/switch/switch.cpp	/^int main() {$/;"	f
 main	util/mdgen/main.go	/^func main() {$/;"	f
 main	util/mdgen/main.go	/^package main$/;"	p
 main	util/serve/main.go	/^func main() {$/;"	f
@@ -704,9 +824,9 @@ myZeroStr	tenets/codelingo/go/golint/var-decl.go	/^var myZeroStr string = ""    
 n	tenets/codelingo/go/golint/error-return.go	/^func n() (int, error, error) { \/\/ OK$/;"	f
 name	tenets/codelingo/php/eval-expression/test.php	/^$name = 'coffee';$/;"	v
 negID	tenets/codelingo/go/golint/var-decl.go	/^var negID int64 = -1$/;"	v
-newFileSRC	flows/codelingo/rewrite/rewrite/writer.go	/^func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, error) {$/;"	f
-newHubWatcher	tenets/codelingo/go/reallocated_slice/broken.go	/^func newHubWatcher(hub HubSource, logger Logger) (*HubWatcher, <-chan struct{}) {$/;"	f
-newHubWatcher	tenets/codelingo/go/reallocated_slice/fixed.go	/^func newHubWatcher(hub HubSource, logger Logger) (*HubWatcher, <-chan struct{}) {$/;"	f
+newFileSRC	flows/codelingo/rewrite/rewrite/writer.go	/^func newFileSRC(ctx *cli.Context, hunk *rewriterpc.Hunk, fileSRC []byte) ([]byte, *comment, error) {$/;"	f
+newHubWatcher	tenets/codelingo/go/reallocated-slice/broken.go	/^func newHubWatcher(hub HubSource, logger Logger) (*HubWatcher, <-chan struct{}) {$/;"	f
+newHubWatcher	tenets/codelingo/go/reallocated-slice/fixed.go	/^func newHubWatcher(hub HubSource, logger Logger) (*HubWatcher, <-chan struct{}) {$/;"	f
 newWriter	tenets/codelingo/go/golint/var-decl.go	/^func newWriter() io.Writer { return nil }$/;"	f
 ni	tenets/codelingo/go/golint/var-decl.go	/^var ni nosuchpkg.Interface = nosuchpkg.NewConcrete()$/;"	v
 normalizeFlags	sdk/flow/cli.go	/^func normalizeFlags(flags []cli.Flag, set *flag.FlagSet) error {$/;"	f
@@ -714,7 +834,7 @@ num	tenets/codelingo/go/golint/var-decl.go	/^const num = 123$/;"	c
 o	tenets/codelingo/go/golint/error-return.go	/^func o() (int, error, int, error) { \/\/ OK$/;"	f
 offset	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) offset() option {$/;"	f
 offsiteCheck	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^function offsiteCheck($url) {$/;"	f
-oldSRC	flows/codelingo/rewrite/rewrite/writer_test.go	/^var oldSRC string = `$/;"	v
+oldSRC	flows/codelingo/rewrite/rewrite/writer_test.go	/^var oldSRC = `$/;"	v
 onlyReturnsNil	tenets/codelingo/go/nil-only-functions/example.go	/^func onlyReturnsNil() error {$/;"	f
 oof	tenets/codelingo/jenkinsx/intformat/src/oof/oof.go	/^func oof() {}$/;"	f
 oof	tenets/codelingo/jenkinsx/intformat/src/oof/oof.go	/^package oof$/;"	p
@@ -742,10 +862,12 @@ out	tenets/codelingo/go/golint/var-decl.go	/^var out io.Writer = os.Stdout$/;"	v
 out2	tenets/codelingo/go/golint/var-decl.go	/^var out2 io.Writer = newWriter() \/\/ MATCH \/should omit.*io\\.Writer\/$/;"	v
 parenID	tenets/codelingo/go/golint/var-decl.go	/^var parenID int64 = (17)$/;"	v
 parse	flows/codelingo/docs/docs/parse/parse.go	/^package parse$/;"	p
+parseArgsTest	sdk/flow/cli_test.go	/^var parseArgsTest = []struct {$/;"	v
 parseBitBucketPR	flows/codelingo/review/review/reviewpr.go	/^func parseBitBucketPR(urlStr []string) (*PROpts, error) {$/;"	f
 parseGithubPR	flows/codelingo/review/review/reviewpr.go	/^func parseGithubPR(urlPath []string) (*PROpts, error) {$/;"	f
 parseGitlabPR	flows/codelingo/review/review/reviewpr.go	/^func parseGitlabPR(urlStr []string) (*PROpts, error) {$/;"	f
 parseTenetsDir	util/mdgen/cmd/genTenets.go	/^func parseTenetsDir(dirPath string) (dataStruct.HubTenets, error) {$/;"	f
+partitionedFile	flows/codelingo/rewrite/rewrite/writer.go	/^type partitionedFile struct {$/;"	t
 perim	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^func (c circle) perim() float64 {$/;"	f
 perim	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^func (r rect) perim() float64 {$/;"	f
 pkg	tenets/codelingo/go/golint/4.go	/^package pkg$/;"	p
@@ -760,7 +882,7 @@ pkg	tenets/codelingo/go/golint/inc.go	/^package pkg$/;"	p
 pkg	tenets/codelingo/go/golint/sort.go	/^package pkg$/;"	p
 pkg_with_underscores	tenets/codelingo/go/golint/names.go	/^package pkg_with_underscores \/\/ MATCH \/underscore.*package name\/$/;"	p
 position	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o option) position() option {$/;"	f
-print	tenets/codelingo/k8/looped-vars-outside-loop/example.go	/^func print(pi *int) { fmt.Println(*pi) }$/;"	f
+print	tenets/codelingo/landmines/looped-vars-outside-loop/example.go	/^func print(pi *int) { fmt.Println(*pi) }$/;"	f
 printHelp	sdk/flow/help.go	/^func printHelp(out io.Writer, templ string, data interface{}) {$/;"	f
 priorities	util/mdgen/cmd/listTenets.go	/^var priorities = map[string]int{$/;"	v
 priorityByOwner	util/mdgen/cmd/listTenets.go	/^func priorityByOwner(owner string) int {$/;"	f
@@ -770,13 +892,13 @@ products	tenets/codelingo/php/sql-concats/example.php	/^	$products = ExecuteSQL(
 pullRequestCmd	flows/codelingo/pull-request/main.go	/^var pullRequestCmd = cli.Command{$/;"	v
 q	tenets/codelingo/go/golint/var-decl.go	/^type q int$/;"	t
 query	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^        $this->query = new Query();$/;"	v
-queueChange	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
-queueChange	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
+queueChange	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
+queueChange	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) queueChange(change Change) {$/;"	f
 quux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func quux() {}$/;"	f
 qux	tenets/codelingo/effective-go/comment-first-word-as-subject/example.go	/^func qux() {}$/;"	f
 rawLingoBundle	flows/codelingo/docs/docs/parse/parse.go	/^type rawLingoBundle struct {$/;"	t
-receiveEvent	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
-receiveEvent	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
+receiveEvent	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
+receiveEvent	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) receiveEvent(topic string, data interface{}) {$/;"	f
 rect	tenets/codelingo/jenkinsx/orginterfaces/bad-interface.go	/^type rect struct {$/;"	t
 redirect	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^    public function redirect($url) {$/;"	f
 render	flows/codelingo/docs/render/terminal.go	/^package render$/;"	p
@@ -793,13 +915,15 @@ returnNonNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnNonN
 returnNum	tenets/codelingo/go/nil-only-functions/example.go	/^func returnNum() int {$/;"	f
 returnPointerAndNil	tenets/codelingo/go/nil-only-functions/example.go	/^func returnPointerAndNil() (*example, error) {$/;"	f
 returnsMixed	tenets/codelingo/go/nil-only-functions/example.go	/^func returnsMixed() error {$/;"	f
+returnsNil	tenets/codelingo/landmines/misused-nil-interface/example.go	/^func returnsNil() error {$/;"	f
+returnsTrue	tenets/codelingo/go/bool-param/example.go	/^func returnsTrue() bool {$/;"	f
 review	flows/codelingo/review/review/checksyntax.go	/^package review$/;"	p
 review	flows/codelingo/review/review/cli.go	/^package review$/;"	p
 review	flows/codelingo/review/review/decorator.go	/^package review$/;"	p
 review	flows/codelingo/review/review/review.go	/^package review$/;"	p
 review	flows/codelingo/review/review/review_test.go	/^package review$/;"	p
 review	flows/codelingo/review/review/reviewpr.go	/^package review$/;"	p
-reviewAction	flows/codelingo/review/review/cli.go	/^func reviewAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), error) {$/;"	f
+reviewAction	flows/codelingo/review/review/cli.go	/^func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.UserVar, chan error, func(), error) {$/;"	f
 reviewPullRequestAction	flows/codelingo/pull-request/main.go	/^func reviewPullRequestAction(ctx *cli.Context) {$/;"	f
 reviewPullRequestCMD	flows/codelingo/pull-request/main.go	/^func reviewPullRequestCMD(cliCtx *cli.Context) (string, error) {$/;"	f
 reviewRequire	flows/codelingo/review/review/cli.go	/^func reviewRequire() error {$/;"	f
@@ -809,25 +933,34 @@ rewrite	flows/codelingo/rewrite/rewrite/decorator.go	/^package rewrite$/;"	p
 rewrite	flows/codelingo/rewrite/rewrite/package_test.go	/^package rewrite$/;"	p
 rewrite	flows/codelingo/rewrite/rewrite/writer.go	/^package rewrite$/;"	p
 rewrite	flows/codelingo/rewrite/rewrite/writer_test.go	/^package rewrite$/;"	p
-rewriteAction	flows/codelingo/rewrite/rewrite/cli.go	/^func rewriteAction(cliCtx *cli.Context) (chan proto.Message, chan error, func(), error) {$/;"	f
+rewriteAction	flows/codelingo/rewrite/rewrite/cli.go	/^func rewriteAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.UserVar, chan error, func(), error) {$/;"	f
+rewriteFile	flows/codelingo/rewrite/rewrite/writer.go	/^func rewriteFile(ctx *cli.Context, inputSRC, newSRC []byte, parts partitionedFile, hunk *rewriterpc.Hunk) ([]byte, error) {$/;"	f
 rewriteRequire	flows/codelingo/rewrite/rewrite/cli.go	/^func rewriteRequire() error {$/;"	f
 rootCmd	util/mdgen/cmd/root.go	/^var rootCmd = &cobra.Command{$/;"	v
 rpc	flows/codelingo/rewrite/rpc/rewrite.pb.go	/^package rpc$/;"	p
 rpcTimeoutMsec	tenets/codelingo/go/golint/time.go	/^var rpcTimeoutMsec = flag.Duration("rpc_timeout", 100*time.Millisecond, "some flag") \/\/ MATCH \/Msec.*\\*time.Duration\/$/;"	v
+safe	tenets/codelingo/go/unsafe-go-routine-variables/test.go	/^func safe() <-chan int {$/;"	f
 searchAction	flows/codelingo/search/main.go	/^func searchAction(ctx *cli.Context) {$/;"	f
 searchCMD	flows/codelingo/search/main.go	/^func searchCMD(cliCtx *cli.Context) (string, error) {$/;"	f
 searchCommand	flows/codelingo/search/main.go	/^var searchCommand = cli.Command{$/;"	v
 searchRequire	flows/codelingo/search/main.go	/^func searchRequire() error {$/;"	f
-sendReq	tenets/codelingo/go/reallocated_slice/broken.go	/^func (w *HubWatcher) sendReq(req interface{}) {$/;"	f
-sendReq	tenets/codelingo/go/reallocated_slice/fixed.go	/^func (w *HubWatcher) sendReq(req interface{}) {$/;"	f
+sendReq	tenets/codelingo/go/reallocated-slice/broken.go	/^func (w *HubWatcher) sendReq(req interface{}) {$/;"	f
+sendReq	tenets/codelingo/go/reallocated-slice/fixed.go	/^func (w *HubWatcher) sendReq(req interface{}) {$/;"	f
 serve	tenets/codelingo/go/todo/example.go	/^func serve() error {$/;"	f
 serverImpl	tenets/codelingo/go/golint/var-decl.go	/^type serverImpl struct{}$/;"	t
+set	sdk/flow/user_variable.go	/^func (s *UserVar) set(val string) {$/;"	f
 setBaseApp	sdk/flow/cli.go	/^func setBaseApp(cliApp *CLIApp) {$/;"	f
 setHelp	sdk/flow/cli.go	/^func (f *flowRunner) setHelp() {$/;"	f
-somethingAction	tenets/modica/default/transport/made_up/something.php	/^    public function somethingAction(){} \/\/ Fits Template$/;"	f
-somethingAction	tenets/modica/default/transport/wrong_controller_name/something.php	/^    public function somethingAction(){} \/\/ ISSUE$/;"	f
-somethingAction	tenets/modica/default/transport/wrong_filename/asdf.php	/^    public function somethingAction(){} \/\/ ISSUE$/;"	f
-somethingAction	tenets/modica/default/transport/wrong_namespace/something.php	/^    public function somethingAction(){} \/\/ Issue$/;"	f
+someFuncA	tenets/codelingo/go/bool-param/example.go	/^func someFuncA(a string, b bool)           {}$/;"	f
+someFuncB	tenets/codelingo/go/bool-param/example.go	/^func someFuncB(b bool, a string)           {}$/;"	f
+someFuncC	tenets/codelingo/go/bool-param/example.go	/^func someFuncC(a string, b bool, c string) {}$/;"	f
+someFuncD	tenets/codelingo/go/bool-param/example.go	/^func someFuncD(b bool, c string, d bool)   {}$/;"	f
+somepackage	tenets/codelingo/effective-go/package-comment/example.go	/^package somepackage$/;"	p
+somethingAction	tenets/codelingo/modica/transport/made_up/something.php	/^    public function somethingAction(){} \/\/ Fits Template$/;"	f
+somethingAction	tenets/codelingo/modica/transport/wrong_controller_name/something.php	/^    public function somethingAction(){} \/\/ ISSUE$/;"	f
+somethingAction	tenets/codelingo/modica/transport/wrong_filename/asdf.php	/^    public function somethingAction(){} \/\/ ISSUE$/;"	f
+somethingAction	tenets/codelingo/modica/transport/wrong_namespace/something.php	/^    public function somethingAction(){} \/\/ Issue$/;"	f
+splitSRC	flows/codelingo/rewrite/rewrite/writer.go	/^func splitSRC(hunk *rewriterpc.Hunk, fileSRC []byte) partitionedFile {$/;"	f
 sql	tenets/codelingo/php/sql-concats/example.php	/^	$sql = "SELECT cost FROM ";$/;"	v
 srcFileTemplate	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^var srcFileTemplate = `$/;"	v
 srccode	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^type srccode struct {$/;"	t
@@ -838,27 +971,31 @@ string	tenets/codelingo/php/eval-expression/test.php	/^$string = 'cup';$/;"	v
 stringT	tenets/codelingo/go/golint/var-decl.go	/^type stringT string$/;"	t
 stringV	tenets/codelingo/go/golint/var-decl.go	/^var stringV stringT = "abc"$/;"	v
 subOneInLoop	tenets/codelingo/go/golint/inc.go	/^func subOneInLoop(y int) {$/;"	f
-sync	tenets/codelingo/k8/well-named-interface/sync/example.go	/^package sync$/;"	p
-syncOp	tenets/codelingo/k8/well-named-interface/sync/example.go	/^type syncOp interface {$/;"	t
+sync	tenets/codelingo/kubernetes/well-named-interface/sync/example.go	/^package sync$/;"	p
+syncOp	tenets/codelingo/kubernetes/well-named-interface/sync/example.go	/^type syncOp interface {$/;"	t
 t	tenets/codelingo/go/golint/names.go	/^type t struct{}$/;"	t
 t_wow	tenets/codelingo/go/golint/names.go	/^type t_wow struct { \/\/ MATCH \/underscore.*type.*t_wow\/$/;"	t
 takes_bool	tenets/codelingo/php/boolean-argument/test.php	/^function takes_bool(bool $input) \/\/ ISSUE$/;"	f
 tenetURL	flows/codelingo/docs/docs/parse/parse.go	/^const tenetURL = "https:\/\/raw.githubusercontent.com\/codelingo\/codelingo\/master\/tenets\/%s\/%s\/%s\/codelingo.yaml"$/;"	c
 tenetsToRawMdDocs	flows/codelingo/docs/main.go	/^func tenetsToRawMdDocs(docs []map[string]string, templateSRC string) (string, error) {$/;"	f
 test	flows/codelingo/rewrite/rewrite/test/mock.go	/^package test$/;"	p
-test	tenets/codelingo/k8/new-package-requires-test/test/testing-good.go	/^package test$/;"	p
+test	tenets/codelingo/kubernetes/new-package-requires-test/test/testing-good.go	/^package test$/;"	p
 testData	flows/codelingo/rewrite/rewrite/writer_test.go	/^var testData = []struct {$/;"	v
 testFileTemplate	tenets/codelingo/jenkinsx/intformat/generate_tests.go	/^var testFileTemplate = `$/;"	v
+testFunc	tenets/codelingo/landmines/shadowed-func-parameter/example.go	/^func testFunc() (err string) {$/;"	f
+testStruct2	tenets/codelingo/kubernetes/well-named-lock/example.go	/^type testStruct2 struct {$/;"	t
 testdata	tenets/codelingo/go/golint/pkg-doc2.go	/^package testdata$/;"	p
+testpackage	tenets/codelingo/lightning-network-daemon/exported-package-is-tested/test/my_test.go	/^package testpackage$/;"	p
 theVar	tenets/codelingo/go/init/example.go	/^var theVar = true$/;"	v
 thing	tenets/codelingo/php/if-assignment/test.php	/^$thing = "ting";$/;"	v
+thing	tenets/codelingo/psr2/elseif-not-else-if/example.php	/^    $thing = 2;$/;"	v
 timeoutSecs	tenets/codelingo/go/golint/time.go	/^var timeoutSecs = 5 * time.Second \/\/ MATCH \/Secs.*time.Duration\/$/;"	v
 toggleOption	flows/codelingo/rewrite/rewrite/option/option.go	/^func (o *option) toggleOption(opt option) {$/;"	f
 tparallel	tenets/codelingo/jenkinsx/tparallel/auth.go	/^package tparallel$/;"	p
 tparallel_test	tenets/codelingo/jenkinsx/tparallel/auth_integration_test.go	/^package tparallel_test$/;"	p
-tryTheThing	tenets/codelingo/k8/shadowed-func-parameter/example.go	/^func tryTheThing() (string, error) {$/;"	f
 unexp	tenets/codelingo/go/golint/errors.go	/^var unexp = errors.New("some unexported error") \/\/ MATCH \/error var.*unexp.*errFoo\/$/;"	v
 unexp	tenets/codelingo/go/golint/unexp-return.go	/^func unexp() hidden { \/\/ ok$/;"	f
+unsafe	tenets/codelingo/go/unsafe-go-routine-variables/test.go	/^func unsafe() <-chan int { \/\/ ISSUE$/;"	f
 url	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^            $url = "\/";$/;"	v
 url	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^        $url = $request->query->get("url", '');$/;"	v
 urlParts	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^        $urlParts = parse_url($url);$/;"	v
@@ -876,15 +1013,17 @@ vcsGit	flows/codelingo/rewrite/rewrite/cli.go	/^	vcsGit string = "git"$/;"	c
 vcsP4	flows/codelingo/review/review/cli.go	/^	vcsP4  string = "perforce"$/;"	c
 vcsP4	flows/codelingo/rewrite/rewrite/cli.go	/^	vcsP4  string = "perforce"$/;"	c
 viewAction	tenets/codelingo/php/offsite-redirection/UserDefinedRedirect.php	/^    public function viewAction(Request $request)$/;"	f
-watcher	tenets/codelingo/go/reallocated_slice/broken.go	/^package watcher$/;"	p
-watcher	tenets/codelingo/go/reallocated_slice/fixed.go	/^package watcher$/;"	p
+watcher	tenets/codelingo/go/reallocated-slice/broken.go	/^package watcher$/;"	p
+watcher	tenets/codelingo/go/reallocated-slice/fixed.go	/^package watcher$/;"	p
 writeCmd	util/mdgen/cmd/write.go	/^var writeCmd = &cobra.Command{$/;"	v
 writeFile	util/mdgen/cmd/write.go	/^func writeFile(tmplPath, outPath string, data interface{}) error {$/;"	f
 writeLexMD	util/mdgen/cmd/genLexicon.go	/^func writeLexMD(data *lexInfo) error {$/;"	f
 x	tenets/codelingo/go/golint/context.go	/^func x(ctx context.Context) { \/\/ ok$/;"	f
 x	tenets/codelingo/go/golint/context.go	/^func x(ctx context.Context, s string) { \/\/ ok$/;"	f
 x	tenets/codelingo/go/golint/var-decl.go	/^var x = 0$/;"	v
-x	tenets/west/default/allocation/variable_allocation.cpp	/^    int x;$/;"	m	class:Obj	file:
+x	tenets/codelingo/west/allocation/variable_allocation.cpp	/^    int x;$/;"	m	class:Obj	file:
+xxx_messageInfo_HelloReply	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var xxx_messageInfo_HelloReply proto.InternalMessageInfo$/;"	v
+xxx_messageInfo_HelloRequest	tenets/codelingo/effective-go/underscores-in-name/proto.pb.go	/^var xxx_messageInfo_HelloRequest proto.InternalMessageInfo$/;"	v
 y	tenets/codelingo/go/golint/context.go	/^func y(s string, ctx context.Context) { \/\/ MATCH \/context.Context should be the first parameter.*\/$/;"	f
 y	tenets/codelingo/go/golint/context.go	/^func y(s string, r int, ctx context.Context, x int) { \/\/ MATCH \/context.Context should be the first parameter.*\/$/;"	f
 y	tenets/codelingo/go/golint/var-decl.go	/^var y string = q(1).String() \/\/ MATCH \/should.*string\/$/;"	v

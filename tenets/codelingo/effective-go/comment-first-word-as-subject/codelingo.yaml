@@ -72,42 +72,54 @@ funcs:
           return arr.filter(function(v){return v!==''});
         }
 
+        function splitCamel(s) {
+          return filterEmpty(s.split(/([A-Z][a-z]*)/));
+        }
+
         // Makes an educated guess to whether or not the first word is an old
         // function name and fixes it.
         function updateOld(s, name) {
-          var result = s
           var words = s.split(" ")
-
-          firstword=words[0]
-
+        
+          firstword=words[0];
+        
           // Ignore when there are special characters. Allow a couple of () though so it can be rewritten
-          if (testre("[^A-Za-z()]", s)) {
+          if (testre("[^A-Za-z0-9()]", firstword)) {
             return s;
           }
-
-          subwords = firstword.split(/([A-Z][a-z]*)/);
-          subwords = filterEmpty(subwords)
-
+        
+          subwords = splitCamel(firstword);
+          name_subwords = splitCamel(name);
+      
           // Ignore words without camel case. Sometimes the 'new' first word is not on old function name
-          if (subwords.length === 1) return s
-
-          //Split first word into camel-cased subwords
-          subwords.forEach(function(word) {
-            if (word.length < 4) return
-            // If start of comment smells like an old name
-            if (lc(word).indexOf(lc(name)) !== -1 ||
-                lc(name).indexOf(lc(word)) !== -1) {
-              words[0] = name
-            }
-          })
+          if (subwords.length === 1) return s;
+      
+          same = setIntersection(subwords, name_subwords)
+      
+          if (same.length > 0) {
+              words[0] = name;
+          } else {
+              //Split first word into camel-cased subwords
+              subwords.forEach(function(subword) {
+                if (subword.length < 4) return;
+                // If start of comment smells like an old name
+                if (lc(subword).indexOf(lc(name)) !== -1 || lc(name).indexOf(lc(subword)) !== -1) {
+                  words[0] = name;
+                }
+              })
+          }
+        
           return words.join(" ")
         }
 
         // modal_verbs etc.
         var verbs = ["will", "does", "is", "exist"];
         var plurifiable_verbs = ["split", "purge", "remove", "test", "ensure", "replace", "get", "start",
-                     "validate", "execute", "demonstrate", "compare", "hook", "report", "take", "clear",
-                     "handle", "decode", "unregister", "capture", "retrieve", "declare", "check", "retrieve", "render", "add", "read", "write"];
+                     "validate", "execute", "demonstrate", "compare", "hook",
+                     "report", "take", "clear", "handle", "decode",
+                     "unregister", "capture", "retrieve", "declare", "check",
+                     "return", "render", "add", "read", "write"];
+      
 
         // If one of these tokens appear followed by an s, it should NOT be treated as a verb
         var verb_plural_blacklist = ["lot", "alia", "arg", "resource",
@@ -146,12 +158,6 @@ funcs:
           return (arr.indexOf(obj) != -1);
         }
 
-        function removeNameFromStart(s, name) {
-          if (! includes(verbs, lc(name))) {
-            s = s.replace(new RegExp("^" + name + "[a-z]* ?", "i"), "")  // Remove name from start including extra alphas and space if exists
-          }
-        }
-
         function setUnion (x, y) {
           var obj = {};
           for (var i = x.length-1; i >= 0; -- i)
@@ -164,6 +170,10 @@ funcs:
             res.push(obj[k]);
           }
           return res;
+        }
+
+        function setIntersection(array1, array2) {
+          return array1.filter(value => -1 !== array2.indexOf(value));
         }
 
         function removeThisIfVerb(s) {
@@ -182,7 +192,6 @@ funcs:
           // without a capital letter because that may be a common noun, such
           // as 'distance', there the function comment is on a 'Distance'
           // function.
-          // s = s.replace(new RegExp("^(This) " + name + " "), "")
           s = s.replace(new RegExp("^(The) " + capitalize(name) + " "), "")
 
           // Make these replacements before removing from the front
@@ -194,10 +203,9 @@ funcs:
           })
 
           s = updateOld(s, name)
-          removeNameFromStart(s, name)
           s = fixLeadingVerb(s)
-          s = s.replace(new RegExp("^[a-z]+([A-Z]+[a-z]+)+ "), "") // Remove leading camelCase
-          s = s.replace(new RegExp("^([A-Z]+[a-z]+){2,} "), "")    // Remove leading PascalCase. Must come after remove name
+          s = s.replace(new RegExp("^[a-z]+([A-Z]+[a-z0-9]+)+ "), "") // Remove leading camelCase
+          s = s.replace(new RegExp("^([A-Z]+[a-z0-9]+){2,} "), "")    // Remove leading PascalCase. Must come after remove name
           s = removeThisIfVerb(s)
           s = s.replace(new RegExp("^Purpose ", "i"), "The purpose ")
 
