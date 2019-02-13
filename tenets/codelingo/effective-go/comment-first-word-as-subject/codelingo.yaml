@@ -211,10 +211,6 @@ funcs:
         }
 
         function rewordComment(s, name, commentChar) {
-          if (testre("^[a-zA-Z]+:", s) || testre("^TODO ", s)) {
-              return s
-          }
-
           // Removing 'The' is fine, unless it is replaced by something
           // without a capital letter because that may be a common noun, such
           // as 'distance', there the function comment is on a 'Distance'
@@ -244,9 +240,20 @@ funcs:
 
         commentString = commentString.replace(new RegExp("^[/*]* ", "i"), " ") // Remove extra leading comment chars
 
-        // Do nothing if comment does not start with alphanumerics
-        if (! testre("^ ?[A-Za-z]", commentString)) {
-          return text
+        // Do nothing if comment starts with
+        // - non-alphanumerics
+        // - test
+        // - LABEL:
+        // - TODO
+        if ( 
+            (! testre("^[A-Za-z]", commentString)) ||
+            (testre("^test", lc(commentString))) ||
+            (testre("^[a-zA-Z]+:", commentString)) ||
+            (testre("^TODO ", commentString)) ||
+            (testre("^A-Za-z_", firstWord(commentString)))
+            ) {
+      
+            return text
         }
 
         commentString = removeInitialWhitespace(commentString)
