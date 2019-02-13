@@ -257,15 +257,18 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      # Only look at exported functions
-      go.func_decl(depth = any):
-        go.comment_group:
-          @review comment
-          @rewrite --replace "{{fixComment(commText, funcName)}}"
-          go.comment:
-            sibling_order == 0
-            text as commText
-        go.ident:
-          public == "true"
-          name as funcName
-          isValid(commText, funcName)
+      go.file(depth = any):
+        exclude:
+          filename as filename
+          regexp(/*_test.go/, filename)
+        go.func_decl(depth = any):
+          go.comment_group:
+            @review comment
+            @rewrite --replace "{{fixComment(commText, funcName)}}"
+            go.comment:
+              sibling_order == 0
+              text as commText
+          go.ident:
+            public == "true"
+            name as funcName
+            isValid(commText, funcName)
