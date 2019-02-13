@@ -1,4 +1,16 @@
 funcs:
+  - name: isNotATestFile
+    type: asserter
+    body: |
+      function(filename) {
+        // ES5 workaround
+        // TODO: don't use ES5
+        String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
+          return this.indexOf(suffix, this.length - suffix.length) >= 0;
+        };
+
+        return !filename.endsWith("_test.go")
+      }
   - name: isValid
     type: asserter
     body: |
@@ -257,15 +269,17 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      # Only look at exported functions
-      go.func_decl(depth = any):
-        go.comment_group:
-          @review comment
-          @rewrite --replace "{{fixComment(commText, funcName)}}"
-          go.comment:
-            sibling_order == 0
-            text as commText
-        go.ident:
-          public == "true"
-          name as funcName
-          isValid(commText, funcName)
+      go.file(depth = any):
+        filename as filename
+        isNotATestFile(filename)
+        go.func_decl(depth = any):
+          go.comment_group:
+            @review comment
+            @rewrite --replace "{{fixComment(commText, funcName)}}"
+            go.comment:
+              sibling_order == 0
+              text as commText
+          go.ident:
+            public == "true"
+            name as funcName
+            isValid(commText, funcName)
