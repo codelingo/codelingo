@@ -1,4 +1,16 @@
 funcs:
+  - name: isNotATestFile
+    type: asserter
+    body: |
+      function(filename) {
+        // ES5 workaround
+        // TODO: don't use ES5
+        String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
+          return this.indexOf(suffix, this.length - suffix.length) >= 0;
+        };
+
+        return !filename.endsWith("_test.go")
+      }
   - name: isValid
     type: asserter
     body: |
@@ -258,9 +270,8 @@ tenets:
       import codelingo/ast/go
 
       go.file(depth = any):
-        exclude:
-          filename as filename
-          regexp(/*_test.go/, filename)
+        filename as filename
+        isNotATestFile(filename)
         go.func_decl(depth = any):
           go.comment_group:
             @review comment
