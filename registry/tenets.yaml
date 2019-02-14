@@ -222,7 +222,7 @@ codelingo:
     version: 0.0.0
     tenets:
       elseif-not-else-if:
-        hasIssues: true
+        hasIssues: false
     tags:
     - php
     - psr
