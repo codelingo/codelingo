@@ -1,8 +1,15 @@
+funcs:
+  - name: extractRaw
+    type: resolver
+    body: |
+      function(rawCode) {
+        return rawCode.replace(" ", "")
+      }
 tenets:
   - name: elseif-not-else-if
     flows:
       codelingo/review:
-        comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
+        comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. Raw is {{rawCode}}
       codelingo/rewrite:
       codelingo/docs:
         title: if, elseif, else
@@ -19,14 +26,13 @@ tenets:
           }```
 
           The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
+
+          
     query: |
       import codelingo/ast/php
 
       @review comment
-      # This does not work as intended.
-      # It removes everything after 'if'
-      # and before closing brace.
-      # Waiting on ability to edit raw file.
-      @rewrite --replace "elseif"
+      @rewrite --replace "{{ extractRaw(rawCode) }}"
       php.stmt_else(depth = any):
+        raw as rawCode
         php.stmt_if
