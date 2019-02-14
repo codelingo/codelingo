@@ -9,7 +9,7 @@ tenets:
   - name: elseif-not-else-if
     flows:
       codelingo/review:
-        comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. Raw is {{rawCode}}
+        comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
       codelingo/rewrite:
       codelingo/docs:
         title: if, elseif, else
@@ -26,8 +26,6 @@ tenets:
           }```
 
           The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
-
-          
     query: |
       import codelingo/ast/php
 
