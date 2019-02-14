@@ -14,6 +14,9 @@ tenets:
       go.file(depth = any): # TODO: package instead
         go.decls:
           go.gen_decl:
+
+            # Collect struct and field name to ensure methods are on the same struct and use
+            # the same field
             go.type_spec:
               go.ident:
                 name as structType
@@ -22,10 +25,12 @@ tenets:
                   go.field:
                     go.names: 
                       go.ident:
-                        name as fieldName
+                        name as fieldName # TODO(validity): verify slice type here - though really the append will do most of the job
                     go.array_type
+
+          # Method that appends to slice field
           go.func_decl(depth = any):
-            go.field_list: # This refers to method receiver fields, not generic fields
+            go.field_list: # TODO(validity): make this refer to method receiver fields, and exclude arguments and return values
               go.field:
                 go.names:
                   go.ident:
@@ -44,12 +49,15 @@ tenets:
                   name == "append"
                 go.args:
                   go.selector_expr:
-                    go.ident: # refers to lhs
+                    go.ident:
                       name == structName
                     go.ident:
                       name == fieldName
+
+          # Method that selects a pointer from a slice field
+          # TODO(validity/false-negative): find updating method via the callgraph from here
           go.func_decl(depth = any):
-            go.field_list: # TODO: Repeated method-of-struct-structure macrofact
+            go.field_list: # TODO(aesthetics): Repeated method-of-struct-structure macrofact
               go.field: 
                 go.names:
                   go.ident:
@@ -57,27 +65,34 @@ tenets:
                 go.star_expr:
                   go.ident: 
                     name == structType
-            go.element(depth = any):  # Could refer to go.block_stmt or any other parent of for and assign
+            go.element(depth = any):  # Refers to parent of for and assign - probably go.block_stmt
+
+              # The address of an element of the slice is assigned to a variable
               go.assign_stmt:
                 go.rhs:
-                  go.unary_expr:
+                  go.unary_expr: # TODO(validity): ensure that this unary expression takes the address
                     go.index_expr:
                       go.selector_expr:
-                        go.ident: # refers to lhs
+                        go.ident:
                           name == structName
                         go.ident:
                           name == fieldName
+
+              # For loop fails to reassign to the variable variable
               go.for_stmt:
                 exclude:
-                  go.assign_stmt: # TODO: repeated index-of-array macrofact
+                  # TODO(validity/false-negative): only exclude for loops with assignments to the variable above
+                  # TODO(validity/false-positive): look for assignments at any point between potential update and potential reallocation
+                  go.assign_stmt: # TODO(aesthetics): repeated index-of-array macrofact
                     go.rhs:
                       go.unary_expr:
                         go.index_expr:
                           go.selector_expr:
-                            go.ident: # refers to lhs
+                            go.ident:
                               name == structName
                             go.ident:
                               name == fieldName
+                # Call the function that may cause slice reallocation
                 @review comment
                 go.call_expr(depth = any):
                   go.selector_expr:
