@@ -2,7 +2,13 @@
   {
    "Comment": "Make one ticker as opposed to making a new timer each iteration.",
    "Filename": "example.go",
-   "Line": 10,
+   "Line": 11,
    "Snippet": "\tfor {\n\t\tselect {\n\t\tcase \u003c-time.After(50 * time.Second):\n\t\t\tfmt.Println(\"Hello, playground\")\n\t\t}"
+  },
+  {
+   "Comment": "Make one ticker as opposed to making a new timer each iteration.",
+   "Filename": "example.go",
+   "Line": 21,
+   "Snippet": "\t\tfor {\n\t\t\tselect {\n\t\t\tcase \u003c-time.After(50 * time.Second):\n\t\t\t\tfmt.Println(\"Hello, playground\")\n\t\t\t}"
   }
  ]

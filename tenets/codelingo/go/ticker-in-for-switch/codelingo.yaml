@@ -1,18 +1,45 @@
+funcs:
+  - name: extractRaw
+    type: resolver
+    body: |
+      function(rawCode) {
+        var splitCode = rawCode.split("\n")
+        var re = /case <-time\.After\(\w*/
+        var blank = splitCode[splitCode.length -1]
+        blank = blank.substring(0, blank.indexOf("}"))
+
+        for (var i = 0; i < splitCode.length; i++) {
+        	line = splitCode[i]
+        	if (line.match(re)) {
+            var start = line.indexOf("(")
+            var end = line.lastIndexOf(")")
+            var callArgs = line.substring(start+1, end)
+            var firstLine = "ticker := time.NewTicker(" + callArgs + ")\n"
+            splitCode[i] = line.replace(/case <-time\.After\(.*/, "case <-ticker.C:")
+            splitCode[0] = blank + splitCode[0]
+            var joinCode = splitCode.join("\n")
+            return firstLine + joinCode
+          }
+        }
+        return rawCode
+      }
 tenets:
   - name: use-ticker-in-for-switch
     flows:
       codelingo/review:
         comment: Make one ticker as opposed to making a new timer each iteration.
+      codelingo/rewrite:
     query: |
       import codelingo/ast/go
-
+      @rewrite --replace "{{ extractRaw(rawCode) }}"
       go.for_stmt(depth = any):
+        raw as rawCode
         go.select_stmt(depth = any):
           go.comm_clause(depth = any):
             go.expr_stmt:
               go.unary_expr:
                 @review comment
-                go.call_expr:
+                go.call_expr:                
                   go.selector_expr:
                     go.ident:
                       name == "time"
