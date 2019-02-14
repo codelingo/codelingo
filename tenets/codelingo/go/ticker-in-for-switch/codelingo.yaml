@@ -39,7 +39,7 @@ tenets:
             go.expr_stmt:
               go.unary_expr:
                 @review comment
-                go.call_expr:                
+                go.call_expr:
                   go.selector_expr:
                     go.ident:
                       name == "time"
