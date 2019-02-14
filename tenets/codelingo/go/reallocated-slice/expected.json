@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "This pointer may become invalid as the slice it comes from is reallocated.",
+   "Filename": "broken.go",
+   "Line": 239,
+   "Snippet": "\t\t\t\treturn\n\t\t\tcase req := \u003c-w.request:\n\t\t\t\tw.handle(req)\n\t\t\t\tcontinue\n\t\t\tcase change := \u003c-w.changes:"
+  },
+  {
+   "Comment": "This pointer may become invalid as the slice it comes from is reallocated.",
+   "Filename": "broken.go",
+   "Line": 221,
+   "Snippet": "\t\t\t\tcontinue\n\t\t\tcase change := \u003c-w.changes:\n\t\t\t\tw.queueChange(change)\n\t\t\t\tcontinue\n\t\t\tcase e.ch \u003c- Change{e.key.c, e.key.id, e.revno}:"
+  }
+ ]
