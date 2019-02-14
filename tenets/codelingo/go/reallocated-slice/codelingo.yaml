@@ -25,7 +25,7 @@ tenets:
                   go.field:
                     go.names: 
                       go.ident:
-                        name as fieldName # TODO(validity): verify slice type here - though really the append will do most of the job
+                        name as sliceField # TODO(validity): verify slice type here - though really the append will do most of the job
                     go.array_type
 
           # Method that appends to slice field
@@ -42,7 +42,7 @@ tenets:
                   go.ident: # Handle non-pointer receiver
                     name == structType
             go.ident:
-              name as updatingFunction
+              name as reallocatingFunction
             go.block_stmt:
               go.call_expr(depth = any):
                 go.ident:
@@ -52,7 +52,7 @@ tenets:
                     go.ident:
                       name == structName
                     go.ident:
-                      name == fieldName
+                      name == sliceField
 
           # Method that selects a pointer from a slice field
           # TODO(validity/false-negative): find updating method via the callgraph from here
@@ -76,7 +76,7 @@ tenets:
                         go.ident:
                           name == structName
                         go.ident:
-                          name == fieldName
+                          name == sliceField
 
               # For loop fails to reassign to the variable variable
               go.for_stmt:
@@ -91,7 +91,7 @@ tenets:
                             go.ident:
                               name == structName
                             go.ident:
-                              name == fieldName
+                              name == sliceField
                 # Call the function that may cause slice reallocation
                 @review comment
                 go.call_expr(depth = any):
@@ -99,4 +99,4 @@ tenets:
                     go.ident:
                       name == structName
                     go.ident:
-                      name == updatingFunction
+                      name == reallocatingFunction
