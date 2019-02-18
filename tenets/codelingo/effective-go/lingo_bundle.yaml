@@ -3,6 +3,7 @@ version: 0.0.0
 tenets:
   - avoid-annotations-in-comments
   - comment-first-word-as-subject
+  - update-comment-first-word-as-subject
   - comment-first-word-when-empty
   - good-package-name
   # - package-comment
