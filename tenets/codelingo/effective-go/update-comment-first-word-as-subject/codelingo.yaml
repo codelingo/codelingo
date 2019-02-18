@@ -279,10 +279,10 @@ funcs:
         return commentChar + " " + rewordComment(commentString, name, commentChar)
       }
 tenets:
-  - name: comment-first-word-as-subject
+  - name: update-comment-first-word-as-subject
     flows:
       codelingo/docs:
-        title: Comment First Word as Subject
+        title: Update Comment First Word as Subject
         body: |
           Doc comments work best as complete sentences, which allow a wide variety of automated presentations.
           The first sentence should be a summary that starts with the name being declared.
