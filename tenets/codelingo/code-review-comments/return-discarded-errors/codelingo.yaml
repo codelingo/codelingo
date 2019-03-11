@@ -1,5 +1,5 @@
 tenets:
-  - name: do-not-discard-errors
+  - name: return-discarded-errors
     vars:
       returnError: |
         if err != nil {
