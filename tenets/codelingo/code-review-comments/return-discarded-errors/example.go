@@ -31,7 +31,27 @@ func example() (int, error) {
 	return 1, errors.New("some error")
 }
 
-func trickyReturnExample() (int, *string, string, bool, error) {
+type a struct{}
+
+func trickyReturnExample() (a, *a, int, *string, string, bool, error) {
 	i, _ := example() // ISSUE
-	return i, nil, "hello", true, nil
+	return a{}, nil, i, nil, "hello", true, nil
 }
+
+func singleExample() error {
+	i, _ := example() // ISSUE
+	_ = i
+	return nil
+}
+
+func nonErrorDiscard() (int, error) {
+	_, err := example()
+	if err != nil {
+		return 0, err
+	}
+	return 0, nil
+}
+
+func (b *a) methodExample() (int, error) {
+	i, _ := example() // ISSUE
+	return i, nil
