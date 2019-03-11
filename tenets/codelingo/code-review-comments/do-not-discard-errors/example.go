@@ -10,7 +10,21 @@ func main() {
 	fmt.Println("Hello, playground")
 	a, _ := example() // ISSUE
 	fmt.Println(a)
-	fmt.Println(err)
+}
+
+func passing() error {
+	_, err := example()
+	if err != nil {
+		return err
+	}
+
+	i, err := example()
+	if err != nil {
+		return err
+	}
+
+	_ = i
+	return nil
 }
 
 func example() (int, error) {

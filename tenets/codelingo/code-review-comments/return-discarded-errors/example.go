@@ -12,6 +12,21 @@ func main() {
 	fmt.Println(a)
 }
 
+func passing() error {
+	_, err := example()
+	if err != nil {
+		return err
+	}
+
+	i, err := example()
+	if err != nil {
+		return err
+	}
+
+	_ = i
+	return nil
+}
+
 func example() (int, error) {
 	return 1, errors.New("some error")
 }
