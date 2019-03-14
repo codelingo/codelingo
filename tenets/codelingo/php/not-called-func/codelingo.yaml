@@ -1,0 +1,16 @@
+tenets:
+  - flows:
+      codelingo/review:
+        comment: |
+          There is no call to this function in this directory
+    name: ingester
+    query: |
+      import codelingo/ast/php
+
+      php.file(depth = any):
+        php.stmt_class:
+          @review comment
+          php.stmt_classmethod:
+            exclude:
+              edge("called_by"):
+                php.expr_methodcall

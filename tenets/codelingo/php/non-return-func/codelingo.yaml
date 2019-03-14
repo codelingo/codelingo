@@ -1,0 +1,19 @@
+tenets:
+  - flows:
+      codelingo/review:
+        comment: |
+          There is no return value in this function
+    name: ingester
+    query: |
+      import codelingo/ast/php
+
+      php.file(depth = any):
+        php.stmt_expression(depth = any):
+          php.expr_assign(depth=any):
+            @review comment
+            php.expr_variable
+            php.expr_staticcall:
+              edge("calls"):
+                php.stmt_classmethod:
+                  exclude:
+                    php.stmt_return
