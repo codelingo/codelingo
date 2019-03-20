@@ -1,0 +1,15 @@
+tenets:
+  - flows:
+      codelingo/review:
+        comment: |
+          There is no call to this private function 
+    name: unused-private-functions
+    query: |
+      import codelingo/ast/php
+      php.stmt_class(depth = any):
+        @review comment
+        php.stmt_classmethod:
+          flags == "MODIFIER_PRIVATE (4)"
+          exclude:
+            edge("called_by"):
+              php.expr_methodcall
