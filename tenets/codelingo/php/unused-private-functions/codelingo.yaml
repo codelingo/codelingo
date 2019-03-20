@@ -1,5 +1,7 @@
 tenets:
   - flows:
+      codelingo/rewrite:
+        place: holder
       codelingo/review:
         comment: |
           There is no call to this private function 
@@ -8,6 +10,7 @@ tenets:
       import codelingo/ast/php
       php.stmt_class(depth = any):
         @review comment
+        @rewrite ""
         php.stmt_classmethod:
           flags == "MODIFIER_PRIVATE (4)"
           exclude:
