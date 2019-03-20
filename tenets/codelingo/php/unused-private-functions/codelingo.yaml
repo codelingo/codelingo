@@ -7,7 +7,7 @@ tenets:
     query: |
       import codelingo/ast/php
       php.file(depth = any):
-        php.stmt_class(depth=any):
+        php.stmt_class(depth = any):
           @review comment
           php.stmt_classmethod:
             flags == "MODIFIER_PRIVATE (4)"
