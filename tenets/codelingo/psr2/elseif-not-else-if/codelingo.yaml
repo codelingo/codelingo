@@ -1,3 +1,10 @@
+funcs:
+  - name: extractRaw
+    type: resolver
+    body: |
+      function(rawCode) {
+        return rawCode.replace(" ", "")
+      }
 tenets:
   - name: elseif-not-else-if
     flows:
@@ -23,10 +30,7 @@ tenets:
       import codelingo/ast/php
 
       @review comment
-      # This does not work as intended.
-      # It removes everything after 'if'
-      # and before closing brace.
-      # Waiting on ability to edit raw file.
-      @rewrite --replace "elseif"
+      @rewrite --replace "{{ extractRaw(rawCode) }}"
       php.stmt_else(depth = any):
+        raw as rawCode
         php.stmt_if

@@ -5,9 +5,9 @@ function helloWorld() {
 
     if ($thing > 10) {
         print('Hello');
-    } else if ($thing > 5) {
+    } elseif ($thing > 5) {
         print('World');
-    } else if ($thing > 2) {
+    } elseif ($thing > 2) {
         print('Yo');
     }
 }

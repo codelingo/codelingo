@@ -1,8 +1,14 @@
 [
   {
-   "Comment": "The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.",
+   "Comment": "The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. Raw is else if ($thing \u003e 5) {\n        print('World');\n    } else if ($thing \u003e 2) {\n        print('Yo');\n    }",
+   "Filename": "example.php",
+   "Line": 8,
+   "Snippet": "    if ($thing \u003e 10) {\n        print('Hello');\n    } else if ($thing \u003e 5) {\n        print('World');\n    } else if ($thing \u003e 2) {\n        print('Yo');\n    }\n}"
+  },
+  {
+   "Comment": "The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. Raw is else if ($thing \u003e 2) {\n        print('Yo');\n    }",
    "Filename": "example.php",
    "Line": 10,
-   "Snippet": "    } elseif ($thing \u003e 5) {\n        print('World');\n    } else if ($thing \u003e 2) {\n        print('!');\n    }\n}"
+   "Snippet": "    } else if ($thing \u003e 5) {\n        print('World');\n    } else if ($thing \u003e 2) {\n        print('Yo');\n    }\n}"
   }
  ]
