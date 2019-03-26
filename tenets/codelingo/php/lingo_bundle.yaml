@@ -9,5 +9,6 @@ tenets:
   - offsite-redirection
   - phplint
   - sql-concats
+  - null-check
 tags:
   - php
