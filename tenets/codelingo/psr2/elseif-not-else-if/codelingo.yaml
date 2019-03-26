@@ -3,6 +3,9 @@ funcs:
     type: resolver
     body: |
       function(rawCode) {
+        if (rawCode.substring(0, 7) !== "else if") {
+          return rawCode
+        }
         return rawCode.replace(" ", "")
       }
 tenets:
