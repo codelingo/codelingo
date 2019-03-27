@@ -1,0 +1,35 @@
+funcs:
+  - name: isIncorrectCase
+    type: asserter
+    body: |
+      function(varName) {
+        var constants = ['true', 'false', 'null']
+
+        if (constants.indexOf(varName.toLowerCase()) !== -1) {
+          return varName !== varName.toLowerCase()
+        }
+        return false
+      }
+  - name: fixCase
+    type: resolver
+    body: |
+      function(varName) {
+        return varName.toLowerCase()
+      }
+tenets:
+  - name: lower-case-constant-values
+    flows:
+      codelingo/review:
+        comment: The PHP constants true, false, and null MUST be in lower case.
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/php
+
+      php.expr_assign(depth = any):
+        php.expr_variable
+        php.expr_constfetch:
+          @review comment
+          @rewrite --replace "{{fixCase(varName)}}"
+          php.name_fullyqualified:
+            name as varName
+            isIncorrectCase(varName)
