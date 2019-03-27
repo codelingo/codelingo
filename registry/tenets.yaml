@@ -225,7 +225,7 @@ codelingo:
     tenets:
       elseif-not-else-if:
         hasIssues: false
-      lower-case-constant-values
+      lower-case-constant-values:
         hasIssues: false
     tags:
     - php
