@@ -133,6 +133,16 @@ codelingo:
       - jenkins-x
       - golang
       - go
+  landmines:
+    description: Best practices from the The Three Go Landmines gist.
+    version: 0.0.0
+    tenets:
+      shadowed-func-parameter:
+        hasIssues: false
+      looped-vars-outside-loop:
+        hasIssues: false
+      misused-nil-interface:
+        hasIssues: false
   kubernetes:
     description: Best practices from the kubernetes repository.
     version: 0.0.0
@@ -141,13 +151,7 @@ codelingo:
         hasIssues: false
       jsonapi-kind-compulsory-metadata:
         hasIssues: false
-      looped-vars-outside-loop:
-        hasIssues: false
-      misused-nil-interface:
-        hasIssues: false
       new-package-requires-test:
-        hasIssues: false
-      shadowed-func-parameter:
         hasIssues: false
       well-formed-lists:
         hasIssues: false
