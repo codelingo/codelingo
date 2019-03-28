@@ -25,11 +25,9 @@ tenets:
     query: |
       import codelingo/ast/php
 
-      php.expr_assign(depth = any):
-        php.expr_variable
-        php.expr_constfetch:
-          @review comment
-          @rewrite --replace "{{fixCase(varName)}}"
-          php.name_fullyqualified:
-            name as varName
-            isIncorrectCase(varName)
+      php.expr_constfetch(depth = any):
+        @review comment
+        @rewrite --replace "{{fixCase(varName)}}"
+        php.name_fullyqualified:
+          name as varName
+          isIncorrectCase(varName)
