@@ -12,10 +12,8 @@ tenets:
           @review comment
           go.ident:
             private == "true"
-            name as funcName
             name != "main"
             name != "init"
-        exclude:
-          go.call_expr(depth = any):
-            go.ident:
-              name as funcName
+          exclude:
+            edge("called_by"):
+              go.call_expr(depth = any)
