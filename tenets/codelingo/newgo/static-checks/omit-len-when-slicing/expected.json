@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "You can omit the second index value when slicing to the end of a slice.",
+   "Filename": "example.go",
+   "Line": 9,
+   "Snippet": "func main() {\n\ts := []int{1, 2, 3, 4, 5}\n\tt := s[1:len(s)]\n\n\tfmt.Println(t)"
+  }
+ ]

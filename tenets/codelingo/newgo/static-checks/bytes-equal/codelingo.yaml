@@ -1,0 +1,39 @@
+funcs:
+ - name: replace
+   type: resolver
+   body: |
+    function(a, b) {
+      return "bytes.Equal(" + a + ", " + b + ")"
+    }
+tenets:
+  - name: find-funcs
+    flows:
+      codelingo/rewrite:
+      codelingo/review:
+        comment: This is a function, but you probably already knew that.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      @rewrite --replace "{{ replace(a, b) }}"
+      go.binary_expr(depth = any):
+        op == "=="
+        go.call_expr:
+          go.selector_expr:
+            go.ident:
+              name == "bytes"
+            go.ident:
+              name == "Compare"
+          go.args:
+            any_of:
+              go.ident:
+                name as a
+              go.basic_lit:
+                value as a
+            any_of:
+              go.ident:
+                name as b
+              go.basic_lit:
+                value as b
+        go.basic_lit:
+          value == 0

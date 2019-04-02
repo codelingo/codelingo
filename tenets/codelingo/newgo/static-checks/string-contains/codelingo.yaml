@@ -1,0 +1,49 @@
+funcs:
+ - name: replace
+   type: resolver
+   body: |
+    function(a, b, pub) {
+      if (pub === "string") {
+        return "strings.Contains(" + "\"" + a + "\", " + "\"" + b + "\")"
+      }
+      return "strings.Contains(" + a + ", " + b + ")"
+    }
+tenets:
+  - name: find-funcs
+    flows:
+      codelingo/rewrite:
+      codelingo/review:
+        comment: This is a function, {{pub}} but you probably already knew that.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      @rewrite --replace "{{ replace(a, b) }}"
+      go.binary_expr(depth = any):
+        go.call_expr:
+          go.selector_expr:
+            go.ident:
+              name == "strings"
+            go.ident:
+              name == "Index"
+          go.args:
+            any_of:
+              go.ident:
+                sibling_order == 0
+                type as pub
+                name as a
+              go.basic_lit:
+                sibling_order == 0
+                value as a
+            any_of:
+              go.ident:
+                sibling_order == 1
+                type as pub
+                name as b
+              go.basic_lit:
+                sibling_order == 1
+                value as b
+        go.unary_expr:
+          op == "-"
+          go.basic_lit:
+            value == 1
