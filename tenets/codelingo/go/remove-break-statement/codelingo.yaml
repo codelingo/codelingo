@@ -1,0 +1,19 @@
+tenets:
+  - name: remove-break-statement
+    flows:
+      codelingo/docs:
+        title: Remove Break Statement
+        body: The break statement that is needed at the end of each case is provided automatically in Go
+      codelingo/review:
+        comment: The break statement that is needed at the end of each case is provided automatically in Go
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/go
+
+
+      go.switch_stmt(depth = any):
+        go.case_clause(depth = any):
+          @rewrite --line ""
+          @review comment
+          go.branch_stmt(depth = any):
+            tok == "break"
