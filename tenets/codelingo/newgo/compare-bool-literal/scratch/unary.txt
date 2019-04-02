@@ -1,0 +1,30 @@
+# TODO rewrite this one first
+# - generate verbose CLQL so I can get facts which I might need
+# - ensure the unary_expr is '!'
+# - ensure the binary_expr is '=='
+# - ensure the second ident is 'true' or false
+
+import codelingo/ast/go
+
+go.file(depth = any):
+  go.decls:
+    go.func_decl:
+      go.block_stmt:
+        go.list:
+          @playground.highlight
+          go.if_stmt:
+            go.binary_expr:
+              op as opValue
+              go.unary_expr:
+                op == "!"
+                go.ident:
+                  child_count == 0
+                  type == "bool"
+              go.ident:
+                child_count == 0
+                # If the name is 'false'
+                # Put an assertion here to ensure the name is either false or true
+                # The value will be unresolved
+                name as boolValue
+            go.block_stmt:
+              child_count == 0

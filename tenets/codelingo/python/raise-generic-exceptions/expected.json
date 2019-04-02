@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Exception type is too generic. Use a more specific exception: https://docs.python.org/3/library/exceptions.html#exception-hierarchy.\n",
+   "Filename": "example.py",
+   "Line": 6,
+   "Snippet": "\ndef incorrect():\n    raise Exception(\"incorrect() isn't implemented; but is still incorrect\")  # ISSUE\n\n"
+  }
+ ]

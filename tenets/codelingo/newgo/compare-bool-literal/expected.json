@@ -1,0 +1,44 @@
+[
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 10,
+   "Snippet": "\t}\n\n\tif alphaEnabled == false {\n\t}\n"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 22,
+   "Snippet": "\t}\n\n\tif alphaEnabled != true {\n\t}\n"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 16,
+   "Snippet": "\t}\n\n\tif alphaEnabled != false {\n\t}\n"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 19,
+   "Snippet": "\t}\n\n\tif alphaEnabled == true {\n\t}\n"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "\t}\n\n\tif alphaEnabled != true || !betaEnabled == true {\n\t}\n}"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 13,
+   "Snippet": "\t}\n\n\tif !alphaEnabled == false {\n\t}\n"
+  },
+  {
+   "Comment": "This boolean expression can be simplified by removing the literal.\n",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "\t}\n\n\tif alphaEnabled != true || !betaEnabled == true {\n\t}\n}"
+  }
+ ]

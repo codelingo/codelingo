@@ -1,0 +1,102 @@
+funcs:
+  - name: isBoolLiteral
+    type: asserter
+    body: |
+      function (name) {
+        return name === "false" || name === "true";
+      }
+  - name: genExpression
+    type: resolver
+    body: |
+      function (has_unary, raw_expression, varname, boolval) {
+      function getOpFromExpression(expression) {
+      var reg = new RegExp("[^!=]([!=]=)[^!=]")
+      return reg.exec(expression)[1];
+      }
+
+      var op = getOpFromExpression(raw_expression);
+
+      var netvalue = false;
+      
+      if (boolval == "false") {
+          netvalue = false;
+      } else {
+          netvalue = true;
+      }
+
+      if (op == "!=") {
+      netvalue = ! netvalue;
+      }
+
+      if (has_unary == "true") {
+      netvalue = ! netvalue;
+      }
+
+      var ret = "";
+
+      if (netvalue) {
+      ret = varname;
+      } else {
+      ret = "! " + varname;
+      }
+
+      return ret;
+      }
+tenets:
+  - name: compare-bool-literal-plain
+    vars:
+      false: "false"
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Compare Bool Literal
+        body: |
+          Minimise boolean logic by not comparing with bool literals.
+      codelingo/review:
+        comment: |
+          This boolean expression can be simplified by removing the literal.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        @rewrite --replace "{{ genExpression(false, rawExpression, identName, boolValue) }}"
+        @review comment
+        go.binary_expr(depth = any):
+          raw as rawExpression
+          go.ident(depth = 0):
+            child_count == 0
+            type == "bool"
+            name as identName
+          go.ident:
+            child_count == 0
+            isBoolLiteral(boolValue)
+            name as boolValue
+  - name: compare-bool-literal-unary
+    vars:
+      true: "true"
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Compare Bool Literal
+        body: |
+          Minimise boolean logic by not comparing with bool literals.
+      codelingo/review:
+        comment: |
+          This boolean expression can be simplified by removing the literal.
+    query: |
+      import codelingo/ast/go
+      
+      go.file(depth = any):
+        @rewrite --replace "{{ genExpression(true, rawExpression, identName, boolValue) }}"
+        @review comment
+        go.binary_expr(depth = any):
+          raw as rawExpression
+          go.unary_expr(depth = 0):
+            go.ident(depth = 0):
+              child_count == 0
+              type == "bool"
+              name as identName
+          go.ident:
+            child_count == 0
+            isBoolLiteral(boolValue)
+            name as boolValue

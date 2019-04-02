@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Caught exception is too generic. Catch a more specific exception(s): https://docs.python.org/3/library/exceptions.html#exception-hierarchy.\n",
+   "Filename": "example.py",
+   "Line": 63,
+   "Snippet": "            else:\n                raise MemoryError(\"not enough memory to handle \u003e 2\")\n        except:  # ISSUE\n            # Who knows what went wrong, abort\n            print(\"error occurred\")\n            sys.exit(1)\n\n"
+  },
+  {
+   "Comment": "Caught exception is too generic. Catch a more specific exception(s): https://docs.python.org/3/library/exceptions.html#exception-hierarchy.\n",
+   "Filename": "example.py",
+   "Line": 45,
+   "Snippet": "            else:\n                raise MemoryError(\"not enough memory to handle \u003e 2\")\n        except Exception as error:  # ISSUE\n            # Something went wrong, abort\n            print(error)\n            sys.exit(1)\n\n"
+  }
+ ]
