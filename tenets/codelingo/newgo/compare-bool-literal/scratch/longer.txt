@@ -1,0 +1,25 @@
+import codelingo/ast/go
+
+go.file(depth = any):
+  go.decls:
+    go.func_decl:
+      go.block_stmt:
+        go.list:
+          @playground.highlight
+          go.if_stmt:
+            go.binary_expr:
+              go.binary_expr:
+                go.ident:
+                  child_count == 0
+                  type == "bool"
+                go.ident:
+                  child_count == 0
+              go.binary_expr:
+                go.ident:
+                  child_count == 0
+                  type == "bool"
+                go.ident:
+                  child_count == 0
+            go.block_stmt:
+              child_count == 0
+

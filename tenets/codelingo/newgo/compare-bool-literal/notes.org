@@ -1,0 +1,103 @@
+* Challenges
+- What if there is already a unary operator?
+  If there is one then you may want to remove the unary operator.
+
+* Serious issues
+- The type of binary_expr is not known
+ Can't differentiate between == and !=.
+
+** Workaround?
+There is no workaround.
+
+* Plan
+- start with a basic, broken tenet
+- add edge-cases
+- remember the name of the literal
+- remember the combination
+- rewrite the expression using javascript
+- start by creating the javascript function
+
+- Has_unary cannot be a value passed into the function.
+  It must be an asserter.
+  But I don't want to create 2x the number of tenets, so I don't want to use an asserter.
+  How can I pass it into the function?
+
+#+BEGIN_SRC javascript
+  // Use clql to match one bool literal and one variable
+  // This is the only combination I will get from the CLQL.
+  function gen_expr(has_unary, operator, varname, boolval) {
+
+  }
+#+END_SRC
+
+* perspective
+Edge-case is the wrong word to describe various similar blocks of CLQL that account for different scenarios.
+
+They should be called cases or scenarios.
+
+* cases
+Add multiple sub-tenets in one codelingo.yaml file.
+
+There are a bunch of combinations.
+- presence of unary operator
+- true or false
+- != or ==
+- position of true/false vs position of ident
+
+That's already 8 tenets.
+
+I can get this down to 2 tenets probably.
+By using a javascript function that takes 3 parameters (unarypresent,
+operator, value), then determines whether or not the unary is to be
+present in the final expression.
+
+The 2 tenets are to match the AST with a unary operator and the AST
+without the unary operator.
+
+But the function can be used with both.
+
+** binary expression with no existing unary operator
+
+#+BEGIN_SRC yaml
+  import codelingo/ast/go
+
+  go.file(depth = any):
+    go.decls:
+      go.func_decl:
+        go.block_stmt:
+          go.list:
+            @playground.highlight
+            go.if_stmt:
+              go.binary_expr:
+                # todo does not have unary here wrapping ident
+                go.ident(depth = 0):
+                  child_count == 0
+                  type == "bool"
+                go.ident(depth = 0):
+                  child_count == 0
+              go.block_stmt:
+                child_count == 0
+#+END_SRC
+
+** binary expression with an existing unary operator
+
+#+BEGIN_SRC yaml
+  import codelingo/ast/go
+
+  go.file(depth = any):
+    go.decls:
+      go.func_decl:
+        go.block_stmt:
+          go.list:
+            @playground.highlight
+            go.if_stmt:
+              go.binary_expr:
+                go.unary_expr(depth = 0):
+                  go.ident(depth = 0):
+                    child_count == 0
+                    type == "bool"
+                go.ident(depth = 0):
+                  child_count == 0
+              go.block_stmt:
+                child_count == 0
+#+END_SRC
