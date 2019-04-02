@@ -64,13 +64,12 @@ func (s *cmdSuite) TestNewFile(c *gc.C) {
 
 func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 
-	for _, data := range testData {
-
+	for _, test := range testData {
 		hunk := &rewriterpc.Hunk{
 			SRC:              "<NEW CODE>",
 			StartOffset:      int32(19),
 			EndOffset:        int32(23),
-			DecoratorOptions: data.decOpts,
+			DecoratorOptions: test.decOpts,
 			Filename:         "not_used",
 			Comment:          "<ALT CODE>",
 		}
@@ -80,9 +79,9 @@ func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 
 		newCode, comment, err := newFileSRC(ctx, hunk, []byte(oldSRC))
 		c.Assert(err, jc.ErrorIsNil)
-		c.Assert(string(newCode), gc.Equals, string(data.newSRC))
-		c.Assert(comment, gc.DeepEquals, data.comment)
-		fmt.Println("PASS:", data.decOpts)
+		c.Assert(string(newCode), gc.Equals, string(test.newSRC))
+		c.Assert(comment, gc.DeepEquals, test.comment)
+		fmt.Println("PASS:", test.decOpts)
 
 	}
 }
@@ -103,7 +102,7 @@ var testData = []struct {
 	{
 		decOpts: "rewrite \"<NEW CODE>\"",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -117,7 +116,7 @@ func <NEW CODE>() {
 	}, {
 		decOpts: "rewrite name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -131,7 +130,7 @@ func <NEW CODE>() {
 	}, {
 		decOpts: "rewrite --replace name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -145,7 +144,7 @@ func <NEW CODE>() {
 	}, {
 		decOpts: "rewrite --replace --start-to-end-offset name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -159,7 +158,7 @@ func <NEW CODE>() {
 	}, {
 		decOpts: "rewrite --start-to-end-offset name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -173,7 +172,7 @@ func <NEW CODE>() {
 	}, {
 		decOpts: "rewrite --start-offset name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>ain() {",
 			Original: "func main() {",
 		},
@@ -187,7 +186,7 @@ func <NEW CODE>ain() {
 	}, {
 		decOpts: "rewrite --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -201,7 +200,7 @@ package test
 	}, {
 		decOpts: "rewrite --start-offset --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -215,7 +214,7 @@ package test
 	}, {
 		decOpts: "rewrite --end-offset --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -229,7 +228,7 @@ package test
 	}, {
 		decOpts: "rewrite --start-to-end-offset --prepend name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>main() {",
 			Original: "func main() {",
 		},
@@ -243,7 +242,7 @@ func <NEW CODE>main() {
 	}, {
 		decOpts: "rewrite --start-offset --prepend name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>main() {",
 			Original: "func main() {",
 		},
@@ -257,7 +256,7 @@ func <NEW CODE>main() {
 	}, {
 		decOpts: "rewrite --prepend name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func <ALT CODE>main() {",
 			Original: "func main() {",
 		},
@@ -271,7 +270,7 @@ func <NEW CODE>main() {
 	}, {
 		decOpts: "rewrite --end-offset --prepend name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func mai<ALT CODE>n() {",
 			Original: "func main() {",
 		},
@@ -285,7 +284,7 @@ func mai<NEW CODE>n() {
 	}, {
 		decOpts: "rewrite --prepend --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -300,7 +299,7 @@ func main() {
 	}, {
 		decOpts: "rewrite --start-to-end-offset --prepend --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -315,7 +314,7 @@ func main() {
 	}, {
 		decOpts: "rewrite --start-offset --prepend --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -330,7 +329,7 @@ func main() {
 	}, {
 		decOpts: "rewrite --end-offset --prepend --line name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "<ALT CODE>",
 			Original: "func main() {",
 		},
@@ -345,7 +344,7 @@ func main() {
 	}, {
 		decOpts: "rewrite --append name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func main<ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -359,7 +358,7 @@ func main<NEW CODE>() {
 	}, {
 		decOpts: "rewrite --start-to-end-offset --append name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func main<ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -373,7 +372,7 @@ func main<NEW CODE>() {
 	}, {
 		decOpts: "rewrite --start-offset --append name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func m<ALT CODE>ain() {",
 			Original: "func main() {",
 		},
@@ -387,7 +386,7 @@ func m<NEW CODE>ain() {
 	}, {
 		decOpts: "rewrite --end-offset --append name",
 		comment: &comment{
-			Line:     2,
+			Line:     3,
 			Content:  "func main<ALT CODE>() {",
 			Original: "func main() {",
 		},
@@ -401,9 +400,9 @@ func main<NEW CODE>() {
 	}, {
 		decOpts: "rewrite --append --line name",
 		comment: &comment{
-			Line:     3,
+			Line:     4,
 			Content:  "<ALT CODE>",
-			Original: "func main() {",
+			Original: "",
 		},
 		newSRC: []byte(`
 package test
@@ -416,9 +415,9 @@ func main() {
 	}, {
 		decOpts: "rewrite --start-to-end-offset --append --line name",
 		comment: &comment{
-			Line:     3,
+			Line:     4,
 			Content:  "<ALT CODE>",
-			Original: "func main() {",
+			Original: "",
 		},
 		newSRC: []byte(`
 package test
@@ -431,9 +430,9 @@ func main() {
 	}, {
 		decOpts: "rewrite --end-offset --append --line name",
 		comment: &comment{
-			Line:     3,
+			Line:     4,
 			Content:  "<ALT CODE>",
-			Original: "func main() {",
+			Original: "",
 		},
 		newSRC: []byte(`
 package test
@@ -446,9 +445,9 @@ func main() {
 	}, {
 		decOpts: "rewrite --start-offset --append --line name",
 		comment: &comment{
-			Line:     3,
+			Line:     4,
 			Content:  "<ALT CODE>",
-			Original: "func main() {",
+			Original: "",
 		},
 		newSRC: []byte(`
 package test
