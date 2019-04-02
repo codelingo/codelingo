@@ -17,6 +17,7 @@ tenets:
       go.func_decl(depth = any):
         go.func_type:
           go.field_list:
+            sibling_order == 0
             go.field:
               go.names:
                 @review comment
