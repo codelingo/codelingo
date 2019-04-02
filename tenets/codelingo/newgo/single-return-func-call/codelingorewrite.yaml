@@ -1,0 +1,65 @@
+funcs:
+  - name: getFuncCall
+    type: resolver
+    body: |
+      function(name) {
+        return "return " + name
+      }
+  - name: isOneAfter
+    type: asserter
+    body: |
+      function(first, second) {
+        return first == (second - 1)
+      }
+tenets:
+  - name: single_func_returns_nil
+    flows:
+      codelingo/rewrite:
+      codelingo/review:
+        comment: "this function only contains a sinlge function call and returns nil/err, it would be good practice to just call the function in the return statement"
+    query: |
+      import codelingo/ast/go
+
+      go.decls(depth = any):
+        @review comment
+        go.func_decl(depth = any):          
+          go.block_stmt:
+            @rewrite --replace "{{ getFuncCall(funcCall) }}"
+            go.list:
+              any_of:
+                go.assign_stmt(depth = any):
+                  sibling_order as so
+                  go.lhs:
+                    child_count == 1
+                    go.ident:
+                      name == "err"
+                  go.rhs:
+                    raw as funcCall
+                    go.call_expr:
+                      go.ident
+                go.if_stmt:
+                  sibling_order as so
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      child_count == 1
+                      go.ident:
+                        name == "err"
+                    go.rhs:
+                      raw as funcCall
+                      go.call_expr:
+                        go.ident
+                  go.binary_expr:
+                    go.ident:
+                      name == "err"
+                    go.ident:
+                      name == "nil"
+              go.return_stmt(depth = any):
+                sibling_order as sor
+                isOneAfter(so, sor)
+                go.results:
+                  child_count == 1
+                  any_of:
+                    go.ident:
+                      name == "err"
+                    go.ident:
+                      name == "nil"

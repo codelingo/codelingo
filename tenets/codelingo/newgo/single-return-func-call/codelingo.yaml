@@ -1,0 +1,53 @@
+funcs:
+  - name: isOneAfter
+    type: asserter
+    body: |
+      function(first, second) {
+        return first == (second - 1)
+      }
+tenets:
+  - name: single-func-returns-nil
+    flows:
+      codelingo/review:
+        comment: This function ends with a call to a function with a single return value. You can just return the call instead.
+    query: |
+      import codelingo/ast/go
+
+      go.decls(depth = any):
+        @review comment
+        go.func_decl(depth = any):          
+          go.block_stmt:
+            go.list:
+              any_of:
+                go.assign_stmt(depth = any):
+                  sibling_order as so
+                  go.lhs:
+                    child_count == 1
+                    go.ident:
+                      name == "err"
+                  go.rhs:
+                    go.call_expr
+                go.if_stmt:
+                  sibling_order as so
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      child_count == 1
+                      go.ident:
+                        name == "err"
+                    go.rhs:
+                      go.call_expr
+                  go.binary_expr:
+                    go.ident:
+                      name == "err"
+                    go.ident:
+                      name == "nil"
+              go.return_stmt(depth = any):
+                sibling_order as sor
+                isOneAfter(so, sor)
+                go.results:
+                  child_count == 1
+                  any_of:
+                    go.ident:
+                      name == "err"
+                    go.ident:
+                      name == "nil"
