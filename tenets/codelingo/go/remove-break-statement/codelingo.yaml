@@ -17,3 +17,6 @@ tenets:
           @review comment
           go.branch_stmt(depth = any):
             tok == "break"
+            # TODO:
+            # Exclude break statements that break to outer labels
+            # Only remove breaks at the end of the clause
