@@ -36,25 +36,19 @@ tenets:
         any_of:
           php.expr_binaryop_plus:
             php.expr_variable:
-              sibling_order == 0
               name == varName
           php.expr_binaryop_minus:
             php.expr_variable:
-              sibling_order == 0
               name == varName
           php.expr_binaryop_mul:
             php.expr_variable:
-              sibling_order == 0
               name == varName
           php.expr_binaryop_div:
             php.expr_variable:
-              sibling_order == 0
               name == varName
           php.expr_binaryop_mod:
             php.expr_variable:
-              sibling_order == 0
               name == varName
           php.expr_binaryop_concat:
             php.expr_variable:
-              sibling_order == 0
               name == varName
