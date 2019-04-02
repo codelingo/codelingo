@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "This is a function, but you probably already knew that.",
+   "Filename": "example.go",
+   "Line": 7,
+   "Snippet": "}\n\nfunc thing(a []string) error {\n  return nil\n}"
+  },
+  {
+   "Comment": "This is a function, but you probably already knew that.",
+   "Filename": "example.go",
+   "Line": 11,
+   "Snippet": "}\n\nfunc another(b []int) {}\n"
+  }
+ ]
