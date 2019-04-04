@@ -73,6 +73,9 @@ func (s *cmdSuite) TestNewFileSRC(c *gc.C) {
 			Filename:         "not_used",
 			Comment:          "<ALT CODE>",
 		}
+		if test.overWriteComment {
+			hunk.SRC = test.commentValueOverwrite
+		}
 
 		ctx, err := flowutil.NewCtx(&DecoratorApp.App, strings.Split(hunk.DecoratorOptions, " ")[1:]...)
 		c.Assert(err, jc.ErrorIsNil)
@@ -95,9 +98,11 @@ func main() {
 `[1:]
 
 var testData = []struct {
-	decOpts string
-	newSRC  []byte
-	comment *comment
+	decOpts               string
+	newSRC                []byte
+	comment               *comment
+	commentValueOverwrite string
+	overWriteComment      bool
 }{
 	{
 		decOpts: "rewrite \"<NEW CODE>\"",
@@ -124,6 +129,22 @@ func <NEW CODE>() {
 package test
 
 func <NEW CODE>() {
+
+}
+`[1:]),
+	}, {
+		decOpts: "rewrite --replace --line",
+		comment: &comment{
+			Line:     3,
+			Content:  "<ALT CODE>",
+			Original: "func main() {",
+		},
+		overWriteComment:      true,
+		commentValueOverwrite: "",
+		newSRC: []byte(`
+package test
+
+
 
 }
 `[1:]),
