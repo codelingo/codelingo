@@ -1,8 +1,9 @@
 tenets:
-  - name: find-funcs
+  - name: omit-len-when-slicing
     flows:
+      codelingo/rewrite:
       codelingo/review:
-        comment: This is a function, but you probably already knew that.
+        comment: You can omit the second index value when slicing to the end of a slice.
     query: |
       import codelingo/ast/go
 
@@ -10,10 +11,11 @@ tenets:
       go.slice_expr(depth = any):
         go.ident:
           name as sliceName
+        @rewrite --replace ""
         go.call_expr:
           go.ident:
             name == "len"
-        go.args:
-          child_count == 1
-          go.ident:
-            name == sliceName
+          go.args:
+            child_count == 1
+            go.ident:
+              name == sliceName
