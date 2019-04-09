@@ -21,10 +21,9 @@ tenets:
                 go.ident:
                   name == "Open"
         exclude:
-          go.expr_stmt(depth = any):
-            go.call_expr:
-              go.selector_expr:
-                go.ident:
-                  name ==  varName
-                go.ident:
-                  name == "Close"
+          go.call_expr(depth = any):
+            go.selector_expr:
+              go.ident:
+                name ==  varName
+              go.ident:
+                name == "Close"         
