@@ -1,0 +1,6 @@
+tenets:
+  - missing-close-file
+tags:
+  - go
+  - rfjakob
+  - gocryptfs
