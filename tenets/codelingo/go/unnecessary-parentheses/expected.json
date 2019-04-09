@@ -1,0 +1,26 @@
+[
+    {
+     "Comment": "Avoid sunnecessary parentheses to make your code easier to read.",
+     "Filename": "test.go",
+     "Line": 7,
+     "Snippet": "func main() {\n\tvar a [2]string\n\ta[0] = (\"Hello\")\n\tfmt.Println((a[0]))\n\tb := (1.2)"
+    },
+    {
+     "Comment": "Avoid sunnecessary parentheses to make your code easier to read.",
+     "Filename": "test.go",
+     "Line": 9,
+     "Snippet": "\ta[0] = (\"Hello\")\n\tfmt.Println((a[0]))\n\tb := (1.2)\n\tfmt.Println((b))\n}"
+    },
+    {
+     "Comment": "Avoid sunnecessary parentheses to make your code easier to read.",
+     "Filename": "test.go",
+     "Line": 10,
+     "Snippet": "\tfmt.Println((a[0]))\n\tb := (1.2)\n\tfmt.Println((b))\n}"
+    },
+    {
+     "Comment": "Avoid sunnecessary parentheses to make your code easier to read.",
+     "Filename": "test.go",
+     "Line": 8,
+     "Snippet": "\tvar a [2]string\n\ta[0] = (\"Hello\")\n\tfmt.Println((a[0]))\n\tb := (1.2)\n\tfmt.Println((b))"
+    }
+   ]
