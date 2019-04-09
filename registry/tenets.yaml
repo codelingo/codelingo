@@ -252,9 +252,9 @@ codelingo:
     tenets:
       missing-close-file:
         hasIssues: false
-      tags:
-        - go
-        - rfjakob
-        - gocryptfs
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
 
 

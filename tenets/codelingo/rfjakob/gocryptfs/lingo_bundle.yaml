@@ -1,3 +1,5 @@
+description: Tenets written for rfjakob
+version: 0.0.0
 tenets:
   - missing-close-file
 tags:
