@@ -2,7 +2,7 @@ tenets:
   - name:  missing-stop-ticker
     flows:
       codelingo/review:
-        comment: Stop the ticker when it is no longer needed
+        comment: Stop the ticker to release associated resources.
     query: |
       import codelingo/ast/go
 
