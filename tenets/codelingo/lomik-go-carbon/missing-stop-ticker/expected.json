@@ -1,0 +1,8 @@
+[
+    {
+     "Comment": "Stop the ticket at the end",
+     "Filename": "test.go",
+     "Line": 8,
+     "Snippet": "func main() {\n\n    ticker := time.NewTicker(500 * time.Millisecond)\n    go func() {\n        for t := range ticker.C {"
+    }
+]
