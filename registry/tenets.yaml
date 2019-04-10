@@ -256,7 +256,7 @@ codelingo:
       - go
       - rfjakob
       - gocryptfs
-  rfjakob-gocryptfs:
+  lomik-go-carbon:
     description: Tenets written for lomik-go-carbon
     version: 0.0.0
     tenets:
