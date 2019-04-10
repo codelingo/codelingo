@@ -246,4 +246,15 @@ codelingo:
       - csharp
       - cpp
       - c++
+  rfjakob:
+    description: Tenets written for rfjakob
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
+
 
