@@ -2,7 +2,7 @@ tenets:
   - name:  missing-stop-ticker
     flows:
       codelingo/review:
-        comment: Stop the ticket at the end
+        comment: Stop the ticker when it is no longer needed
     query: |
       import codelingo/ast/go
 
