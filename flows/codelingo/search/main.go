@@ -6,15 +6,13 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/golang/protobuf/ptypes"
-
-	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
 	"github.com/codelingo/lingo/app/util"
 	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	"github.com/codelingo/rpc/flow"
 	"github.com/codelingo/rpc/flow/client"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/juju/errors"
 	"github.com/urfave/cli"
 )
@@ -32,6 +30,11 @@ var searchCommand = cli.Command{
 			Value: "json-pretty",
 			Usage: "How to format the found results. Possible values are: json, json-pretty.",
 		},
+		cli.BoolFlag{
+			Name:   "insecure",
+			Hidden: true,
+			Usage:  "Review without TLS",
+		},
 	},
 	Description: `
 ""$ lingo search <filename>" .
@@ -40,9 +43,9 @@ var searchCommand = cli.Command{
 }
 
 func main() {
-	if err := flowutil.Run(searchCommand); err != nil {
-		flowutil.HandleErr(err)
-	}
+	// if err := flowutil.Run(searchCommand); err != nil {
+	// 	flowutil.HandleErr(err)
+	// }
 }
 
 func searchAction(ctx *cli.Context) {
@@ -82,7 +85,7 @@ func searchCMD(cliCtx *cli.Context) (string, error) {
 
 	args := cliCtx.Args()
 	if len(args) == 0 {
-		return "", errors.New("Please specify the filepath to a rpc.yaml file.")
+		return "", errors.New("please specify the filepath to a rpc.yaml file.")
 	}
 
 	dotlingo, err := ioutil.ReadFile(args[0])
@@ -90,7 +93,10 @@ func searchCMD(cliCtx *cli.Context) (string, error) {
 		return "", errors.Trace(err)
 	}
 
-	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer)
+	insecure := cliCtx.IsSet("insecure")
+	util.Logger.Debugf("insecure %t", insecure)
+
+	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, insecure)
 	if err != nil {
 		return "", errors.Trace(err)
 	}
@@ -110,11 +116,17 @@ func searchCMD(cliCtx *cli.Context) (string, error) {
 		return "", errors.Trace(err)
 	}
 
+	reqc := make(chan *flow.Request)
+	go func() {
+		reqc <- &flow.Request{
+			Flow:    "search",
+			Payload: payload,
+		}
+		close(reqc)
+	}()
+
 	fmt.Println("Running search flow...")
-	resultc, errorc, err := c.Run(ctx, &flow.Request{
-		Flow:    "search",
-		Payload: payload,
-	})
+	resultc, errorc, err := c.Run(ctx, reqc)
 	if err != nil {
 		return "", errors.Trace(err)
 	}
