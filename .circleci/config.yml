@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:2.0
+      - image: circleci/golang:1.10
     working_directory: /go/src/github.com/codelingo/codelingo
     steps:
       - checkout
