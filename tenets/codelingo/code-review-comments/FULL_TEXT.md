@@ -84,7 +84,7 @@ is for methods whose signature must match an interface in the standard library
 or in a third party library.
 
 Don't create custom Context types or use interfaces other than Context in
-function signatures.
+function signatures. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/no-custom-context)
 
 If you have application data to pass around, put it in a parameter,
 in the receiver, in globals, or, if it truly belongs there, in a Context value.
