@@ -47,6 +47,8 @@ codelingo:
         hasIssues: false
       context-first-arg:
         hasIssues: false
+      context-in-struct:
+        hasIssues: false
       do-not-discard-errors:
         hasIssues: true
       go-error-fmt:
