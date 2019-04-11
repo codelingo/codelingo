@@ -472,6 +472,8 @@ Clarity of docs is always more important than saving a line or two in your funct
 Finally, in some cases you need to name a result parameter in order to change
 it in a deferred closure. That is always OK.
 
+[Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/named-result-params)
+
 
 ## Naked Returns
 
