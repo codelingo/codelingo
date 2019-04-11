@@ -13,13 +13,13 @@ type Example struct {
 }
 
 // GetThing returns the Example's Thing
-func (e *Example) GetThing() (thing *Thing) {
+func (e *Example) GetThing() (thing *Thing) { // ISSUE
 	thing = e.TheThing
 	return
 }
 
 // GetThingAsValue returns the Example's Thing as value
-func (e *Example) GetThingAsValue() (thing Thing) {
+func (e *Example) GetThingAsValue() (thing Thing) { // ISSUE
 	thing = *e.TheThing
 	return
 }
@@ -31,14 +31,14 @@ func (e *Example) GetCount() (count int) {
 }
 
 // GetAll returns all the Thing
-func (e *Example) GetAll() (thing Thing, count int) {
+func (e *Example) GetAll() (thing Thing, count int) { // ISSUE
 	thing = *e.TheThing
 	count = e.Count
 	return
 }
 
 // Extract a Thing
-func Extract(e *Example) (thing Thing) {
+func Extract(e *Example) (thing Thing) { // ISSUE
 	thing = *e.TheThing
 	return
 }
