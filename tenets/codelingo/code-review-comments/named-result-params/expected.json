@@ -1,0 +1,26 @@
+[
+  {
+   "Comment": "Consider what it will look like in godoc. thing Thing will stutter in godoc; better to use Thing",
+   "Filename": "main.go",
+   "Line": 34,
+   "Snippet": "\n// GetAll returns all the Thing\nfunc (e *Example) GetAll() (thing Thing, count int) {\n\tthing = *e.TheThing\n\tcount = e.Count"
+  },
+  {
+   "Comment": "Consider what it will look like in godoc. thing Thing will stutter in godoc; better to use Thing",
+   "Filename": "main.go",
+   "Line": 22,
+   "Snippet": "\n// GetThingAsValue returns the Example's Thing as value\nfunc (e *Example) GetThingAsValue() (thing Thing) {\n\tthing = *e.TheThing\n\treturn"
+  },
+  {
+   "Comment": "Consider what it will look like in godoc. thing Thing will stutter in godoc; better to use Thing",
+   "Filename": "main.go",
+   "Line": 41,
+   "Snippet": "\n// Extract a Thing\nfunc Extract(e *Example) (thing Thing) {\n\tthing = *e.TheThing\n\treturn"
+  },
+  {
+   "Comment": "Consider what it will look like in godoc. thing Thing will stutter in godoc; better to use Thing",
+   "Filename": "main.go",
+   "Line": 16,
+   "Snippet": "\n// GetThing returns the Example's Thing\nfunc (e *Example) GetThing() (thing *Thing) {\n\tthing = e.TheThing\n\treturn"
+  }
+ ]
