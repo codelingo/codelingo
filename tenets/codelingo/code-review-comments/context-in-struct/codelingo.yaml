@@ -31,6 +31,7 @@ tenets:
             @review comment
             go.selector_expr:
               go.ident:
+                # It's unnecessary to confirm that this refers to the actual context package, as any similarly named package should conform to the same requirements
                 name == "context"
               go.ident:
                 name == "Context"
