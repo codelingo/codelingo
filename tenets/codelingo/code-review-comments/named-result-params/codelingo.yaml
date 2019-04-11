@@ -49,6 +49,8 @@ tenets:
 
       go.func_decl(depth = any):
         go.func_type:
+          # TODO: add exception for multiple indistinguishable returns values of the same type
+          # TODO: add exception for shorter functions
           go.field_list:
             sibling_order == 1
             @review comment
