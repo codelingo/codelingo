@@ -1,6 +1,7 @@
 description: Best Practices for Golang from Code Review Comments.
 version: 0.0.0
 tenets:
+  - avoid-meaningless-package-names
   - avoid-renaming-imports
   - context-first-arg
   - context-in-struct
