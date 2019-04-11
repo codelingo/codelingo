@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "If the receiver is a struct that contains a sync.Mutex or similar synchronizing field, the receiver must be a pointer to avoid copying. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-type)",
+   "Filename": "main.go",
+   "Line": 11,
+   "Snippet": "}\n\nfunc (t thing) GetName() string {\n\treturn t.name\n}"
+  }
+ ]

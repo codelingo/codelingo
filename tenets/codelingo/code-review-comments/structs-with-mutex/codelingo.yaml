@@ -1,0 +1,33 @@
+tenets:
+  - name: structs-with-mutex
+    flows:
+      codelingo/review:
+        comment: If the receiver is a struct that contains a sync.Mutex or similar synchronizing field, the receiver must be a pointer to avoid copying. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-type)
+      codelingo/docs:
+        title: Structs with Mutex
+        body: If the receiver is a struct that contains a sync.Mutex or similar synchronizing field, the receiver must be a pointer to avoid copying.
+    query: |
+      import codelingo/ast/go
+
+      
+      go.type_spec(depth = any):
+        go.ident:
+          type as structType
+        go.struct_type:
+          go.field_list:
+            go.field:
+              go.names:
+                go.ident
+              go.selector_expr:
+                go.ident:
+                  name == "sync"
+                go.ident:
+                  name == "Mutex"
+      go.func_decl(depth = any):
+        go.field_list:
+          go.field:
+            go.names:
+              go.ident
+            @review comment
+            go.ident:
+              type == structType
