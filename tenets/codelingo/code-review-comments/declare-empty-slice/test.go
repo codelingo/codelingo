@@ -11,9 +11,9 @@ type Person struct {
 }
 
 func main() {
-	personSlice := []Person{}
-	strSlice := []string{}
-	intSlice1 := []int{}
+	personSlice := []Person{} //Issue
+	strSlice := []string{}    //Issue
+	intSlice1 := []int{}      //Issue
 	intSlice2 := []int{1, 2}
 
 	personSlice = append(personSlice, Person{FirstName: "John", LastName: "Snow", Age: 45})

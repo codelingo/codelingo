@@ -2,8 +2,9 @@ tenets:
   - name:  declare-empty-slice
     flows:
       codelingo/review:
-        comment: Declare {{sliceName}} as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.
-
+        comment: Declare {{sliceName}} as a nil slice, with `var {{sliceName}} <type> [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)
+      # A rewrite would not work for now. See generated query for this example https://www.codelingo.io/playground/?id=37. 
+      # Also, if a struct is defined in one file and a variable of the struct type is declared in another, we get "invalid type" in the generated query
     query: |
       import codelingo/ast/go
       

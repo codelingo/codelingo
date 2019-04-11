@@ -1,20 +1,20 @@
 [
     {
-     "Comment": "Declare personSlice as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Comment": "Declare intSlice1 as a nil slice, with `var intSlice1 \u003ctype\u003e [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
      "Filename": "test.go",
-     "Line": 17,
-     "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}"
+     "Line": 16,
+     "Snippet": "\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue\n\tintSlice2 := []int{1, 2}\n"
     },
     {
-     "Comment": "Declare strSlice as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Comment": "Declare strSlice as a nil slice, with `var strSlice \u003ctype\u003e [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
      "Filename": "test.go",
-     "Line": 18,
-     "Snippet": "func main() {\n\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}\n\tintSlice2 := []int{1, 2}"
+     "Line": 15,
+     "Snippet": "func main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue\n\tintSlice2 := []int{1, 2}"
     },
     {
-     "Comment": "Declare intSlice1 as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Comment": "Declare personSlice as a nil slice, with `var personSlice \u003ctype\u003e [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
      "Filename": "test.go",
-     "Line": 19,
-     "Snippet": "\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}\n\tintSlice2 := []int{1, 2}\n\t"
+     "Line": 14,
+     "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue"
     }
-]
+   ]
