@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Don't add a Context member to a struct type; instead add a ctx parameter to each method on that type that needs to pass it along.",
+   "Filename": "main.go",
+   "Line": 8,
+   "Snippet": "type Example struct {\n\tName string\n\tCtx  context.Context\n}\n"
+  }
+ ]
