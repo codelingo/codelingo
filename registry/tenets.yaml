@@ -55,6 +55,8 @@ codelingo:
         hasIssues: false
       no-custom-context:
         hasIssues: false
+      structs-with-mutex:
+        hasIssues: false
       use-crypto-rand:
         hasIssues: true
     tags:
