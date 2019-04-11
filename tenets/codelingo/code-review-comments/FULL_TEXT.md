@@ -73,6 +73,8 @@ Most functions that use a Context should accept it as their first parameter:
 func F(ctx context.Context, /* other arguments */) {}
 ```
 
+[Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/context-first-arg)
+
 A function that is never request-specific may use context.Background(),
 but err on the side of passing a Context even if you think you don't need
 to. The default case is to pass a Context; only use context.Background()
@@ -81,7 +83,7 @@ directly if you have a good reason why the alternative is a mistake.
 Don't add a Context member to a struct type; instead add a ctx parameter
 to each method on that type that needs to pass it along. The one exception
 is for methods whose signature must match an interface in the standard library
-or in a third party library.
+or in a third party library. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/context-in-struct)
 
 Don't create custom Context types or use interfaces other than Context in
 function signatures.
@@ -130,7 +132,7 @@ For more discussion about nil in Go see Francesc Campoy's talk [Understanding Ni
 
 Do not use package `math/rand` to generate keys, even throwaway ones.
 Unseeded, the generator is completely predictable. Seeded with `time.Nanoseconds()`,
-there are just a few bits of entropy. Instead, use `crypto/rand`'s Reader,
+there are just a few bits of entropy. Instead, use `crypto/rand`'s Reader [(Tenet)](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/use-crypto-rand),
 and if you need text, print to hexadecimal or base64:
 
 ``` go
@@ -163,7 +165,7 @@ See https://golang.org/doc/effective_go.html#errors. Don't use panic for normal 
 
 ## Error Strings
 
-Error strings should not be capitalized (unless beginning with proper nouns or acronyms) or end with punctuation, since they are usually printed following other context. That is, use `fmt.Errorf("something bad")` not `fmt.Errorf("Something bad")`, so that `log.Printf("Reading %s: %v", filename, err)` formats without a spurious capital letter mid-message. This does not apply to logging, which is implicitly line-oriented and not combined inside other messages.
+Error strings should not be capitalized (unless beginning with proper nouns or acronyms) or end with punctuation, since they are usually printed following other context. That is, use `fmt.Errorf("something bad")` not `fmt.Errorf("Something bad")`, so that `log.Printf("Reading %s: %v", filename, err)` formats without a spurious capital letter mid-message. This does not apply to logging, which is implicitly line-oriented and not combined inside other messages. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/go-error-fmt)
 
 ## Examples
 
@@ -190,13 +192,13 @@ If that just isn't feasible, document when and why the goroutines exit.
 
 ## Handle Errors
 
-See https://golang.org/doc/effective_go.html#errors. Do not discard errors using `_` variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
+See https://golang.org/doc/effective_go.html#errors. Do not discard errors using `_` variables [(Tenet)](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/do-not-discard-errors). If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic. [Tenet](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/return-discarded-errors/codelingo.yaml)
 
 ## Imports
 
 Avoid renaming imports except to avoid a name collision; good package names
 should not require renaming. In the event of collision, prefer to rename the most
-local or project-specific import.
+local or project-specific import. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/avoid-renaming-imports)
 
 
 Imports are organized in groups, with blank lines between them.
