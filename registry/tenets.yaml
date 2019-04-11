@@ -248,4 +248,26 @@ codelingo:
       - csharp
       - cpp
       - c++
+  rfjakob-gocryptfs:
+    description: Tenets written for rfjakob-gocryptfs
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
+  lomik-go-carbon:
+    description: Tenets written for lomik-go-carbon
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - lomik
+      - go-carbon
+
+
 
