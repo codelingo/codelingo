@@ -7,6 +7,7 @@ tenets:
   - do-not-discard-errors
   - go-error-fmt
   - no-custom-context
+  - structs-with-mutex
   - use-crypto-rand
 tags:
   - golang
