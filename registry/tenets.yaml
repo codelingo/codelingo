@@ -53,6 +53,8 @@ codelingo:
         hasIssues: true
       go-error-fmt:
         hasIssues: false
+      no-custom-context:
+        hasIssues: false
       use-crypto-rand:
         hasIssues: true
     tags:

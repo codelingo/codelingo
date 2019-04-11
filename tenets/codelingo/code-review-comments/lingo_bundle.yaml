@@ -6,6 +6,7 @@ tenets:
   - context-in-struct
   - do-not-discard-errors
   - go-error-fmt
+  - no-custom-context
   - use-crypto-rand
 tags:
   - golang
