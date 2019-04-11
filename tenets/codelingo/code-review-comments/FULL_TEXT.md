@@ -545,7 +545,7 @@ so you can omit that name from the identifiers. For example, if you are in packa
 you don't need type ChubbyFile, which clients will write as `chubby.ChubbyFile`.
 Instead, name the type `File`, which clients will write as `chubby.File`.
 Avoid meaningless package names like util, common, misc, api, types, and interfaces. See http://golang.org/doc/effective_go.html#package-names and
-http://blog.golang.org/package-names for more.
+http://blog.golang.org/package-names for more. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/avoid-meaningless-package-names)
 
 ## Pass Values
 
