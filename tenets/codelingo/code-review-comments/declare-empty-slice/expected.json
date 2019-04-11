@@ -1,0 +1,20 @@
+[
+    {
+     "Comment": "Declare personSlice as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Filename": "test.go",
+     "Line": 17,
+     "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}"
+    },
+    {
+     "Comment": "Declare strSlice as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Filename": "test.go",
+     "Line": 18,
+     "Snippet": "func main() {\n\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}\n\tintSlice2 := []int{1, 2}"
+    },
+    {
+     "Comment": "Declare intSlice1 as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.",
+     "Filename": "test.go",
+     "Line": 19,
+     "Snippet": "\tpersonSlice := []Person{}\n  \tstrSlice := []string{}\n\tintSlice1 := []int{}\n\tintSlice2 := []int{1, 2}\n\t"
+    }
+]

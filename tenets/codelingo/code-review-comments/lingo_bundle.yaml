@@ -8,6 +8,7 @@ tenets:
   - go-error-fmt
   - no-custom-context
   - use-crypto-rand
+  - declare-empty-slice
 tags:
   - golang
   - go

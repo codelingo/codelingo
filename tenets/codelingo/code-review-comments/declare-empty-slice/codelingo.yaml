@@ -1,0 +1,19 @@
+tenets:
+  - name:  declare-empty-slice
+    flows:
+      codelingo/review:
+        comment: Declare {{sliceName}} as a nil slice, rather than non-nil but zero-length. See https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices for more information.
+
+    query: |
+      import codelingo/ast/go
+      
+      @review comment
+      go.assign_stmt(depth = any):
+        tok == ":="
+        go.lhs:
+          go.ident:
+            name as sliceName
+        go.rhs:
+          go.composite_lit:
+            child_count == 1
+            go.array_type
