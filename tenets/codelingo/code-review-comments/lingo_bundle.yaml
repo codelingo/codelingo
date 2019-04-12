@@ -11,6 +11,7 @@ tenets:
   - use-crypto-rand
   - declare-empty-slice
   - same-receiver-name
+  - receiver-name-short-reflect-identity
 tags:
   - golang
   - go

@@ -1,0 +1,41 @@
+funcs:
+  - name: isNotAbbr
+    type: asserter
+    body: |
+      function(receiverName, typeName) {
+        rc = receiverName.toLowerCase()
+        tn = typeName.toLowerCase()
+        if(rc.length > 2) 
+          return true
+        for (i = 0; i < rc.length; i++) {
+          if(tn.indexOf(rc[i]) == -1)
+            return true
+        }
+        return false
+      }
+
+tenets:
+  - name:  receiver-name-short-reflect-identity
+    flows:
+      codelingo/review:
+        comment: The name of a method's receiver "{{receiverName}}" should be short and also a reflection of its identity "{{typeName}}" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)
+      
+    query: |
+      import codelingo/ast/go
+      
+      go.func_decl(depth = any):
+        @review comment
+        go.field_list:
+          go.field:
+            go.names:
+              go.ident:
+                name as receiverName
+            any_of:
+              go.ident:
+                name as typeName
+                isNotAbbr(receiverName,typeName)
+              go.star_expr:
+                go.ident:
+                  name as typeName
+                  isNotAbbr(receiverName,typeName)
+
