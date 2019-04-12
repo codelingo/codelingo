@@ -10,6 +10,7 @@ tenets:
   - no-custom-context
   - use-crypto-rand
   - declare-empty-slice
+  - same-receiver-name
 tags:
   - golang
   - go
