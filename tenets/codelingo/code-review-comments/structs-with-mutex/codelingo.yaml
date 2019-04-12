@@ -9,25 +9,30 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      
-      go.type_spec(depth = any):
+      go.file(depth = any):
         go.ident:
-          type as structType
-        go.struct_type:
+          name as packageName
+        go.type_spec(depth = any):
+          go.ident:
+            type as structType
+          go.struct_type:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident
+                go.selector_expr:
+                  go.ident:
+                    name == "sync"
+                  go.ident:
+                    name == "Mutex"
+      go.file(depth = any):
+        go.ident:
+          name == packageName
+        go.func_decl(depth = any):
           go.field_list:
             go.field:
               go.names:
                 go.ident
-              go.selector_expr:
-                go.ident:
-                  name == "sync"
-                go.ident:
-                  name == "Mutex"
-      go.func_decl(depth = any):
-        go.field_list:
-          go.field:
-            go.names:
-              go.ident
-            @review comment
-            go.ident:
-              type == structType
+              @review comment
+              go.ident:
+                type == structType
