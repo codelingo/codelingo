@@ -43,6 +43,8 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      avoid-meaningless-package-names:
+        hasIssues: false
       avoid-renaming-imports:
         hasIssues: false
       context-first-arg:

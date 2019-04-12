@@ -1,0 +1,34 @@
+funcs:
+  - name: fixSliceType
+    type: resolver
+    body: |
+      function(sliceType) {
+        sliceType = sliceType.split(' ').join('');
+        return  sliceType.substring(0, sliceType.indexOf("{"))
+      }
+
+tenets:
+  - name:  declare-empty-slice
+    flows:
+      codelingo/review:
+        comment: Declare {{sliceName}} as a nil slice, with `var {{sliceName}} {{fixSliceType(sliceType)}} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)
+      # A rewrite only works with raw for now. See generated query for this example https://www.codelingo.io/playground/?id=37. 
+      # Also, if a struct is defined in one file and a variable of the struct type is declared in another, we get "invalid type" in the generated query
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/go
+      
+      @review comment
+      @rewrite --replace "var {{sliceName}} {{fixSliceType(sliceType)}}"
+      go.assign_stmt(depth = any):
+        tok == ":="
+        go.lhs:
+          go.ident:
+            name as sliceName
+        go.rhs:
+          raw as sliceType
+          start_offset
+          end_offset
+          go.composite_lit:
+            child_count == 1
+            go.array_type
