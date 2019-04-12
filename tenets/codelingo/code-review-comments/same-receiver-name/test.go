@@ -5,11 +5,11 @@ import "fmt"
 type T1 struct{}
 type T2 struct{}
 
-func (t T1) Method1() { //Issue
+func (t T1) Method1() { //ISSUE
 	fmt.Println("Hello from Method1")
 }
 
-func (this T1) Method2() { //Issue
+func (this T1) Method2() { //ISSUE
 	fmt.Println("Hello from Method2")
 }
 
