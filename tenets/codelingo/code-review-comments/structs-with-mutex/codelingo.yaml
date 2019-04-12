@@ -29,5 +29,5 @@ tenets:
             go.names:
               go.ident
             @review comment
-            go.ident:
+            go.ident: // ident is not a child of a star_expr, so it is not a pointer receiver
               type == structType

@@ -8,7 +8,7 @@ type thing struct {
 	mutex sync.Mutex
 }
 
-func (t thing) GetName() string {
+func (t thing) GetName() string { // ISSUE
 	return t.name
 }
 
