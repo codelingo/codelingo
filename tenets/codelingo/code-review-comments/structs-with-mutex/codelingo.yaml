@@ -8,31 +8,31 @@ tenets:
         body: If the receiver is a struct that contains a sync.Mutex or similar synchronizing field, the receiver must be a pointer to avoid copying.
     query: |
       import codelingo/ast/go
-
-      go.file(depth = any):
-        go.ident:
-          name as packageName
-        go.type_spec(depth = any):
+      go.dir(depth = any):
+        go.file(depth = any):
           go.ident:
-            type as structType
-          go.struct_type:
+            name as packageName
+          go.type_spec(depth = any):
+            go.ident:
+              type as structType
+            go.struct_type:
+              go.field_list:
+                go.field:
+                  go.names:
+                    go.ident
+                  go.selector_expr:
+                    go.ident:
+                      name == "sync"
+                    go.ident:
+                      name == "Mutex"
+        go.file(depth = any):
+          go.ident:
+            name == packageName
+          go.func_decl(depth = any):
             go.field_list:
               go.field:
                 go.names:
                   go.ident
-                go.selector_expr:
-                  go.ident:
-                    name == "sync"
-                  go.ident:
-                    name == "Mutex"
-      go.file(depth = any):
-        go.ident:
-          name == packageName
-        go.func_decl(depth = any):
-          go.field_list:
-            go.field:
-              go.names:
-                go.ident
-              @review comment
-              go.ident:
-                type == structType
+                @review comment
+                go.ident:
+                  type == structType
