@@ -1,0 +1,7 @@
+description: Best practices for PHP from Drupal.
+version: 0.0.0
+tenets:
+  - upper-case-constant-values
+tags:
+  - php
+  - drupal

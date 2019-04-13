@@ -241,6 +241,15 @@ codelingo:
     - php
     - psr
     - psr2
+  drupal:
+    description: Best practices for PHP from Drupal.
+    version: 0.0.0
+    tenets:
+      upper-case-constant-values:
+        hasIssues: false
+    tags:
+    - php
+    - drupal
   west:
     description: Tenets written for West
     version: 0.0.0
