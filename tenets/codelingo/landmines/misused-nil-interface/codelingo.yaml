@@ -1,0 +1,49 @@
+funcs:
+  - name: typeIsPointer
+    type: asserter
+    body: |
+      function (type) {
+        return type.charAt(0) === "*";
+      }
+  - name: equalTo
+    type: asserter
+    body: |
+     function (strA, strB) {
+       return strA == strB
+     }
+tenets:
+  - name: misused-nil-interface
+    flows:
+      codelingo/docs:
+        title: Misused Nil Interface
+        body: |
+          Nil interface is not the same as having a nil pointer in the interface.
+      codelingo/review:
+        comment: The value of the returned variable is not nil! The interface `{{interfaceName}}` serves as a pointer, therefore the returned variable is a pointer to a nil pointer.
+    query: |
+      import codelingo/ast/go
+      
+      # Note: This is only going to find instances where the interface is defined inside the file.
+      # so won't pick up https://golang.org/doc/faq#nil_error.
+      go.decls(depth = any):
+        go.type_spec(depth = any):
+          go.ident:
+            name as interfaceName
+            type as interfaceType
+          go.interface_type
+        go.func_decl:
+          go.func_type:
+            go.field_list
+            go.field_list:
+              go.field:
+                go.ident:
+                  type == interfaceType
+          go.block_stmt:
+            go.list:
+              go.return_stmt(depth = any):
+                go.results:
+                  @review comment
+                  go.ident:
+                    type as returnType
+                    typeIsPointer(returnType)
+                    value == "<nil>"

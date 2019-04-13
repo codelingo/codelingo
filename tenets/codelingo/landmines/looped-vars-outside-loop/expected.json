@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "Loop variable i is used outside the loop. Make a copy instead if you intend to use its value.",
+   "Filename": "example.go",
+   "Line": 18,
+   "Snippet": "\t\tprint(\u0026i)\n\t\tgo fmt.Println(i)\n\t\tgo func() { fmt.Println(i) }()\n\t}\n"
+  },
+  {
+   "Comment": "Loop variable i is used outside the loop. Make a copy instead if you intend to use its value.",
+   "Filename": "example.go",
+   "Line": 13,
+   "Snippet": "\t\tdefer fmt.Println(i)\n\t\tfunc() { fmt.Println(i) }()\n\t\tdefer func() { fmt.Println(i) }()\n\t\tdefer func(i int) { fmt.Println(i) }(i)\n\t\tdefer print(\u0026i)"
+  },
+  {
+   "Comment": "Loop variable i is used outside the loop. Make a copy instead if you intend to use its value.",
+   "Filename": "example.go",
+   "Line": 15,
+   "Snippet": "\t\tdefer func() { fmt.Println(i) }()\n\t\tdefer func(i int) { fmt.Println(i) }(i)\n\t\tdefer print(\u0026i)\n\t\tprint(\u0026i)\n\t\tgo fmt.Println(i)"
+  }
+ ]

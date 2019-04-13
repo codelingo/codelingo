@@ -1,0 +1,14 @@
+[
+    {
+     "Comment": "If you call the receiver \"this\" in \"Method2\" method, don't call it \"t\" in \"Method1\" method. Be consistent. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)",
+     "Filename": "test.go",
+     "Line": 8,
+     "Snippet": "type T2 struct{}\n\nfunc (t T1) Method1() { //ISSUE\n\tfmt.Println(\"Hello from Method1\")\n}"
+    },
+    {
+     "Comment": "If you call the receiver \"t\" in \"Method1\" method, don't call it \"this\" in \"Method2\" method. Be consistent. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)",
+     "Filename": "test.go",
+     "Line": 12,
+     "Snippet": "}\n\nfunc (this T1) Method2() { //ISSUE\n\tfmt.Println(\"Hello from Method2\")\n}"
+    }
+   ]
