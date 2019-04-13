@@ -290,6 +290,8 @@ func rewriteFile(ctx *cli.Context, inputSRC, newSRC []byte, parts partitionedFil
 	case opts.IsAppend() && opts.IsStartOffset() && opts.IsLine():
 		// insert on new line after startoffset
 		fileSRC = append(fileSRC[0:parts.startLineOffsets()[1]+1], append(newLineAfter, parts.srcAfterStartLine()...)...)
+	default:
+		return nil, errors.New("rewrite case not found")
 	}
 	return fileSRC, nil
 }
