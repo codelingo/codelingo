@@ -1,0 +1,43 @@
+funcs:
+  - name: isKeyName
+    type: asserter
+    body: |
+      function(name) {
+        return name.toLowerCase().indexOf("key") !== -1
+      }
+tenets:
+  - name: use-crypto-rand
+    flows:
+      codelingo/docs:
+        title: Use Crypto Rand
+        body: |
+          Do not use package math/rand to generate keys, even 
+          throwaway ones. Unseeded, the generator is completely predictable. 
+          Seeded with time.Nanoseconds(), there are just a few bits of entropy. 
+          Instead, use crypto/rand's Reader, and if you need text, print to 
+          hexadecimal or base64
+      codelingo/review:
+        comment: |
+          Do not use package math/rand to generate keys. Instead, use crypto/rand.
+          hexadecimal or base64
+    query: |
+      import codelingo/ast/go
+
+      go.import_spec(depth = any):
+        go.ident:
+          name as importName
+        go.basic_lit:
+          value == "math/rand"
+      go.assign_stmt(depth = any):
+        go.lhs:
+          @review comment
+          go.ident:
+            name as lhsName
+            isKeyName(lhsName)
+        go.rhs:
+          any_of:
+            go.ident:
+              name == "rand"
+            go.ident:
+              name == importName
+        

@@ -34,10 +34,10 @@ statically in the website etc. There are no file generating side
 effects and output is json of the form:
 
 {
-	name: 'codelingo/codelingo - nil_only_functions',
+	name: 'codelingo/codelingo - nil-only-functions',
 	repo: 'github.com/codelingo/codelingo',
 	dir: '/',
-	tenet: 'codelingo/go/nil_only_functions'
+	tenet: 'codelingo/go/nil-only-functions'
 },
 	`,
 	Run: func(cmd *cobra.Command, args []string) {

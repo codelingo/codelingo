@@ -1,0 +1,8 @@
+description: Tenets written for rfjakob-gocryptfs
+version: 0.0.0
+tenets:
+  - missing-close-file
+tags:
+  - go
+  - rfjakob
+  - gocryptfs

@@ -43,12 +43,22 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      avoid-meaningless-package-names:
+        hasIssues: false
       avoid-renaming-imports:
-        hasIssues: true
+        hasIssues: false
       context-first-arg:
         hasIssues: false
+      context-in-struct:
+        hasIssues: false
+      do-not-discard-errors:
+        hasIssues: true
       go-error-fmt:
         hasIssues: false
+      no-custom-context:
+        hasIssues: false
+      use-crypto-rand:
+        hasIssues: true
     tags:
       - golang
       - go
@@ -59,6 +69,10 @@ codelingo:
       avoid-annotations-in-comments:
         hasIssues: false
       comment-first-word-as-subject:
+        hasIssues: false
+      update-comment-first-word-as-subject:
+        hasIssues: false
+      comment-first-word-when-empty:
         hasIssues: false
       good-package-name:
         hasIssues: false
@@ -97,6 +111,8 @@ codelingo:
         hasIssues: true
       tested:
         hasIssues: false
+      ticker-in-for-switch:
+        hasIssues: false
       todo:
         hasIssues: false
       unconvert:
@@ -123,6 +139,16 @@ codelingo:
       - jenkins-x
       - golang
       - go
+  landmines:
+    description: Best practices from the The Three Go Landmines gist.
+    version: 0.0.0
+    tenets:
+      shadowed-func-parameter:
+        hasIssues: false
+      looped-vars-outside-loop:
+        hasIssues: false
+      misused-nil-interface:
+        hasIssues: false
   kubernetes:
     description: Best practices for the kubernetes repository.
     version: 0.0.0
@@ -131,13 +157,7 @@ codelingo:
         hasIssues: false
       jsonapi-kind-compulsory-metadata:
         hasIssues: false
-      looped-vars-outside-loop:
-        hasIssues: false
-      misused-nil-interface:
-        hasIssues: false
       new-package-requires-test:
-        hasIssues: false
-      shadowed-func-parameter:
         hasIssues: false
       well-formed-lists:
         hasIssues: false
@@ -341,6 +361,28 @@ codelingo:
         hasIssues: false
     tags:
       - php
+  psr1:
+    description: Best practices for PHP from PSR-1.
+    version: 0.0.0
+    tenets:
+      camel-case-method-name:
+        hasIssues: false
+    tags:
+      - php
+      - psr
+      - psr1
+  psr2:
+    description: Best practices for PHP from PSR-2.
+    version: 0.0.0
+    tenets:
+      elseif-not-else-if:
+        hasIssues: false
+      lower-case-constant-values:
+        hasIssues: false
+    tags:
+    - php
+    - psr
+    - psr2
   west:
     description: Tenets written for West
     version: 0.0.0
@@ -356,4 +398,26 @@ codelingo:
       - csharp
       - cpp
       - c++
+  rfjakob-gocryptfs:
+    description: Tenets written for rfjakob-gocryptfs
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
+  lomik-go-carbon:
+    description: Tenets written for lomik-go-carbon
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - lomik
+      - go-carbon
+
+
 

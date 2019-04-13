@@ -5,89 +5,34 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"sync"
 
-	"github.com/golang/protobuf/ptypes"
-
+	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/util"
-	"github.com/codelingo/lingo/service"
 	grpcclient "github.com/codelingo/lingo/service/grpc"
 	"github.com/codelingo/rpc/flow"
-	"github.com/codelingo/rpc/flow/client"
 	"github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 	"github.com/urfave/cli"
 )
 
-func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, chan error, error) {
+func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) (chan proto.Message, <-chan *flowutil.UserVar, chan error, error) {
 	defer util.Logger.Sync()
-	util.Logger.Debug("opening connection to flow server ...")
-	conn, err := service.GrpcConnection(service.LocalClient, service.FlowServer, insecure)
-	if err != nil {
-		return nil, nil, errors.Trace(err)
-	}
-	util.Logger.Debug("...connection to flow server opened")
-	c := client.NewFlowClient(conn)
 
 	// Create context with metadata
-	ctx, err = grpcclient.AddUsernameToCtx(ctx)
+	ctx, err := grpcclient.AddUsernameToCtx(ctx)
 	if err != nil {
-		return nil, nil, errors.Trace(err)
-	}
-
-	payload, err := ptypes.MarshalAny(req)
-	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 
 	util.Logger.Debug("sending request to flow server...")
-	replyc, runErrc, err := c.Run(ctx, &flow.Request{Flow: "review", Payload: payload})
+	issuec, userVarc, errc, _, err := flowutil.RunFlow("review", req,
+		func() proto.Message { return &flow.Issue{} },
+		func(m proto.Message) proto.Message { return m })
 	if err != nil {
-		return nil, nil, errors.Trace(err)
+		return nil, nil, nil, errors.Trace(err)
 	}
 	util.Logger.Debug("...request to flow server sent. Received reply channel.")
-
-	issuec := make(chan proto.Message)
-	errc := make(chan error)
-	wg := sync.WaitGroup{}
-	wg.Add(2)
-
-	go func() {
-		for err := range runErrc {
-			errc <- err
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for reply := range replyc {
-			if reply.IsHeartbeat {
-				continue
-			}
-			if reply.Error != "" {
-				errc <- errors.New(reply.Error)
-				continue
-			}
-
-			issue := &flow.Issue{}
-			err := ptypes.UnmarshalAny(reply.Payload, issue)
-			if err != nil {
-				errc <- err
-				continue
-			}
-
-			issuec <- issue
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		wg.Wait()
-		close(issuec)
-		close(errc)
-	}()
-
-	return issuec, errc, nil
+	return issuec, userVarc, errc, nil
 }
 
 type ReportStrt struct {

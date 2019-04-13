@@ -40,8 +40,8 @@ var cliCMD = &CLIApp{
 			},
 		},
 	},
-	Request: func(*cli.Context) (chan proto.Message, chan error, func(), error) {
-		return nil, nil, nil, nil
+	Request: func(*cli.Context) (chan proto.Message, <-chan *UserVar, chan error, func(), error) {
+		return nil, nil, nil, nil, nil
 	},
 }
 
@@ -63,5 +63,47 @@ var decoratorCMD = &DecoratorApp{
 				Usage: "some decorator usage",
 			},
 		},
+	},
+}
+
+func (s *flowSuite) TestDecoratorArgs(c *gc.C) {
+	for _, test := range decoratorArgsTest {
+		result := DecoratorArgs(test.input)
+		c.Assert(result, jc.DeepEquals, test.expected)
+	}
+}
+
+var decoratorArgsTest = []struct {
+	input    string
+	expected []string
+}{
+	{
+		input:    "review -f -someflag",
+		expected: []string{"-f", "-someflag"},
+	},
+	{
+		input:    "review -f \"{{something}}\"",
+		expected: []string{"-f", "\"{{something}}\""},
+	},
+	{
+		input:    `rewrite -r "errors.Errorf(\"{{formatString}})\""`,
+		expected: []string{"-r", `"errors.Errorf(\"{{formatString}})\""`},
+	},
+}
+
+func (s *flowSuite) TestParseArgs(c *gc.C) {
+	for _, test := range parseArgsTest {
+		result := ParseArgs(test.input)
+		c.Assert(result, jc.DeepEquals, test.expected)
+	}
+}
+
+var parseArgsTest = []struct {
+	input    []string
+	expected string
+}{
+	{
+		input:    []string{"-r", `"errors.Errorf(\"{{formatString}})\""`},
+		expected: `-r "errors.Errorf(\"{{formatString}})\""`,
 	},
 }

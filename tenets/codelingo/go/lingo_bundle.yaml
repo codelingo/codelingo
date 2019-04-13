@@ -12,6 +12,7 @@ tenets:
   - reallocated-slice
   - sprintf
   - tested
+  - ticker-in-for-switch
   - todo
   - unconvert
 tags:

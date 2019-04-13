@@ -1,0 +1,39 @@
+funcs:
+  - name: isBlacklisted
+    type: asserter
+    body: |
+      function(name) {
+        var blacklist = [
+          "util",
+          "common",
+          "misc",
+          "api",
+          "types",
+          "interfaces",
+        ]
+
+        for (var i = 0; i < blacklist.length; i++) {
+          if (name === blacklist[i]) {
+            return true
+          }
+        }
+
+        return false
+      }
+tenets:
+  - name: avoid-meaningless-package-names
+    flows:
+      codelingo/review:
+        comment: Avoid meaningless package names like util, common, misc, api, types, and interfaces. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#package-names)
+      codelingo/docs:
+        title: Avoid Meaningless Package Names
+        body: |
+           Avoid meaningless package names like util, common, misc, api, types, and interfaces. See http://golang.org/doc/effective_go.html#package-names and http://blog.golang.org/package-names for more.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        @review comment
+        go.ident:
+          name as packageName
+          isBlacklisted(packageName)
