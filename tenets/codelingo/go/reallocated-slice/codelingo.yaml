@@ -1,0 +1,85 @@
+tenets:
+  - name: reallocated-slice
+    flows:
+      codelingo/docs:
+        title: Reallocated Slice
+        body: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313
+      codelingo/review:
+        comment: This pointer may become invalid as the slice it comes from is reallocated.
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any): # TODO: package instead
+        go.decls:
+          go.gen_decl:
+            go.type_spec:
+              go.ident:
+                name as structType
+              go.struct_type:
+                go.field_list:
+                  go.field:
+                    go.names: 
+                      go.ident:
+                        name as fieldName
+                    go.array_type
+          go.func_decl(depth = any):
+            go.field_list: # This refers to method receiver fields, not generic fields
+              go.field:
+                go.names:
+                  go.ident:
+                    name as structName
+                any_of:
+                  go.star_expr:
+                    go.ident: # Handle pointer receiver
+                      name == structType
+                  go.ident: # Handle non-pointer receiver
+                    name == structType
+            go.ident:
+              name as updatingFunction
+            go.block_stmt:
+              go.call_expr(depth = any):
+                go.ident:
+                  name == "append"
+                go.args:
+                  go.selector_expr:
+                    go.ident: # refers to lhs
+                      name == structName
+                    go.ident:
+                      name == fieldName
+          go.func_decl(depth = any):
+            go.field_list: # TODO: Repeated method-of-struct-structure macrofact
+              go.field: 
+                go.names:
+                  go.ident:
+                    name == structName
+                go.star_expr:
+                  go.ident: 
+                    name == structType
+            go.element(depth = any):  # Could refer to go.block_stmt or any other parent of for and assign
+              go.assign_stmt:
+                go.rhs:
+                  go.unary_expr:
+                    go.index_expr:
+                      go.selector_expr:
+                        go.ident: # refers to lhs
+                          name == structName
+                        go.ident:
+                          name == fieldName
+              go.for_stmt:
+                exclude:
+                  go.assign_stmt: # TODO: repeated index-of-array macrofact
+                    go.rhs:
+                      go.unary_expr:
+                        go.index_expr:
+                          go.selector_expr:
+                            go.ident: # refers to lhs
+                              name == structName
+                            go.ident:
+                              name == fieldName
+                @review comment
+                go.call_expr(depth = any):
+                  go.selector_expr:
+                    go.ident:
+                      name == structName
+                    go.ident:
+                      name == updatingFunction

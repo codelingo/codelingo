@@ -1,0 +1,26 @@
+[
+  {
+   "Comment": "Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name (Baz) being declared.\nFrom [effective go](https://golang.org/doc/effective_go.html#commentary).\n",
+   "Filename": "example.go",
+   "Line": 34,
+   "Snippet": "func baz() {}\n\n// This func comment should begin with 'Baz'\n// and we should not worry about this line\nfunc Baz() {}"
+  },
+  {
+   "Comment": "Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name (Quux) being declared.\nFrom [effective go](https://golang.org/doc/effective_go.html#commentary).\n",
+   "Filename": "example.go",
+   "Line": 47,
+   "Snippet": "func quux() {}\n\n// The Quux will handle xyz\nfunc Quux() {}"
+  },
+  {
+   "Comment": "Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name (Qux) being declared.\nFrom [effective go](https://golang.org/doc/effective_go.html#commentary).\n",
+   "Filename": "example.go",
+   "Line": 41,
+   "Snippet": "func qux() {}\n\n// This is called by a xyz\nfunc Qux() {}\n"
+  },
+  {
+   "Comment": "Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name (Bar) being declared.\nFrom [effective go](https://golang.org/doc/effective_go.html#commentary).\n",
+   "Filename": "example.go",
+   "Line": 26,
+   "Snippet": "func bar() {}\n\n/* This func comment should begin with 'Bar'\n */\nfunc Bar() {}\n"
+  }
+ ]

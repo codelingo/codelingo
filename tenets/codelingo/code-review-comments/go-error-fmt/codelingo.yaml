@@ -1,0 +1,100 @@
+funcs:
+  - name: isInvalidErrName
+    type: asserter
+    body: |
+      function (a) {
+        if (a.charAt(a.length - 1) === '.') {
+          return true
+        }
+
+        var first = a.split(" ")[0]
+        if (first === first.toUpperCase()) {
+          return false
+        }
+
+        // We ignore errors with words containing capitals anywhere in first word
+        // unless the only capital is at the start. This prevents acronyms or
+        // (most) code-related words being caught
+        first = first.substring(1)
+        for (var i = 0; i < first.length; i++) {
+          if (first.charAt(i) === first.charAt(i).toUpperCase()) {
+            return false
+          }
+        }
+        
+        return a.charAt(0) >= "A" && a.charAt(0) <= "Z"
+      }
+  - name: fixErrorFormat
+    type: resolver
+    body: |
+      function(text) {
+        function escapeGoFormat(text) {
+          return text.replace(new RegExp("([\\\"])", "g"), "\\$1")
+        }
+        
+        function surroundWithQuotes(text) {
+          return "\"" + text + "\""
+        }
+        
+        function uncapitalizeFirstLetter(text) {
+          return text.charAt(0).toLowerCase() + text.slice(1);
+        }
+
+        function removeTrailingPunctuation(text) {
+          var punc = /[.;:!? ]/
+          while (punc.exec(text.charAt(text.length - 1))) { 
+            text = text.substring(0, text.length - 1)
+          }
+          return text
+        }
+
+        var first = text.split(" ")[0]
+        if (first === first.toUpperCase() || (first === "I")) {
+          return surroundWithQuotes(escapeGoFormat(removeTrailingPunctuation(text)))
+        }
+
+        first = first.substring(1)
+        for (var i = 0; i < first.length; i++) {
+          if (first.charAt(i) === first.charAt(i).toUpperCase()) {
+            return surroundWithQuotes(escapeGoFormat(removeTrailingPunctuation(text)))
+          }
+        }
+
+        return surroundWithQuotes(escapeGoFormat(uncapitalizeFirstLetter(removeTrailingPunctuation(text))))
+      }
+tenets:
+  - name: go-error-fmt
+    flows:
+      codelingo/rewrite:
+      codelingo/docs:
+        title: Go Error Format
+        body: |
+          Error strings should not be capitalized (unless beginning with proper nouns 
+          or acronyms) or end with punctuation, since they are usually printed following
+          other context. That is, use fmt.Errorf("something bad") not fmt.Errorf("Something bad"),
+          so that log.Printf("Reading %s: %v", filename, err) formats without a spurious 
+          capital letter mid-message. This does not apply to logging, which is implicitly
+          line-oriented and not combined inside other messages.
+      codelingo/review:
+        comment: |
+          Error strings should not be capitalized (unless beginning with proper nouns 
+          or acronyms) or end with punctuation, since they are usually printed following
+          other context.
+    query: |
+      import codelingo/ast/go
+
+      go.call_expr(depth = any):
+        go.selector_expr:
+          go.ident:
+            name == "fmt"
+          go.ident:
+            name == "Errorf"
+        go.args:
+          @review comment
+          @rewrite --replace "{{fixErrorFormat(strValue)}}"
+          go.basic_lit:
+            sibling_order == 0
+            kind == "string"
+            value as strValue
+            isInvalidErrName(strValue)
+

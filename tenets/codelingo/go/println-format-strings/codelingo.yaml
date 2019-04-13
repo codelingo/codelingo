@@ -1,6 +1,7 @@
 tenets:
   - name: println-format-strings
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Println Format Strings
         body: |
@@ -14,8 +15,8 @@ tenets:
       @review comment
       go.call_expr(depth = any):
         go.selector_expr:
+          @rewrite --replace "{{identName}}f"
           go.ident:
-            @review.vars.identName
             name as identName
             regex(/^(Sp|P)rint(ln)?$/, identName)
         go.args:

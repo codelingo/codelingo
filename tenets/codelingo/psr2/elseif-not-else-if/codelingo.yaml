@@ -1,0 +1,36 @@
+funcs:
+  - name: extractRaw
+    type: resolver
+    body: |
+      function(rawCode) {
+        return rawCode.replace(" ", "")
+      }
+tenets:
+  - name: elseif-not-else-if
+    flows:
+      codelingo/review:
+        comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
+      codelingo/rewrite:
+      codelingo/docs:
+        title: if, elseif, else
+        body: |
+          An ```if``` structure looks like the following. Note the placement of parentheses, spaces, and braces; and that ```else``` and ```elseif``` are on the same line as the closing brace from the earlier body.
+
+          ```<?php
+          if ($expr1) {
+              // if body
+          } elseif ($expr2) {
+              // elseif body
+          } else {
+              // else body;
+          }```
+
+          The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
+    query: |
+      import codelingo/ast/php
+
+      @review comment
+      @rewrite --replace "{{ extractRaw(rawCode) }}"
+      php.stmt_else(depth = any):
+        raw as rawCode
+        php.stmt_if

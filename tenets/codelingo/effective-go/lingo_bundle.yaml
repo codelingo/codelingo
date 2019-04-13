@@ -1,0 +1,14 @@
+description: Best Practices for Golang from Effective Go.
+version: 0.0.0
+tenets:
+  - avoid-annotations-in-comments
+  - comment-first-word-as-subject
+  - update-comment-first-word-as-subject
+  - comment-first-word-when-empty
+  - good-package-name
+  # - package-comment
+  - single-method-interface-name
+  - underscores-in-name
+tags:
+  - golang
+  - go

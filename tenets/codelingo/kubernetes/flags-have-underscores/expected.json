@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Flag `\"bad_name\"` contains an underscore. Use a dash instead.",
+   "Filename": "example.go",
+   "Line": 20,
+   "Snippet": "func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {\n\tflags.StringVar(f.CertFile, flagGoodName, *f.CertFile, \"This is the description of a good flag\")\n\tflags.StringVar(f.CertFile, flagBadName, *f.CertFile, \"This is the description of a bad flag\")\n\n\tvar flagvar int"
+  },
+  {
+   "Comment": "Flag `\"bad_name\"` contains an underscore. Use a dash instead.",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "\tflag.IntVar(\u0026flagvar, \"flagname\", 1234, \"help message for flagname\")\n\n\tvar ip *int = flags.Int(flagBadName, 1234, \"This is the description of a bad flag\")\n}\n"
+  }
+ ]

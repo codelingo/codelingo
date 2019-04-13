@@ -1,37 +1,122 @@
-cacophony:
-  default:
+codelingo:
+  cacophony:
     description: Tenets written for The Cacophony Project.
     version: 0.0.0
     tenets:
-      - caught-generic-exceptions
-      - debug-prints
-      - defer-in-loop
-      - no-fmt-print
-      - raise-generic-exceptions
-      - redundant-defer-wraps
+      caught-generic-exceptions:
+        hasIssues: false
+      debug-prints:
+        hasIssues: false
+      defer-in-loop:
+        hasIssues: false
+      no-fmt-print:
+        hasIssues: false
+      raise-generic-exceptions:
+        hasIssues: false
+      redundant-defer-wraps:
+        hasIssues: false
     tags:
       - golang
       - go
       - python
       - py
-codelingo:
+  cockroachdb:
+    description: Best Practices for CockroachDB from their contributor docs.
+    version: 0.0.0
+    tenets:
+      avoid-bool-params:
+        hasIssues: true
+      fmt-verbs:
+        hasIssues: true
+      func-args-inline-comments:
+        hasIssues: true
+      line-length-limit:
+        hasIssues: true
+      wrapping-func-signatures:
+        hasIssues: true
+    tags:
+      - golang
+      - go
+      - cockroach
+      - cockroachdb
+  code-review-comments:
+    description: Best Practices for Golang from Code Review Comments.
+    version: 0.0.0
+    tenets:
+      avoid-meaningless-package-names:
+        hasIssues: false
+      avoid-renaming-imports:
+        hasIssues: false
+      context-first-arg:
+        hasIssues: false
+      context-in-struct:
+        hasIssues: false
+      do-not-discard-errors:
+        hasIssues: true
+      go-error-fmt:
+        hasIssues: false
+      no-custom-context:
+        hasIssues: false
+      use-crypto-rand:
+        hasIssues: true
+    tags:
+      - golang
+      - go
+  effective-go:
+    description: Best Practices for Golang from Effective Go.
+    version: 0.0.0
+    tenets:
+      avoid-annotations-in-comments:
+        hasIssues: false
+      comment-first-word-as-subject:
+        hasIssues: false
+      update-comment-first-word-as-subject:
+        hasIssues: false
+      comment-first-word-when-empty:
+        hasIssues: false
+      good-package-name:
+        hasIssues: false
+      package-comment:
+        hasIssues: true
+      single-method-interface-name:
+        hasIssues: false
+      underscores-in-name:
+        hasIssues: false
+    tags:
+      - golang
+      - go
   go:
     description: Best Practices for Golang.
     version: 0.0.0
     tenets:
-      - bool-param
-      - empty-slice
-      - global-var
-      - golint
-      - goto
-      - marshalling
-      - nil_only_functions
-      - println-format-strings
-      - reallocated-slice
-      - sprintf
-      - tested
-      - todo
-      - unconvert
+      bool-param:
+        hasIssues: false
+      empty-slice:
+        hasIssues: false
+      global-var:
+        hasIssues: false
+      golint:
+        hasIssues: false
+      goto:
+        hasIssues: false
+      marshalling:
+        hasIssues: false
+      nil-only-functions:
+        hasIssues: true
+      println-format-strings:
+        hasIssues: false
+      reallocated-slice:
+        hasIssues: false
+      sprintf:
+        hasIssues: true
+      tested:
+        hasIssues: false
+      ticker-in-for-switch:
+        hasIssues: false
+      todo:
+        hasIssues: false
+      unconvert:
+        hasIssues: false
     tags:
       - golang
       - go
@@ -39,50 +124,158 @@ codelingo:
     description: Best practices from the jenkins-x/js repository.
     version: 0.0.0
     tenets:
-      - intformat
-      - orginterfaces
-      - parallel-in-tests
-      - test-package-name
-      - tparallel
+      intformat:
+        hasIssues: false
+      orginterfaces:
+        hasIssues: false
+      parallel-in-tests:
+        hasIssues: false
+      test-package-name:
+        hasIssues: false
+      tparallel:
+        hasIssues: false
     tags:
       - jenkins
       - jenkins-x
       - golang
       - go
+  landmines:
+    description: Best practices from the The Three Go Landmines gist.
+    version: 0.0.0
+    tenets:
+      shadowed-func-parameter:
+        hasIssues: false
+      looped-vars-outside-loop:
+        hasIssues: false
+      misused-nil-interface:
+        hasIssues: false
+  kubernetes:
+    description: Best practices from the kubernetes repository.
+    version: 0.0.0
+    tenets:
+      flags-have-underscores:
+        hasIssues: false
+      jsonapi-kind-compulsory-metadata:
+        hasIssues: false
+      new-package-requires-test:
+        hasIssues: false
+      well-formed-lists:
+        hasIssues: false
+      well-named-interface:
+        hasIssues: false
+      well-named-lists:
+        hasIssues: false
+      well-named-lock:
+        hasIssues: false
+      well-named-locks:
+        hasIssues: false
+      well-named-package:
+        hasIssues: false
+    tags:
+      - kubernetes
+      - golang
+      - go
+  lightning-network-daemon:
+    description: Best practices from the lightning network daemon repository.
+    version: 0.0.0
+    tenets:
+      rpc-responses-display-uniformly:
+        hasIssues: false
+      exported-package-is-tested:
+        hasIssues: false
+    tags:
+      - lnd
+      - golang
+      - go
+  modica:
+    description: Tenets written for Modica
+    version: 0.0.0
+    tenets:
+      null-check:
+        hasIssues: false
+      transport:
+        hasIssues: false
+    tags:
+      - php
   php:
     description: Best practices for PHP.
     version: 0.0.0
     tenets:
-      - boolean-argument
-      - count-in-loop
-      - empty-catch-block
-      - eval-expression
-      - if-assignment
-      - offsite-redirection
-      - phplint
-      - sql-concats
+      boolean-argument:
+        hasIssues: false
+      count-in-loop:
+        hasIssues: false
+      empty-catch-block:
+        hasIssues: false
+      eval-expression:
+        hasIssues: false
+      if-assignment:
+        hasIssues: false
+      offsite-redirection:
+        hasIssues: false
+      phplint:
+        hasIssues: false
+      sql-concats:
+        hasIssues: false
     tags:
       - php
-modica:
-  default:
-    description: Tenets written for Modica
+  psr1:
+    description: Best practices for PHP from PSR-1.
     version: 0.0.0
     tenets:
-      - null-check
-      - transport
+      camel-case-method-name:
+        hasIssues: false
     tags:
       - php
-west:
-  default:
+      - psr
+      - psr1
+  psr2:
+    description: Best practices for PHP from PSR-2.
+    version: 0.0.0
+    tenets:
+      elseif-not-else-if:
+        hasIssues: false
+      lower-case-constant-values:
+        hasIssues: false
+    tags:
+    - php
+    - psr
+    - psr2
+  west:
     description: Tenets written for West
     version: 0.0.0
     tenets:
-      - allocation
-      - shadowing
-      - switch
+      allocation:
+        hasIssues: false
+      shadowing:
+        hasIssues: false
+      switch:
+        hasIssues: false
     tags:
       - c#
       - csharp
       - cpp
       - c++
-      
+  rfjakob-gocryptfs:
+    description: Tenets written for rfjakob-gocryptfs
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
+  lomik-go-carbon:
+    description: Tenets written for lomik-go-carbon
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - lomik
+      - go-carbon
+
+
+

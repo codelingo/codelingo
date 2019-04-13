@@ -1,0 +1,26 @@
+[
+  {
+   "Comment": "The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.",
+   "Filename": "effective-go/underscores-in-name/example.go",
+   "Line": 14,
+   "Snippet": "}\n\nfunc a_bad_function() {\n\tfmt.Println(\"Needs a name change\")\n}"
+  },
+  {
+   "Comment": "The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.",
+   "Filename": "effective-go/underscores-in-name/example.go",
+   "Line": 18,
+   "Snippet": "}\n\ntype Bad_Interface interface {\n\tSomeMethod() int\n}"
+  },
+  {
+   "Comment": "The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.",
+   "Filename": "effective-go/underscores-in-name/example.go",
+   "Line": 5,
+   "Snippet": "func main() {\n\tvar a int = 15\n\ta_bad_name := 20\n\tvar another_bad_name string = \"hello\"\n\taGoodVar := 2"
+  },
+  {
+   "Comment": "The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.",
+   "Filename": "effective-go/underscores-in-name/example.go",
+   "Line": 6,
+   "Snippet": "\tvar a int = 15\n\ta_bad_name := 20\n\tvar another_bad_name string = \"hello\"\n\taGoodVar := 2\n}"
+  }
+ ]

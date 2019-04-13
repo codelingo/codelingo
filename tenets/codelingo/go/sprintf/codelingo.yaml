@@ -1,6 +1,10 @@
 tenets:
   - name: sprintf-error
+    vars:
+      newline: |
+        errors.Errorf("{{formatString}}")
     flows:
+      codelingo/rewrite:
       codelingo/docs:
         title: Sprintf Error
         body: |
@@ -11,6 +15,7 @@ tenets:
       import codelingo/ast/go
   
       @review comment
+      @rewrite -r "{{newline}}"
       go.call_expr(depth = any):
         go.selector_expr:
           go.ident:
@@ -24,3 +29,8 @@ tenets:
                 name == "fmt"
               go.ident:
                 name == "Sprintf"
+            go.args:
+              go.basic_lit:
+                child_count == 0
+                kind == "string"
+                value as formatString

@@ -1,0 +1,31 @@
+funcs:
+  - name: containsUnderscores
+    type: asserter
+    body: |
+      function(name) {
+        if (name.length === 1) {
+          return false
+        }
+        return name.indexOf("_") !== -1
+      }
+  - name: isNotProto
+    type: asserter
+    body: |
+      function(name) {
+        return name.indexOf(".pb.go") === -1
+      }
+tenets:
+  - name: underscores-in-name
+    flows:
+      codelingo/review:
+        comment: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+    query: |
+      import codelingo/ast/go
+      go.file(depth = any):
+        filename as fName
+        # Ignore generated .pb.go files
+        isNotProto(fName)
+        @review comment
+        go.ident(depth = any):
+          name as varName
+          containsUnderscores(varName)

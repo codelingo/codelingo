@@ -1,7 +1,8 @@
-decscrpiton: Best practices from the jenkins-x/js repository
+description: Best practices from the jenkins-x/js repository.
 version: 0.0.0
 tenets:
   - intformat
+  - orginterfaces
   - parallel-in-tests
   - test-package-name
   - tparallel

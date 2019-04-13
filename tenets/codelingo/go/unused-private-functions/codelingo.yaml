@@ -1,14 +1,15 @@
 tenets:
   - name: find-unused-private-funcs
-    doc: Finds unused private functions.
     flows:
+      codelingo/rewrite:
       codelingo/review:
         comment: This private function is not used in the package.
     query: |
       import codelingo/ast/go
       go.dir(depth = any):
+        @rewrite -r ""
         go.func_decl(depth = any):
-          @review.comment
+          @review comment
           go.ident:
             private == "true"
             name as funcName

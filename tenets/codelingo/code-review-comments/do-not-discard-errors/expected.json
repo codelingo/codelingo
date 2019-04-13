@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Do not discard errors using _ variables. If a function returns an error, \ncheck it to make sure the function succeeded. Handle the error, return it, or, \nin truly exceptional situations, panic.\n",
+   "Filename": "code-review-comments/do-not-discard-errors/example.go",
+   "Line": 9,
+   "Snippet": ")\n\nfunc main() {\n\tfmt.Println(\"Hello, playground\")\n\ta, _ := example()\n\tfmt.Println(a)\n\tfmt.Println(err)\n}\n\nfunc example() (int, error) {"
+  }
+ ]

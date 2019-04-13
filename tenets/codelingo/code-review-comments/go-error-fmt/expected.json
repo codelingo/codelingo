@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "Error strings should not be capitalized (unless beginning with proper nouns \nor acronyms) or end with punctuation, since they are usually printed following\nother context.\n",
+   "Filename": "example.go",
+   "Line": 7,
+   "Snippet": "\nfunc main() {\n\tfmt.Errorf(\"something bad.\")\n\tfmt.Errorf(\"this is okay\")\n\tfmt.Errorf(\"This is not okay\")"
+  },
+  {
+   "Comment": "Error strings should not be capitalized (unless beginning with proper nouns \nor acronyms) or end with punctuation, since they are usually printed following\nother context.\n",
+   "Filename": "example.go",
+   "Line": 11,
+   "Snippet": "\tfmt.Errorf(\"This is not okay\")\n\tfmt.Errorf(\"THIS is okay\")\n\tfmt.Errorf(\"THIS is not okay.\")\n}"
+  },
+  {
+   "Comment": "Error strings should not be capitalized (unless beginning with proper nouns \nor acronyms) or end with punctuation, since they are usually printed following\nother context.\n",
+   "Filename": "example.go",
+   "Line": 9,
+   "Snippet": "\tfmt.Errorf(\"something bad.\")\n\tfmt.Errorf(\"this is okay\")\n\tfmt.Errorf(\"This is not okay\")\n\tfmt.Errorf(\"THIS is okay\")\n\tfmt.Errorf(\"THIS is not okay.\")"
+  }
+ ]
