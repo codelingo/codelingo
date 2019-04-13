@@ -19,7 +19,17 @@ tenets:
     flows:
       codelingo/review:
         comment: The name of a method's receiver "{{receiverName}}" should be short and also a reflection of its identity "{{typeName}}" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)
-      
+      codelingo/docs:
+        title: Method's receiver name 
+        body: |
+          The name of a method's receiver should be a reflection of its identity; often a one or two letter 
+          abbreviation of its type suffices (such as "c" or "cl" for "Client"). Don't use generic names such as 
+          "me", "this" or "self", identifiers typical of object-oriented languages that gives the method a 
+          special meaning. In Go, the receiver of a method is just another parameter and therefore, should 
+          be named accordingly. The name need not be as descriptive as that of a method argument, as its 
+          role is obvious and serves no documentary purpose. It can be very short as it will appear on 
+          almost every line of every method of the type; familiarity admits brevity. 
+
     query: |
       import codelingo/ast/go
       
