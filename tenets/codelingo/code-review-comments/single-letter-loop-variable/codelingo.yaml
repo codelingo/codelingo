@@ -24,7 +24,6 @@ tenets:
       import codelingo/ast/go
  
       # Currently, we only raise an issue for a loop variable in 1) a for loop with all three parts 2) a for range loop
-      # https://trello.com/c/OeIKlQoi/97-single-letter-index-variables
       any_of:
         go.for_stmt(depth = any):
           child_count == 4
