@@ -1,0 +1,14 @@
+[
+    {
+     "Comment": "loop index variable \"index\" should be a single letter [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)",
+     "Filename": "test.go",
+     "Line": 14,
+     "Snippet": "\n\tsum = 0\n\tfor index := 0; index \u003c 10; index++ { //ISSUE\n\t\tsum += index\n\t}"
+    },
+    {
+     "Comment": "loop index variable \"index\" should be a single letter [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)",
+     "Filename": "test.go",
+     "Line": 57,
+     "Snippet": "\n\tsum = 0\n\tfor index, num := range nums { //ISSUE\n\t\tsum += index + num\n\t}"
+    }
+]
