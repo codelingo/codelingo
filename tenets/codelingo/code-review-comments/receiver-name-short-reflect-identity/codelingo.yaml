@@ -8,7 +8,7 @@ funcs:
         if(rc.length > 2) 
           return true
         for (i = 0; i < rc.length; i++) {
-          if(tn.indexOf(rc[i]) == -1)
+          if(tn.indexOf(rc[i]) === -1)
             return true
         }
         return false
