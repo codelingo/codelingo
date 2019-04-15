@@ -14,6 +14,7 @@ tenets:
   - receiver-name-short-reflect-identity
   - single-letter-loop-variable
   - short-reader-variable
+  - camel-case-constants
 tags:
   - golang
   - go
