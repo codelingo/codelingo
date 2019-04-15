@@ -13,6 +13,7 @@ tenets:
   - same-receiver-name
   - receiver-name-short-reflect-identity
   - single-letter-loop-variable
+  - short-reader-variable
 tags:
   - golang
   - go

@@ -67,6 +67,8 @@ codelingo:
         hasIssues: false
       single-letter-loop-variable:
         hasIssues: false
+      short-reader-variable:
+        hasIssues: false
     tags:
       - golang
       - go
