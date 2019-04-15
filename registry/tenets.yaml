@@ -69,6 +69,8 @@ codelingo:
         hasIssues: false
       short-reader-variable:
         hasIssues: false
+      camel-case-constants:
+        hasIssues: false
     tags:
       - golang
       - go

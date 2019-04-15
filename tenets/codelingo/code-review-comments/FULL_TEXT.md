@@ -427,7 +427,7 @@ boundaries are, not to start counting lines.
 
 ## Mixed Caps
 
-See https://golang.org/doc/effective_go.html#mixed-caps. This applies even when it breaks conventions in other languages. For example an unexported constant is `maxLength` not `MaxLength` or `MAX_LENGTH`.
+See https://golang.org/doc/effective_go.html#mixed-caps. This applies even when it breaks conventions in other languages. For example an unexported constant is `maxLength` not `MaxLength` or `MAX_LENGTH`. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/camel-case-constants)
 
 Also see [Initialisms](https://github.com/golang/go/wiki/CodeReviewComments#initialisms).
 
