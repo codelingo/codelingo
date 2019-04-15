@@ -59,6 +59,14 @@ codelingo:
         hasIssues: false
       use-crypto-rand:
         hasIssues: true
+      same-receiver-name:
+        hasIssues: false
+      receiver-name-short-reflect-identity:
+        hasIssues: false
+      declare-empty-slice:
+        hasIssues: false
+      single-letter-loop-variable:
+        hasIssues: false
     tags:
       - golang
       - go
