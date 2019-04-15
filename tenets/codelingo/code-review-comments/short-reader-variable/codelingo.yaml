@@ -1,0 +1,41 @@
+funcs:
+  - name: isNotValid
+    type: asserter
+    body: |
+      function(varName) {
+        return varName.length > 2 || varName[0] != 'r' || (varName[0] == 'r' && (varName[1] < '0' || varName[1] > '9'))
+      }
+
+
+tenets:
+  - name:  short-reader-variable
+    flows:
+      codelingo/review:
+        comment: reader variable "{{varName}}" should be a single letter "r", or two letters starting with "r" followed by a number for more readability [See Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
+        # We currently accept two letters rather than a single letter to allow use of r1...rn. This helps readibility if two readers are needed in the same scope
+
+      codelingo/docs:
+        title: Short Reader variables 
+        body: |
+          
+          Variable names in Go should be short rather than long. This is especially true for local variables with limited scope. Prefer c to lineCount. Prefer i to sliceIndex.
+
+          The basic rule. the further from its declaration that a name is used, the more descriptive the name must be. For a method receiver, one or two letters is sufficient. Common variables such as loop indices and readers can be a single letter (i, r). More unusual things and global variables need more descriptive names.
+    query: |
+      import codelingo/ast/go
+ 
+      go.func_decl(depth = any):
+        @review comment
+        go.assign_stmt (depth = any):
+          tok == ":="
+          go.lhs:
+            go.ident:
+              name as varName
+              isNotValid(varName)
+          go.rhs:
+            go.call_expr:
+              go.selector_expr:
+                go.ident:
+                  name == "strings"
+                go.ident:
+                  name == "NewReader"
