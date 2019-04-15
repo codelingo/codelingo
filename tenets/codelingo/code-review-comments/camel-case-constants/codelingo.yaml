@@ -1,16 +1,19 @@
 funcs:
-  - name: hasUnderscore
+  - name: isNotValid
     type: asserter
     body: |
       function(varName) {
-        return varName !== "_" && varName.indexOf("_") !== -1 
+        return (varName === varName.toUpperCase() && varName.length > 4) || (varName !== "_" && varName.indexOf("_") !== -1) 
       }
   - name: fixName
     type: resolver
     body: |
       function(varName, private){
-        if(varName.indexOf("_") === -1 || varName === "_") 
-          return varName
+        if(varName.indexOf("_") === -1 || varName === "_"){ 
+          if(varName === varName.toUpperCase() && varName.length > 4) // variable is ALLCAPS, should be changed to Allcaps
+            return varName.charAt(0).toUpperCase() + varName.toLowerCase().substring(1)
+          return varName // variable can be all lowercase, mixedCaps or MixedCaps or ALLCAPS with length less than 4 (we do not change acronyms of length 4 or less)
+        }
         varName = varName.toLowerCase()
         pieces = varName.split("_");
         constName = []
@@ -51,5 +54,6 @@ tenets:
             @rewrite --replace "{{fixName(varName, varPrivate)}}"
             go.ident:
               name as varName
-              hasUnderscore(varName)
+              isNotValid(varName)
               private as varPrivate
+

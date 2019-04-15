@@ -1,38 +1,44 @@
 [
     {
+     "Comment": "Define constant \"PUBLIC_PI\" as \"PublicPi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
+     "Filename": "test.go",
+     "Line": 10,
+     "Snippet": "const private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n\nfunc main() {"
+    },
+    {
+     "Comment": "Define constant \"PIVALUE\" as \"Pivalue\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
+     "Filename": "test.go",
+     "Line": 7,
+     "Snippet": "const Pi = 3.14\nconst PI = 3.14\nconst PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE"
+    },
+    {
      "Comment": "Define constant \"private_Pi\" as \"privatePi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
-     "Line": 6,
-     "Snippet": "\nconst Pi = 3.14\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE"
+     "Line": 8,
+     "Snippet": "const PI = 3.14\nconst PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE"
     },
     {
      "Comment": "Define constant \"Public_Pi\" as \"PublicPi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
-     "Line": 7,
-     "Snippet": "const Pi = 3.14\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n"
-    },
-    {
-     "Comment": "Define constant \"PUBLIC_PI\" as \"PublicPi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
-     "Filename": "test.go",
-     "Line": 8,
-     "Snippet": "const private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n\nfunc main() {"
-    },
-    {
-     "Comment": "Define constant \"PUBLIC_WORLD\" as \"PublicWorld\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
-     "Filename": "test.go",
-     "Line": 23,
-     "Snippet": "\tfmt.Println(\"Happy\", Public_Pi, \"Day\")\n\n\tconst PUBLIC_WORLD = \"World\" //ISSUE\n\tfmt.Println(\"Hello\", PUBLIC_WORLD)\n\tfmt.Println(\"Happy\", PUBLIC_PI, \"Day\")"
+     "Line": 9,
+     "Snippet": "const PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n"
     },
     {
      "Comment": "Define constant \"private_World\" as \"privateWorld\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
-     "Line": 15,
-     "Snippet": "\tfmt.Println(\"Happy\", Pi, \"Day\")\n\n\tconst private_World = \"World\" //ISSUE\n\tfmt.Println(\"Hello\", private_World)\n\tfmt.Println(\"Happy\", private_Pi, \"Day\")"
+     "Line": 19,
+     "Snippet": "\tfmt.Println(\"Happy\", PIVALUE, \"Day\")\n\n\tconst private_World = \"World\" //ISSUE\n\tfmt.Println(\"Hello\", private_World)\n\tfmt.Println(\"Happy\", private_Pi, \"Day\")"
     },
     {
      "Comment": "Define constant \"Public_World\" as \"PublicWorld\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
-     "Line": 19,
+     "Line": 23,
      "Snippet": "\tfmt.Println(\"Happy\", private_Pi, \"Day\")\n\n\tconst Public_World = \"World\" //ISSUE\n\tfmt.Println(\"Hello\", Public_World)\n\tfmt.Println(\"Happy\", Public_Pi, \"Day\")"
+    },
+    {
+     "Comment": "Define constant \"PUBLIC_WORLD\" as \"PublicWorld\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
+     "Filename": "test.go",
+     "Line": 27,
+     "Snippet": "\tfmt.Println(\"Happy\", Public_Pi, \"Day\")\n\n\tconst PUBLIC_WORLD = \"World\" //ISSUE\n\tfmt.Println(\"Hello\", PUBLIC_WORLD)\n\tfmt.Println(\"Happy\", PUBLIC_PI, \"Day\")"
     }
-]
+   ]

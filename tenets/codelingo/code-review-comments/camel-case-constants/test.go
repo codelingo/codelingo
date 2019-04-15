@@ -3,6 +3,8 @@ package main
 import "fmt"
 
 const Pi = 3.14
+const PI = 3.14
+const PIVALUE = 3.14    //ISSUE
 const private_Pi = 3.14 //ISSUE
 const Public_Pi = 3.14  //ISSUE
 const PUBLIC_PI = 3.14  //ISSUE
@@ -11,6 +13,8 @@ func main() {
 	const World = "World"
 	fmt.Println("Hello", World)
 	fmt.Println("Happy", Pi, "Day")
+	fmt.Println("Happy", PI, "Day")
+	fmt.Println("Happy", PIVALUE, "Day")
 
 	const private_World = "World" //ISSUE
 	fmt.Println("Hello", private_World)
