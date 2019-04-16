@@ -15,6 +15,7 @@ tenets:
   - single-letter-loop-variable
   - short-reader-variable
   - camel-case-constants
+  - short-name-limited-scope
 tags:
   - golang
   - go

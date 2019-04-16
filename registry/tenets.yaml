@@ -71,6 +71,8 @@ codelingo:
         hasIssues: false
       camel-case-constants:
         hasIssues: false
+      short-name-limited-scope:
+        hasIssues: false
     tags:
       - golang
       - go
