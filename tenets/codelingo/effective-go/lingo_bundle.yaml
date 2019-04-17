@@ -13,6 +13,7 @@ tenets:
   - defer-close-file
   - reuse-variable-name-type-switch
   - no-get-in-getters-name
+  - initialize-using-composite-literal
 tags:
   - golang
   - go
