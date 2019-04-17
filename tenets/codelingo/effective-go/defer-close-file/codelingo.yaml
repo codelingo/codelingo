@@ -1,0 +1,34 @@
+tenets:
+  - name:  defer-close-file
+    flows:
+      codelingo/docs:
+        title: Defer Close File
+        body: |
+          Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function. [as specified in Effective Go](https://golang.org/doc/effective_go.html#defer)
+      codelingo/review:
+        comment: Add "defer {{fileName}}.Close()" after opening the file "{{fileName}}"
+    query: |
+      import codelingo/ast/go
+      
+      go.func_decl(depth = any):
+        @review comment
+        go.assign_stmt(depth = any):
+          go.lhs:
+            go.ident:
+              sibling_order == 0
+              name as fileName
+          go.rhs:
+            go.call_expr:
+              go.selector_expr:
+                go.ident:
+                  name == "os"
+                go.ident:
+                  name == "Open"
+        exclude:
+          go.defer_stmt(depth = any):
+            go.call_expr:
+              go.selector_expr:
+                go.ident:
+                  name ==  fileName
+                go.ident:
+                  name == "Close"     

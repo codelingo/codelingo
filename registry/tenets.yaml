@@ -96,6 +96,12 @@ codelingo:
         hasIssues: false
       underscores-in-name:
         hasIssues: false
+      unnecessary-else:
+        hasIssues: false
+      defer-close-file:
+        hasIssues: false
+      reuse-variable-name-type-switch:
+        hasIssues: false
     tags:
       - golang
       - go
