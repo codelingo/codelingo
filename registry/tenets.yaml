@@ -102,6 +102,8 @@ codelingo:
         hasIssues: false
       reuse-variable-name-type-switch:
         hasIssues: false
+      no-get-in-getters-name:
+        hasIssues: false
     tags:
       - golang
       - go
