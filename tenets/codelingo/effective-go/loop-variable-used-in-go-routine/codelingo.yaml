@@ -1,0 +1,128 @@
+funcs:
+  - name: isEqualtoAny
+    type: asserter
+    body: |
+      function(name1, name2, name3) {
+        return (name1 == name3 && name1 != "_" ) || (name2 == name3 && name2 != "_" ) 
+      }
+
+  - name: isEqual
+    type: asserter
+    body: |
+      function(name1, name2) {
+        return name1 == name2 && name1 != "_"  
+      }
+
+
+tenets:
+  - name: loop-variable-used-in-go-routine
+    flows:
+      codelingo/docs:
+        title: test
+        body: |
+            The loop variable is reused for each iteration, so it is shared across all goroutines. We need to make sure that it is unique for each goroutine. One way to do that, is passing the loop variable as an argument to the closure in the goroutine.
+            Note: This tenet assumes that loop variables are not shadowed inside goroutine. We need ssa to work to find the right loop variables in that case.
+      codelingo/review:
+        comment: Pass any loop variables used in the goroutine as an argument to the closure. [as specified in Effective Go](https://golang.org/doc/effective_go.html#channels) 
+
+    query: |
+      import codelingo/ast/go
+
+      
+      go.file(depth = any):
+        any_of:
+          go.for_stmt(depth = any):
+            go.assign_stmt:
+              go.lhs:
+                go.ident:
+                  name as varName1
+            go.block_stmt:
+              go.list:
+                @review comment
+                go.go_stmt(depth = any):
+                  go.call_expr:
+                    go.func_lit:
+                      go.block_stmt:
+                        go.ident(depth = any):
+                          name as varName2
+                          isEqual(varName1, varName2)
+                    exclude:
+                      go.args:
+                        go.ident:
+                          name as varName3
+                          isEqual(varName2, varName3)
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName4
+                    go.rhs:
+                      go.ident:
+                        name as varName5
+                        isEqual(varName4, varName5)
+                        isEqual(varName2, varName4)
+          go.range_stmt(depth = any):  
+            child_count == 4   
+            go.ident:
+              sibling_order == 0       
+              name as varName1
+            go.ident:
+              sibling_order == 1
+              name as varName2
+            go.block_stmt:
+              go.list:
+                @review comment
+                go.go_stmt(depth = any):
+                  go.call_expr:
+                    go.func_lit:
+                      go.block_stmt:
+                        go.ident(depth = any):
+                          name as varName3
+                          isEqualtoAny(varName1, varName2, varName3) 
+                    exclude:
+                      go.args:
+                        go.ident:
+                          name as varName4
+                          isEqual(varName3, varName4) 
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName5
+                    go.rhs:
+                      go.ident:
+                        name as varName6
+                        isEqual(varName5, varName6)
+                        isEqual(varName3, varName5)
+                  
+
+          go.range_stmt(depth = any): 
+            child_count == 3    
+            go.ident:
+              sibling_order == 0
+              name as varName1
+            go.block_stmt:
+              go.list:
+                @review comment
+                go.go_stmt(depth = any):
+                  go.call_expr:
+                    go.func_lit:
+                      go.block_stmt:
+                        go.ident(depth = any):
+                          name as varName2
+                          isEqual(varName1, varName2)
+                    exclude:
+                      go.args:
+                        go.ident:
+                          name as varName3
+                          isEqual(varName2, varName3)
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName4
+                    go.rhs:
+                      go.ident:
+                        name as varName5
+                        isEqual(varName4, varName5)
+                        isEqual(varName2, varName4)

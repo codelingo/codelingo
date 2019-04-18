@@ -104,6 +104,10 @@ codelingo:
         hasIssues: false
       no-get-in-getters-name:
         hasIssues: false
+      initialize-using-composite-literal:
+        hasIssues: false
+      loop-variable-used-in-go-routine:
+        hasIssues: false
     tags:
       - golang
       - go
