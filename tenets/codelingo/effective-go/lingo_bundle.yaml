@@ -14,6 +14,7 @@ tenets:
   - reuse-variable-name-type-switch
   - no-get-in-getters-name
   - initialize-using-composite-literal
+  - loop-variable-used-in-go-routine
 tags:
   - golang
   - go

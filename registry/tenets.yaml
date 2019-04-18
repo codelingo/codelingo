@@ -106,6 +106,8 @@ codelingo:
         hasIssues: false
       initialize-using-composite-literal:
         hasIssues: false
+      loop-variable-used-in-go-routine:
+        hasIssues: false
     tags:
       - golang
       - go
