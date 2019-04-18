@@ -43,16 +43,36 @@ codelingo:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
     tenets:
+      avoid-meaningless-package-names:
+        hasIssues: false
       avoid-renaming-imports:
         hasIssues: false
       context-first-arg:
+        hasIssues: false
+      context-in-struct:
         hasIssues: false
       do-not-discard-errors:
         hasIssues: true
       go-error-fmt:
         hasIssues: false
+      no-custom-context:
+        hasIssues: false
       use-crypto-rand:
         hasIssues: true
+      same-receiver-name:
+        hasIssues: false
+      receiver-name-short-reflect-identity:
+        hasIssues: false
+      declare-empty-slice:
+        hasIssues: false
+      single-letter-loop-variable:
+        hasIssues: false
+      short-reader-variable:
+        hasIssues: false
+      camel-case-constants:
+        hasIssues: false
+      short-name-limited-scope:
+        hasIssues: false
     tags:
       - golang
       - go
@@ -75,6 +95,14 @@ codelingo:
       single-method-interface-name:
         hasIssues: false
       underscores-in-name:
+        hasIssues: false
+      unnecessary-else:
+        hasIssues: false
+      defer-close-file:
+        hasIssues: false
+      reuse-variable-name-type-switch:
+        hasIssues: false
+      no-get-in-getters-name:
         hasIssues: false
     tags:
       - golang
@@ -133,6 +161,16 @@ codelingo:
       - jenkins-x
       - golang
       - go
+  landmines:
+    description: Best practices from the The Three Go Landmines gist.
+    version: 0.0.0
+    tenets:
+      shadowed-func-parameter:
+        hasIssues: false
+      looped-vars-outside-loop:
+        hasIssues: false
+      misused-nil-interface:
+        hasIssues: false
   kubernetes:
     description: Best practices from the kubernetes repository.
     version: 0.0.0
@@ -141,13 +179,7 @@ codelingo:
         hasIssues: false
       jsonapi-kind-compulsory-metadata:
         hasIssues: false
-      looped-vars-outside-loop:
-        hasIssues: false
-      misused-nil-interface:
-        hasIssues: false
       new-package-requires-test:
-        hasIssues: false
-      shadowed-func-parameter:
         hasIssues: false
       well-formed-lists:
         hasIssues: false
@@ -231,6 +263,15 @@ codelingo:
     - php
     - psr
     - psr2
+  drupal:
+    description: Best practices for PHP from Drupal.
+    version: 0.0.0
+    tenets:
+      upper-case-constant-values:
+        hasIssues: false
+    tags:
+    - php
+    - drupal
   west:
     description: Tenets written for West
     version: 0.0.0
@@ -246,4 +287,26 @@ codelingo:
       - csharp
       - cpp
       - c++
+  rfjakob-gocryptfs:
+    description: Tenets written for rfjakob-gocryptfs
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - rfjakob
+      - gocryptfs
+  lomik-go-carbon:
+    description: Tenets written for lomik-go-carbon
+    version: 0.0.0
+    tenets:
+      missing-close-file:
+        hasIssues: false
+    tags:
+      - go
+      - lomik
+      - go-carbon
+
+
 

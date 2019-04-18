@@ -9,6 +9,10 @@ tenets:
   # - package-comment
   - single-method-interface-name
   - underscores-in-name
+  - unnecessary-else
+  - defer-close-file
+  - reuse-variable-name-type-switch
+  - no-get-in-getters-name
 tags:
   - golang
   - go

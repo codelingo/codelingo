@@ -1,0 +1,20 @@
+[
+    {
+     "Comment": "Declare intSlice1 as a nil slice, with `var intSlice1 []int [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+     "Filename": "test.go",
+     "Line": 16,
+     "Snippet": "\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue\n\tintSlice2 := []int{1, 2}\n"
+    },
+    {
+     "Comment": "Declare personSlice as a nil slice, with `var personSlice []Person [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+     "Filename": "test.go",
+     "Line": 14,
+     "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue"
+    },
+    {
+     "Comment": "Declare strSlice as a nil slice, with `var strSlice []string [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+     "Filename": "test.go",
+     "Line": 15,
+     "Snippet": "func main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue\n\tintSlice2 := []int{1, 2}"
+    }
+]
