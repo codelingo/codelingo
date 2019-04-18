@@ -14,6 +14,12 @@
     {
      "Comment": "Pass any loop variables used in the goroutine as an argument to the closure. [as specified in Effective Go](https://golang.org/doc/effective_go.html#channels)",
      "Filename": "test.go",
+     "Line": 82,
+     "Snippet": "\tfor i, val := range values {\n\t\tval := val\n\t\tgo func() { //ISSUE\n\t\t\tif i \u003c n {\n\t\t\t\tfmt.Println(val)\n\t\t\t}\n\t\t}()\n\t}\n}"
+    },
+    {
+     "Comment": "Pass any loop variables used in the goroutine as an argument to the closure. [as specified in Effective Go](https://golang.org/doc/effective_go.html#channels)",
+     "Filename": "test.go",
      "Line": 9,
      "Snippet": "func Test1(values []int) {\n\tfor val := range values {\n\t\tgo func() { //ISSUE\n\t\t\tfmt.Println(val)\n\t\t}()\n\t}\n}"
     },

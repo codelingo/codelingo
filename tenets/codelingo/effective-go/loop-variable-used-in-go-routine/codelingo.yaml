@@ -3,13 +3,15 @@ funcs:
     type: asserter
     body: |
       function(name1, name2, name3) {
-        return (name1 == name3 && name1 != "_" ) || (name2 == name3 && name2 != "_" ) }
+        return (name1 == name3 && name1 != "_" ) || (name2 == name3 && name2 != "_" ) 
+      }
 
   - name: isEqual
     type: asserter
     body: |
       function(name1, name2) {
-        return name1 == name2 && name1 != "_"  }
+        return name1 == name2 && name1 != "_"  
+      }
 
 
 tenets:
@@ -49,6 +51,16 @@ tenets:
                         go.ident:
                           name as varName3
                           isEqual(varName2, varName3)
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName4
+                    go.rhs:
+                      go.ident:
+                        name as varName5
+                        isEqual(varName4, varName5)
+                        isEqual(varName2, varName4)
           go.range_stmt(depth = any):  
             child_count == 4   
             go.ident:
@@ -72,6 +84,17 @@ tenets:
                         go.ident:
                           name as varName4
                           isEqual(varName3, varName4) 
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName5
+                    go.rhs:
+                      go.ident:
+                        name as varName6
+                        isEqual(varName5, varName6)
+                        isEqual(varName3, varName5)
+                  
 
           go.range_stmt(depth = any): 
             child_count == 3    
@@ -93,3 +116,13 @@ tenets:
                         go.ident:
                           name as varName3
                           isEqual(varName2, varName3)
+                exclude:            
+                  go.assign_stmt(depth = any):
+                    go.lhs:
+                      go.ident:
+                        name as varName4
+                    go.rhs:
+                      go.ident:
+                        name as varName5
+                        isEqual(varName4, varName5)
+                        isEqual(varName2, varName4)

@@ -67,6 +67,38 @@ func Test7(values []int) {
 	}
 }
 
+func Test8(values []int) {
+	for val := range values {
+		val := val
+		go func() {
+			fmt.Println(val)
+		}()
+	}
+}
+
+func Test9(values []int, n int) {
+	for i, val := range values {
+		val := val
+		go func() { //ISSUE
+			if i < n {
+				fmt.Println(val)
+			}
+		}()
+	}
+}
+
+func Test10(values []int, n int) {
+	for i, val := range values {
+		val := val
+		i := i
+		go func() {
+			if i < n {
+				fmt.Println(val)
+			}
+		}()
+	}
+}
+
 func main() {
 	values := []int{2, 3, 5, 7, 11, 13}
 	Test1(values)
@@ -76,4 +108,7 @@ func main() {
 	Test5(values, true)
 	Test6(values, true)
 	Test7(values)
+	Test8(values)
+	Test9(values, 4)
+	Test10(values, 5)
 }
