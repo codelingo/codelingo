@@ -27,4 +27,3 @@ tenets:
             go.selector_expr:
               go.ident:
                 name == varName
-                
