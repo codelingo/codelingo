@@ -1,8 +1,26 @@
 [
   {
-   "Comment": "Do not discard errors using _ variables. If a function returns an error, \ncheck it to make sure the function succeeded. Handle the error, return it, or, \nin truly exceptional situations, panic.\n",
-   "Filename": "code-review-comments/do-not-discard-errors/example.go",
-   "Line": 9,
-   "Snippet": ")\n\nfunc main() {\n\tfmt.Println(\"Hello, playground\")\n\ta, _ := example()\n\tfmt.Println(a)\n\tfmt.Println(err)\n}\n\nfunc example() (int, error) {"
+   "Comment": "Do not discard errors using _ variables.\n",
+   "Filename": "example.go",
+   "Line": 46,
+   "Snippet": "\nfunc trickyReturnExample() (int, *string, string, bool, error) {\n\ti, _ := example() // ISSUE\n\treturn i, nil, \"hello\", true, nil\n}"
+  },
+  {
+   "Comment": "Do not discard errors using _ variables.\n",
+   "Filename": "example.go",
+   "Line": 11,
+   "Snippet": "func main() {\n\tfmt.Println(\"Hello, playground\")\n\ta, _ := example() // ISSUE\n\tfmt.Println(a)\n\tb, _ := one()"
+  },
+  {
+   "Comment": "Do not discard errors using _ variables.\n",
+   "Filename": "example.go",
+   "Line": 16,
+   "Snippet": "\tfmt.Println(b)\n\n\texample() // ISSUE\n\tif true {\n\t\ttrickyReturnExample() // ISSUE"
+  },
+  {
+   "Comment": "Do not discard errors using _ variables.\n",
+   "Filename": "example.go",
+   "Line": 18,
+   "Snippet": "\texample() // ISSUE\n\tif true {\n\t\ttrickyReturnExample() // ISSUE\n\t}\n}"
   }
  ]
