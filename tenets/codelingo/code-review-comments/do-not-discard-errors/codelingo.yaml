@@ -4,9 +4,7 @@ tenets:
       codelingo/docs:
         title: Do Not Discard Errors
         body: |
-          Do not discard errors using _ variables. If a function returns an error, 
-          check it to make sure the function succeeded. Handle the error, return it, or, 
-          in truly exceptional situations, panic.
+          Do not discard errors using _ variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
       codelingo/review:
         comment: |
           Do not discard errors using _ variables.
@@ -31,7 +29,7 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      go.block_stmt(depth = any):
+      go.block_stmt(depth = any): # The call expression is a child of block_stmt without any intervening facts, such as go.assign_stmt.
         go.list:
           go.expr_stmt:
             @review comment
