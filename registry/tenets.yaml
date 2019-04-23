@@ -69,6 +69,10 @@ codelingo:
         hasIssues: false
       short-reader-variable:
         hasIssues: false
+      camel-case-constants:
+        hasIssues: false
+      short-name-limited-scope:
+        hasIssues: false
     tags:
       - golang
       - go
@@ -91,6 +95,18 @@ codelingo:
       single-method-interface-name:
         hasIssues: false
       underscores-in-name:
+        hasIssues: false
+      unnecessary-else:
+        hasIssues: false
+      defer-close-file:
+        hasIssues: false
+      reuse-variable-name-type-switch:
+        hasIssues: false
+      no-get-in-getters-name:
+        hasIssues: false
+      initialize-using-composite-literal:
+        hasIssues: false
+      loop-variable-used-in-go-routine:
         hasIssues: false
     tags:
       - golang
@@ -248,9 +264,9 @@ codelingo:
       lower-case-constant-values:
         hasIssues: false
     tags:
-    - php
-    - psr
-    - psr2
+      - php
+      - psr
+      - psr2
   drupal:
     description: Best practices for PHP from Drupal.
     version: 0.0.0
@@ -258,8 +274,8 @@ codelingo:
       upper-case-constant-values:
         hasIssues: false
     tags:
-    - php
-    - drupal
+      - php
+      - drupal
   west:
     description: Tenets written for West
     version: 0.0.0

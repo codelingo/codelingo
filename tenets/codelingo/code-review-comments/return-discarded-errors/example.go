@@ -55,3 +55,4 @@ func nonErrorDiscard() (int, error) {
 func (b *a) methodExample() (int, error) {
 	i, _ := example() // ISSUE
 	return i, nil
+}

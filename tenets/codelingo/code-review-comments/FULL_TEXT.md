@@ -427,7 +427,7 @@ boundaries are, not to start counting lines.
 
 ## Mixed Caps
 
-See https://golang.org/doc/effective_go.html#mixed-caps. This applies even when it breaks conventions in other languages. For example an unexported constant is `maxLength` not `MaxLength` or `MAX_LENGTH`.
+See https://golang.org/doc/effective_go.html#mixed-caps. This applies even when it breaks conventions in other languages. For example an unexported constant is `maxLength` not `MaxLength` or `MAX_LENGTH`. [Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/camel-case-constants)
 
 Also see [Initialisms](https://github.com/golang/go/wiki/CodeReviewComments#initialisms).
 
@@ -606,6 +606,6 @@ In any case, the onus is on you to fail with a helpful message to whoever's debu
 
 ## Variable Names
 
-Variable names in Go should be short rather than long.  This is especially true for local variables with limited scope.  Prefer `c` to `lineCount`.  Prefer `i` to `sliceIndex`.
+Variable names in Go should be short rather than long.  This is especially true for local variables with limited scope ([Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/short-name-limited-scope)). Prefer `c` to `lineCount`.  Prefer `i` to `sliceIndex`.
 
-The basic rule: the further from its declaration that a name is used, the more descriptive the name must be. For a method receiver, one or two letters is sufficient. Common variables)  such as loop indices ([Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/single-letter-loop-variable) and readers ([Tenet](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/short-reader-variable)) can be a single letter (`i`, `r`). More unusual things and global variables need more descriptive names.
+The basic rule: the further from its declaration that a name is used, the more descriptive the name must be. For a method receiver, one or two letters is sufficient. Common variables)  such as loop indices [(Tenet)](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/single-letter-loop-variable) and readers [(Tenet)](https://github.com/codelingo/codelingo/tree/master/tenets/codelingo/code-review-comments/short-reader-variable) can be a single letter (`i`, `r`). More unusual things and global variables need more descriptive names.
