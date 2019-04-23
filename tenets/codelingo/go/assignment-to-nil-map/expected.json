@@ -1,8 +1,0 @@
-[
-  {
-   "Comment": "Use 'make' when creating maps to prevent assigning to a nil map.",
-   "Filename": "main.go",
-   "Line": 9,
-   "Snippet": "\tmetrics := []string{\"example\"}\n\n\tvar accessTimes map[string]int64\n\taccessTimes = make(map[string]int64)\n\tfor _, m := range metrics {"
-  }
- ]
