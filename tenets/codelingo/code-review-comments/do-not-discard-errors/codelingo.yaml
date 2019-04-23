@@ -7,7 +7,7 @@ tenets:
           Do not discard errors using _ variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
       codelingo/review:
         comment: |
-          Do not discard errors using _ variables.
+          Do not discard errors using _ variables. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).
     query: |
       import codelingo/ast/go
 
@@ -25,7 +25,7 @@ tenets:
           Do not ignore errors. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
       codelingo/review:
         comment: |
-          Do not discard errors using _ variables.
+          If a function returns an error, check it to make sure the function succeeded. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).
     query: |
       import codelingo/ast/go
 
