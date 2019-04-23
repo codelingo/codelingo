@@ -1,16 +1,16 @@
 description: Best practices from the kubernetes repository.
 version: 0.0.0
 tenets:
-  - flags-have-underscores
-  - jsonapi-kind-compulsory-metadata
-  - new-package-requires-test
-  - well-formed-lists
-  - well-named-interface
-  - well-named-lists
-  - well-named-lock
-  - well-named-locks
-  - well-named-package
+- flags-have-underscores
+- jsonapi-kind-compulsory-metadata
+- new-package-requires-test
+- well-formed-lists
+- well-named-interface
+- well-named-lists
+- well-named-lock
+- well-named-locks
+- well-named-package
 tags:
-  - kubernetes
-  - golang
-  - go
+- kubernetes
+- golang
+- go
