@@ -2,7 +2,6 @@
 description: Best Practices for Golang.
 version: 0.0.0
 tenets:
-  - assignment-to-nil-map
   - bool-param
   - empty-slice
   - global-var
