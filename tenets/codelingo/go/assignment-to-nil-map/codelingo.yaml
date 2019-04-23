@@ -1,0 +1,20 @@
+tenets:
+  - name: assignment-to-nil-map
+    flows:
+      codelingo/review:
+        comment: Use 'make' when creating maps to prevent assigning to a nil map.
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/go
+      @rewrite --replace "{{mapName}} := make(map[{{keyType}}]{{valType}})"
+      go.gen_decl(depth = any):
+        @review comment
+        go.value_spec:
+          go.names:
+            go.ident:
+              name as mapName
+          go.map_type:
+            go.ident:
+              name as keyType
+            go.ident:
+              name as valType
