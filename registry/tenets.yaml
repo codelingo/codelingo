@@ -16,10 +16,10 @@ codelingo:
       redundant-defer-wraps:
         hasIssues: false
     tags:
-      - golang
-      - go
-      - python
-      - py
+    - golang
+    - go
+    - python
+    - py
   cockroachdb:
     description: Best Practices for CockroachDB from their contributor docs.
     version: 0.0.0
@@ -35,10 +35,10 @@ codelingo:
       wrapping-func-signatures:
         hasIssues: true
     tags:
-      - golang
-      - go
-      - cockroach
-      - cockroachdb
+    - golang
+    - go
+    - cockroach
+    - cockroachdb
   code-review-comments:
     description: Best Practices for Golang from Code Review Comments.
     version: 0.0.0
@@ -74,8 +74,8 @@ codelingo:
       short-name-limited-scope:
         hasIssues: false
     tags:
-      - golang
-      - go
+    - golang
+    - go
   effective-go:
     description: Best Practices for Golang from Effective Go.
     version: 0.0.0
@@ -109,8 +109,8 @@ codelingo:
       loop-variable-used-in-go-routine:
         hasIssues: false
     tags:
-      - golang
-      - go
+    - golang
+    - go
   go:
     description: Best Practices for Golang.
     version: 0.0.0
@@ -144,8 +144,8 @@ codelingo:
       unconvert:
         hasIssues: false
     tags:
-      - golang
-      - go
+    - golang
+    - go
   jenkinsx:
     description: Best practices from the jenkins-x/js repository.
     version: 0.0.0
@@ -161,10 +161,10 @@ codelingo:
       tparallel:
         hasIssues: false
     tags:
-      - jenkins
-      - jenkins-x
-      - golang
-      - go
+    - jenkins
+    - jenkins-x
+    - golang
+    - go
   landmines:
     description: Best practices from the The Three Go Landmines gist.
     version: 0.0.0
@@ -198,9 +198,9 @@ codelingo:
       well-named-package:
         hasIssues: false
     tags:
-      - kubernetes
-      - golang
-      - go
+    - kubernetes
+    - golang
+    - go
   lightning-network-daemon:
     description: Best practices from the lightning network daemon repository.
     version: 0.0.0
@@ -210,9 +210,9 @@ codelingo:
       exported-package-is-tested:
         hasIssues: false
     tags:
-      - lnd
-      - golang
-      - go
+    - lnd
+    - golang
+    - go
   modica:
     description: Tenets written for Modica
     version: 0.0.0
@@ -222,7 +222,7 @@ codelingo:
       transport:
         hasIssues: false
     tags:
-      - php
+    - php
   php:
     description: Best practices for PHP.
     version: 0.0.0
@@ -244,7 +244,7 @@ codelingo:
       sql-concats:
         hasIssues: false
     tags:
-      - php
+    - php
   psr1:
     description: Best practices for PHP from PSR-1.
     version: 0.0.0
@@ -252,9 +252,9 @@ codelingo:
       camel-case-method-name:
         hasIssues: false
     tags:
-      - php
-      - psr
-      - psr1
+    - php
+    - psr
+    - psr1
   psr2:
     description: Best practices for PHP from PSR-2.
     version: 0.0.0
@@ -264,9 +264,9 @@ codelingo:
       lower-case-constant-values:
         hasIssues: false
     tags:
-      - php
-      - psr
-      - psr2
+    - php
+    - psr
+    - psr2
   drupal:
     description: Best practices for PHP from Drupal.
     version: 0.0.0
@@ -274,8 +274,8 @@ codelingo:
       upper-case-constant-values:
         hasIssues: false
     tags:
-      - php
-      - drupal
+    - php
+    - drupal
   west:
     description: Tenets written for West
     version: 0.0.0
@@ -287,10 +287,10 @@ codelingo:
       switch:
         hasIssues: false
     tags:
-      - c#
-      - csharp
-      - cpp
-      - c++
+    - c#
+    - csharp
+    - cpp
+    - c++
   rfjakob-gocryptfs:
     description: Tenets written for rfjakob-gocryptfs
     version: 0.0.0
@@ -298,9 +298,9 @@ codelingo:
       missing-close-file:
         hasIssues: false
     tags:
-      - go
-      - rfjakob
-      - gocryptfs
+    - go
+    - rfjakob
+    - gocryptfs
   lomik-go-carbon:
     description: Tenets written for lomik-go-carbon
     version: 0.0.0
@@ -308,9 +308,6 @@ codelingo:
       missing-close-file:
         hasIssues: false
     tags:
-      - go
-      - lomik
-      - go-carbon
-
-
-
+    - go
+    - lomik
+    - go-carbon
