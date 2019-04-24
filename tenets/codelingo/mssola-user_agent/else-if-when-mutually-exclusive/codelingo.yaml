@@ -2,12 +2,12 @@ tenets:
   - name: find-funcs
     flows:
       codelingo/review:
-        comment: This is a function, but you probably already knew that.
+        comment: |
+          Replace this `if` statement with an `else if`. it is mutually exclusive with the previous if statement has the same operands.
     query: |
       import codelingo/ast/go
 
       go.element(depth = any):
-        @review comment
         go.if_stmt:
           sibling_order as so
           go.binary_expr:
@@ -16,6 +16,7 @@ tenets:
               name as lhsVariable
             go.basic_lit:
               value as rhsLiteral
+        @review comment
         go.if_stmt:
           sibling_order as so2
           oneGreater(so, so2) # TODO: sibling_order == increment(so)
