@@ -1,21 +1,19 @@
-
 description: Best Practices for Golang.
 version: 0.0.0
 tenets:
-  - bool-param
-  - empty-slice
-  - global-var
-  - golint
-  - goto
-  - marshalling
-  - nil-only-functions
-  - println-format-strings
-  - reallocated-slice
-  - sprintf
-  - tested
-  - ticker-in-for-switch
-  - todo
-  - unconvert
+- bool-param
+- empty-slice
+- global-var
+- golint
+- goto
+- marshalling
+- println-format-strings
+- reallocated-slice
+- sprintf
+- tested
+- ticker-in-for-switch
+- todo
+- unconvert
 tags:
-  - golang
-  - go
+- golang
+- go

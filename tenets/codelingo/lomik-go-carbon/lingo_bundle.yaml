@@ -4,6 +4,6 @@ tenets:
   - assignment-to-nil-map
   - missing-stop-ticker
 tags:
-  - go
-  - lomik
-  - go-carbon
+- go
+- lomik
+- go-carbon

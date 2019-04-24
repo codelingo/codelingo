@@ -1,14 +1,14 @@
 description: Best practices for PHP.
 version: 0.0.0
 tenets:
-  - boolean-argument
-  - count-in-loop
-  - empty-catch-block
-  - eval-expression
-  - if-assignment
-  - offsite-redirection
-  - phplint
-  - sql-concats
-  - null-check
+- boolean-argument
+- count-in-loop
+- empty-catch-block
+- eval-expression
+- if-assignment
+- offsite-redirection
+- phplint
+- sql-concats
+- null-check
 tags:
-  - php
+- php
