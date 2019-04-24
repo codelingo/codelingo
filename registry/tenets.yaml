@@ -305,6 +305,8 @@ codelingo:
     description: Tenets written for lomik-go-carbon
     version: 0.0.0
     tenets:
+      assignment-to-nil-map:
+        hasIssues: false
       missing-close-file:
         hasIssues: false
     tags:

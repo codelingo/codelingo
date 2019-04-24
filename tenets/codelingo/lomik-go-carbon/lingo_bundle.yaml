@@ -1,7 +1,8 @@
 description: Tenets written for lomik-go-carbon
 version: 0.0.0
 tenets:
-- missing-stop-ticker
+  - assignment-to-nil-map
+  - missing-stop-ticker
 tags:
 - go
 - lomik
