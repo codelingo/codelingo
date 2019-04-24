@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "This is a function, but you probably already knew that.",
+   "Filename": "main.go",
+   "Line": 9,
+   "Snippet": "func main() {\n\ta := 1\n\tif a == 1 {\n\t\tfmt.Println(a)\n\t}\n\tif a \u003e 1 { // ISSUE\n\t\tfmt.Println(a)"
+  }
+ ]

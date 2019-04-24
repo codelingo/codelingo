@@ -1,0 +1,91 @@
+tenets:
+  - name: find-funcs
+    flows:
+      codelingo/review:
+        comment: This is a function, but you probably already knew that.
+    query: |
+      import codelingo/ast/go
+
+      go.element(depth = any):
+        @review comment
+        go.if_stmt:
+          sibling_order as so
+          go.binary_expr:
+            op as operator1
+            go.ident:
+              name as lhsVariable
+            go.basic_lit:
+              value as rhsLiteral
+        go.if_stmt:
+          sibling_order as so2
+          oneGreater(so, so2) # TODO: sibling_order == increment(so)
+          go.binary_expr:
+            op as operator2
+            doesNotOverlap(operator1, operator2)
+            go.ident:
+              name == lhsVariable
+            go.basic_lit:
+              value == rhsLiteral
+
+funcs:
+  - name: increment
+    type: resolver
+    body: |
+      function (a) {
+        return a + 1
+      }
+  - name: oneGreater
+    type: asserter
+    body: |
+      function (a, b) {
+        return a + 1 == b
+      }
+  - name: doesNotOverlap
+    type: asserter
+      # overlap would return whether the two conditions like x >= 1 and x <= 1 can be true at the same time.
+      # doesNotOverlap does the inverse
+      #
+      # More precisely, overlap would take two operators op1 and op2 (like < or >=), and returns whether there 
+      # exists an m and n such that (m op1 n) && (m op2 n).
+      # TODO, generalise for a given n1 and n2
+    body: |
+      function (op1, op2) {
+        // from https://stackoverflow.com/a/16436975
+        function arraysEqual(a, b) {
+          if (a === b) return true;
+          if (a == null || b == null) return false;
+          if (a.length != b.length) return false;
+
+          for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) return false;
+          }
+          return true;
+        }
+
+        // ES5 hack from https://stackoverflow.com/a/237176
+        Array.prototype.includesArray = function(obj) {
+          var i = this.length;
+          while (i--) {
+              if (arraysEqual(this[i], obj)) {
+                  return true;
+              }
+          }
+          return false;
+        }
+
+        var overlapping = [
+          [">", ">="],
+          [">=", "=="],
+          [">=", "<="],
+          ["==", "<="],
+          ["<=", "<"],
+          // Inverse
+          [">=", ">"],
+          ["==", ">="],
+          ["<=", ">="],
+          ["<=", "=="],
+          ["<", "<="],
+        ]
+
+        return !(overlapping.includesArray([op1, op2]) || overlapping.includesArray([op2, op1]))
+      }
