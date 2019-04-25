@@ -1,5 +1,5 @@
 description: Tenets written for Modica
 version: 0.0.0
-tenets:
+tenets: 
 tags:
-  - php
+- php

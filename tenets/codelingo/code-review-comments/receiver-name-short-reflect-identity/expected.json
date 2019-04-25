@@ -1,0 +1,20 @@
+[
+    {
+     "Comment": "The name of a method's receiver \"m\" should be short and also a reflection of its identity \"TestStruct\" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)",
+     "Filename": "test.go",
+     "Line": 19,
+     "Snippet": "}\n\nfunc (m TestStruct) Method4() { //ISSUE\n\tfmt.Println(\"Hello from Method4\")\n}"
+    },
+    {
+     "Comment": "The name of a method's receiver \"test\" should be short and also a reflection of its identity \"TestStruct\" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)",
+     "Filename": "test.go",
+     "Line": 15,
+     "Snippet": "}\n\nfunc (test TestStruct) Method3() { //ISSUE\n\tfmt.Println(\"Hello from Method3\")\n}"
+    },
+    {
+     "Comment": "The name of a method's receiver \"td\" should be short and also a reflection of its identity \"TestStruct\" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)",
+     "Filename": "test.go",
+     "Line": 23,
+     "Snippet": "}\n\nfunc (td TestStruct) Method5() { //ISSUE\n\tfmt.Println(\"Hello from Method5\")\n}"
+    }
+]

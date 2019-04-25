@@ -1,0 +1,38 @@
+[
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 5,
+   "Snippet": "function helloWorld() {\n    print \"hello world!\";\n    $thing = True;\n    $thingAgain = TRUE;\n    $thingTheThird = true;"
+  },
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 11,
+   "Snippet": "    $another = false;\n    $andAnother = FALSE;\n    $aNull = null;\n    $anotherNull = Null;\n    $thirdNull = NULL;"
+  },
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 12,
+   "Snippet": "    $andAnother = FALSE;\n    $aNull = null;\n    $anotherNull = Null;\n    $thirdNull = NULL;\n    "
+  },
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 7,
+   "Snippet": "    $thing = True;\n    $thingAgain = TRUE;\n    $thingTheThird = true;\n    $otherThing = False;\n    $another = false;"
+  },
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 8,
+   "Snippet": "    $thingAgain = TRUE;\n    $thingTheThird = true;\n    $otherThing = False;\n    $another = false;\n    $andAnother = FALSE;"
+  },
+  {
+   "Comment": "Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)",
+   "Filename": "example-orig.php",
+   "Line": 9,
+   "Snippet": "    $thingTheThird = true;\n    $otherThing = False;\n    $another = false;\n    $andAnother = FALSE;\n    $aNull = null;"
+  }
+ ]

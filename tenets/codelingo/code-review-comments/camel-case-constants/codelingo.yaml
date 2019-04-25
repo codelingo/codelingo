@@ -1,0 +1,59 @@
+funcs:
+  - name: isNotValid
+    type: asserter
+    body: |
+      function(varName) {
+        return (varName === varName.toUpperCase() && varName.length > 4) || (varName !== "_" && varName.indexOf("_") !== -1) 
+      }
+  - name: fixName
+    type: resolver
+    body: |
+      function(varName, private){
+        if(varName.indexOf("_") === -1 || varName === "_"){ 
+          if(varName === varName.toUpperCase() && varName.length > 4) // variable is ALLCAPS, should be changed to Allcaps
+            return varName.charAt(0).toUpperCase() + varName.toLowerCase().substring(1)
+          return varName // variable can be all lowercase, mixedCaps or MixedCaps or ALLCAPS with length less than 4 (we do not change acronyms of length 4 or less)
+        }
+        varName = varName.toLowerCase()
+        pieces = varName.split("_");
+        constName = []
+        if(private == "true"){
+          constName.push(pieces[0])
+        }
+        else{
+          constName.push(pieces[0].charAt(0).toUpperCase() + pieces[0].substring(1))
+        }
+        for (var i = 1; i < pieces.length; i++) {
+          constName.push(pieces[i].charAt(0).toUpperCase() + pieces[i].substring(1))
+        }
+        return constName.join('')
+      }
+
+tenets:
+  - name:  camel-case-constants
+    flows:
+      codelingo/review:
+        comment: Define constant "{{varName}}" as "{{fixName(varName, varPrivate)}}". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)
+      codelingo/docs:
+        title: Camel case constants
+        body: |    
+          See https://golang.org/doc/effective_go.html#mixed-caps. This applies even when it breaks conventions in other languages. For example an unexported constant is maxLength not MaxLength or MAX_LENGTH.
+      codelingo/rewrite:
+        #Currently, rewrite is incomplete as all the references to each constant should be fixed too.
+
+      
+    query: |
+      import codelingo/ast/go
+     
+      go.gen_decl(depth = any):
+        tok == "const"
+        go.value_spec:
+          
+          go.names:
+            @review comment
+            @rewrite --replace "{{fixName(varName, varPrivate)}}"
+            go.ident:
+              name as varName
+              isNotValid(varName)
+              private as varPrivate
+

@@ -1,0 +1,42 @@
+funcs:
+  - name: hasGet
+    type: asserter
+    body: |
+      function(name) {
+        return name.substring(0,3) === "Get"
+      }
+
+  - name: fixName
+    type: resolver
+    body: |
+      function(name) {
+        return name.charAt(0).toUpperCase() + name.substring(1)
+      }
+
+tenets:
+  - name: no-get-in-getters-name
+    flows:
+      codelingo/docs:
+        title: no Get at the start of Getters name
+        body: |
+          It's neither idiomatic nor necessary to put Get into the getter's name. If you have a field called owner (lower case, unexported), the getter method should be called Owner (upper case, exported), not GetOwner. 
+      codelingo/review:
+        comment: Do not use Get at the start of "{{methodName}}", use "{{fixName(varName)}}" instead [as specified in Effective Go](https://golang.org/doc/effective_go.html#Getters) 
+      codelingo/rewrite:
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.func_decl(depth = any):     
+        go.field_list
+        go.ident:
+          name as methodName
+          hasGet(methodName)
+        go.block_stmt:
+          go.list:
+            go.return_stmt:
+              go.results:
+                go.selector_expr:
+                  go.ident:
+                    sibling_order == 1
+                    name as varName

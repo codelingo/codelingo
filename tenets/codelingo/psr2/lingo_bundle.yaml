@@ -1,8 +1,9 @@
 description: Best practices for PHP from PSR-2.
 version: 0.0.0
 tenets:
-  - elseif-not-else-if
+- elseif-not-else-if
+- lower-case-constant-values
 tags:
-  - php
-  - psr
-  - psr2
+- php
+- psr
+- psr2
