@@ -1,0 +1,14 @@
+[
+    {
+     "Comment": "Add \"defer f2.Close()\" after opening the file \"f2\"",
+     "Filename": "test.go",
+     "Line": 24,
+     "Snippet": "\tfmt.Printf(\"%d bytes: %s\\n\", n1, string(b1))\n\n\tf2, err := os.Open(\"/tmp/test.txt\") //ISSUE\n\tcheck(err)\n\tb2 := make([]byte, 5)"
+    },
+    {
+     "Comment": "Add \"defer f1.Close()\" after opening the file \"f1\"",
+     "Filename": "test.go",
+     "Line": 16,
+     "Snippet": "func main() {\n\n\tf1, err := os.Open(\"/tmp/test.txt\") //ISSUE\n\tcheck(err)\n\t//defer f1.Close()"
+    }
+   ]

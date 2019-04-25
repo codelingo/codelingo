@@ -10,6 +10,13 @@ func main() {
 	fmt.Println("Hello, playground")
 	a, _ := example() // ISSUE
 	fmt.Println(a)
+	b, _ := one()
+	fmt.Println(b)
+
+	example() // ISSUE
+	if true {
+		trickyReturnExample() // ISSUE
+	}
 }
 
 func passing() error {
@@ -29,6 +36,10 @@ func passing() error {
 
 func example() (int, error) {
 	return 1, errors.New("some error")
+}
+
+func one() (int, int) {
+	return 0, 1
 }
 
 func trickyReturnExample() (int, *string, string, bool, error) {

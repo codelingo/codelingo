@@ -1,0 +1,32 @@
+[
+    {
+     "Comment": "Initialize f using a composite literal to simplify the code. [as specified in Effective Go](https://golang.org/doc/effective_go.html#composite_literals)",
+     "Filename": "test.go",
+     "Line": 23,
+     "Snippet": "\t}\n\tf := new(File)\n\tf.fd = fd     //ISSUE\n\tf.name = name //ISSUE\n\treturn f"
+    },
+    {
+     "Comment": "Initialize f using a composite literal to simplify the code. [as specified in Effective Go](https://golang.org/doc/effective_go.html#composite_literals)",
+     "Filename": "test.go",
+     "Line": 24,
+     "Snippet": "\tf := new(File)\n\tf.fd = fd     //ISSUE\n\tf.name = name //ISSUE\n\treturn f\n}"
+    },
+    {
+     "Comment": "Initialize p2 using a composite literal to simplify the code. [as specified in Effective Go](https://golang.org/doc/effective_go.html#composite_literals)",
+     "Filename": "test.go",
+     "Line": 46,
+     "Snippet": "\tp2.FirstName = \"Alice\" //ISSUE\n\tp2.LastName = \"Green\"  //ISSUE\n\tp2.Age = 40            //ISSUE\n\tfmt.Println(p2)\n"
+    },
+    {
+     "Comment": "Initialize p2 using a composite literal to simplify the code. [as specified in Effective Go](https://golang.org/doc/effective_go.html#composite_literals)",
+     "Filename": "test.go",
+     "Line": 44,
+     "Snippet": "\n\tp2 := new(Person)\n\tp2.FirstName = \"Alice\" //ISSUE\n\tp2.LastName = \"Green\"  //ISSUE\n\tp2.Age = 40            //ISSUE"
+    },
+    {
+     "Comment": "Initialize p2 using a composite literal to simplify the code. [as specified in Effective Go](https://golang.org/doc/effective_go.html#composite_literals)",
+     "Filename": "test.go",
+     "Line": 45,
+     "Snippet": "\tp2 := new(Person)\n\tp2.FirstName = \"Alice\" //ISSUE\n\tp2.LastName = \"Green\"  //ISSUE\n\tp2.Age = 40            //ISSUE\n\tfmt.Println(p2)"
+    }
+   ]

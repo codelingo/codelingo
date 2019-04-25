@@ -1,11 +1,20 @@
 description: Best Practices for Golang from Code Review Comments.
 version: 0.0.0
 tenets:
-  - avoid-renaming-imports
-  - context-first-arg
-  - do-not-discard-errors
-  - go-error-fmt
-  - use-crypto-rand
+- avoid-meaningless-package-names
+- avoid-renaming-imports
+- context-first-arg
+- context-in-struct
+- go-error-fmt
+- no-custom-context
+- use-crypto-rand
+- declare-empty-slice
+- same-receiver-name
+- receiver-name-short-reflect-identity
+- single-letter-loop-variable
+- short-reader-variable
+- camel-case-constants
+- short-name-limited-scope
 tags:
-  - golang
-  - go
+- golang
+- go

@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Replace this `if` statement with an `else if`. it is mutually exclusive with the previous if statement has the same operands.\n",
+   "Filename": "main.go",
+   "Line": 12,
+   "Snippet": "\t\tfmt.Println(a)\n\t}\n\tif a \u003e 1 { // ISSUE\n\t\tfmt.Println(a)\n\t}\n\n\t// Non issue as == and \u003e= are not mutually exclusive"
+  }
+ ]

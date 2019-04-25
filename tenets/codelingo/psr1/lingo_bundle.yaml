@@ -1,8 +1,8 @@
 description: Best Practices for PHP from PSR-1.
 version: 0.0.0
 tenets:
-  - camel-case-method-name
+- camel-case-method-name
 tags:
-  - php
-  - psr
-  - psr1
+- php
+- psr
+- psr1
