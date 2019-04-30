@@ -1,6 +1,8 @@
 
 
-<h3 align="center"> CodeLingo </h3>
+<h3 align="center"> <a href="https://codelingo.io" target="_blank">
+    <img src="./public/img/CLLogo.svg" />
+  </a> </h3>
 
 <p align="center">
   <b>Drive Continuous Higher Standards with CodeLingo's Automated Reviews, Bug Fixes and Docs! </b>
