@@ -1,7 +1,7 @@
 
 
 <h3 align="center"> <a href="https://codelingo.io" target="_blank">
-    <img src="https://raw.githubusercontent.com/Daanikus/codelingo/add-logo/public/img/CLLogo.svg" />
+    <img src="./public/img/CLLogo.svg" />
   </a> </h3>
 
 <p align="center">
