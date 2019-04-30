@@ -9,6 +9,8 @@ tenets:
 - no-custom-context
 - use-crypto-rand
 - declare-empty-slice
+- do-not-ignore-errors
+- do-not-discard-errors
 - same-receiver-name
 - receiver-name-short-reflect-identity
 - single-letter-loop-variable
