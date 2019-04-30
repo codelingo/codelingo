@@ -22,8 +22,11 @@ tenets:
               go.selector_expr:
                 go.ident:
                   name == "os"
-                go.ident:
-                  name == "Open"
+                any_of:
+                  go.ident:
+                    name == "Open"
+                  go.ident:
+                    name == "OpenFile"
         exclude:
           go.defer_stmt(depth = any):
             go.call_expr:
