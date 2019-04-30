@@ -175,6 +175,9 @@ codelingo:
         hasIssues: false
       misused-nil-interface:
         hasIssues: false
+  tags:
+    - golang
+    - go
   kubernetes:
     description: Best practices from the kubernetes repository.
     version: 0.0.0
