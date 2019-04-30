@@ -12,9 +12,29 @@ tenets:
     flows:
       codelingo/review:
         comment: Declare {{sliceName}} as a nil slice, with `var {{sliceName}} {{fixSliceType(sliceType)}} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)
-      # A rewrite only works with raw for now. See generated query for this example https://www.codelingo.io/playground/?id=37. 
-      # Also, if a struct is defined in one file and a variable of the struct type is declared in another, we get "invalid type" in the generated query
       codelingo/rewrite:
+      codelingo/docs:
+        title: Declaring Empty Slices
+        body: |
+          When declaring an empty slice, prefer
+
+          ```go
+          var t []string
+          ```
+
+          over 
+
+          ```go
+          t := []string{}
+          ```
+
+          The former declares a nil slice value, while the latter is non-nil but zero-length. They are functionally equivalent—their `len` and `cap` are both zero—but the nil slice is the preferred style.
+
+          Note that there are limited circumstances where a non-nil but zero-length slice is preferred, such as when encoding JSON objects (a `nil` slice encodes to `null`, while `[]string{}` encodes to the JSON array `[]`).
+
+          When designing interfaces, avoid making a distinction between a nil slice and a non-nil, zero-length slice, as this can lead to subtle programming errors.
+
+          For more discussion about nil in Go see Francesc Campoy's talk [Understanding Nil](https://www.youtube.com/watch?v=ynoY2xz-F8s).
     query: |
       import codelingo/ast/go
       
