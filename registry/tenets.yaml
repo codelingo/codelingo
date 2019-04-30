@@ -239,6 +239,8 @@ codelingo:
         hasIssues: false
       offsite-redirection:
         hasIssues: false
+      shorthand-assignment-operators:
+        hasIssues: true
       phplint:
         hasIssues: false
       sql-concats:
