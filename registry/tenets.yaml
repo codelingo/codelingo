@@ -175,7 +175,7 @@ codelingo:
         hasIssues: false
       misused-nil-interface:
         hasIssues: false
-  tags:
+    tags:
     - golang
     - go
   kubernetes:
