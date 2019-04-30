@@ -1,6 +1,8 @@
 
 
-<h3 align="center"> CodeLingo </h3>
+<h3 align="center"> <a href="https://github.com/apps/codelingo" target="_blank">
+    <img width="295" height="38" src="https://raw.githubusercontent.com/Daanikus/codelingo/master/public/img/CLLogo.png" />
+  </a> </h3>
 
 <p align="center">
   <b>Drive Continuous Higher Standards with CodeLingo's Automated Reviews, Bug Fixes and Docs! </b>
