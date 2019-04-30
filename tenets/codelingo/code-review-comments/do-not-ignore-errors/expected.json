@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "If a function returns an error, check it to make sure the function succeeded. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).\n",
+   "Filename": "example.go",
+   "Line": 16,
+   "Snippet": "\tfmt.Println(b)\n\n\texample() // ISSUE\n\tif true {\n\t\ttrickyReturnExample()"
+  },
+  {
+   "Comment": "If a function returns an error, check it to make sure the function succeeded. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).\n",
+   "Filename": "example.go",
+   "Line": 18,
+   "Snippet": "\texample() // ISSUE\n\tif true {\n\t\ttrickyReturnExample()\n\t}\n}"
+  }
+ ]
