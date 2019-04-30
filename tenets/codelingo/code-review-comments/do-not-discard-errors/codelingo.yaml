@@ -4,12 +4,10 @@ tenets:
       codelingo/docs:
         title: Do Not Discard Errors
         body: |
-          Do not discard errors using _ variables. If a function returns an error, 
-          check it to make sure the function succeeded. Handle the error, return it, or, 
-          in truly exceptional situations, panic.
+          Do not discard errors using _ variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
       codelingo/review:
         comment: |
-          Do not discard errors using _ variables.
+          Do not discard errors using _ variables. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).
     query: |
       import codelingo/ast/go
 
@@ -19,4 +17,28 @@ tenets:
           go.ident:
             name == "_"
             type == "error"
+  - name: do-not-ignore-errors
+    flows:
+      codelingo/docs:
+        title: Do Not Ignore Errors
+        body: |
+          Do not ignore errors. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
+      codelingo/review:
+        comment: |
+          If a function returns an error, check it to make sure the function succeeded. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#handle-errors).
+    query: |
+      import codelingo/ast/go
 
+      go.block_stmt(depth = any): # The call expression is a child of block_stmt without any intervening facts, such as go.assign_stmt.
+        go.list:
+          go.expr_stmt:
+            @review comment
+            go.call_expr:
+              edge("calls"):
+                go.func_decl:
+                  go.func_type:
+                    go.field_list
+                    go.field_list:
+                      go.field:
+                        go.ident:
+                          name == "error"

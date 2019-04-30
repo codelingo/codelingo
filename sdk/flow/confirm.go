@@ -7,6 +7,7 @@ package flow
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/codelingo/lingo/app/util"
 	"github.com/juju/errors"
@@ -51,7 +52,8 @@ func (item *ConfirmerItem) Confirm(ctx *cli.Context) (bool, error) {
 	fmt.Scanln(&option)
 	action, err := item.action(option)
 	if err != nil {
-		return false, errors.Trace(err)
+		fmt.Fprintf(os.Stderr, "no action found for option %q", option)
+		return item.Confirm(ctx)
 	}
 
 	pass, retry, err := action()
