@@ -37,11 +37,12 @@ func main() {
 		}
 	}
 
-	for n := 0; n <= 5; n++ {
-		if n%2 == 0 {
-			break
-		} else { //ISSUE
-			fmt.Println(n)
-		}
+	if true {
+		goto end
+	} else { //ISSUE
+		fmt.Println("test")
 	}
+end:
+	fmt.Println("Hello world!")
+
 }

@@ -20,13 +20,13 @@
     {
      "Comment": "Pass any loop variables used in the goroutine as an argument to the closure. [as specified in Effective Go](https://golang.org/doc/effective_go.html#channels)",
      "Filename": "test.go",
-     "Line": 9,
-     "Snippet": "func Test1(values []int) {\n\tfor val := range values {\n\t\tgo func() { //ISSUE\n\t\t\tfmt.Println(val)\n\t\t}()\n\t}\n}"
+     "Line": 54,
+     "Snippet": "func Test6(values []int, n bool) {\n\tfor val := range values {\n\t\tgo func(n bool) { //ISSUE\n\t\t\tif n {\n\t\t\t\tfmt.Println(val)\n\t\t\t}\n\t\t}(n)\n\t}\n}"
     },
     {
      "Comment": "Pass any loop variables used in the goroutine as an argument to the closure. [as specified in Effective Go](https://golang.org/doc/effective_go.html#channels)",
      "Filename": "test.go",
-     "Line": 54,
-     "Snippet": "func Test6(values []int, n bool) {\n\tfor val := range values {\n\t\tgo func(n bool) { //ISSUE\n\t\t\tif n {\n\t\t\t\tfmt.Println(val)\n\t\t\t}\n\t\t}(n)\n\t}\n}"
+     "Line": 9,
+     "Snippet": "func Test1(values []int) {\n\tfor val := range values {\n\t\tgo func() { //ISSUE\n\t\t\tfmt.Println(val)\n\t\t}()\n\t}\n}"
     }
    ]
