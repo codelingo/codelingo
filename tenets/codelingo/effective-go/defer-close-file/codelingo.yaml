@@ -4,9 +4,10 @@ tenets:
       codelingo/docs:
         title: Defer Close File
         body: |
-          Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function. 
+          Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function.
+          TODO if a function returns the open file, follow it and check if it is closed
       codelingo/review:
-        comment: Add "defer {{fileName}}.Close()" after opening the file "{{fileName}}". [as specified in Effective Go](https://golang.org/doc/effective_go.html#defer)
+        comment: Add `defer {{fileName}}.Close()` after opening the file `{{fileName}}`. . [as specified in Effective Go](https://golang.org/doc/effective_go.html#defer)
     query: |
       import codelingo/ast/go
       
@@ -26,7 +27,24 @@ tenets:
                   go.ident:
                     name == "Open"
                   go.ident:
-                    name == "OpenFile"
+                    name == "OpenFile"      
+        exclude:
+          go.return_stmt(depth = any):
+            go.results:
+              go.ident:
+                name == fileName
+          go.func_type:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident:
+                    name == fileName
+                go.star_expr:
+                  go.selector_expr:
+                    go.ident:
+                      name == "os"
+                    go.ident:
+                      name == "File"
         exclude:
           go.defer_stmt(depth = any):
             go.call_expr:

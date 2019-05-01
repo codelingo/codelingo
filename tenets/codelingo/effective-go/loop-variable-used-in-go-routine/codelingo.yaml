@@ -53,6 +53,7 @@ tenets:
                           isEqual(varName2, varName3)
                 exclude:            
                   go.assign_stmt(depth = any):
+                    tok == ":="
                     go.lhs:
                       go.ident:
                         name as varName4
@@ -86,6 +87,7 @@ tenets:
                           isEqual(varName3, varName4) 
                 exclude:            
                   go.assign_stmt(depth = any):
+                    tok == ":="
                     go.lhs:
                       go.ident:
                         name as varName5
@@ -118,6 +120,7 @@ tenets:
                           isEqual(varName2, varName3)
                 exclude:            
                   go.assign_stmt(depth = any):
+                    tok == ":="
                     go.lhs:
                       go.ident:
                         name as varName4

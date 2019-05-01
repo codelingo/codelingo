@@ -10,6 +10,27 @@ func check(e error) {
 		panic(e)
 	}
 }
+func test1() *os.File {
+	f, err := os.Open("/tmp/test.txt")
+	check(err)
+	return f
+}
+
+func test2() {
+	f, err := os.Open("/tmp/test.txt") //ISSUE
+	check(err)
+	//defer f.Close()
+	b := make([]byte, 5)
+	n, err := f.Read(b)
+	check(err)
+	fmt.Printf("%d bytes: %s\n", n, string(b))
+}
+
+func test3() (f *os.File) {
+	f, err := os.Open("/tmp/test.txt")
+	check(err)
+	return
+}
 
 func main() {
 
@@ -21,7 +42,7 @@ func main() {
 	check(err)
 	fmt.Printf("%d bytes: %s\n", n1, string(b1))
 
-	f2, err := os.Open("/tmp/test.txt") 
+	f2, err := os.Open("/tmp/test.txt")
 	check(err)
 	defer f2.Close()
 	b2 := make([]byte, 5)
@@ -37,5 +58,5 @@ func main() {
 	n3, err := f3.Read(b3)
 	check(err)
 	fmt.Printf("%d bytes: %s\n", n3, string(b3))
-      
+
 }

@@ -14,7 +14,7 @@ tenets:
         body: |
            When an if statement doesn't flow into the next statement—that is, the body ends in break, continue, goto, or return—the unnecessary else is omitted.
       codelingo/review:
-        comment: Omit unnecessary else when if has a return statement. [as specified in Effective Go](https://golang.org/doc/effective_go.html#control-structures) 
+        comment: Omit unnecessary else when `if` doesn't flow into the next statement. [as specified in Effective Go](https://golang.org/doc/effective_go.html#control-structures) 
       codelingo/rewrite:
     query: |
       import codelingo/ast/go
@@ -29,11 +29,10 @@ tenets:
               go.branch_stmt:
                 tok == "break"
               go.branch_stmt:
+                tok == "goto"
+              go.branch_stmt:
                 tok == "continue"
         @review comment
         go.block_stmt:
           sibling_order as sb2
           isGreater(sb2, sb1)
-
-              
-       
