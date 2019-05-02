@@ -8,7 +8,6 @@ tenets:
 - if-assignment
 - offsite-redirection
 - phplint
-- sql-concats
 - null-check
 tags:
 - php
