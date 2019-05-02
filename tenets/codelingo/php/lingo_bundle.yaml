@@ -6,9 +6,10 @@ tenets:
 - empty-catch-block
 - eval-expression
 - if-assignment
+- null-check
 - offsite-redirection
 - phplint
-- sql-concats
-- null-check
+- shorthand-assignment-operator
+- unused-private-functions
 tags:
 - php
