@@ -6,14 +6,20 @@ tenets:
 - global-var
 - golint
 - goto
+- init
 - marshalling
+- nil-only-functions
 - println-format-strings
 - reallocated-slice
+- remove-break-statement
 - sprintf
 - tested
 - ticker-in-for-switch
 - todo
 - unconvert
+- unnecessary-parentheses
+- unsafe-go-routine-variables
+- unused-private-functions
 tags:
 - golang
 - go
