@@ -8,7 +8,6 @@ tenets:
 - context-in-struct
 - declare-empty-slice
 - do-not-discard-errors
-- do-not-ignore-errors
 - go-error-fmt
 - no-custom-context
 - receiver-name-short-reflect-identity
