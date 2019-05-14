@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Close the response when you are done to recycle connections.",
+   "Filename": "main.go",
+   "Line": 13,
+   "Snippet": "func main() {\n\tvar c client\n\t_, err := c.Object.Put()\n\tif err != nil {\n\t\tpanic(err)"
+  }
+ ]

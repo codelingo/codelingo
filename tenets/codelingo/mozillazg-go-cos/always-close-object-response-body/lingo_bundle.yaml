@@ -1,0 +1,9 @@
+description: Tenets written for mozillazg/go-cos.
+version: 0.0.0
+tenets:
+- always-close-object-response-body
+tags:
+- golang
+- go
+- go-cos
+- mozillazg

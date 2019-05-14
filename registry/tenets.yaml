@@ -226,6 +226,17 @@ codelingo:
         hasIssues: false
     tags:
     - php
+  mozillazg-go-cos:
+    description: Tenets written for mozillazg/go-cos.
+    version: 0.0.0
+    tenets:
+      always-close-object-response-body:
+        hasIssues: false
+    tags:
+    - golang
+    - go
+    - go-cos
+    - mozillazg
   php:
     description: Best practices for PHP.
     version: 0.0.0
