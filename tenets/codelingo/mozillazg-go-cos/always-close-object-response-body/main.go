@@ -10,7 +10,7 @@ type client struct {
 
 func main() {
 	var c client
-	_, err := c.Object.Put()
+	_, err := c.Object.Put() // ISSUE
 	if err != nil {
 		panic(err)
 	}
