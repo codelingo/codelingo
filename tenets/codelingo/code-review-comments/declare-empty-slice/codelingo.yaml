@@ -4,7 +4,8 @@ funcs:
     body: |
       function(sliceType) {
         sliceType = sliceType.split(' ').join('');
-        if (sliceType.substring(sliceType.length - 4, sliceType.length) == "{}{}" && (sliceType.indexOf("interface") !== 0 || sliceType.indexOf("struct") !== 0)) // This check is for empty interface or struct
+        // This check is for empty interface or struct, which include `{}` as part of their type definition
+        if (sliceType.substring(sliceType.length - 4, sliceType.length) == "{}{}" && (sliceType.indexOf("interface") !== 0 || sliceType.indexOf("struct") !== 0)) 
             return sliceType.substring(0, sliceType.indexOf("{")) + "{}"
         return sliceType.substring(0, sliceType.indexOf("{"))
       }
