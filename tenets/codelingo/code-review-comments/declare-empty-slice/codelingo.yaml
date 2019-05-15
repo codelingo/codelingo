@@ -4,7 +4,9 @@ funcs:
     body: |
       function(sliceType) {
         sliceType = sliceType.split(' ').join('');
-        return  sliceType.substring(0, sliceType.indexOf("{"))
+        if (sliceType.substring(sliceType.length - 4, sliceType.length) == "{}{}" && sliceType.indexOf("interface") !== 0)
+            return sliceType.substring(0, sliceType.indexOf("{")) + "{}"
+        return sliceType.substring(0, sliceType.indexOf("{"))
       }
 
 tenets:
@@ -22,13 +24,13 @@ tenets:
           var t []string
           ```
 
-          over 
+          over
 
           ```go
           t := []string{}
           ```
 
-          The former declares a nil slice value, while the latter is non-nil but zero-length. They are functionally equivalent—their `len` and `cap` are both zero—but the nil slice is the preferred style.
+          The former declares a nil slice value, while the latter is non-nil but zero-length. They are functionally equivalent ^`^ttheir `len` and `cap` are both zero ^`^tbut the nil slice is the preferred style.
 
           Note that there are limited circumstances where a non-nil but zero-length slice is preferred, such as when encoding JSON objects (a `nil` slice encodes to `null`, while `[]string{}` encodes to the JSON array `[]`).
 
@@ -37,7 +39,7 @@ tenets:
           For more discussion about nil in Go see Francesc Campoy's talk [Understanding Nil](https://www.youtube.com/watch?v=ynoY2xz-F8s).
     query: |
       import codelingo/ast/go
-      
+
       @review comment
       @rewrite --replace "var {{sliceName}} {{fixSliceType(sliceType)}}"
       go.assign_stmt(depth = any):

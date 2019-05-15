@@ -16,6 +16,8 @@ func main() {
 	intSlice1 := []int{}      //Issue
 	intSlice2 := []int{1, 2}
 
+	i1 := []interface{}{}   //ISSUE
+	i2 := [][]interface{}{} //ISSUE
 	personSlice = append(personSlice, Person{FirstName: "John", LastName: "Snow", Age: 45})
 	strSlice = append(strSlice, "test")
 	intSlice1 = append(intSlice1, 1)
@@ -28,4 +30,5 @@ func main() {
 	intSlice2 = []int{}
 
 	fmt.Println(personSlice, strSlice, intSlice1, intSlice2)
+	fmt.Println(i1, i2)
 }
