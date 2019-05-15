@@ -1,9 +1,15 @@
 [
     {
-        "Comment": "Declare i1 as a nil slice, with `var i1 []interface{} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+        "Comment": "Declare personSlice as a nil slice, with `var personSlice []Person [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
         "Filename": "test.go",
-        "Line": 19,
-        "Snippet": "\tintSlice2 := []int{1, 2}\n\n\ti1 := []interface{}{}   //ISSUE\n\ti2 := [][]interface{}{} //ISSUE\n\tpersonSlice = append(personSlice, Person{FirstName: \"John\", LastName: \"Snow\", Age: 45})"
+        "Line": 14,
+        "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue"
+    },
+    {
+        "Comment": "Declare s2 as a nil slice, with `var s2 [][]struct{} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+        "Filename": "test.go",
+        "Line": 23,
+        "Snippet": "\n\ts1 := []struct{}{}   //ISSUE\n\ts2 := [][]struct{}{} //ISSUE\n\n\tpersonSlice = append(personSlice, Person{FirstName: \"John\", LastName: \"Snow\", Age: 45})"
     },
     {
         "Comment": "Declare strSlice as a nil slice, with `var strSlice []string [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
@@ -18,15 +24,21 @@
         "Snippet": "\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue\n\tintSlice2 := []int{1, 2}\n"
     },
     {
+        "Comment": "Declare i1 as a nil slice, with `var i1 []interface{} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+        "Filename": "test.go",
+        "Line": 19,
+        "Snippet": "\tintSlice2 := []int{1, 2}\n\n\ti1 := []interface{}{}   //ISSUE\n\ti2 := [][]interface{}{} //ISSUE\n"
+    },
+    {
         "Comment": "Declare i2 as a nil slice, with `var i2 [][]interface{} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
         "Filename": "test.go",
         "Line": 20,
-        "Snippet": "\n\ti1 := []interface{}{}   //ISSUE\n\ti2 := [][]interface{}{} //ISSUE\n\tpersonSlice = append(personSlice, Person{FirstName: \"John\", LastName: \"Snow\", Age: 45})\n\tstrSlice = append(strSlice, \"test\")"
+        "Snippet": "\n\ti1 := []interface{}{}   //ISSUE\n\ti2 := [][]interface{}{} //ISSUE\n\n\ts1 := []struct{}{}   //ISSUE"
     },
     {
-        "Comment": "Declare personSlice as a nil slice, with `var personSlice []Person [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
+        "Comment": "Declare s1 as a nil slice, with `var s1 []struct{} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)",
         "Filename": "test.go",
-        "Line": 14,
-        "Snippet": "\nfunc main() {\n\tpersonSlice := []Person{} //Issue\n\tstrSlice := []string{}    //Issue\n\tintSlice1 := []int{}      //Issue"
+        "Line": 22,
+        "Snippet": "\ti2 := [][]interface{}{} //ISSUE\n\n\ts1 := []struct{}{}   //ISSUE\n\ts2 := [][]struct{}{} //ISSUE\n"
     }
 ]
