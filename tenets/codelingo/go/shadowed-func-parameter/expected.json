@@ -1,0 +1,8 @@
+[
+    {
+        "Comment": "Identifier `x` := shadows parameter `x`. Rename one of them to make the code easier to read.",
+        "Filename": "test.go",
+        "Line": 10,
+        "Snippet": "\tfmt.Println(x)\n\t{\n\t\tx := 2 //ISSUE\n\t\tfmt.Println(x)\n\t}"
+    }
+]
