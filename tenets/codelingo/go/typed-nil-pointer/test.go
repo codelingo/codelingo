@@ -15,7 +15,7 @@ func test1(arg int) interface{} {
 		result = &Person{}
 	}
 
-	return result
+	return result //ISSUE
 }
 
 func test2(arg int) interface{} {
@@ -29,7 +29,7 @@ func test2(arg int) interface{} {
 		return nil
 	}
 
-	return result //ISSUE
+	return result
 }
 
 func main() {
