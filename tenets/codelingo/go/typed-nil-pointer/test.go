@@ -29,7 +29,7 @@ func test2(arg int) interface{} {
 		return nil
 	}
 
-	return result
+	return result //ISSUE
 }
 
 func main() {
