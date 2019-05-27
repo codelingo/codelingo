@@ -1,0 +1,8 @@
+[
+    {
+        "Comment": "If typed pointer `result` is nil, return nil explicitly",
+        "Filename": "test.go",
+        "Line": 18,
+        "Snippet": "\t}\n\n\treturn result\n}\n"
+    }
+]
