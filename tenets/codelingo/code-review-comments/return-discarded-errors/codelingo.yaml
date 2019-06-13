@@ -7,13 +7,12 @@ tenets:
         }
     flows:
       codelingo/review:
-        comment: Don't discard errors. {{ returnArgs }}
+        comment: Don't discard errors.
       codelingo/rewrite:
         place: holder
     query: |
       import codelingo/ast/go
 
-      @review comment
       go.func_decl(depth = any):
         go.func_type:
           @place holder
@@ -21,6 +20,7 @@ tenets:
             raw as args
             sibling_order == 1
         @rewrite --line --append "{{returnError}}"
+        @review comment
         go.assign_stmt(depth = any):
           go.lhs:
             @rewrite "err"
