@@ -26,7 +26,7 @@ tenets:
   - name: underscores-in-name
     flows:
       codelingo/review:
-        comment: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+        comment: Use MixedCaps or mixedCaps rather than underscores to write multiword names. From [Effective Go](https://golang.org/doc/effective_go.html#mixed-caps).
     query: |
       import codelingo/ast/go
       go.file(depth = any):
