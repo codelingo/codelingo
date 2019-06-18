@@ -1,12 +1,20 @@
 funcs:
-  - name: containsUnderscores
+  - name: containsInvalidUnderscores
     type: asserter
     body: |
       function(name) {
         if (name.length === 1) {
           return false
         }
-        return name.indexOf("_") !== -1
+
+        var location = name.indexOf("_")
+        if (location === -1) {
+          return false
+        }
+
+        // Underscores are valid if they're in-between two digits
+        var digits = '0123456789'
+        return digits.indexOf(name.charAt(location + 1)) === -1 || digits.indexOf(name.charAt(location - 1)) === -1
       }
   - name: isNotProto
     type: asserter
@@ -18,7 +26,7 @@ tenets:
   - name: underscores-in-name
     flows:
       codelingo/review:
-        comment: The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+        comment: Use MixedCaps or mixedCaps rather than underscores to write multiword names. From [Effective Go](https://golang.org/doc/effective_go.html#mixed-caps).
     query: |
       import codelingo/ast/go
       go.file(depth = any):
@@ -28,4 +36,4 @@ tenets:
         @review comment
         go.ident(depth = any):
           name as varName
-          containsUnderscores(varName)
+          containsInvalidUnderscores(varName)
