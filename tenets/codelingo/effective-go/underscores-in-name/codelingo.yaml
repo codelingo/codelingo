@@ -1,12 +1,20 @@
 funcs:
-  - name: containsUnderscores
+  - name: containsInvalidUnderscores
     type: asserter
     body: |
       function(name) {
         if (name.length === 1) {
           return false
         }
-        return name.indexOf("_") !== -1
+
+        var location = name.indexOf("_")
+        if (location === -1) {
+          return false
+        }
+
+        // Underscores are valid if they're in-between two digits
+        var digits = '0123456789'
+        return digits.indexOf(name.charAt(location + 1)) === -1 || digits.indexOf(name.charAt(location - 1)) === -1
       }
   - name: isNotProto
     type: asserter
@@ -28,4 +36,4 @@ tenets:
         @review comment
         go.ident(depth = any):
           name as varName
-          containsUnderscores(varName)
+          containsInvalidUnderscores(varName)

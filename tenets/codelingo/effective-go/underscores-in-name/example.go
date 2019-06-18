@@ -1,9 +1,12 @@
 // Package main used for testing of tenet
 package main
 
+import "fmt"
+
 func main() {
 	var a = 15
 	a_bad_name := 20
+	HashSHA512_384 := func() {} // A reasonable exception
 	var another_bad_name = "hello"
 	aGoodVar := 2
 }
@@ -20,6 +23,7 @@ func a_bad_function() {
 type Bad_Interface interface {
 	SomeMethod() int
 }
+
 // BetterInterface used as example
 type BetterInterface interface {
 	SomeMethod() int
