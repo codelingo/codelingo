@@ -124,7 +124,7 @@
     "service",
   ]
   pruneopts = "UT"
-  revision = "f39e23524fe300b14877d7e18e4113ce66185d9b"
+  revision = "d205101a7bc2f6f843a60f3d8de0f7e19cae2617"
 
 [[projects]]
   branch = "master"
@@ -262,8 +262,8 @@
     "ptypes/timestamp",
   ]
   pruneopts = "UT"
-  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
-  version = "v1.2.0"
+  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
+  version = "v1.3.1"
 
 [[projects]]
   digest = "1:f4f203acd8b11b8747bdcd91696a01dbc95ccb9e2ca2db6abf81c3a4f5e950ce"

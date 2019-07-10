@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
@@ -166,6 +167,13 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
+	wd, err := os.Getwd()
+	if err != nil {
+		return nil, nil, nil, nil, errors.Trace(err)
+
+	}
+	parts := strings.Split(wd, "/")
+	path := parts[2] + "/" + parts[len(parts)-1]
 
 	ctx, cancel := util.UserCancelContext(context.Background())
 	req := &flow.ReviewRequest{
@@ -175,6 +183,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		Vcs:      vcsTypeStr,
 		Dir:      workingDir,
 		Dotlingo: dotlingo,
+		Path:     path,
 	}
 	switch vcsTypeStr {
 	case vcsGit:
