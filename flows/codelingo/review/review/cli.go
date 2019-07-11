@@ -3,7 +3,9 @@ package review
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
@@ -167,24 +169,67 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
+	// Build `path` for go projects as "reponame" for a local repo or "github.com/username/reponame" for a github repo
+	// path variable is initially empty and will remain empty for none go repos
+	path := ""
+
+	// Find the current working directory, i.e. where user executed `lingo run review` command on the repo
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
-	parts := strings.Split(wd, "/")
-	path := parts[2] + "/" + parts[len(parts)-1]
+	// Check if the repo is a go project
+	goProject, err := isGoProject(wd)
+	if err != nil {
+		return nil, nil, nil, nil, errors.Trace(err)
+	}
+
+	// Check if GOPATH is set
+	goPath := os.Getenv("GOPATH")
+
+	if goPath != "" && goProject {
+		if strings.Contains(wd, "github.com") { // Check if the working directory includes "github.com/username/reponame"
+			swd := wd[strings.Index(wd, "github.com"):]
+			parts := strings.Split(swd, "/")
+			if len(parts) == 3 {
+				path = swd
+			}
+		} else if strings.HasPrefix(wd, goPath+"/src/") { //Check if repo is local and lives in GOPATH/src/reponame
+			swd := wd[strings.Index(wd, "src/"):]
+			parts := strings.Split(swd, "/")
+			if len(parts) == 2 {
+				path = parts[1]
+			}
+		}
+		// If none of the above, path remains empty
+	}
 
 	ctx, cancel := util.UserCancelContext(context.Background())
-	req := &flow.ReviewRequest{
-		Repo:     name,
-		Sha:      sha,
-		Patches:  patches,
-		Vcs:      vcsTypeStr,
-		Dir:      workingDir,
-		Dotlingo: dotlingo,
-		Path:     path,
+
+	var req *flow.ReviewRequest
+	// If path is not empty, it is sent in ReviewRequest and used in go lexicon
+	if path != "" {
+		req = &flow.ReviewRequest{
+			Repo:     name,
+			Sha:      sha,
+			Patches:  patches,
+			Vcs:      vcsTypeStr,
+			Dir:      workingDir,
+			Dotlingo: dotlingo,
+			Path:     path,
+		}
+	} else {
+		req = &flow.ReviewRequest{
+			Repo:     name,
+			Sha:      sha,
+			Patches:  patches,
+			Vcs:      vcsTypeStr,
+			Dir:      workingDir,
+			Dotlingo: dotlingo,
+		}
 	}
+
 	switch vcsTypeStr {
 	case vcsGit:
 		addr, err := cfg.GitServerAddr()
@@ -230,4 +275,24 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 	fmt.Println("Running review flow...")
 	resultc, userVarc, errc, err := RequestReview(ctx, req, insecure)
 	return resultc, userVarc, errc, cancel, errors.Trace(err)
+}
+
+func isGoProject(currentDir string) (bool, error) {
+	isGo := false
+	items, err := ioutil.ReadDir(currentDir)
+	if err != nil {
+		return false, err
+	}
+	for _, item := range items {
+		if item.IsDir() {
+			isGo, err = isGoProject(filepath.Join(currentDir, item.Name()))
+			if err != nil {
+				return false, err
+			}
+		} else if filepath.Ext(item.Name()) == ".go" {
+			isGo = true
+			break
+		}
+	}
+	return isGo, nil
 }
