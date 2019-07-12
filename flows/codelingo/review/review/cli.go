@@ -239,7 +239,6 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 // `path` is the relative path from $GOPATH/src to the repo root. It's required for package resolution
 // It is empty for non-Go repos
 func findPath() (string, error) {
-	path := ""
 
 	// Find the root of repo
 	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
@@ -261,10 +260,10 @@ func findPath() (string, error) {
 	// Check if repo is in GOPATH
 	if goPath != "" && goProject {
 		if strings.HasPrefix(repoRoot, goPath+"/src/") {
-			path = strings.TrimPrefix(repoRoot, goPath+"/src/")
+			return strings.TrimPrefix(repoRoot, goPath+"/src/"), nil
 		}
 	}
-	return path, nil
+	return "", nil
 }
 
 func isGoProject(currentDir string) (bool, error) {
