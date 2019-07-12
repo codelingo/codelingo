@@ -3,7 +3,11 @@ package review
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 
 	flowutil "github.com/codelingo/codelingo/sdk/flow"
 	"github.com/codelingo/lingo/app/commands/verify"
@@ -167,7 +171,14 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 
 	}
 
+	path, err := findPath()
+	if err != nil {
+		return nil, nil, nil, nil, errors.Trace(err)
+
+	}
+
 	ctx, cancel := util.UserCancelContext(context.Background())
+
 	req := &flow.ReviewRequest{
 		Repo:     name,
 		Sha:      sha,
@@ -175,7 +186,9 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		Vcs:      vcsTypeStr,
 		Dir:      workingDir,
 		Dotlingo: dotlingo,
+		Path:     path,
 	}
+
 	switch vcsTypeStr {
 	case vcsGit:
 		addr, err := cfg.GitServerAddr()
@@ -221,4 +234,55 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 	fmt.Println("Running review flow...")
 	resultc, userVarc, errc, err := RequestReview(ctx, req, insecure)
 	return resultc, userVarc, errc, cancel, errors.Trace(err)
+}
+
+// `path` is the relative path from $GOPATH/src to the repo root. It's required for package resolution
+// It is empty for non-Go repos
+func findPath() (string, error) {
+
+	// Find the root of repo
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+	repoRoot := strings.TrimSpace(string(output))
+
+	// Check if the repo is a go project
+	goProject, err := isGoProject(repoRoot)
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+
+	// Check if GOPATH is set
+	goPath := os.Getenv("GOPATH")
+
+	// Check if repo is in GOPATH
+	if goPath != "" && goProject {
+		if strings.HasPrefix(repoRoot, goPath+"/src/") {
+			return strings.TrimPrefix(repoRoot, goPath+"/src/"), nil
+		}
+	}
+	return "", nil
+}
+
+func isGoProject(currentDir string) (bool, error) {
+	items, err := ioutil.ReadDir(currentDir)
+	if err != nil {
+		return false, errors.Trace(err)
+	}
+	for _, item := range items {
+		if !item.IsDir() && filepath.Ext(item.Name()) == ".go" {
+			return true, nil
+		} else if item.IsDir() && !strings.HasPrefix(item.Name(), ".") {
+			isGo, err := isGoProject(filepath.Join(currentDir, item.Name()))
+			if err != nil {
+				return false, errors.Trace(err)
+			}
+			if isGo {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
 }
