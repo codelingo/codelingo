@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -169,65 +170,25 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
-	// Build `path` for go projects as "reponame" for a local repo or "github.com/username/reponame" for a github repo
-	// path variable is initially empty and will remain empty for none go repos
-	path := ""
-
-	// Find the current working directory, i.e. where user executed `lingo run review` command on the repo
-	wd, err := os.Getwd()
+	// `path` is the relative path from $GOPATH/src to the repo root. It's required for package resolution
+	// It is empty for non-Go repos
+	path, err := findPath()
 	if err != nil {
 		return nil, nil, nil, nil, errors.Trace(err)
 
-	}
-	// Check if the repo is a go project
-	goProject, err := isGoProject(wd)
-	if err != nil {
-		return nil, nil, nil, nil, errors.Trace(err)
-	}
-
-	// Check if GOPATH is set
-	goPath := os.Getenv("GOPATH")
-
-	if goPath != "" && goProject {
-		if strings.Contains(wd, "github.com") { // Check if the working directory includes "github.com/username/reponame"
-			swd := wd[strings.Index(wd, "github.com"):]
-			parts := strings.Split(swd, "/")
-			if len(parts) == 3 {
-				path = swd
-			}
-		} else if strings.HasPrefix(wd, goPath+"/src/") { //Check if repo is local and lives in GOPATH/src/reponame
-			swd := wd[strings.Index(wd, "src/"):]
-			parts := strings.Split(swd, "/")
-			if len(parts) == 2 {
-				path = parts[1]
-			}
-		}
-		// If none of the above, path remains empty
 	}
 
 	ctx, cancel := util.UserCancelContext(context.Background())
 
-	var req *flow.ReviewRequest
 	// If path is not empty, it is sent in ReviewRequest and used in go lexicon
-	if path != "" {
-		req = &flow.ReviewRequest{
-			Repo:     name,
-			Sha:      sha,
-			Patches:  patches,
-			Vcs:      vcsTypeStr,
-			Dir:      workingDir,
-			Dotlingo: dotlingo,
-			Path:     path,
-		}
-	} else {
-		req = &flow.ReviewRequest{
-			Repo:     name,
-			Sha:      sha,
-			Patches:  patches,
-			Vcs:      vcsTypeStr,
-			Dir:      workingDir,
-			Dotlingo: dotlingo,
-		}
+	req := &flow.ReviewRequest{
+		Repo:     name,
+		Sha:      sha,
+		Patches:  patches,
+		Vcs:      vcsTypeStr,
+		Dir:      workingDir,
+		Dotlingo: dotlingo,
+		Path:     path,
 	}
 
 	switch vcsTypeStr {
@@ -277,21 +238,54 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 	return resultc, userVarc, errc, cancel, errors.Trace(err)
 }
 
+func findPath() (string, error) {
+	path := ""
+
+	// Find the root of repo
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+	repoRoot := strings.TrimSpace(string(output))
+
+	// Check if the repo is a go project
+	goProject, err := isGoProject(repoRoot)
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+
+	// Check if GOPATH is set
+	goPath := os.Getenv("GOPATH")
+
+	// Check if repo is in GOPATH
+	if goPath != "" && goProject {
+		if strings.HasPrefix(repoRoot, goPath+"/src/github.com") {
+			path = strings.TrimPrefix(repoRoot, goPath+"/src/")
+
+		} else if strings.HasPrefix(repoRoot, goPath+"/src/") {
+			path = strings.TrimPrefix(repoRoot, goPath+"/src/")
+		}
+	}
+	return path, nil
+}
+
 func isGoProject(currentDir string) (bool, error) {
 	isGo := false
 	items, err := ioutil.ReadDir(currentDir)
 	if err != nil {
-		return false, err
+		return false, errors.Trace(err)
 	}
 	for _, item := range items {
-		if item.IsDir() {
+		if !item.IsDir() && filepath.Ext(item.Name()) == ".go" {
+			return true, nil
+
+		} else if item.IsDir() && !strings.HasPrefix(item.Name(), ".") {
 			isGo, err = isGoProject(filepath.Join(currentDir, item.Name()))
 			if err != nil {
-				return false, err
+				return false, errors.Trace(err)
 			}
-		} else if filepath.Ext(item.Name()) == ".go" {
-			isGo = true
-			break
+
 		}
 	}
 	return isGo, nil
