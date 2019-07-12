@@ -170,8 +170,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
-	// `path` is the relative path from $GOPATH/src to the repo root. It's required for package resolution
-	// It is empty for non-Go repos
+
 	path, err := findPath()
 	if err != nil {
 		return nil, nil, nil, nil, errors.Trace(err)
@@ -180,7 +179,6 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 
 	ctx, cancel := util.UserCancelContext(context.Background())
 
-	// If path is not empty, it is sent in ReviewRequest and used in go lexicon
 	req := &flow.ReviewRequest{
 		Repo:     name,
 		Sha:      sha,
@@ -238,6 +236,8 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 	return resultc, userVarc, errc, cancel, errors.Trace(err)
 }
 
+// `path` is the relative path from $GOPATH/src to the repo root. It's required for package resolution
+// It is empty for non-Go repos
 func findPath() (string, error) {
 	path := ""
 
@@ -260,10 +260,7 @@ func findPath() (string, error) {
 
 	// Check if repo is in GOPATH
 	if goPath != "" && goProject {
-		if strings.HasPrefix(repoRoot, goPath+"/src/github.com") {
-			path = strings.TrimPrefix(repoRoot, goPath+"/src/")
-
-		} else if strings.HasPrefix(repoRoot, goPath+"/src/") {
+		if strings.HasPrefix(repoRoot, goPath+"/src/") {
 			path = strings.TrimPrefix(repoRoot, goPath+"/src/")
 		}
 	}
@@ -271,7 +268,6 @@ func findPath() (string, error) {
 }
 
 func isGoProject(currentDir string) (bool, error) {
-	isGo := false
 	items, err := ioutil.ReadDir(currentDir)
 	if err != nil {
 		return false, errors.Trace(err)
@@ -279,14 +275,15 @@ func isGoProject(currentDir string) (bool, error) {
 	for _, item := range items {
 		if !item.IsDir() && filepath.Ext(item.Name()) == ".go" {
 			return true, nil
-
 		} else if item.IsDir() && !strings.HasPrefix(item.Name(), ".") {
-			isGo, err = isGoProject(filepath.Join(currentDir, item.Name()))
+			isGo, err := isGoProject(filepath.Join(currentDir, item.Name()))
 			if err != nil {
 				return false, errors.Trace(err)
 			}
-
+			if isGo {
+				return true, nil
+			}
 		}
 	}
-	return isGo, nil
+	return false, nil
 }
