@@ -1,6 +1,6 @@
 tenets:
   - name: raised-generic-exceptions
-    flows:
+    actions:
       codelingo/docs:
         title: Raised Generic Exceptions
         body: |

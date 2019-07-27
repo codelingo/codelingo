@@ -15,7 +15,7 @@ funcs:
 
 tenets:
   - name: no-get-in-getters-name
-    flows:
+    actions:
       codelingo/docs:
         title: no Get at the start of Getters name
         body: |

@@ -7,7 +7,7 @@ funcs:
     }
 tenets:
   - name: orginterfaces
-    flows:
+    actions:
       codelingo/docs:
         title: IsNotInterfaceFile
         body: Finds interfaces which are not defined in a file called interface.go.

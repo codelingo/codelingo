@@ -13,7 +13,7 @@ funcs:
       }
 tenets:
   - name:  short-name-limited-scope
-    flows:
+    actions:
       codelingo/review:
         comment: Local variable "{{varName}}" with a limited scope (less than 10 lines) should be short rather than long [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
       codelingo/docs:

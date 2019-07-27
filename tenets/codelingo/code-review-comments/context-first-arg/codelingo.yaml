@@ -1,6 +1,6 @@
 tenets:
   - name: context-first-arg
-    flows:
+    actions:
       codelingo/docs:
         title: Context as First Argument
         body: |

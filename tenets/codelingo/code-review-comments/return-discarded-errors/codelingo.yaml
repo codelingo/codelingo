@@ -5,7 +5,7 @@ tenets:
         if err != nil {
           return {{ zeroValues(args) }}
         }
-    flows:
+    actions:
       codelingo/review:
         comment: Don't discard errors.
       codelingo/rewrite:

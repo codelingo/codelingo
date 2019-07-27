@@ -25,7 +25,7 @@ funcs:
       }
 tenets:
   - name: rpc-responses-display-uniformly
-    flows:
+    actions:
       codelingo/docs:
         title: RPC responses display uniformly
         body: |

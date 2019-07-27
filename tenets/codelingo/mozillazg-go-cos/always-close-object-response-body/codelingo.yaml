@@ -1,6 +1,6 @@
 tenets:
   - name:  always-close-object-response-body
-    flows:
+    actions:
       codelingo/review:
         comment: Close the response when you are done to recycle connections.
     query: |

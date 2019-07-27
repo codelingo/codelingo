@@ -8,7 +8,7 @@ funcs:
 
 tenets:
   - name:  same-receiver-name
-    flows:
+    actions:
       codelingo/review:
         comment: If you call the receiver "{{receiverName1}}" in "{{methodName1}}" method, don't call it "{{receiverName2}}" in "{{methodName2}}" method. Be consistent. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)
       

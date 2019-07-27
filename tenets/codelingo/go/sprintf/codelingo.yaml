@@ -3,7 +3,7 @@ tenets:
     vars:
       newline: |
         errors.Errorf("{{formatString}}")
-    flows:
+    actions:
       codelingo/rewrite:
       codelingo/docs:
         title: Sprintf Error

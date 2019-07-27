@@ -1,6 +1,6 @@
 tenets:
   - name: empty-slice
-    flows:
+    actions:
       codelingo/rewrite:
       codelingo/docs:
         title: Empty Slice
