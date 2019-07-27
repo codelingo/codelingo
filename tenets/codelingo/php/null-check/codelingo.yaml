@@ -1,6 +1,6 @@
 tenets:
   - name: null-check
-    actions:
+    flows:
       codelingo/docs:
         title: Null Check
         body: Finds all calls to null-check

@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: line-length-limit
-    actions:
+    flows:
       codelingo/docs:
         title: Wrap Long Lines
         body: |

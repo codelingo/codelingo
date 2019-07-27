@@ -1,6 +1,6 @@
 tenets:
   - name: boolean-argument
-    actions:
+    flows:
       codelingo/docs:
         title: Boolean Argument
         body: A boolean flag argument is a reliable indicator for a violation of the Single Responsibility Principle (SRP). https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/index.rst#clean-code-rules

@@ -1,6 +1,6 @@
 tenets:
   - name: no-custom-context
-    actions:
+    flows:
       codelingo/review:
         comment: Don't create custom Context types or use interfaces other than Context in function signatures. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#contexts)
       codelingo/docs:

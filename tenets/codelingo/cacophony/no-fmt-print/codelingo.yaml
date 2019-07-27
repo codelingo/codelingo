@@ -1,6 +1,6 @@
 tenets:
   - name: no-fmt-printx
-    actions:
+    flows:
       codelingo/docs:
         title: No Fmt Printx
         body: |

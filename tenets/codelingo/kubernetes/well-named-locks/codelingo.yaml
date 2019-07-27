@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: well-named-locks
-    actions:
+    flows:
       codelingo/docs:
         title: Well Named Locks
         body: |

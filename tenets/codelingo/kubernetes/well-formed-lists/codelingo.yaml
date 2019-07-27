@@ -1,6 +1,6 @@
 tenets:
   - name: well-formed-lists
-    actions:
+    flows:
       codelingo/docs:
         title: Well Formed Lists
         body: |

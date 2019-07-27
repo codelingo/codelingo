@@ -268,7 +268,7 @@ funcs:
       }
 tenets:
   - name: update-comment-first-word-as-subject
-    actions:
+    flows:
       codelingo/docs:
         title: Update Comment First Word as Subject
         body: |

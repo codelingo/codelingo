@@ -15,7 +15,7 @@ funcs:
       }
 tenets:
   - name: avoid-annotations-in-comments
-    actions:
+    flows:
       codelingo/docs:
         title: Avoid Annotations in Comments
         body: |

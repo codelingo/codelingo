@@ -1,6 +1,6 @@
 tenets:
   - name: println-format-strings
-    actions:
+    flows:
       codelingo/rewrite:
       codelingo/docs:
         title: Println Format Strings

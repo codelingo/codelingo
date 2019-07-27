@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name:  find-typed-nil
-    actions:
+    flows:
       codelingo/review:
         comment:  If typed pointer `{{returnName}}` is nil, return nil explicitly
     query: |

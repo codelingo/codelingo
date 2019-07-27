@@ -1,6 +1,6 @@
 tenets:
   - name: find-unused-private-funcs
-    actions:
+    flows:
       codelingo/rewrite:
       codelingo/review:
         comment: This private function is not used in the package.

@@ -1,6 +1,6 @@
 tenets:
   - name: shadowed-func-parameter
-    actions:
+    flows:
       codelingo/docs:
         title: Shadowed Function Parameter
         body: |

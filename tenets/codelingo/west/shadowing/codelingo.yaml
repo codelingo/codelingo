@@ -1,6 +1,6 @@
 tenets:
   - name: shadowed-parameter
-    actions:
+    flows:
       codelingo/docs:
         title: Shadowed Parameter
         body: Finds parameters that are updated in the method body.
@@ -19,7 +19,7 @@ tenets:
               name as paramName
 
   - name: shadowed-declaration
-    actions:
+    flows:
       codelingo/docs:
         title: Shadowed Declaration
         body: Finds declarations that are updated in an inner scope.

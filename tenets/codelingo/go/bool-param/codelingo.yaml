@@ -1,6 +1,6 @@
 tenets:
   - name: bool-arg
-    actions:
+    flows:
       codelingo/docs:
         title: Bool Arg
         body: |

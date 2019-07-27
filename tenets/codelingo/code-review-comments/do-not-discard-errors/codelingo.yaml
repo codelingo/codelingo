@@ -1,6 +1,6 @@
 tenets:
   - name: do-not-discard-errors
-    actions:
+    flows:
       codelingo/docs:
         title: Do Not Discard Errors
         body: |

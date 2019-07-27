@@ -1,6 +1,6 @@
 tenets:
   - name: unsafe-go-routine-variables
-    actions:
+    flows:
       codelingo/docs:
         title: Unsafe Go Routine Variables
         body: Example tenet that finds unsafe variables in goroutines.

@@ -1,6 +1,6 @@
 tenets:
   - name:  defer-close-file
-    actions:
+    flows:
       codelingo/docs:
         title: Defer Close File
         body: |

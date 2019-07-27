@@ -1,6 +1,6 @@
 tenets:
   - name: do-not-ignore-errors
-    actions:
+    flows:
       codelingo/rewrite:
         errorHandler: place holder
       codelingo/docs:

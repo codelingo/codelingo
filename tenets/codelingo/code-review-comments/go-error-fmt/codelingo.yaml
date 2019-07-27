@@ -64,7 +64,7 @@ funcs:
       }
 tenets:
   - name: go-error-fmt
-    actions:
+    flows:
       codelingo/rewrite:
       codelingo/docs:
         title: Go Error Format

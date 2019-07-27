@@ -12,7 +12,7 @@ funcs:
 
 tenets:
   - name:  declare-empty-slice
-    actions:
+    flows:
       codelingo/review:
         comment: Declare {{sliceName}} as a nil slice, with `var {{sliceName}} {{fixSliceType(sliceType)}} [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#declaring-empty-slices)
       codelingo/rewrite:

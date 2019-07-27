@@ -1,6 +1,6 @@
 tenets:
   - name: todo-comments
-    actions:
+    flows:
       codelingo/docs:
         title: Todo Comments
         body: |

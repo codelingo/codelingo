@@ -19,7 +19,7 @@ funcs:
       }
 tenets:
   - name:  find-sync-mutex-lock
-    actions:
+    flows:
       codelingo/review:
         comment:  Replace sync/mutex `{{mtxName}}` with sync/atomic to improve performance
     query: |

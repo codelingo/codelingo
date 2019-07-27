@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: well-named-interface
-    actions:
+    flows:
       codelingo/docs:
         title: Well Named Interface
         body: |

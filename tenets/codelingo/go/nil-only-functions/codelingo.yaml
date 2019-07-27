@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: nil-only-functions
-    actions:
+    flows:
       codelingo/rewrite:
       codelingo/docs:
         title: Nil Only Functions

@@ -16,7 +16,7 @@ funcs:
 
 tenets:
   - name: loop-variable-used-in-go-routine
-    actions:
+    flows:
       codelingo/docs:
         title: test
         body: |

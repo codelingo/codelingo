@@ -1,6 +1,6 @@
 tenets:
   - name: looped-vars-outside-loop
-    actions:
+    flows:
       codelingo/docs:
         title: Looped vars outside loop
         body: |

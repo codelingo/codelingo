@@ -1,6 +1,6 @@
 tenets:
   - name: caught-generic-exceptions
-    actions:
+    flows:
       codelingo/docs:
         title: Caught Generic Exceptions
         body: |

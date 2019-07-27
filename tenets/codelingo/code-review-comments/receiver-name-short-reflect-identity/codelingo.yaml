@@ -16,7 +16,7 @@ funcs:
 
 tenets:
   - name:  receiver-name-short-reflect-identity
-    actions:
+    flows:
       codelingo/review:
         comment: The name of a method's receiver "{{receiverName}}" should be short and also a reflection of its identity "{{typeName}}" [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#receiver-names)
       codelingo/docs:

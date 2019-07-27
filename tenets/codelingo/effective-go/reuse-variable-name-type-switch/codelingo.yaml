@@ -8,7 +8,7 @@ funcs:
 
 tenets:
   - name: reuse-variable-name-type-switch
-    actions:
+    flows:
       codelingo/docs:
         title: Reuse the variable name in a type switch
         body: |

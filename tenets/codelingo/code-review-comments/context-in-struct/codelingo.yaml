@@ -1,6 +1,6 @@
 tenets:
   - name: context-in-struct
-    actions:
+    flows:
       codelingo/review:
         comment: Don't add a Context member to a struct type; instead add a ctx parameter to each method on that type that needs to pass it along. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#contexts)
       codelingo/docs:

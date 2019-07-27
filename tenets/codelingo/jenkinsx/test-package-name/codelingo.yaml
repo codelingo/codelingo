@@ -7,7 +7,7 @@ funcs:
     }
 tenets:
   - name: test-package-name
-    actions:
+    flows:
       codelingo/rewrite:
         name: |
           {{packageName}}_test

@@ -22,7 +22,7 @@ funcs:
       }
 tenets:
   - name: avoid-meaningless-package-names
-    actions:
+    flows:
       codelingo/review:
         comment: Avoid meaningless package names like util, common, misc, api, types, and interfaces. From [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#package-names)
       codelingo/docs:

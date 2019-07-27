@@ -29,7 +29,7 @@ funcs:
       }
 tenets:
   - name: camel-case-method-name
-    actions:
+    flows:
       codelingo/docs:
         title: Camel Case Method Name
         body: Method names MUST be declared in camelCase
