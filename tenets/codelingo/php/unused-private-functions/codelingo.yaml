@@ -1,5 +1,5 @@
 tenets:
-  - flows:
+  - actions:
       codelingo/rewrite:
         place: holder
       codelingo/review:

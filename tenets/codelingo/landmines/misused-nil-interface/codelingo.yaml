@@ -13,7 +13,7 @@ funcs:
      }
 tenets:
   - name: misused-nil-interface
-    flows:
+    actions:
       codelingo/docs:
         title: Misused Nil Interface
         body: |

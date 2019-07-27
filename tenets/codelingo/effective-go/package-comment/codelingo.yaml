@@ -1,6 +1,6 @@
 tenets:
   - name: package-comment
-    flows:
+    actions:
       codelingo/docs:
         title: Package Comment
         body: |

@@ -1,6 +1,6 @@
 tenets:
   - name: redundant-defer-wraps
-    flows:
+    actions:
       codelingo/docs:
         title: Redundant Defer Wraps
         body: |

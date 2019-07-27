@@ -1,6 +1,6 @@
 tenets:
   - name:  missing-close-file
-    flows:
+    actions:
       codelingo/review:
         comment: Close the file when you are done
     query: |

@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: func-args-inline-comments
-    flows:
+    actions:
       codelingo/docs:
         title: Function Arguments Inline Comments
         body: |

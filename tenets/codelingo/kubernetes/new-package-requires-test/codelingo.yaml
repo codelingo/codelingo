@@ -13,7 +13,7 @@ funcs:
       }
 tenets:
   - name: new-package-requires-test
-    flows:
+    actions:
       codelingo/docs:
         title: New Package Requires Test
         body: |

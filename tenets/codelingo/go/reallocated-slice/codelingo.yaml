@@ -1,6 +1,6 @@
 tenets:
   - name: reallocated-slice
-    flows:
+    actions:
       codelingo/docs:
         title: Reallocated Slice
         body: Find slices that may be subject to reallocation pointer changes. Designed to catch problems like this https://github.com/juju/juju/commit/8ff9d72ebc07c0f1d2f048e5d0486335e637b313

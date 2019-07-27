@@ -1,6 +1,6 @@
 tenets:
   - name: init
-    flows:
+    actions:
       codelingo/docs:
         title: Init
         body: |

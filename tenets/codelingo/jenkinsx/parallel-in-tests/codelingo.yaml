@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: parallel-in-tests
-    flows:
+    actions:
       codelingo/rewrite:
       codelingo/docs:
         title: Is Parallel In Tests
