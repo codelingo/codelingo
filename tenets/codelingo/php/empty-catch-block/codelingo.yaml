@@ -1,6 +1,6 @@
 tenets:
   - name: empty-catch-block
-    actions:
+    flows:
       codelingo/docs:
         title: Empty Catch Block
         body: |

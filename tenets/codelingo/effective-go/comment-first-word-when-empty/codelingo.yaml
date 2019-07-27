@@ -13,7 +13,7 @@ funcs:
       }
 tenets:
   - name: comment-first-word-when-empty
-    actions:
+    flows:
       codelingo/review:
         comment: |
           Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name ({{funcName}}) being declared.

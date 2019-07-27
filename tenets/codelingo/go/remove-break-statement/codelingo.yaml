@@ -1,6 +1,6 @@
 tenets:
   - name: remove-break-statement
-    actions:
+    flows:
       codelingo/docs:
         title: Remove Break Statement
         body: The break statement that is needed at the end of each case is provided automatically in Go

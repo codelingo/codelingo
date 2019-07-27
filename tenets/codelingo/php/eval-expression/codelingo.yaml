@@ -1,6 +1,6 @@
 tenets:
   - name: eval-expression
-    actions:
+    flows:
       codelingo/docs:
         title: Eval Expression
         body: |

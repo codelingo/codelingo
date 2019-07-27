@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: well-named-lists
-    actions:
+    flows:
       codelingo/docs:
         title: Well Named Lists
         body: |

@@ -1,6 +1,6 @@
 tenets:
   - name: php-lint-rules
-    actions:
+    flows:
       codelingo/docs:
         title: Php Lint Rules
         body: Example tenet that finds all lint problems.

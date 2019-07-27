@@ -15,7 +15,7 @@ funcs:
       }
 tenets:
   - name: avoid-renaming-imports
-    actions:
+    flows:
       codelingo/docs:
         title: Avoid Renaming Imports
         body: |

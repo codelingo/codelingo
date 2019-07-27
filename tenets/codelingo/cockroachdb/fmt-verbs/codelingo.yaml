@@ -44,7 +44,7 @@ tenets:
   - name: fmt-verbs
     vars:
       result: "{{verbForType(argType)}}"
-    actions:
+    flows:
       codelingo/docs:
         title: Use Appropriate Verbs in Format
         body: |

@@ -1,6 +1,6 @@
 tenets:
   - name: defer-in-loop
-    actions:
+    flows:
       codelingo/docs:
         title: Defer In Loop
         body: |

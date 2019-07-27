@@ -280,7 +280,7 @@ funcs:
       }
 tenets:
   - name: comment-first-word-as-subject
-    actions:
+    flows:
       codelingo/docs:
         title: Comment First Word as Subject
         body: |

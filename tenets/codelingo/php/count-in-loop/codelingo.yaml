@@ -1,6 +1,6 @@
 tenets:
   - name: count-in-loop
-    actions:
+    flows:
       codelingo/docs:
         title: Count In Loop
         body: Using count/sizeof in loops expressions is considered bad practice https://github.com/phpmd/phpmd/blob/master/src/site/rst/rules/design.rst#countinloopexpression.

@@ -1,6 +1,6 @@
 tenets:
   - name: use-offsite-check
-    actions:
+    flows:
       codelingo/docs:
         title: Use Offsite Check
         body: |

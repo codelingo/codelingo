@@ -1,6 +1,6 @@
 tenets:
   - name: use-ticker-in-for-switch
-    actions:
+    flows:
       codelingo/review:
         comment: Make one ticker as opposed to making a new timer each iteration.
     query: |

@@ -18,7 +18,7 @@ funcs:
       }
 tenets:
   - name: lower-case-constant-values
-    actions:
+    flows:
       codelingo/review:
         comment: The PHP constants true, false, and null MUST be in lower case.
       codelingo/rewrite:

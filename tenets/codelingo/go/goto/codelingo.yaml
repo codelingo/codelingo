@@ -1,6 +1,6 @@
 tenets:
   - name: goto-statement
-    actions:
+    flows:
       codelingo/docs:
         title: Goto Statement
         body: |

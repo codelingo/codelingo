@@ -11,7 +11,7 @@ funcs:
 
 tenets:
   - name: unnecessary-parentheses
-    actions:
+    flows:
       codelingo/docs:
         title: Unnecessary Parentheses
         body: |

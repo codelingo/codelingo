@@ -31,7 +31,7 @@ funcs:
 
 tenets:
   - name:  camel-case-constants
-    actions:
+    flows:
       codelingo/review:
         comment: Define constant "{{varName}}" as "{{fixName(varName, varPrivate)}}". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)
       codelingo/docs:

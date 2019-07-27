@@ -1,6 +1,6 @@
 tenets:
   - name: global-variable
-    actions:
+    flows:
       codelingo/docs:
         title: Global Variable
         body: |

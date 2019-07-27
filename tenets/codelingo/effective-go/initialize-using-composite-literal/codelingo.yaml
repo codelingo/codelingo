@@ -1,6 +1,6 @@
 tenets:
   - name:  initialize-using-composite-literal
-    actions:
+    flows:
       codelingo/docs:
         title: Initialize instance using composite literal
         body: |

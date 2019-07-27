@@ -24,7 +24,7 @@ funcs:
       }
 tenets:
   - name: underscores-in-name
-    actions:
+    flows:
       codelingo/review:
         comment: Use MixedCaps or mixedCaps rather than underscores to write multiword names. From [Effective Go](https://golang.org/doc/effective_go.html#mixed-caps).
     query: |

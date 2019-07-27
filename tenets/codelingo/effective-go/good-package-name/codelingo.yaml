@@ -19,7 +19,7 @@ funcs:
       }
 tenets:
   - name: good-package-name
-    actions:
+    flows:
       codelingo/docs:
         title: Good Package Name
         body: |

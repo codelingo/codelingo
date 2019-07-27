@@ -1,6 +1,6 @@
 tenets:
   - name: mixed-marshalling
-    actions:
+    flows:
       codelingo/docs:
         title: Mixed Marshalling
         body: |

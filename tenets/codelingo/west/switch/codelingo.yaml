@@ -1,6 +1,6 @@
 tenets:
   - name: fall-through-case
-    actions:
+    flows:
       codelingo/docs:
         title: Fall Through Case
         body: Finds non-empty cases that fall through.

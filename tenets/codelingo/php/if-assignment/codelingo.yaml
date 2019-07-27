@@ -1,6 +1,6 @@
 tenets:
   - name: if-assignment
-    actions:
+    flows:
       codelingo/docs:
         title: If Assignment
         body: |
