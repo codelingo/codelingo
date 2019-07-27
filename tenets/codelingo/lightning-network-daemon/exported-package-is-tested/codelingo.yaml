@@ -19,7 +19,7 @@ funcs:
       }
 tenets:
   - name: exported-package-is-not-tested
-    flows:
+    actions:
       codelingo/docs:
         title: Exported package is tested
         body: |

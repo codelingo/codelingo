@@ -1,6 +1,6 @@
 tenets:
   - name: go-lint-rules
-    flows:
+    actions:
       codelingo/docs:
         title: Go Lint Rules
         body: |

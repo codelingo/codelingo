@@ -1,6 +1,6 @@
 tenets:
   - name:  find-typed-nil
-    flows:
+    actions:
       codelingo/review:
         comment:  If typed pointer is nil, return nil explicitly
     query: |

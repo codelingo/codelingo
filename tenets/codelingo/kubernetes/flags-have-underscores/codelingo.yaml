@@ -8,7 +8,7 @@ funcs:
 
 tenets:
   - name: flags-have-underscores
-    flows:
+    actions:
       codelingo/docs:
         title: Flags Have Underscores
         body: |

@@ -1,6 +1,6 @@
 tenets:
   - name: debug-prints
-    flows:
+    actions:
       codelingo/docs:
         title: Debug Prints
         body: |

@@ -1,6 +1,6 @@
 tenets:
   - name: wrapping-func-signatures
-    flows:
+    actions:
       codelingo/docs:
         title: Wrapping Function Signatures
         body: |

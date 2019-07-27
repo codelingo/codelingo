@@ -1,6 +1,6 @@
 tenets:
   - name: freed-new-object
-    flows:
+    actions:
       codelingo/docs:
         title: Freed New Object
         body: Finds objects that were created with new and freed.
@@ -24,7 +24,7 @@ tenets:
               identifier_token as varName
 
   - name: deleted-malloced-objects
-    flows:
+    actions:
       codelingo/docs:
         title: Deleted Malloced Objects
         body: Finds objects that were obtained with malloc and deleted.
@@ -50,7 +50,7 @@ tenets:
               identifier_token as varName
 
   - name: used-after-deletion
-    flows:
+    actions:
       codelingo/docs:
         title: Used After Deletion
         body: Finds objects used after deletion.
@@ -73,7 +73,7 @@ tenets:
             identifier_token as varName
 
   - name: undeleted-returned-object
-    flows:
+    actions:
       codelingo/docs:
         title: Undeleted Returned Object
         body: Finds objects new that are not deleted.

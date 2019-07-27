@@ -18,7 +18,7 @@ funcs:
       }
 tenets:
   - name: upper-case-constant-values
-    flows:
+    actions:
       codelingo/review:
         comment: Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)
       codelingo/rewrite:

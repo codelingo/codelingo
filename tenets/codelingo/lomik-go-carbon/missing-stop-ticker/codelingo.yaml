@@ -1,6 +1,6 @@
 tenets:
   - name:  missing-stop-ticker
-    flows:
+    actions:
       codelingo/review:
         comment: Stop the ticker to release associated resources.
     query: |

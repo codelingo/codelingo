@@ -37,7 +37,7 @@ tenets:
 
   # There is an explicit tenet for each case. See more concise possible solutions below.
   - name: right-build-directive-wrong-file
-    flows:
+    actions:
       codelingo/rewrite:
         name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
@@ -70,7 +70,7 @@ tenets:
           # filename != append("packageName", "_integration_test.go")
 
   - name: right-build-directive-wrong-package
-    flows:
+    actions:
       codelingo/rewrite:
         name: |
           {{packageName}}_test
@@ -107,7 +107,7 @@ tenets:
             # name != append(packageName, "_test")
 
   - name: right-package-wrong-build-directive
-    flows:
+    actions:
       codelingo/rewrite:
         name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
@@ -141,7 +141,7 @@ tenets:
                 text == "// +build integration"
 
   - name: right-package-wrong-file
-    flows:
+    actions:
       codelingo/rewrite:
         name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
@@ -173,7 +173,7 @@ tenets:
           # filename != append(packageName, "_integration_test.go")
 
   - name: right-file-wrong-build-directive
-    flows:
+    actions:
       codelingo/rewrite:
         name: filler # non-empty rewrite section required for parse error
       codelingo/docs:
@@ -208,7 +208,7 @@ tenets:
                 text == "// +build integration"
 
   - name: right-file-wrong-package
-    flows:
+    actions:
       codelingo/rewrite:
         name: |
           {{packageName}}_test

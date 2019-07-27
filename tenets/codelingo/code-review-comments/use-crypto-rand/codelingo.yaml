@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: use-crypto-rand
-    flows:
+    actions:
       codelingo/docs:
         title: Use Crypto Rand
         body: |

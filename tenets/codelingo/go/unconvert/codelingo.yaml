@@ -1,6 +1,6 @@
 tenets:
   - name: unconvert
-    flows:
+    actions:
       codelingo/rewrite:
       codelingo/docs:
         title: Unconvert

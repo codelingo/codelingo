@@ -1,6 +1,6 @@
 tenets:
   - name: well-named-package
-    flows:
+    actions:
       codelingo/docs:
         title: Well Named Package
         body: |

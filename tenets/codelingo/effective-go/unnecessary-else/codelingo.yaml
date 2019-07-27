@@ -8,7 +8,7 @@ funcs:
 
 tenets:
   - name: unnecessary-else 
-    flows:
+    actions:
       codelingo/docs:
         title: Unnecessary Else 
         body: |
