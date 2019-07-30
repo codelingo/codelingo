@@ -1,6 +1,6 @@
 tenets:
   - name: find-funcs
-    flows:
+    actions:
       codelingo/review:
         comment: |
           Replace this `if` statement with an `else if`. it is mutually exclusive with the previous if statement has the same operands.

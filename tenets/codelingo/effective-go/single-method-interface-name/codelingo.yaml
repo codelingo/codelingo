@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: single-method-interface-name
-    flows:
+    actions:
       codelingo/docs:
         title: Single Method Interface Name
         body: |

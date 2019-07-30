@@ -19,7 +19,7 @@ funcs:
       }
 tenets:
   - name: jsonapi-kind-compulsory-metadata
-    flows:
+    actions:
       codelingo/docs:
         title: JSON API kind compulsory metadata
         body: |

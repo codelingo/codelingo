@@ -19,7 +19,7 @@ funcs:
       }
 tenets:
   - name: find-funcs
-    flows:
+    actions:
       codelingo/docs:
         title: NewConcat
         body: Example tenet that finds all exported functions that do not have a corresponding test function.

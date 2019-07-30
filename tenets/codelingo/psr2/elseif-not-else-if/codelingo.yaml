@@ -7,7 +7,7 @@ funcs:
       }
 tenets:
   - name: elseif-not-else-if
-    flows:
+    actions:
       codelingo/review:
         comment: The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words.
       codelingo/rewrite:

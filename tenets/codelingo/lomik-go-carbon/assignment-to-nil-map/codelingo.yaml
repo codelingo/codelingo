@@ -1,6 +1,6 @@
 tenets:
   - name: assignment-to-nil-map
-    flows:
+    actions:
       codelingo/review:
         comment: Use 'make' when creating maps to prevent assigning to a nil map.
       codelingo/rewrite:

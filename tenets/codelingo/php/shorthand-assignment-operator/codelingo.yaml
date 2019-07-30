@@ -17,7 +17,7 @@ funcs:
 
 tenets:
   - name: shorthand-assignment-operator
-    flows:
+    actions:
       codelingo/docs:
         title: Shorthand Assignment Operators
         body: It is recommended to use shorthand assignment operators
