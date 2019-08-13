@@ -321,7 +321,7 @@ codelingo:
     tenets:
       assignment-to-nil-map:
         hasIssues: false
-      missing-close-file:
+      missing-stop-ticker:
         hasIssues: false
     tags:
     - go
