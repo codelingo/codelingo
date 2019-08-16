@@ -9,7 +9,7 @@ funcs:
       }
 tenets:
   - name:  potential-nil-pointer
-    flows:
+    actions:
       codelingo/docs:
         title: Potential nil pointer 
         body: |
