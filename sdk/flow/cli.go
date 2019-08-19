@@ -181,7 +181,6 @@ func setBaseApp(cliApp *CLIApp) {
 		cli.BoolFlag{
 			Name:  "no-fatal",
 			Usage: "the command will be run in 'no-fatal' mode, which will allow an Action to keep running even after receiving an error",
-			//	Destination: &language,
 		},
 	}
 	app.Compiled = time.Now()
