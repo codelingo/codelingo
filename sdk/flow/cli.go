@@ -178,6 +178,11 @@ func setBaseApp(cliApp *CLIApp) {
 			Usage: "the Tenet `FILE` to run rewrite over. If the flag is not set, codelingo.yaml files are read from the branch being rewritten.",
 			//	Destination: &language,
 		},
+		cli.BoolFlag{
+			Name:  "no-fatal",
+			Usage: "the command will be run in 'no-fatal' mode, which will allow an Action to keep running even after receiving an error",
+			//	Destination: &language,
+		},
 	}
 	app.Compiled = time.Now()
 	app.EnableBashCompletion = true
@@ -245,7 +250,9 @@ l:
 			}
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
-			return errors.Trace(err)
+			if !ctx.Bool("no-fatal") {
+				return errors.Trace(err)
+			}
 		case v, ok := <-userVarC:
 			if !ok {
 				userVarC = nil
