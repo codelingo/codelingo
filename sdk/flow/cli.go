@@ -225,6 +225,12 @@ func (f *flowRunner) action(ctx *cli.Context) {
 }
 
 func (f *flowRunner) command(ctx *cli.Context) (err error) {
+	isNoFatalMode := ctx.Bool("no-fatal")
+	if isNoFatalMode {
+		fmt.Println("WARNING: command running in 'no fatal error' mode")
+	}
+
+	var errs []error
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	defer func() {
@@ -250,9 +256,10 @@ l:
 			}
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
-			if !ctx.Bool("no-fatal") {
+			if !isNoFatalMode {
 				return errors.Trace(err)
 			}
+			errs = append(errs, err)
 		case v, ok := <-userVarC:
 			if !ok {
 				userVarC = nil
@@ -311,6 +318,15 @@ l:
 		if resultc == nil && errc == nil && userVarC == nil {
 			break l
 		}
+	}
+
+	if isNoFatalMode {
+		fmt.Println("\n\n", strings.Repeat("-", 15))
+		fmt.Printf("NO FATAL MODE: The following %d errors were ignored:\n", len(errs))
+		for _, err := range errs {
+			fmt.Println("ERROR:", err.Error())
+		}
+		fmt.Print(strings.Repeat("-", 15), "\n\n")
 	}
 
 	return
