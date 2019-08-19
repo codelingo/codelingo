@@ -323,7 +323,7 @@ l:
 		fmt.Println("\n\n", strings.Repeat("-", 15))
 		fmt.Printf("NO FATAL MODE: The following %d errors were ignored:\n", len(errs))
 		for _, err := range errs {
-			fmt.Println("ERROR:", err.Error())
+			fmt.Println("ERROR:", errors.ErrorStack(err))
 		}
 		fmt.Print(strings.Repeat("-", 15), "\n\n")
 	}
