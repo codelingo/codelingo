@@ -86,14 +86,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:210ca4edc7c277d3a1becbf65b30e926ef4642b02f96146cc64c0c9f8e80122a"
+  digest = "1:d2a76bb2bcd9790187245c57e85edc1815af9bce23393fa3393beeda5036782f"
   name = "github.com/codelingo/clql"
   packages = [
     "dotlingo",
     "inner",
   ]
   pruneopts = "UT"
-  revision = "45d204b5076b28931a0a0c3556fc22e3d7c681d4"
+  revision = "4a63b1003f8bf59c1c585fc2cca58f6083926aac"
 
 [[projects]]
   branch = "master"
@@ -113,6 +113,14 @@
   ]
   pruneopts = "UT"
   revision = "299656113649d54923cc9b6c0872248c115450dd"
+
+[[projects]]
+  branch = "master"
+  digest = "1:78d0cea6d598e3f2498ee014cd4ee767966698a35bef29b4dd28922846c5eabb"
+  name = "github.com/codelingo/rectangle"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a8eef7aa76cf129d19f122ad003e28b198bedf84"
 
 [[projects]]
   branch = "master"
@@ -234,6 +242,14 @@
   pruneopts = "UT"
   revision = "d459835d2b077e44f7c9b453505ee29881d5d12d"
   version = "v1.2"
+
+[[projects]]
+  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
+  name = "github.com/go-yaml/yaml"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
 
 [[projects]]
   branch = "master"
@@ -888,6 +904,7 @@
     "github.com/codelingo/lingo/service",
     "github.com/codelingo/lingo/service/grpc",
     "github.com/codelingo/lingo/vcs",
+    "github.com/codelingo/rectangle",
     "github.com/codelingo/rpc/flow",
     "github.com/codelingo/rpc/flow/client",
     "github.com/common-nighthawk/go-figure",
