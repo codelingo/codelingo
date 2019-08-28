@@ -321,9 +321,19 @@ codelingo:
     tenets:
       assignment-to-nil-map:
         hasIssues: false
-      missing-close-file:
+      missing-stop-ticker:
         hasIssues: false
     tags:
     - go
     - lomik
     - go-carbon
+  dev:
+    description: Tenets tested in dev-lexicons
+    version: 0.0.0
+    tenets:
+      potential-nil-pointer:
+        hasIssues: false
+    tags:
+    - go
+    - golang
+
