@@ -19,7 +19,7 @@ tenets:
                         name == "time"
                       go.ident:
                         name == "After"
-        // TODO: use path or macro facts for repeated code
+        #TODO: use path or macro facts for repeated code
         go.for_stmt(depth = any):
           go.select_stmt(depth = any):
             go.comm_clause(depth = any):
