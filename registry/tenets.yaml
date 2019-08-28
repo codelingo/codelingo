@@ -137,7 +137,7 @@ codelingo:
         hasIssues: true
       tested:
         hasIssues: false
-      ticker-in-for-switch:
+      ticker-in-for-select:
         hasIssues: false
       todo:
         hasIssues: false
