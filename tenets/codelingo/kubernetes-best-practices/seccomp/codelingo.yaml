@@ -16,6 +16,7 @@ tenets:
         yaml.mapping(depth = 1):
           yaml.scalar:
             value == "kind"
+          # TODO: only comment once per repo since each kubernetes object is not a new security flaw
           @review comment
           yaml.scalar:
             value as kubernetesObject
