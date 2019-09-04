@@ -1,11 +1,11 @@
 tenets:
-  - name: find-funcs
+  - name: seccomp
     flows:
       codelingo/review:
         comment: | 
           This kubernetes config file is not paired with a PodSecurityPolicy requiring its pods to run in seccomp.
 
-          Pods should be run in `docker/default` or `runtime/default`, but they `unconfined` by default to ensure backwards compatability.
+          Pods should be run in `docker/default` or `runtime/default`, but they are `unconfined` by default to ensure backwards compatability.
 
           [Seccomp docs](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp). [Issue tracking seccomp default](https://github.com/kubernetes/kubernetes/issues/81115).
     query: |
