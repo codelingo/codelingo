@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-app
+  labels:
+    app: example-app
+    version: v1
+    role: backend
+spec:
+  containers:
+  - name: java

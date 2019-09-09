@@ -178,6 +178,10 @@ func setBaseApp(cliApp *CLIApp) {
 			Usage: "the Tenet `FILE` to run rewrite over. If the flag is not set, codelingo.yaml files are read from the branch being rewritten.",
 			//	Destination: &language,
 		},
+		cli.BoolFlag{
+			Name:  "no-fatal",
+			Usage: "the command will be run in 'no-fatal' mode, which will allow an Action to keep running even after receiving an error",
+		},
 	}
 	app.Compiled = time.Now()
 	app.EnableBashCompletion = true
@@ -220,6 +224,12 @@ func (f *flowRunner) action(ctx *cli.Context) {
 }
 
 func (f *flowRunner) command(ctx *cli.Context) (err error) {
+	isNoFatalMode := ctx.Bool("no-fatal")
+	if isNoFatalMode {
+		fmt.Println("WARNING: command running in 'no fatal error' mode")
+	}
+
+	var errs []error
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	defer func() {
@@ -245,7 +255,10 @@ l:
 			}
 
 			util.Logger.Debugf("Result error: %s", errors.ErrorStack(err))
-			return errors.Trace(err)
+			if !isNoFatalMode {
+				return errors.Trace(err)
+			}
+			errs = append(errs, err)
 		case v, ok := <-userVarC:
 			if !ok {
 				userVarC = nil
@@ -304,6 +317,15 @@ l:
 		if resultc == nil && errc == nil && userVarC == nil {
 			break l
 		}
+	}
+
+	if isNoFatalMode {
+		fmt.Println("\n\n", strings.Repeat("-", 15))
+		fmt.Printf("NO FATAL MODE: The following %d errors were ignored:\n", len(errs))
+		for _, err := range errs {
+			fmt.Println("ERROR:", errors.ErrorStack(err))
+		}
+		fmt.Print(strings.Repeat("-", 15), "\n\n")
 	}
 
 	return

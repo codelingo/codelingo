@@ -137,7 +137,7 @@ codelingo:
         hasIssues: true
       tested:
         hasIssues: false
-      ticker-in-for-switch:
+      ticker-in-for-select:
         hasIssues: false
       todo:
         hasIssues: false
@@ -178,6 +178,15 @@ codelingo:
     tags:
     - golang
     - go
+  kubernetes-best-practices:
+    description: Best practices for using Kubernetes
+    version: 0.0.0
+    tenets:
+      seccomp:
+        hasIssues: false
+    tags:
+    - yaml
+    - kubernetes
   kubernetes:
     description: Best practices from the kubernetes repository.
     version: 0.0.0

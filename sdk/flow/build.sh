@@ -14,8 +14,6 @@ codelingoPath="$path/src/github.com/codelingo/codelingo"
 flowPath="$codelingoPath/flows/$owner/$name"
 
 v="
-windows,386;\
-linux,386;\
 windows,amd64;\
 linux,amd64;\
 darwin,amd64;"

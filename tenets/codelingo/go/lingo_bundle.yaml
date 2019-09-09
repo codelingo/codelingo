@@ -14,7 +14,7 @@ tenets:
 - remove-break-statement
 - sprintf
 - tested
-- ticker-in-for-switch
+- ticker-in-for-select
 - todo
 - unconvert
 - unnecessary-parentheses

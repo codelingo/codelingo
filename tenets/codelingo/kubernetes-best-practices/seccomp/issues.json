@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "This kubernetes config file is not paired with a PodSecurityPolicy requiring its pods to run in seccomp.\n\nPods should be run in `docker/default` or `runtime/default`, but they `unconfined` by default to ensure backwards compatability.\n\n[Seccomp docs](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp). [Issue tracking seccomp default](https://github.com/kubernetes/kubernetes/issues/81115).\n",
+   "Filename": "examplePod.yaml",
+   "Line": 2,
+   "Snippet": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: example-app"
+  }
+ ]
