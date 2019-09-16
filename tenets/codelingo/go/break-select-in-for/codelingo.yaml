@@ -1,0 +1,25 @@
+funcs:
+  - name: plusOne
+    type: resolver
+    body: |
+      func (a) {
+        return a + 1
+      } 
+tenets:
+  - name: break-select-in-for
+    flows:
+      codelingo/review:
+        comment: |
+          This `break` statement only breaks to the innermost select, rather than the parent `for` loop.
+          This is generally unexpected and can cause an active goroutine to leak.
+          Fix it by adding a label to the for loop and breaking to that instead.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.for_stmt(depth = any):
+        go.select_stmt(depth = any):
+          go.branch_stmt(depth = any):
+            exclude:
+              go.ident
+
