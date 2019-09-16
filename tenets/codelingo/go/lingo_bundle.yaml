@@ -12,6 +12,7 @@ tenets:
 - println-format-strings
 - reallocated-slice
 - remove-break-statement
+- remove-empty-suite-functions
 - sprintf
 - tested
 - ticker-in-for-select
