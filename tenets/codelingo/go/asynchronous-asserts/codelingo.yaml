@@ -1,0 +1,15 @@
+tenets:
+  - name: asynchronous-asserts
+    actions:
+      codelingo/review:
+        comment: Don't use c.Assert on a goroutine.
+    query: |
+      import codelingo/ast/go
+
+      go.go_stmt(depth = any):
+        @review comment
+        go.selector_expr(depth = any):
+          go.ident:
+            name == "c"
+          go.ident:
+            name == "Assert"
