@@ -44,7 +44,7 @@ l:
 		}
 	}
 
-	// Which works perfectly fine to break a select insisde a for loop
+	// Which works perfectly fine to break a select inside a for loop
 	fmt.Println("Expecting 0, 1, 2:")
 	c2 := intChan()
 m:
@@ -61,19 +61,14 @@ m:
 
 	// The trouble is, we often use selects inside for loops and intend to break the for loop
 	// forgetting that we need a label lest we only break the select statement
+	// This leads to infinite 0s after our expected 0, 1, 2
 	fmt.Println("Expecting 0, 1, 2:")
 	c3 := intChan()
-	breakCountDown := 10
 	for {
 		select {
 		case i, ok := <-c3:
 			fmt.Println(i)
 			if !ok {
-				fmt.Println("But actually we get infinite 0s as well")
-				breakCountDown--
-				if breakCountDown <= 0 {
-					panic("escape infinite loop")
-				}
 				break // ISSUE
 			}
 		}
