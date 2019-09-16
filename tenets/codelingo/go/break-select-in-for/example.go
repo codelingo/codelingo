@@ -14,14 +14,7 @@ func main() {
 
 	// and don't often break from selects, so it's easy to forget that it's possible
 	fmt.Println("Expecting 0:")
-	c1 := make(chan int)
-	go func() {
-		for i := range []int{0, 1, 2} {
-			c1 <- i
-		}
-		close(c1)
-	}()
-
+	c1 := intChan()
 	select {
 	case i := <-c1:
 		fmt.Println(i)
@@ -53,14 +46,7 @@ l:
 
 	// Which works perfectly fine to break a select insisde a for loop
 	fmt.Println("Expecting 0, 1, 2:")
-	c2 := make(chan int)
-	go func() {
-		for i := range []int{0, 1, 2} {
-			c2 <- i
-		}
-		close(c2)
-	}()
-
+	c2 := intChan()
 m:
 	for {
 		select {
@@ -76,14 +62,7 @@ m:
 	// The trouble is, we often use selects inside for loops and intend to break the for loop
 	// forgetting that we need a label lest we only break the select statement
 	fmt.Println("Expecting 0, 1, 2:")
-	c3 := make(chan int)
-	go func() {
-		for i := range []int{0, 1, 2} {
-			c3 <- i
-		}
-		close(c3)
-	}()
-
+	c3 := intChan()
 	breakCountDown := 10
 	for {
 		select {
@@ -99,4 +78,13 @@ m:
 			}
 		}
 	}
+}
+
+func intChan() <-chan int {
+	ch := make(chan int, 3)
+	ch <- 1
+	ch <- 2
+	ch <- 3
+	close(ch)
+	return ch
 }

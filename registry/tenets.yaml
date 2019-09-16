@@ -117,6 +117,8 @@ codelingo:
     tenets:
       bool-param:
         hasIssues: false
+      break-select-in-for:
+        hasIssues: false
       empty-slice:
         hasIssues: false
       global-var:
