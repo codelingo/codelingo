@@ -133,6 +133,8 @@ codelingo:
         hasIssues: false
       reallocated-slice:
         hasIssues: false
+      remove-empty-suite-functions:
+        hasIssues: false
       sprintf:
         hasIssues: true
       tested:

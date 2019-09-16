@@ -1,0 +1,28 @@
+tenets:
+  - name: remove-empty-suite-functions
+    flows:
+      codelingo/review:
+        comment: |
+          We're not obliged to implement suite functions like SetupTest, so there's
+          no reason to leave stubs of them lying around.
+      codelingo/rewrite:
+        place: holder
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        filename as fname
+        regex(/.*_test.go/, fname)
+        @review comment
+        @rewrite --replace ""
+        go.func_decl(depth = any):
+          go.field_list:
+            go.ident(depth = any):
+              name as receiver
+              # Assumes that all suites have "Suite" in their name.
+              # TODO: enforce this in another tenet or look at the type info on the
+              # receiver's definition
+              regex(/Suite/, receiver)
+          go.block_stmt:
+            exclude:
+              go.element
