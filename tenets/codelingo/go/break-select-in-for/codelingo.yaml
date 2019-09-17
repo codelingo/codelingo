@@ -13,6 +13,7 @@ tenets:
       go.for_stmt(depth = any):
         go.select_stmt(depth = any):
           go.branch_stmt(depth = any):
+            tok == "break"
             exclude:
               go.ident
 
