@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "This is a call to a deprecated function.",
+   "Filename": "example.go",
+   "Line": 4,
+   "Snippet": "\nfunc main() {\n\tdeprecated()             // ISSUE\n\tdeprecatedAndCommented() // ISSUE\n\tnotQuiteDeprecated()"
+  },
+  {
+   "Comment": "This is a call to a deprecated function.",
+   "Filename": "example.go",
+   "Line": 5,
+   "Snippet": "func main() {\n\tdeprecated()             // ISSUE\n\tdeprecatedAndCommented() // ISSUE\n\tnotQuiteDeprecated()\n\tbadlyDeprecated()"
+  }
+ ]
