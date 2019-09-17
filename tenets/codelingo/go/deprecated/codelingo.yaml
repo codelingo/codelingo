@@ -1,6 +1,6 @@
 tenets:
   - name: deprecated
-    flows:
+    actions:
       codelingo/review:
         comment: This is a call to a deprecated function.
     query: |
