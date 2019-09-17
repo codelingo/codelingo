@@ -119,6 +119,8 @@ codelingo:
         hasIssues: false
       break-select-in-for:
         hasIssues: false
+      deprecated:
+        hasIssues: false
       empty-slice:
         hasIssues: false
       global-var:
