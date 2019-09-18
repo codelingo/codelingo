@@ -19,7 +19,7 @@ func main() {
 
 
         go func() {
-            fmt.Println("Hello") // Non Issie
+            fmt.Println("Hello") // Non Issue
         }()
 
 }
