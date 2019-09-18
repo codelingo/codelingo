@@ -2,7 +2,7 @@ tenets:
   - name: dont-ignore-gofunc-returns
     actions:
       codelingo/review:
-        comment: Do not ignore values returned by go-funcs.
+        comment: Do not ignore values returned by goroutines.
     query: |
       import codelingo/ast/go
 
