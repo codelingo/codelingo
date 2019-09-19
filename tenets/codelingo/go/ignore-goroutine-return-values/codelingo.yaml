@@ -16,4 +16,7 @@ tenets:
                 go.field_list
             edge("calls"):
               go.func_decl:
-                go.return_stmt(depth = any)
+                go.func_type:
+                  go.field_list
+                  go.field_list
+

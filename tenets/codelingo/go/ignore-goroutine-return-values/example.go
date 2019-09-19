@@ -10,16 +10,16 @@ func main() {
         go B() // Non Issue
 	<-time.After(time.Second)
 
-	go func() string {
+	go func() string { // Issue
 	    word := "Hello"
-	    return word // Issue
+	    return word 
         }()
 
 
 
 
-        go func() {
-            fmt.Println("Hello") // Non Issue
+        go func() { // Non Issue
+            fmt.Println("Hello")
         }()
 
 }
