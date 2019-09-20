@@ -1,0 +1,8 @@
+[
+  {
+   "Comment": "Values returned from defered functions should not be ignored.",
+   "Filename": "example.go",
+   "Line": 18,
+   "Snippet": "func main() {\n\n\tdefer doStuff() // Issue\n\tdefer sayStuff() // Non Issue\n}"
+  }
+ ]
