@@ -9,8 +9,14 @@ tenets:
       @review comment
       go.defer_stmt(depth = any):
         go.call_expr:
-          edge("calls"):
-            go.func_decl:
-              go.func_type:
-                go.field_list
-                go.field_list
+          any_of:
+            edge("calls"):
+              go.func_decl:
+                go.func_type:
+                  go.field_list
+                  go.field_list
+            edge("calls"):
+              go.func_lit:
+                go.func_type:
+                  go.field_list
+                  go.field_list
