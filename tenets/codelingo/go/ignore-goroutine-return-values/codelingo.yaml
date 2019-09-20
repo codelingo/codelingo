@@ -1,0 +1,22 @@
+tenets:
+  - name: dont-ignore-gofunc-returns
+    actions:
+      codelingo/review:
+        comment: Do not ignore values returned by goroutines.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.go_stmt(depth = any):
+        go.call_expr:
+          any_of:
+            go.func_lit:
+              go.func_type:
+                go.field_list
+                go.field_list
+            edge("calls"):
+              go.func_decl:
+                go.func_type:
+                  go.field_list
+                  go.field_list
+
