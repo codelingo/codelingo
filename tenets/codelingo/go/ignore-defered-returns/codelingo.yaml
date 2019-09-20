@@ -15,8 +15,7 @@ tenets:
                 go.func_type:
                   go.field_list
                   go.field_list
-            edge("calls"):
-              go.func_lit:
-                go.func_type:
-                  go.field_list
-                  go.field_list
+            go.func_lit:
+              go.func_type:
+                go.field_list
+                go.field_list
