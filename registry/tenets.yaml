@@ -149,6 +149,10 @@ codelingo:
         hasIssues: false
       unconvert:
         hasIssues: false
+      ignore-defered-returns:
+        hasIssues: false
+      ignore-goroutine-return-values:
+        hasIssues: false
     tags:
     - golang
     - go
