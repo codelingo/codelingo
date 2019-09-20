@@ -3,6 +3,12 @@
    "Comment": "Values returned from defered functions should not be ignored.",
    "Filename": "example.go",
    "Line": 18,
-   "Snippet": "func main() {\n\n\tdefer doStuff() // Issue\n\tdefer sayStuff() // Non Issue\n}"
+   "Snippet": "func main() {\n\n\tdefer doStuff() // Issue\n\tdefer sayStuff() // Non Issue\n"
+  },
+  {
+   "Comment": "Values returned from defered functions should not be ignored.",
+   "Filename": "example.go",
+   "Line": 25,
+   "Snippet": "\t}()\n\n\tdefer func() string { // Issue\n\t\treturn \"Hello\"\n\t}()\n}"
   }
  ]
