@@ -1,7 +1,0 @@
-description: Tenets tested in dev-lexicons
-version: 0.0.0
-tenets:
-- potential-nil-pointer
-tags:
-- golang
-- go
