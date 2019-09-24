@@ -14,8 +14,7 @@ tenets:
             go.field:
               go.names:
                 go.ident:
-                  name as fieldName
-                  regex(/^[A-Z]/, fieldName)
+                  private == "false"
       @review comment
       go.func_decl(depth = any):
         go.field_list(depth = any):
