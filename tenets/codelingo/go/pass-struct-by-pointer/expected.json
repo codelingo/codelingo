@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Passing a pointer to a struct with exported fields such as Cat is bad practice as it can result in multiple process reading and writing to the same memory.",
+   "Filename": "example.go",
+   "Line": 17,
+   "Snippet": "}\n\nfunc getCatName(c *Cat) {\n\tfmt.Println(c.Name) // Issue, accessing struct with exported field(s) by reference\n}\n\nfunc getCatAge(c Cat) { // Non Issue, passing struct by value"
+  },
+  {
+   "Comment": "Passing a pointer to a struct with exported fields such as Cat is bad practice as it can result in multiple process reading and writing to the same memory.",
+   "Filename": "example.go",
+   "Line": 33,
+   "Snippet": "}\n\nfunc (c *Cat) getName() { // Issue, accesing struct with exported field(s) by reference\n\tfmt.Pritnln(c.Name)\n}\n\nfunc (c Cat) getAge() { // Non Issue, passing struct by value"
+  }
+ ]
