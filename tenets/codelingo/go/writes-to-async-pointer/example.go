@@ -36,7 +36,7 @@ func main() {
 
 	go getNameFromPointer(t)
 
-	go setNameOnPointer(t)
+	go setNameOnPointer(t) // Issue
 
 	t2 := newThing("Thing")
 
@@ -52,7 +52,7 @@ func main() {
 		fmt.Println(t.name)
 	}(t2)
 
-	go func(t *thing) {
+	go func(t *thing) { // Issue
 		t.name = "car"
 	}(t)
 

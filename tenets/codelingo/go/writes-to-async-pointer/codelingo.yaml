@@ -12,26 +12,22 @@ tenets:
           go.call_expr:
             edge("calls"):
               go.func_decl:
-                go.func_type:
-                  go.field_list:
-                    go.field:
-                      go.names:
-                        go.ident:
-                          name as pointer
-                      go.star_expr
+                go.field(depth = any):
+                  go.names:
+                    go.ident:
+                      name as pointer
+                  go.star_expr
                 go.assign_stmt(depth = any):
                   go.lhs(depth = any):
                     go.ident(depth = any):
                       name == pointer
           go.call_expr(depth = any):
             go.func_lit:
-              go.func_type:
-                go.field_list:
-                  go.field:
-                    go.names:
-                      go.ident:
-                        name as pointer            
-                    go.star_expr
+              go.field(depth = any):
+                go.names:
+                  go.ident:
+                    name as pointer           
+                go.star_expr
               go.assign_stmt(depth = any):
                 go.lhs(depth = any):
                   go.ident(depth = any):
