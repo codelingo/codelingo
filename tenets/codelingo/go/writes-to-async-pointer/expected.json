@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Writing to a reference passed to an asynchronous function can lead to unexpected behaviour.",
+   "Filename": "example.go",
+   "Line": 55,
+   "Snippet": "\t}(t2)\n\n\tgo func(t *thing) {\n\t\tt.name = \"car\"\n\t}(t)\n\n\tgo func(t thing) {"
+  },
+  {
+   "Comment": "Writing to a reference passed to an asynchronous function can lead to unexpected behaviour.",
+   "Filename": "example.go",
+   "Line": 39,
+   "Snippet": "\tgo getNameFromPointer(t)\n\n\tgo setNameOnPointer(t)\n\n\tt2 := newThing(\"Thing\")"
+  }
+ ]
