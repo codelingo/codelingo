@@ -153,8 +153,6 @@ codelingo:
         hasIssues: false
       ignore-goroutine-return-values:
         hasIssues: false
-      pass-struct-by-pointer:
-        hasIssues: false
     tags:
     - golang
     - go
