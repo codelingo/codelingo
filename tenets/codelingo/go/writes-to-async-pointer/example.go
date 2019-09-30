@@ -20,6 +20,14 @@ func writeToPointer(t *thing) {
 	t.name = "car"
 }
 
+func (t *thing) readFromPointer() {
+	fmt.Println(t.name)
+}
+
+func (t *thing) writeToPointer(name string) {
+	t.name = name
+}
+
 // safe demonstrates what the tenet has no interest in, here we perform several
 // reads and writes, some of them on different threads, but all directly to an
 // instance of a 'thing' so there are no issues.
@@ -61,6 +69,11 @@ func unsafe() {
 		t.name = "car"
 	}(t)
 
+	t.readFromPointer()
+
+	t.writeToPointer("plane")
+
+	go t.writeToPointer("boat") // Issue
 }
 
 func main() {
