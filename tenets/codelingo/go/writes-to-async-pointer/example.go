@@ -8,55 +8,62 @@ type thing struct {
 	name string
 }
 
-func getNameFromPointer(t *thing) {
+func readFromPointer(t *thing) {
 	fmt.Println(t.name)
 }
 
-func getName(t thing) {
+func safeRead(t thing) {
 	fmt.Println(t.name)
 }
 
-func setNameOnPointer(t *thing) {
+func writeToPointer(t *thing) {
 	t.name = "car"
 }
 
-func newThingPointer(name string) *thing {
-	return &thing{name}
+// safe demonstrates what the tenet has no interest in, here we perform several
+// reads and writes, some of them on different threads, but all directly to an
+// instance of a 'thing' so there are no issues.
+func safe() {
+
+	t := thing{"Object"}
+
+	safeRead(t)
+
+	go safeRead(t)
+
+	go func(t thing) {
+		fmt.Println(t.name)
+	}(t)
+
+	go func(t thing) {
+		t.name = "bus"
+	}(t)
 }
 
-func newThing(name string) thing {
-	return thing{name}
-}
+// unsafe also performs several reads and writes, but here we are using a pointer
+// to a 'thing'. When this happens on a seperate thread to the calling context we
+// have the potential for unexpected bahviour.
+func unsafe() {
 
-func main() {
+	t := &thing{"Pointer"}
 
-	t := newThingPointer("Pointer")
+	readFromPointer(t)
 
-	getNameFromPointer(t)
+	go readFromPointer(t)
 
-	go getNameFromPointer(t)
-
-	go setNameOnPointer(t) // Issue
-
-	t2 := newThing("Thing")
-
-	getName(t2)
-
-	go getName(t2)
+	go writeToPointer(t) // Issue
 
 	go func(t *thing) {
 		fmt.Println(t.name)
 	}(t)
 
-	go func(t thing) {
-		fmt.Println(t.name)
-	}(t2)
-
 	go func(t *thing) { // Issue
 		t.name = "car"
 	}(t)
 
-	go func(t thing) {
-		t.name = "bus"
-	}(t2)
+}
+
+func main() {
+	safe()
+	unsafe()
 }
