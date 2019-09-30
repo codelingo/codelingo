@@ -8,15 +8,15 @@ type thing struct {
 	name string
 }
 
-func readFromPointer(t *thing) {
+func readVulnerableField(t *thing) {
 	fmt.Println(t.name)
 }
 
-func safeRead(t thing) {
+func readSafeField(t thing) {
 	fmt.Println(t.name)
 }
 
-func writeToPointer(t *thing) {
+func writeVulnerableField(t *thing) {
 	t.name = "car"
 }
 
@@ -35,9 +35,9 @@ func safe() {
 
 	t := thing{"Object"}
 
-	safeRead(t)
+	readSafeField(t)
 
-	go safeRead(t)
+	go readSafeField(t)
 
 	go func(t thing) {
 		fmt.Println(t.name)
@@ -55,11 +55,11 @@ func unsafe() {
 
 	t := &thing{"Pointer"}
 
-	readFromPointer(t)
+	readVulnerableField(t)
 
-	go readFromPointer(t)
+	go readVulnerableField(t)
 
-	go writeToPointer(t) // Issue
+	go writeVulnerableField(t) // Issue
 
 	go func(t *thing) {
 		fmt.Println(t.name)
