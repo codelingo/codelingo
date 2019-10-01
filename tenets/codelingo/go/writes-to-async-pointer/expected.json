@@ -1,14 +1,14 @@
 [
   {
-   "Comment": "Writing to a reference passed to an asynchronous function can lead to unexpected behaviour.",
+   "Comment": "Writing to a reference passed to an asynchronous function is dengerous when other reads and writes have been called from the same context.",
    "Filename": "example.go",
-   "Line": 54,
-   "Snippet": "\tgo readFromPointer(t)\n\n\tgo writeToPointer(t) // Issue\n\n\tgo func(t *thing) {"
+   "Line": 110,
+   "Snippet": "\n// Concurrent reads and writes to a field of a pointer to an instance of thing. Issue\nfunc concurrentPointerReadWrites() {\n\n\tt := \u0026thing{\"Pointer\"}\n\n\treadVulnerableField(t)\n\n\tgo readVulnerableField(t)\n\n\tgo writeVulnerableField(t)\n\n\tgo func(t *thing) {\n\t\tfmt.Println(t.name)\n\t}(t)\n\n\tgo func(t *thing) {\n\t\tt.name = \"car\"\n\t}(t)\n\n\tt.readFromPointer()\n\n\tt.writeToPointer(\"plane\")\n\n\tgo t.writeToPointer(\"boat\")\n}\n\nfunc main() {"
   },
   {
-   "Comment": "Writing to a reference passed to an asynchronous function can lead to unexpected behaviour.",
+   "Comment": "Writing to a reference passed to an asynchronous function is dengerous when other reads and writes have been called from the same context.",
    "Filename": "example.go",
-   "Line": 60,
-   "Snippet": "\t}(t)\n\n\tgo func(t *thing) { // Issue\n\t\tt.name = \"car\"\n\t}(t)\n\n}"
+   "Line": 96,
+   "Snippet": "\n// Concurrent writes to a field of a pointer to an instance of thing. Issue\nfunc concurrentPointerWrites() {\n\n\tt := \u0026thing{\"Pointer\"}\n\n\twriteVulnerableField(t)\n\n\tgo writeVulnerableField(t)\n\n\tgo func(t *thing) {\n\t\tt.name = \"bus\"\n\t}(t)\n}\n\n// Concurrent reads and writes to a field of a pointer to an instance of thing. Issue"
   }
  ]
