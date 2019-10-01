@@ -1,0 +1,16 @@
+tenets:
+  - name: naked-chan-access
+    actions:
+      codelingo/review:
+        comment: Reading from a channel without wrapping it in a select statement is unsafe. 
+    query: |
+      import codelingo/ast/go
+
+      go.func_decl(depth = any):
+        exclude:
+          go.select_stmt(depth = any):
+            include:
+              @review comment
+              go.unary_expr(depth = any):
+                op == "<-"
+
