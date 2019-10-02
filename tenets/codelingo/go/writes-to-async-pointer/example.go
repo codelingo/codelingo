@@ -29,8 +29,6 @@ func concurrentCopyReadWrites() {
 
 	t := thing{"Object"}
 
-	readSafeField(t)
-
 	go readSafeField(t)
 
 	go func(t thing) {
@@ -47,8 +45,6 @@ func concurrentCopyReads() {
 
 	t := thing{"Object"}
 
-	readSafeField(t)
-
 	go readSafeField(t)
 
 	go func(t thing) {
@@ -61,8 +57,6 @@ func concurrentCopyWrites() {
 
 	t := thing{"Object"}
 
-	writeSafeField(t)
-
 	go writeSafeField(t)
 
 	go func(t thing) {
@@ -74,8 +68,6 @@ func concurrentCopyWrites() {
 func concurrentPointerReads() {
 
 	t := &thing{"Pointer"}
-
-	readVulnerableField(t)
 
 	go readVulnerableField(t)
 
