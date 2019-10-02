@@ -24,14 +24,6 @@ func writeSafeField(t thing) {
 	t.name = "boat"
 }
 
-func (t *thing) readFromPointer() {
-	fmt.Println(t.name)
-}
-
-func (t *thing) writeToPointer(name string) {
-	t.name = name
-}
-
 // Concurrent read and writes to a field of a copy of an instance of thing. No Issue
 func concurrentCopyReadWrites() {
 
@@ -97,8 +89,6 @@ func concurrentPointerWrites() {
 
 	t := &thing{"Pointer"}
 
-	writeVulnerableField(t)
-
 	go writeVulnerableField(t)
 
 	go func(t *thing) {
@@ -110,8 +100,6 @@ func concurrentPointerWrites() {
 func concurrentPointerReadWrites() {
 
 	t := &thing{"Pointer"}
-
-	readVulnerableField(t)
 
 	go readVulnerableField(t)
 
@@ -125,11 +113,6 @@ func concurrentPointerReadWrites() {
 		t.name = "car"
 	}(t)
 
-	t.readFromPointer()
-
-	t.writeToPointer("plane")
-
-	go t.writeToPointer("boat")
 }
 
 func main() {
