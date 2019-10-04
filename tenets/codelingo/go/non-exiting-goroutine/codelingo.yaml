@@ -31,14 +31,21 @@ tenets:
                     exclude:
                       go.element:
                         exclude:
-                          # TODO: assert that the break statement has no other for loop of select parents as
-                          # well as switch parents. https://github.com/codelingo/codelingo/issues/457
-                          go.switch_stmt(depth = any):
-                            include:
-                              go.branch_stmt(depth = any):
-                                tok == "break"
-                                exclude:
-                                  go.ident
+                          any_of:
+                            go.for_stmt(depth = any):
+                              include:
+                                go.branch_stmt(depth = any):
+                                  tok == "break"
+                            go.select_stmt(depth = any):
+                              include:
+                                go.branch_stmt(depth = any):
+                                  tok == "break"
+                            go.switch_stmt(depth = any):
+                              include:
+                                go.branch_stmt(depth = any):
+                                  tok == "break"
+                                  exclude:
+                                    go.ident
 
             # Match all labeled for loops
             # TODO: use fragments to reduce code repetition between labeled and non-labeled sections
@@ -68,11 +75,18 @@ tenets:
                 exclude:
                   go.element:
                     exclude:
-                      # TODO: assert that the break statement has no other for loop of select parents as
-                      # well as switch parents. https://github.com/codelingo/codelingo/issues/457
-                      go.switch_stmt(depth = any):
-                        include:
-                          go.branch_stmt(depth = any):
-                            tok == "break"
-                            exclude:
-                              go.ident
+                      any_of:
+                        go.for_stmt(depth = any):
+                          include:
+                            go.branch_stmt(depth = any):
+                              tok == "break"
+                        go.select_stmt(depth = any):
+                          include:
+                            go.branch_stmt(depth = any):
+                              tok == "break"
+                        go.switch_stmt(depth = any):
+                          include:
+                            go.branch_stmt(depth = any):
+                              tok == "break"
+                              exclude:
+                                go.ident
