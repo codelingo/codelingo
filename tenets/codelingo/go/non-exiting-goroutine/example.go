@@ -2,20 +2,17 @@ package main
 
 func main() {
 	go func() {
-	l:
 		for { // ISSUE - labeled simple infinite loop
 		}
 	}()
 
 	go func() {
-	l:
 		for {
 			return
 		}
 	}()
 
 	go func() {
-	l:
 		for { // ISSUE - labeled loop with an out of scope return child
 			func() {
 				return
@@ -24,7 +21,6 @@ func main() {
 	}()
 
 	go func() {
-	l:
 		for {
 			break
 		}
@@ -62,6 +58,7 @@ func main() {
 			case 1:
 				break
 			}
+			continue l
 		}
 	}()
 
@@ -70,6 +67,57 @@ func main() {
 		for {
 			switch 1 {
 			case 1:
+				break l
+			}
+		}
+	}()
+
+	go func() { // ISSUE - labeled loop with inapplicable break statement
+	l:
+		for {
+			select {
+			case <-make(chan int):
+				break
+			}
+			continue l
+		}
+	}()
+
+	go func() {
+	l:
+		for {
+			select {
+			case <-make(chan int):
+				break l
+			}
+		}
+	}()
+
+	go func() { // ISSUE - labeled loop with inapplicable break statement
+	l:
+		for {
+			for {
+				break
+			}
+			continue l
+		}
+	}()
+
+	go func() { // ISSUE - labeled loop with inapplicable break statement
+	l:
+		for {
+		m:
+			for {
+				break m
+			}
+			continue l
+		}
+	}()
+
+	go func() {
+	l:
+		for {
+			for {
 				break l
 			}
 		}
