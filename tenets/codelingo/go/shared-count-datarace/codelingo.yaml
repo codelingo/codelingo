@@ -25,5 +25,3 @@ tenets:
                       go.field_list:
                         go.ident(depth = any):
                           name == countVar
-
-
