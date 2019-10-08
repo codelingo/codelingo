@@ -1,0 +1,14 @@
+tenets:
+  - name: non-directional-chan
+    actions:
+      codelingo/review:
+        comment: Returned channels or channel arguments should generally have a direction.
+    query: |
+      import codelingo/ast/go
+
+      go.func_type(depth = any):
+        go.field_list:
+          go.field:
+            @review comment
+            go.chan_type:
+              dir == 3

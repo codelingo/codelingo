@@ -135,6 +135,8 @@ codelingo:
         hasIssues: true
       non-exiting-goroutine:
         hasIssues: true
+      non-directional-chan:
+        hasIssues: true
       println-format-strings:
         hasIssues: false
       reallocated-slice:
