@@ -6,18 +6,33 @@ tenets:
     query: |
       import codelingo/ast/go
 
-      @review comment
-      go.for_stmt(depth = any):
-        go.binary_expr:
-          go.ident:
-            name as countName
-        go.go_stmt(depth = any):
-          go.call_expr:
-            go.func_lit:
-              exclude:
-                go.func_type:
-                  go.field_list:
-                    go.field
-              go.ident(depth = any):
-                name == countName
+      go.func_decl(depth = any):
+        any_of:
+          @review comment
+          go.for_stmt(depth = any):
+            go.binary_expr:
+              go.ident:
+                name as countName
+            go.go_stmt(depth = any):
+              go.call_expr:
+                go.func_lit:
+                  exclude:
+                    go.func_type:
+                      go.field_list:
+                        go.field
+                  go.ident(depth = any):
+                    name == countName
+          @review comment
+          go.range_stmt(depth = any):
+            go.ident:
+              name as countName
+            go.go_stmt(depth = any):
+              go.call_expr:
+                go.func_lit:
+                  exclude:
+                    go.func_type:
+                      go.field_list:
+                        go.field
+                  go.ident(depth = any):
+                    name == countName
 

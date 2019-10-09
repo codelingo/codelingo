@@ -21,4 +21,32 @@ func main() {
 			fmt.Println(i)
 		}(i)
 	}
+
+	slice := []int{0,1,2,3}
+
+	// Issue
+	for _, i := range slice {
+		go func() {
+			fmt.Println(i)
+		}()
+	}
+
+	// Issue
+	for j, i := range slice {
+		go func() {
+			fmt.Println(j)
+		}()
+	}
+
+	for _, i := range slice {
+		go func(i int) {
+			fmt.Println(i)
+		}(i)
+	}
+
+	for j, i := range slice {
+		go func(j int) {
+			fmt.Println(j)
+		}(j)
+	}
 }

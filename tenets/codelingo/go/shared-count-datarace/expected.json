@@ -4,5 +4,17 @@
    "Filename": "example.go",
    "Line": 12,
    "Snippet": "\t// value of i. However this may not always be the case so the goroutine should\n\t// be given a copy of I as an argument as in the second for loop.\n\tfor i := 0; i \u003c 5; i++  {\n\t\tgo func() {\n\t\t\tfmt.Println(i)\n\t\t}()\n\t}\n\n\t// Non Issue"
+  },
+  {
+   "Comment": "Goroutines created in for loops that use the iterator of the loop internally should instead use a copy made at the time of the goroutines creation by passing it as an argument.",
+   "Filename": "example.go",
+   "Line": 35,
+   "Snippet": "\n\t// Issue\n\tfor j, i := range slice {\n\t\tgo func() {\n\t\t\tfmt.Println(j)\n\t\t}()\n\t}\n\n\tfor _, i := range slice {"
+  },
+  {
+   "Comment": "Goroutines created in for loops that use the iterator of the loop internally should instead use a copy made at the time of the goroutines creation by passing it as an argument.",
+   "Filename": "example.go",
+   "Line": 28,
+   "Snippet": "\n\t// Issue\n\tfor _, i := range slice {\n\t\tgo func() {\n\t\t\tfmt.Println(i)\n\t\t}()\n\t}\n\n\t// Issue"
   }
  ]
