@@ -6,9 +6,11 @@ import (
 
 func main() {
 
-	// Issue - Each goroutine inside this for loop is intended to have a unique
-	// value of i. However this may not always be the case so the goroutine should
-	// be given a copy of I as an argument as in the second for loop.
+	// Issue - When a loop creates goroutines which needs to use the iterator of the
+	// loop the iterator should always be provided as an argument to the function.
+	// If this is not done, as in the below case, then we risk having an unexpected
+	// value of the iterator as the parent goroutine may have incremented its value
+	// already.
 	for i := 0; i < 5; i++  {
 		go func() {
 			fmt.Println(i)
