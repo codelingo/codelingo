@@ -38,15 +38,26 @@ func main() {
 		}()
 	}
 
+	// Non Issue
 	for _, i := range slice {
 		go func(i int) {
 			fmt.Println(i)
 		}(i)
 	}
 
+	// Non Issue
 	for j, i := range slice {
 		go func(j int) {
 			fmt.Println(j)
 		}(j)
+	}
+
+	size := 4
+
+	// Non Issue, the goroutines in this loop use the upper bound of the loop which doesn't change therefore there is no issue
+	for i := 0; i < size; i++ {
+		go func() {
+			fmt.Println(size)
+		}()
 	}
 }

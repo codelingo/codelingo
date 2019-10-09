@@ -13,6 +13,9 @@ tenets:
             go.binary_expr:
               go.ident:
                 name as countName
+            go.inc_dec_stmt:
+              go.ident:
+                name == countName
             go.go_stmt(depth = any):
               go.call_expr:
                 go.func_lit:
