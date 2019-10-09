@@ -1,27 +1,23 @@
 tenets:
-  - name: find-funcs
+  - name: shared-count-datarace
     actions:
       codelingo/review:
-        comment: This is a function, but you probably already knew that.
+        comment: Goroutines created in for loops that use the iterator of the loop internally should instead use a copy made at the time of the goroutines creation by passing it as an argument.
     query: |
       import codelingo/ast/go
 
       @review comment
       go.for_stmt(depth = any):
-        go.assign_stmt:
-          go.lhs:
-            go.ident:
-              name as countVar
         go.binary_expr:
           go.ident:
-            name == countVar
+            name as countName
         go.go_stmt(depth = any):
           go.call_expr:
             go.func_lit:
-              go.go_stmt(depth = any):
-                go.call_expr:
-                  go.func_lit:
-                    go.func_type:
-                      go.field_list:
-                        go.ident(depth = any):
-                          name == countVar
+              exclude:
+                go.func_type:
+                  go.field_list:
+                    go.field
+              go.ident(depth = any):
+                name == countName
+
