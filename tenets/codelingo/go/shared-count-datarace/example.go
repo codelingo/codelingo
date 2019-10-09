@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 func main() {
@@ -62,4 +63,16 @@ func main() {
 			fmt.Println(size)
 		}()
 	}
+
+	// Non Issue, the use of a WaitGroup here means there is no risk of a race condition
+	wg := sync.WaitGroup{}
+	for i := 0; i < 5; i++ {
+		i := i
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			fmt.Prinltn(i)
+		}()
+	}
+	wg.Wait()
 }

@@ -7,6 +7,13 @@ tenets:
       import codelingo/ast/go
 
       go.func_decl(depth = any):
+        go.assign_stmt(depth = any):
+          go.lhs:
+            go.ident:
+              name as wgName
+          go.rhs:
+            go.ident(depth = any):
+              name == "WaitGroup"
         any_of:
           @review comment
           go.for_stmt(depth = any):
@@ -16,6 +23,20 @@ tenets:
             go.inc_dec_stmt:
               go.ident:
                 name == countName
+            exclude:
+              go.assign_stmt(depth = any):
+                go.lhs:
+                  go.ident:
+                    name == "i"
+                go.rhs:
+                  go.ident:
+                    name == "i"
+              go.call_expr(depth = any):
+                go.selector_expr:
+                  go.ident:
+                    name == wgName
+                  go.ident:
+                    name == "Add"
             go.go_stmt(depth = any):
               go.call_expr:
                 go.func_lit:
