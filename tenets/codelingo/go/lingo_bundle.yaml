@@ -26,6 +26,7 @@ tenets:
 - unused-private-functions
 - ignore-goroutine-return-values
 - ignore-defered-returns
+- shared-count-datarace
 tags:
 - golang
 - go
