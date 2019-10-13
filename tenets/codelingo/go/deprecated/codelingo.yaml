@@ -2,7 +2,7 @@ tenets:
   - name: deprecated
     actions:
       codelingo/review:
-        comment: This is a call to a deprecated function.
+        comment: This is a call to a [deprecated function](https://rakyll.org/deprecated/).
     query: |
       import codelingo/ast/go
 
