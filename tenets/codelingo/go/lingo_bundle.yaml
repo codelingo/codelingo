@@ -11,6 +11,7 @@ tenets:
 - init
 - marshalling
 - nil-only-functions
+- non-exiting-goroutine
 - println-format-strings
 - reallocated-slice
 - remove-break-statement

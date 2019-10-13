@@ -133,6 +133,8 @@ codelingo:
         hasIssues: false
       nil-only-functions:
         hasIssues: true
+      non-exiting-goroutine:
+        hasIssues: true
       println-format-strings:
         hasIssues: false
       reallocated-slice:
