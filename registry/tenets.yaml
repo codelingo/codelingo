@@ -153,6 +153,8 @@ codelingo:
         hasIssues: false
       ignore-goroutine-return-values:
         hasIssues: false
+      shared-count-datarace:
+        hasIssues: false
     tags:
     - golang
     - go
