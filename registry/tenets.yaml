@@ -152,9 +152,9 @@ codelingo:
       unconvert:
         hasIssues: false
       ignore-defered-returns:
-        hasIssues: false
+        hasIssues: true
       ignore-goroutine-return-values:
-        hasIssues: false
+        hasIssues: true
       shared-count-datarace:
         hasIssues: false
     tags:
