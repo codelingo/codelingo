@@ -12,6 +12,7 @@ tenets:
 - marshalling
 - nil-only-functions
 - non-exiting-goroutine
+- pointer-leaves-method
 - println-format-strings
 - reallocated-slice
 - remove-break-statement

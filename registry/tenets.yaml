@@ -135,6 +135,8 @@ codelingo:
         hasIssues: true
       non-exiting-goroutine:
         hasIssues: true
+      pointer-leaves-method:
+        hasIssues: false
       println-format-strings:
         hasIssues: false
       reallocated-slice:
