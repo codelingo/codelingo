@@ -25,8 +25,6 @@ tenets:
 - unnecessary-parentheses
 - unsafe-go-routine-variables
 - unused-private-functions
-- ignore-goroutine-return-values
-- ignore-defered-returns
 - shared-count-datarace
 tags:
 - golang
