@@ -135,6 +135,8 @@ codelingo:
         hasIssues: true
       non-exiting-goroutine:
         hasIssues: true
+      pointer-leaves-method:
+        hasIssues: false
       println-format-strings:
         hasIssues: false
       reallocated-slice:
@@ -152,9 +154,9 @@ codelingo:
       unconvert:
         hasIssues: false
       ignore-defered-returns:
-        hasIssues: false
+        hasIssues: true
       ignore-goroutine-return-values:
-        hasIssues: false
+        hasIssues: true
       shared-count-datarace:
         hasIssues: false
       only-use-must-in-init:

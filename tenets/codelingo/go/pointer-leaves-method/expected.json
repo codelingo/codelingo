@@ -1,0 +1,15 @@
+[
+  {
+   "Comment": "The receiver pointer is returned from this method. Make a copy instead.",
+   "Filename": "main.go",
+   "Line": 29,
+   "Snippet": "\t\tid:   1,\n\t\tname: *b.name,\n\t\tbar:  b, // ISSUE\n\t}\n\treturn f"
+  },
+  {
+   "Comment": "The receiver pointer is returned from this method. Make a copy instead.",
+   "Filename": "race/race.go",
+   "Line": 65,
+   "Snippet": "func (n *NumHolder) NewUnsafeFirster() Firster {\n\tf := \u0026NumFirster{\n\t\tholder: n, // Issue\n\t}\n\treturn f"
+  }
+ ]
+
