@@ -26,6 +26,7 @@ tenets:
 - unsafe-go-routine-variables
 - unused-private-functions
 - shared-count-datarace
+- only-use-must-in-init
 tags:
 - golang
 - go
