@@ -161,6 +161,8 @@ codelingo:
         hasIssues: false
       only-use-must-in-init:
         hasIssues: false
+      async-writes-to-pointer:
+        hasIssues: true
     tags:
     - golang
     - go
