@@ -16,7 +16,7 @@ func foo() {
 
 	var green, _ = regexp.Compile("a")
 
-	yelllow, _ := regexp.Compile("a")
+	yellow, _ := regexp.Compile("a")
 
 	red := regexp.MustCompile("a") // Issue
 
@@ -26,7 +26,7 @@ func foo() {
 func bar() {
 	var green, _ = regexp.Compile("a")
 
-	yelllow, _ := regexp.Compile("a")
+	yellow, _ := regexp.Compile("a")
 
 	red := regexp.MustCompile("a") // Issue
 
@@ -36,7 +36,7 @@ func bar() {
 func init() {
 	var green, _ = regexp.Compile("a")
 
-	yelllow, _ := regexp.Compile("a")
+	yellow, _ := regexp.Compile("a")
 
 	red := regexp.MustCompile("a")
 

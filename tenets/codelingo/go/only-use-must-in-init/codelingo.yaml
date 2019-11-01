@@ -3,13 +3,13 @@ funcs:
     type: asserter
     body: |
       function (name) {
-        return !(name == "init")
+        return name !== "init"
       }
 tenets:
   - name: only-use-must-in-init
     actions:
       codelingo/review:
-        comment: Funcitons that begin with Must should only be used in init().
+        comment: Functons prefixed with Must generally panic instead of returning errors. Only use in globals or init functions.
     query: |
       import codelingo/ast/go
 
