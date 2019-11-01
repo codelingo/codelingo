@@ -27,6 +27,7 @@ tenets:
 - ignore-goroutine-return-values
 - ignore-defered-returns
 - shared-count-datarace
+- only-use-must-in-init
 tags:
 - golang
 - go

@@ -157,6 +157,8 @@ codelingo:
         hasIssues: false
       shared-count-datarace:
         hasIssues: false
+      only-use-must-in-init:
+        hasIssues: false
     tags:
     - golang
     - go

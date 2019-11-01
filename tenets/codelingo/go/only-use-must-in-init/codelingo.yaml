@@ -1,0 +1,27 @@
+funcs:
+  - name: isNotInit
+    type: asserter
+    body: |
+      function (name) {
+        return !(name == "init")
+      }
+tenets:
+  - name: only-use-must-in-init
+    actions:
+      codelingo/review:
+        comment: Funcitons that begin with Must should only be used in init().
+    query: |
+      import codelingo/ast/go
+
+      go.func_decl(depth = any):
+        go.ident:
+          name as func
+          isNotInit(func)
+        @review comment
+        go.assign_stmt(depth = any):
+          go.rhs:
+            go.call_expr:
+              go.selector_expr:
+                go.ident:
+                  name as funcCall
+                  regex(/^Must[A-Z]/, funcCall)
