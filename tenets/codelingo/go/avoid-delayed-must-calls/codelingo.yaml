@@ -3,13 +3,13 @@ funcs:
     type: asserter
     body: |
       function (name) {
-        return name !== "init"
+        return name !== "init" && name !== "main"
       }
 tenets:
-  - name: only-use-must-in-init
+  - name: avoid-delayed-must-calls
     actions:
       codelingo/review:
-        comment: Functons prefixed with Must generally panic instead of returning errors. Only use in globals or init functions.
+        comment: Functons prefixed with Must generally panic instead of returning errors. Only use in globals or init/main functions.
     query: |
       import codelingo/ast/go
 
@@ -20,8 +20,8 @@ tenets:
         @review comment
         go.assign_stmt(depth = any):
           go.rhs:
-            go.call_expr:
-              go.selector_expr:
+            go.call_expr(depth = any):
+              go.selector_expr(depth = any):
                 go.ident:
                   name as funcCall
                   regex(/^Must[A-Z]/, funcCall)
