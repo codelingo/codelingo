@@ -22,6 +22,7 @@ tenets:
 - tested
 - ticker-in-for-select
 - todo
+- unchecked-type-assertion
 - unconvert
 - unnecessary-parentheses
 - unsafe-go-routine-variables
