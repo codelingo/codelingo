@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Returned channels or channel arguments should generally have a direction.",
+   "Filename": "example.go",
+   "Line": 11,
+   "Snippet": "}\n\nfunc f(c chan int) {} // ISSUE\n\nfunc g(c \u003c-chan int) {}"
+  },
+  {
+   "Comment": "Returned channels or channel arguments should generally have a direction.",
+   "Filename": "example.go",
+   "Line": 17,
+   "Snippet": "func h(c chan\u003c- int) {}\n\nfunc i() chan int { // ISSUE\n\treturn nil\n}"
+  }
+ ]

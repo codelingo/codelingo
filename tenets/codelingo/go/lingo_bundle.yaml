@@ -11,6 +11,7 @@ tenets:
 - init
 - marshalling
 - nil-only-functions
+- non-directional-chan
 - non-exiting-goroutine
 - pointer-leaves-method
 - println-format-strings

@@ -133,6 +133,8 @@ codelingo:
         hasIssues: false
       nil-only-functions:
         hasIssues: true
+      non-directional-chan:
+        hasIssues: true
       non-exiting-goroutine:
         hasIssues: true
       pointer-leaves-method:
