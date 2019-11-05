@@ -1,0 +1,58 @@
+tenets:
+  - name: writes-to-async-pointer
+    actions:
+      codelingo/review:
+        comment: Writing to a reference passed to an asynchronous function is dengerous when other reads and writes have been called from the same context.
+    query: |
+      import codelingo/ast/go
+
+      @review comment
+      go.func_decl(depth = any):
+        go.go_stmt(depth = any):
+          any_of:
+            go.call_expr:
+              edge("calls"):
+                go.func_decl:
+                  go.field(depth = any):
+                    go.names:
+                      go.ident:
+                        name as pointer
+                    go.star_expr
+                  go.assign_stmt(depth = any):
+                    go.lhs(depth = any):
+                      go.ident(depth = any):
+                        name == pointer
+            go.call_expr(depth = any):
+              go.func_lit:
+                go.field(depth = any):
+                  go.names:
+                    go.ident:
+                      name as pointer           
+                  go.star_expr
+                go.assign_stmt(depth = any):
+                  go.lhs(depth = any):
+                    go.ident(depth = any):
+                      name == pointer
+        go.go_stmt(depth = any):
+          any_of:
+            go.call_expr:
+              edge("calls"):
+                go.func_decl:
+                  go.field(depth = any):
+                    go.names:
+                      go.ident:
+                        name == pointer
+                    go.star_expr
+                  go.assign_stmt(depth = any):
+                    go.ident(depth = any):
+                      name == pointer
+            go.call_expr(depth = any):
+              go.func_lit:
+                go.field(depth = any):
+                  go.names:
+                    go.ident:
+                      name == pointer           
+                  go.star_expr
+                go.assign_stmt(depth = any):
+                  go.ident(depth = any):
+                    name == pointer

@@ -1,0 +1,14 @@
+[
+  {
+   "Comment": "Funcitons that begin with Must should only be used in init().",
+   "Filename": "example.go",
+   "Line": 21,
+   "Snippet": "\tyelllow, _ := regexp.Compile(\"a\")\n\n\tred := regexp.MustCompile(\"a\") // Issue\n\n\tfmt.Println(green + yellow + red)"
+  },
+  {
+   "Comment": "Funcitons that begin with Must should only be used in init().",
+   "Filename": "example.go",
+   "Line": 31,
+   "Snippet": "\tyelllow, _ := regexp.Compile(\"a\")\n\n\tred := regexp.MustCompile(\"a\") // Issue\n\n\tfmt.Println(green + yellow + red)"
+  }
+ ]
