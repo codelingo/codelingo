@@ -10,7 +10,7 @@ func main() {
 	bar()
 
 	red := regexp.MustCompile("a")
-	fmt.Printf(red.String())
+	fmt.Println(red.String())
 }
 
 func foo() {
@@ -35,6 +35,17 @@ func bar() {
 
 	if indigo == true {
 		fmt.Printf("%s %s %s \n", green.String(), yellow.String(), red.String())
+	}
+}
+
+func baz() {
+	matched := regexp.MustCompile("a").MatchString("b") // Issue
+	if matched {
+		fmt.Println(matched)
+	}
+
+	if regexp.MustCompile("a").MatchString("c") { // Issue
+		fmt.Println(matched)
 	}
 }
 
