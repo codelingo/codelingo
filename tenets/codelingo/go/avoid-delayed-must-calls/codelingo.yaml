@@ -1,5 +1,5 @@
 funcs:
-  - name: isNotInit
+  - name: isNotValidFunc
     type: asserter
     body: |
       function (name) {
@@ -16,12 +16,10 @@ tenets:
       go.func_decl(depth = any):
         go.ident:
           name as func
-          isNotInit(func)
+          isNotValidFunc(func)
         @review comment
-        go.assign_stmt(depth = any):
-          go.rhs:
-            go.call_expr(depth = any):
-              go.selector_expr(depth = any):
-                go.ident:
-                  name as funcCall
-                  regex(/^Must[A-Z]/, funcCall)
+        go.call_expr(depth = any):
+          go.selector_expr:
+            go.ident:
+              name as funcCall
+              regex(/^Must([A-Z]|$)/, funcCall)

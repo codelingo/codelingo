@@ -10,7 +10,7 @@ func main() {
 	bar()
 
 	red := regexp.MustCompile("a")
-	fmt.Println(red.String())
+	fmt.Printf(red.String())
 }
 
 func foo() {
@@ -21,7 +21,7 @@ func foo() {
 
 	red := regexp.MustCompile("a") // Issue
 
-	fmt.Println("%s %s %S \n", green.String(), yellow.String(), red.String())
+	fmt.Printf("%s %s %s \n", green.String(), yellow.String(), red.String())
 }
 
 func bar() {
@@ -33,7 +33,9 @@ func bar() {
 
 	indigo := regexp.MustCompile("a").Match([]byte(`seafood`)) // Issue
 
-	fmt.Println("%s %s %s %s \n", green.String(), yellow.String(), red.String(), indigo)
+	if indigo == true {
+		fmt.Printf("%s %s %s \n", green.String(), yellow.String(), red.String())
+	}
 }
 
 func init() {
@@ -43,5 +45,5 @@ func init() {
 
 	red := regexp.MustCompile("a") // Acceptable
 
-	fmt.Println(green.String() + yellow.String() + red.String())
+	fmt.Printf(green.String() + yellow.String() + red.String())
 }
