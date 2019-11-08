@@ -4,6 +4,7 @@ tenets:
 - avoid-delayed-must-calls
 - bool-param
 - break-select-in-for
+- default-in-type-switch
 - deprecated
 - empty-slice
 - global-var

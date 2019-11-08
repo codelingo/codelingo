@@ -121,6 +121,8 @@ codelingo:
         hasIssues: false
       deprecated:
         hasIssues: false
+      default-in-type-switch:
+        hasIssues: false
       empty-slice:
         hasIssues: false
       global-var:
