@@ -169,6 +169,8 @@ codelingo:
         hasIssues: false
       async-writes-to-pointer:
         hasIssues: true
+      insecure-http-connection:
+        hasIssues: false
     tags:
     - golang
     - go
