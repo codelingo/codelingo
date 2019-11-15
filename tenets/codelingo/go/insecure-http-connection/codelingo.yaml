@@ -40,3 +40,19 @@ tenets:
                         name == "InsecureSkipVerify"
                       go.ident:
                         name == "true"
+          go.func_decl(depth = any):
+            go.assign_stmt(depth = any):
+              go.lhs:
+                go.ident:
+                  name as var
+            @review comment
+            go.assign_stmt(depth = any):
+              go.lhs:
+                go.selector_expr:
+                  go.ident:
+                    name == var
+                  go.ident:
+                    name == "InsecureSkipVerify"
+              go.rhs:
+                go.ident:
+                  name == "true"

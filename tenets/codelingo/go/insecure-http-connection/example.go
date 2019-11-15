@@ -21,7 +21,6 @@ func (zeroSource) Read(b []byte) (n int, err error) {
 func main() {
 
 	serverOne := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
-
 	serverOne.TLS = &tls.Config{
 		Rand: zeroSource{},
 	}
@@ -30,7 +29,6 @@ func main() {
 	defer serverOne.Close()
 
 	serverTwo := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
-
 	serverTwo.TLS = &tls.Config{ // Issue
 		Rand: zeroSource{},
 		InsecureSkipVerify: true,
@@ -38,8 +36,6 @@ func main() {
 
 	serverTwo.StartTLS()
 	defer serverTwo.Close()
-
-
 
 	w := os.Stdout
 
@@ -74,5 +70,6 @@ func main() {
 
 	resp.Body.Close()
 
-
+	foo := &tls.Config{}
+	foo.InsecureSkipVerify = true // Issue
 }

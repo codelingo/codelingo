@@ -2,13 +2,19 @@
   {
    "Comment": "Skipping verification exposes the connection to man-in-the-middle attacks and should never be used in production code.",
    "Filename": "example.go",
-   "Line": 63,
+   "Line": 59,
    "Snippet": "\tclientTwo := http.Client{\n\t\tTransport: \u0026http.Transport{\n\t\t\tTLSClientConfig: \u0026tls.Config{ // Issue\n\t\t\t\tKeyLogWriter: w,\n\t\t\t\tRand: zeroSource{},\n\t\t\t\tInsecureSkipVerify: true,\n\t\t\t},\n\t\t},\n\t}"
   },
   {
    "Comment": "Skipping verification exposes the connection to man-in-the-middle attacks and should never be used in production code.",
    "Filename": "example.go",
-   "Line": 34,
-   "Snippet": "\tserverTwo := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))\n\n\tserverTwo.TLS = \u0026tls.Config{ // Issue\n\t\tRand: zeroSource{},\n\t\tInsecureSkipVerify: true,\n\t}\n\n\tserverTwo.StartTLS()"
+   "Line": 32,
+   "Snippet": "\n\tserverTwo := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))\n\tserverTwo.TLS = \u0026tls.Config{ // Issue\n\t\tRand: zeroSource{},\n\t\tInsecureSkipVerify: true,\n\t}\n\n\tserverTwo.StartTLS()"
+  },
+  {
+   "Comment": "Skipping verification exposes the connection to man-in-the-middle attacks and should never be used in production code.",
+   "Filename": "example.go",
+   "Line": 74,
+   "Snippet": "\n\tfoo := \u0026tls.Config{}\n\tfoo.InsecureSkipVerify = true // Issue\n}"
   }
  ]
