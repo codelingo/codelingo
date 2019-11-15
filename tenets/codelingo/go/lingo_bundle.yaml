@@ -30,6 +30,7 @@ tenets:
 - unnecessary-parentheses
 - unsafe-go-routine-variables
 - unused-private-functions
+- insecure-http-connection
 tags:
 - golang
 - go
