@@ -49,7 +49,7 @@ func main() {
 	}
 	resp, err := clientOne.Get(serverOne.URL)
 	if err != nil {
-		log.Fatalf("Faile to get url: %v", err)
+		log.Fatalf("Failed to get url: %v", err)
 	}
 
 	resp.Body.Close()
@@ -65,7 +65,7 @@ func main() {
 	}
 	resp, err = clientTwo.Get(serverTwo.URL)
 	if err != nil {
-		log.Fatalf("Faile to get url: %v", err)
+		log.Fatalf("Failed to get url: %v", err)
 	}
 
 	resp.Body.Close()

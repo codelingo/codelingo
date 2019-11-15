@@ -2,7 +2,7 @@ tenets:
   - name: insecure-http-connection
     actions:
       codelingo/review:
-        comment: Skipping verification exposes the connection to man-in-the-middle attacks and should never be used in production code.
+        comment: Skipping verification exposes the connection to man-in-the-middle attacks. This should only be used for testing.
     query: |
       import codelingo/ast/go
 
