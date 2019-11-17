@@ -1,0 +1,8 @@
+[
+    {
+     "Comment": "Error was not checked before reassignment",
+     "Filename": "example.go",
+     "Line": 6,
+     "Snippet": "\nfunc main() {\n\tfile, err := os.Open("test.txt"),\n\tfile, err = os.Open("test.txt")"
+    }
+   ]

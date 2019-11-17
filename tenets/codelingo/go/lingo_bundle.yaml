@@ -18,6 +18,7 @@ tenets:
 - pointer-leaves-method
 - println-format-strings
 - reallocated-slice
+- reassigned-error
 - remove-break-statement
 - remove-empty-suite-functions
 - shadowed-variable

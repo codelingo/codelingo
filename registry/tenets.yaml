@@ -145,6 +145,8 @@ codelingo:
         hasIssues: false
       reallocated-slice:
         hasIssues: false
+      reassigned-error:
+        hasIssues: false
       remove-empty-suite-functions:
         hasIssues: false
       shadowed-variable:

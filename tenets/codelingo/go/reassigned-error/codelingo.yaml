@@ -1,0 +1,41 @@
+funcs:
+- name: compareFunc
+  type: asserter
+  body: |
+    function (a, b) {
+      return a < b;
+    }
+- name: threeComparison
+  type: asserter
+  body: |
+    function (a, b, c) {
+      return (a < b) && (a > c);
+    }
+tenets:
+- name: error-reassign
+  actions:
+    codelingo/review:
+      comment: Error was not checked before reassignment
+  query: |
+    import codelingo/ast/go
+    go.block_stmt(depth = any):
+      go.list:
+        @review comment
+        go.assign_stmt:
+          sibling_order as so1
+          go.lhs:
+            go.ident:
+              name == "err"
+        go.assign_stmt:
+          sibling_order as so2
+          compareFunc(so1, so2)
+          go.lhs:
+            go.ident:
+              name == "err"
+        exclude:
+          go.if_stmt:
+            sibling_order as so3 
+            threeComparison(so3, so2, so1)
+            go.binary_expr:
+              go.ident:
+                name == "err"
