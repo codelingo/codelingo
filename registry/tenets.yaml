@@ -147,6 +147,8 @@ codelingo:
         hasIssues: false
       remove-empty-suite-functions:
         hasIssues: false
+      shadowed-variable:
+        hasIssues: false
       sprintf:
         hasIssues: true
       tested:

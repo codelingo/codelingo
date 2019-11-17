@@ -20,6 +20,7 @@ tenets:
 - reallocated-slice
 - remove-break-statement
 - remove-empty-suite-functions
+- shadowed-variable
 - shared-count-datarace
 - sprintf
 - tested
