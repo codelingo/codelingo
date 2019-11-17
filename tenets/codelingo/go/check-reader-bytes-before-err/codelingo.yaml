@@ -1,0 +1,53 @@
+funcs:
+  - name: compareFunc
+    type: asserter
+    body: |
+      function (a, b) {
+        return a < b;
+      }
+  - name: threeComparison
+    type : asserter
+    body: |
+      function (a, b, c){
+        return (a < b) && (a > c);
+      }
+tenets:
+  - name: check-reader-bytes-before-err
+    actions:
+      codelingo/review:
+        comment: Check io.Reader bytes read (and process) before checking err
+    query: |
+      import codelingo/ast/go
+
+      go.block_stmt(depth = any):
+        go.list:
+          go.assign_stmt:
+            sibling_order as so1
+            go.lhs:
+              go.ident:
+                name == "err"
+            go.rhs:
+              go.call_expr:
+                go.selector_expr:
+                  go.ident:
+                    name == "Read"
+                go.args:
+                  go.ident:
+                    name as x
+          @review comment
+          go.if_stmt:
+            sibling_order as so2
+            compareFunc(so1, so2)
+            go.binary_expr:
+              go.ident:
+                name == "err"
+          exclude:
+            go.expr_stmt:
+              sibling_order as so3
+              threeComparison(so3, so2, so1)
+              go.call_expr:
+                go.args: 
+                  go.call_expr:
+                    go.args:
+                      go.ident:
+                        name == x

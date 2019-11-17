@@ -1,0 +1,8 @@
+[
+    {
+     "Comment": "Check io.Reader bytes read (and process) before checking err",
+     "Filename": "example.go",
+     "Line": 24,
+     "Snippet": "\n\tn, err = file.Read(buff)\n\tif err != nil { // Issue\n\t\tpanic(err)\n\t}\n\n\tfmt.Println(\"read\", n, \"data:\", string(buff))"
+    }
+   ]

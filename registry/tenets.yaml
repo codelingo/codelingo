@@ -119,6 +119,8 @@ codelingo:
         hasIssues: false
       break-select-in-for:
         hasIssues: false
+      check-reader-bytes-before-err:
+        hasIssues: false
       deprecated:
         hasIssues: false
       default-in-type-switch:
