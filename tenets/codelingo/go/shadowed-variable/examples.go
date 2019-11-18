@@ -2,15 +2,34 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
 	foo()
 	bar()
+	baz()
+}
+
+func baz() {
+	file, err := os.Open("test.txt")
+	if err != nil {
+		return 
+	}
+	defer file.Close()
+
+	fileList := []string{"test1.txt"}
+	for _, f:= range fileList {
+		fileN, err := os.Open(f) // Acceptable
+		if err != nil {
+			return 
+		}
+		defer fileN.Close()
+	}
 }
 
 func foo() {
-	x := 1
+	x := 1	// Acceptable
 	fmt.Println(x)
 	{
 		x = 5  // Acceptable
@@ -24,9 +43,10 @@ func foo() {
 func bar() { //nested test
 	x := "test"
 	{
-		if x == "test" {
+		if true {
 			x := "newVariable" // Issue
 			fmt.Println(x)
 		}
 	}
+	fmt.Println(x)
 }
