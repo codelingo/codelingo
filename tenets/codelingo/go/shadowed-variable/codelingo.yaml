@@ -24,3 +24,4 @@ tenets:
                         go.ident:
                           name == x
                           name != "err"
+                          name != "_"
