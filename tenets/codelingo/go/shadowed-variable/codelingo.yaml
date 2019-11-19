@@ -23,3 +23,5 @@ tenets:
                         @review comment
                         go.ident:
                           name == x
+                          name != "err"
+                          name != "_"
