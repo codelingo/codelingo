@@ -36,6 +36,14 @@ tenets:
           go.if_stmt:
             sibling_order as so3 
             threeComparison(so3, so2, so1)
-            go.binary_expr:
+            go.binary_expr(depth = any):
               go.ident:
                 name == "err"
+        exclude:
+          go.expr_stmt:
+            sibling_order as so4
+            threeComparison(so4, so2, so1)
+            go.call_expr:
+              go.args:
+                go.ident:
+                  name == "err"
