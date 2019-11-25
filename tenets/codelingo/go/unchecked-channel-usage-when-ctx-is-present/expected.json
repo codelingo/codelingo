@@ -1,0 +1,8 @@
+[
+    {
+     "Comment": "Any channel operations should be guarded by ctx.Done() as the function takes a context in as a parameter",
+     "Filename": "example.go",
+     "Line": 25,
+     "Snippet": "\tgo func() {\n\t\tfor i := 0; i \u003c 5; i++ {\n\t\t\tc1 \u003c- \"message1\" // Issue\n\t\t}\n\t\tclose(c1)"
+    }
+   ]

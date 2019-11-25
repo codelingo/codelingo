@@ -161,6 +161,8 @@ codelingo:
         hasIssues: false
       todo:
         hasIssues: false
+      unchecked-channel-usage-when-ctx-is-present:
+        hasIssues: false
       unchecked-type-assertion:
         hasIssues: false
       unconvert:

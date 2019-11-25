@@ -1,0 +1,39 @@
+tenets:
+  - name: unchecked-channel-usage-when-ctx-is-present
+    actions:
+      codelingo/review:
+        comment: Any channel operations should be guarded by {{x}}.Done() as the function takes a context in as a parameter
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        go.decls: 
+          go.func_decl:
+            go.func_type:
+              go.field_list:
+                go.field:
+                  go.names:
+                    go.ident:
+                      name as x
+                  go.selector_expr:
+                    go.ident:
+                      name == "context"
+                    go.ident:
+                      name == "Context"
+            go.block_stmt(depth = any):
+              go.list:
+                go.go_stmt:
+                  go.call_expr:
+                    go.send_stmt(depth = any):
+                      @review comment
+                      go.ident:
+                        type == "chan string"
+                  exclude:
+                    go.expr_stmt(depth = any):
+                      go.unary_expr:
+                        go.call_expr:
+                          go.selector_expr:
+                            go.ident:
+                              name == x
+                            go.ident:
+                              name == "Done"

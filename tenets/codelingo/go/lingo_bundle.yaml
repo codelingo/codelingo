@@ -28,6 +28,7 @@ tenets:
 - tested
 - ticker-in-for-select
 - todo
+- unchecked-channel-usage-when-ctx-is-present
 - unchecked-type-assertion
 - unconvert
 - unnecessary-parentheses
