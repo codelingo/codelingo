@@ -1,0 +1,82 @@
+funcs:
+  - name: compareFunc
+    type: asserter
+    body: |
+      function (a, b) {
+        return a < b;
+      }
+  - name: threeComparison
+    type : asserter
+    body: |
+      function (a, b, c){
+        return (a < b) && (b < c);
+      }
+tenets:
+  - name: mutex-locking
+    actions:
+      codelingo/review:
+        comment: mutex was locked or unlocked prior to the variable being changed
+    query: |
+      import codelingo/ast/go
+
+      go.file(depth = any):
+        go.decls(depth = any):
+          go.func_decl:
+            go.field_list:
+              go.field:
+                go.names:
+                  go.ident:
+                    name as structName
+                go.star_expr:
+                  go.ident:
+                    name as fullStructName
+            go.block_stmt:
+              go.list:
+                go.expr_stmt:
+                  sibling_order as so1
+                  go.call_expr:
+                    go.selector_expr:
+                      go.selector_expr:
+                        go.ident:
+                          name == structName
+                        go.ident:
+                          name == "mu"
+                      go.ident:
+                        name == "Lock"
+                go.expr_stmt:
+                  sibling_order as so2
+                  go.call_expr:
+                    go.selector_expr:
+                      go.selector_expr:
+                        go.ident:
+                          name == structName
+                        go.ident:
+                          name == "mu"
+                      go.ident:
+                        name == "Unlock"
+              any_of:          
+                @review comment     
+                go.inc_dec_stmt(depth = any):
+                  sibling_order as so3
+                  threeComparison(so1, so2, so3)
+                  go.selector_expr:
+                    go.ident:
+                      name == structName
+                go.assign_stmt(depth = any):
+                  sibling_order as so3
+                  threeComparison(so1, so2, so3)
+                  go.lhs:
+                    go.ident:
+                      name == structName
+                go.inc_dec_stmt(depth = any):
+                  sibling_order as so3
+                  threeComparison(so3, so1, so2)
+                  go.selector_expr:
+                    go.ident:
+                      name == structName
+                go.assign_stmt(depth = any):
+                  sibling_order as so3
+                  threeComparison(so3, so1, so2)
+                  go.lhs:
+                    go.ident:
+                      name == structName

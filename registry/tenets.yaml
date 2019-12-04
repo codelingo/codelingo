@@ -135,6 +135,8 @@ codelingo:
         hasIssues: false
       marshalling:
         hasIssues: false
+      mutex-locking:
+        hasIssues: false
       nil-only-functions:
         hasIssues: true
       non-directional-chan:

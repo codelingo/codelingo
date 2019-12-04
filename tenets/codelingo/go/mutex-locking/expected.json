@@ -1,0 +1,8 @@
+[
+    {
+     "Comment": "mutex was locked or unlocked prior to the variable being changed",
+     "Filename": "example.go",
+     "Line": 18,
+     "Snippet": "\tf.name = name\n\tf.mu.Unlock()\n\tf.count++ // Issue\n}\n"
+    }
+   ]  

@@ -13,6 +13,7 @@ tenets:
 - goto
 - init
 - marshalling
+- mutex-locking
 - nil-only-functions
 - non-directional-chan
 - non-exiting-goroutine
