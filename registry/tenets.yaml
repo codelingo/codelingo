@@ -177,6 +177,8 @@ codelingo:
         hasIssues: true
       insecure-http-connection:
         hasIssues: false
+      concurrent-use-of-rand:
+        hasIssues: true
     tags:
     - golang
     - go

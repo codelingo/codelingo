@@ -34,6 +34,7 @@ tenets:
 - unsafe-go-routine-variables
 - unused-private-functions
 - insecure-http-connection
+- concurrent-use-of-rand
 tags:
 - golang
 - go
