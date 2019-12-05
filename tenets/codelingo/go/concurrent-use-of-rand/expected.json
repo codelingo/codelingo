@@ -1,0 +1,20 @@
+[
+  {
+   "Comment": "Unlike the default source used by top-level functions in math.rand package, a new source is not safe for concurrent use.",
+   "Filename": "main.go",
+   "Line": 14,
+   "Snippet": "\tgo func(r *rand.Rand) {\n\t\tfmt.Println(r.Int31())\n\t}(source) // Issue\n\n\tgo func() {"
+  },
+  {
+   "Comment": "Unlike the default source used by top-level functions in math.rand package, a new source is not safe for concurrent use.",
+   "Filename": "main.go",
+   "Line": 22,
+   "Snippet": "\n\tgo func() {\n\t\tfmt.Println(source.Int31()) //Issue\n\t}()\n"
+  },
+  {
+   "Comment": "Unlike the default source used by top-level functions in math.rand package, a new source is not safe for concurrent use.",
+   "Filename": "main.go",
+   "Line": 27,
+   "Snippet": "\tprintRand(source)\n\n\tgo printRand(source) // Issue\n\n\tprintRandUniqueSource()"
+  }
+ ]
