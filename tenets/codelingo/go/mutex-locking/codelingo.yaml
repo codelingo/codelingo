@@ -1,10 +1,4 @@
 funcs:
-  - name: compareFunc
-    type: asserter
-    body: |
-      function (a, b) {
-        return a < b;
-      }
   - name: threeComparison
     type : asserter
     body: |
