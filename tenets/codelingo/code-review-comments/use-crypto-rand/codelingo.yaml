@@ -5,7 +5,7 @@ funcs:
       function(name) {
         return name.toLowerCase().indexOf("key") !== -1
       }
-tenets:
+specs:
   - name: use-crypto-rand
     actions:
       codelingo/docs:

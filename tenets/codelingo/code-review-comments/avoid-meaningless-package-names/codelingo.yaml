@@ -20,7 +20,7 @@ funcs:
 
         return false
       }
-tenets:
+specs:
   - name: avoid-meaningless-package-names
     actions:
       codelingo/review:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: fall-through-case
     actions:
       codelingo/docs:

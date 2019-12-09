@@ -62,7 +62,7 @@ funcs:
 
         return surroundWithQuotes(escapeGoFormat(uncapitalizeFirstLetter(removeTrailingPunctuation(text))))
       }
-tenets:
+specs:
   - name: go-error-fmt
     actions:
       codelingo/rewrite:

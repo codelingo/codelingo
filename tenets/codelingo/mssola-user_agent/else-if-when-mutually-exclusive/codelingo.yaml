@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: find-funcs
     actions:
       codelingo/review:

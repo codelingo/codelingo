@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: eval-expression
     actions:
       codelingo/docs:

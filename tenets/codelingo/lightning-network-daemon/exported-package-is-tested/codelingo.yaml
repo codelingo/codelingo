@@ -17,7 +17,7 @@ funcs:
       function (lit, pack) {
         return lit === "github.com/lightningnetwork/lnd/".concat(pack)
       }
-tenets:
+specs:
   - name: exported-package-is-not-tested
     actions:
       codelingo/docs:

@@ -23,7 +23,7 @@ funcs:
         var m = a.match(/protobuf:"[^"]*name=([^,"]+).+ json:"([^,"]+)/)
         return m && ((m[1] != m[2]) || (notSnakeCase(m[1]) || notSnakeCase(m[2])) || (! ( ident == camelize(m[1]) || ident == singleCapitalize(m[1]) )))
       }
-tenets:
+specs:
   - name: rpc-responses-display-uniformly
     actions:
       codelingo/docs:

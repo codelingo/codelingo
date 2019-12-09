@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: mixed-marshalling
     actions:
       codelingo/docs:
@@ -20,7 +20,7 @@ tenets:
                 @review comment
                 go.ident:
                   # Replace with your own client/server types (prepended with /resource/).
-                  type == "/resource/tenets/codelingo/go/marshalling/example.go.Server"
+                  type == "/resource/specs/codelingo/go/marshalling/example.go.Server"
           go.field_list # Refers to parameters, making the first field list the reciever
         go.block_stmt:
           go.assign_stmt(depth = any):
@@ -33,4 +33,4 @@ tenets:
                     name == "Marshal"
                 go.args:
                   go.ident:
-                    type == "/resource/tenets/codelingo/go/marshalling/example.go.ClientData"
+                    type == "/resource/specs/codelingo/go/marshalling/example.go.ClientData"

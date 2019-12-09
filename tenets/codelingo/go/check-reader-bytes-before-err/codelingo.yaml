@@ -11,7 +11,7 @@ funcs:
       function (a, b, c){
         return (a < b) && (a > c);
       }
-tenets:
+specs:
   - name: check-reader-bytes-before-err
     actions:
       codelingo/review:

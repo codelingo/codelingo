@@ -10,7 +10,7 @@ funcs:
         return sliceType.substring(0, sliceType.indexOf("{"))
       }
 
-tenets:
+specs:
   - name:  declare-empty-slice
     actions:
       codelingo/review:

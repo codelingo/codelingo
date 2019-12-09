@@ -5,7 +5,7 @@ funcs:
       function (start, str) {
         return str.indexOf(start) == 0
       }
-tenets:
+specs:
   - name: well-named-interface
     actions:
       codelingo/docs:

@@ -266,7 +266,7 @@ funcs:
 
         return commentChar + whitespace + rewordComment(commentString, name, commentChar)
       }
-tenets:
+specs:
   - name: update-comment-first-word-as-subject
     actions:
       codelingo/docs:

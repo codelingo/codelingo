@@ -11,11 +11,11 @@ funcs:
       function(childCount) {
         return childCount <= 10 // This is an approximate; we assume if the number of children of a block is less equal than 10, it is a short one
       }
-tenets:
+specs:
   - name:  short-name-limited-scope
     actions:
       codelingo/review:
-        comment: Local variable "{{varName}}" with a limited scope (less than 10 lines) should be short rather than long [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
+        comment: Local variable "{{varName}}" with a limited scope (less than 10 lines) should be short rather than long [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/specs/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
       codelingo/docs:
         title: Short Name Limited Scope
         body: |    

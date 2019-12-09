@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: avoid-bool-params
   - import: codelingo/go/bool-param
     #

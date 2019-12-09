@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: non-exiting-goroutine
     actions:
       codelingo/review:

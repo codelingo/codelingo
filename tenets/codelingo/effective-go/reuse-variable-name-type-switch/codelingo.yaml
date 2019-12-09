@@ -6,7 +6,7 @@ funcs:
         return name1 != name2
       }
 
-tenets:
+specs:
   - name: reuse-variable-name-type-switch
     actions:
       codelingo/docs:

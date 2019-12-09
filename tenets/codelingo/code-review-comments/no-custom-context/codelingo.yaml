@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: no-custom-context
     actions:
       codelingo/review:

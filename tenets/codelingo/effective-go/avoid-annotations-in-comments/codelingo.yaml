@@ -13,7 +13,7 @@ funcs:
         }
         return false
       }
-tenets:
+specs:
   - name: avoid-annotations-in-comments
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: shared-count-datarace
     actions:
       codelingo/review:

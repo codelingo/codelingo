@@ -11,7 +11,7 @@ funcs:
      function (strA, strB) {
        return strA == strB
      }
-tenets:
+specs:
   - name: misused-nil-interface
     actions:
       codelingo/docs:

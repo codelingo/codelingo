@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: empty-catch-block
     actions:
       codelingo/docs:

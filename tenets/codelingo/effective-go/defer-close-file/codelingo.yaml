@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name:  defer-close-file
     actions:
       codelingo/docs:

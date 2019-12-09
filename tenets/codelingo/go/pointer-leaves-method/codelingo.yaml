@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: pointer-leaves-method
     actions:
       codelingo/review:

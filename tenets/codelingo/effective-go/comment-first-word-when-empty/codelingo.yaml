@@ -11,7 +11,7 @@ funcs:
 
         return !filename.endsWith("_test.go")
       }
-tenets:
+specs:
   - name: comment-first-word-when-empty
     actions:
       codelingo/review:

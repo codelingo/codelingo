@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: non-directional-chan
     actions:
       codelingo/review:

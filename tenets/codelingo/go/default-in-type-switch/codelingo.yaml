@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: default-in-type-switch
     actions:
       codelingo/review:

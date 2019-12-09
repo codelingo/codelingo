@@ -6,7 +6,7 @@ funcs:
         return name1 != name2
       }
 
-tenets:
+specs:
   - name:  same-receiver-name
     actions:
       codelingo/review:

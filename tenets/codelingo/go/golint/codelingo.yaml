@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: go-lint-rules
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - actions:
       codelingo/rewrite:
         place: holder

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: empty-slice
     actions:
       codelingo/rewrite:

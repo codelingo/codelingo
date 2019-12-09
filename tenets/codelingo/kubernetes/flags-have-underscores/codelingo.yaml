@@ -6,7 +6,7 @@ funcs:
         return str.indexOf(substr) != -1
       }
 
-tenets:
+specs:
   - name: flags-have-underscores
     actions:
       codelingo/docs:

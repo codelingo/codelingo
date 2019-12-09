@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: do-not-ignore-errors
     actions:
       codelingo/rewrite:

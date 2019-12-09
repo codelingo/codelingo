@@ -5,7 +5,7 @@ funcs:
     function (str) {
       return !str.match(/.*_test$/);
     }
-tenets:
+specs:
   - name: test-package-name
     actions:
       codelingo/rewrite:

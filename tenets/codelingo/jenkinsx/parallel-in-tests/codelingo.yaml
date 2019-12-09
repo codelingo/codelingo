@@ -5,7 +5,7 @@ funcs:
       function (str) {
         return str.match(/.*_test.go$/) && !str.match(/.*_integration_test.go$/);
       }
-tenets:
+specs:
   - name: parallel-in-tests
     actions:
       codelingo/rewrite:

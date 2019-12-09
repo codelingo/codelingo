@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: shadowed-func-parameter
     actions:
       codelingo/docs:

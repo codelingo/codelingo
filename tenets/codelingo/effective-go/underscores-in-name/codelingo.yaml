@@ -22,7 +22,7 @@ funcs:
       function(name) {
         return name.indexOf(".pb.go") === -1
       }
-tenets:
+specs:
   - name: underscores-in-name
     actions:
       codelingo/review:

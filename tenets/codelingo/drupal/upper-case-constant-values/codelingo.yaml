@@ -16,7 +16,7 @@ funcs:
       function(varName) {
         return varName.toUpperCase()
       }
-tenets:
+specs:
   - name: upper-case-constant-values
     actions:
       codelingo/review:

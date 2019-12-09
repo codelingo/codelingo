@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: reallocated-slice
     actions:
       codelingo/docs:

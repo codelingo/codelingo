@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: ticker-in-for-select
     actions:
       codelingo/review:

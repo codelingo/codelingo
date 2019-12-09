@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: debug-prints
     actions:
       codelingo/docs:

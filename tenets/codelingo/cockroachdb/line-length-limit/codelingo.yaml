@@ -5,7 +5,7 @@ funcs:
       function (a, b) {
         return Math.abs(a - b) > 100
       }
-tenets:
+specs:
   - name: line-length-limit
     actions:
       codelingo/docs:

@@ -5,7 +5,7 @@ funcs:
       function(identOffset, commentOffset) {
         return 
       }
-tenets:
+specs:
   - name: func-args-inline-comments
     actions:
       codelingo/docs:

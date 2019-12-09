@@ -6,11 +6,11 @@ funcs:
         return varName.length > 1 
       }
 
-tenets:
+specs:
   - name:  single-letter-loop-variable
     actions:
       codelingo/review:
-        comment: loop index variable "{{varName}}" should be a single letter [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
+        comment: loop index variable "{{varName}}" should be a single letter [as specified in Code Review Comments](https://github.com/codelingo/codelingo/blob/master/specs/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
       codelingo/docs:
         title: Local variables with limited scope are prefered to be short
         body: |

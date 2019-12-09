@@ -5,7 +5,7 @@ funcs:
       function (nameA, nameB) {
         return nameA != nameB
       }
-tenets:
+specs:
   - name: well-named-lock
     actions:
       codelingo/docs:

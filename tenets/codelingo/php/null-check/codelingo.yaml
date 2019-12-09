@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: null-check
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name:  always-close-object-response-body
     actions:
       codelingo/review:

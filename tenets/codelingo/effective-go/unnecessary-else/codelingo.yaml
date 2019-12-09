@@ -6,7 +6,7 @@ funcs:
         return name1 > name2
       }
 
-tenets:
+specs:
   - name: unnecessary-else 
     actions:
       codelingo/docs:

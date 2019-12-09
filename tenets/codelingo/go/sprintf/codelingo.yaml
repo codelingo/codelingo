@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: sprintf-error
     vars:
       newline: |

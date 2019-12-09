@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: assignment-to-nil-map
     actions:
       codelingo/review:

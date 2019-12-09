@@ -5,7 +5,7 @@ funcs:
       function (name) {
         return name !== "init" && name !== "main"
       }
-tenets:
+specs:
   - name: avoid-delayed-must-calls
     actions:
       codelingo/review:

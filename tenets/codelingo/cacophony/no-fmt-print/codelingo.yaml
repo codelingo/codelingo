@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: no-fmt-printx
     actions:
       codelingo/docs:

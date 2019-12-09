@@ -1,6 +1,6 @@
-tenets:
+specs:
   - name: remove-empty-suite-functions
-    flows:
+    actions:
       codelingo/review:
         comment: |
           We're not obliged to implement suite functions like SetupTest, so there's

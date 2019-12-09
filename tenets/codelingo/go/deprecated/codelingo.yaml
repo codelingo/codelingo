@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: deprecated
     actions:
       codelingo/review:

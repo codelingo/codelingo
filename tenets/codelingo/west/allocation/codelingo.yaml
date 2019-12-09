@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: freed-new-object
     actions:
       codelingo/docs:

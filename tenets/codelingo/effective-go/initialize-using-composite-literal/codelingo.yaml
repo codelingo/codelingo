@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name:  initialize-using-composite-literal
     actions:
       codelingo/docs:

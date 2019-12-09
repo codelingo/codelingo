@@ -16,7 +16,7 @@ funcs:
       function(varName) {
         return varName.toLowerCase()
       }
-tenets:
+specs:
   - name: lower-case-constant-values
     actions:
       codelingo/review:

@@ -5,7 +5,7 @@ funcs:
       function(varName) {
         return varName.indexOf("*") !== -1
       }
-tenets:
+specs:
   - name:  find-typed-nil
     actions:
       codelingo/review:

@@ -14,7 +14,7 @@ funcs:
       }
 
 
-tenets:
+specs:
   - name: loop-variable-used-in-go-routine
     actions:
       codelingo/docs:

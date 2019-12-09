@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: ignore-defered-returns
     actions:
       codelingo/review:

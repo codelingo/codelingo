@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: unconvert
     actions:
       codelingo/rewrite:

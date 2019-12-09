@@ -1,6 +1,6 @@
-tenets:
+specs:
   - name: break-select-in-for
-    flows:
+    actions:
       codelingo/review:
         comment: |
           This `break` statement only breaks to the innermost select, rather than the parent `for` loop.

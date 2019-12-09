@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: println-format-strings
     actions:
       codelingo/rewrite:

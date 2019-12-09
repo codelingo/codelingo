@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: todo-comments
     actions:
       codelingo/docs:

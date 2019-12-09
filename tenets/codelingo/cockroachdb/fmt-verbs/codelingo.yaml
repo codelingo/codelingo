@@ -40,7 +40,7 @@ funcs:
 
         return typeof result == 'undefined' ? "" : result
       }
-tenets:
+specs:
   - name: fmt-verbs
     vars:
       result: "{{verbForType(argType)}}"

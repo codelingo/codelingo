@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: use-offsite-check
     actions:
       codelingo/docs:

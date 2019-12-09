@@ -29,7 +29,7 @@ funcs:
         return constName.join('')
       }
 
-tenets:
+specs:
   - name:  camel-case-constants
     actions:
       codelingo/review:

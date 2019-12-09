@@ -278,7 +278,7 @@ funcs:
         commentString = removeInitialWhitespace(commentString)
         return commentChar + " " + rewordComment(commentString, name, commentChar)
       }
-tenets:
+specs:
   - name: comment-first-word-as-subject
     actions:
       codelingo/docs:

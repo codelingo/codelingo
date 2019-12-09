@@ -9,7 +9,7 @@ funcs:
       }
 
 
-tenets:
+specs:
   - name: unnecessary-parentheses
     actions:
       codelingo/docs:

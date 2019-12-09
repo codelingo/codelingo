@@ -1,4 +1,4 @@
-tenets:
+specs:
   # Integration test suite
   - name: parallel-integration-tests
     actions:

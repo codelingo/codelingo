@@ -11,7 +11,7 @@ funcs:
       function (str) {
         return str.indexOf("test/") != 0
       }
-tenets:
+specs:
   - name: new-package-requires-test
     actions:
       codelingo/docs:

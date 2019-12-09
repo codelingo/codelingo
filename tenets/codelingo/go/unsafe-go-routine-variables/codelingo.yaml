@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: unsafe-go-routine-variables
     actions:
       codelingo/docs:

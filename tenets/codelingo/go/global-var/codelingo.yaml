@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: global-variable
     actions:
       codelingo/docs:

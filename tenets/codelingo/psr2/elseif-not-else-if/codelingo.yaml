@@ -5,7 +5,7 @@ funcs:
       function(rawCode) {
         return rawCode.replace(" ", "")
       }
-tenets:
+specs:
   - name: elseif-not-else-if
     actions:
       codelingo/review:

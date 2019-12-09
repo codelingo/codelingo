@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: defer-in-loop
     actions:
       codelingo/docs:

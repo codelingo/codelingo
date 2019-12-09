@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name:  missing-close-file
     actions:
       codelingo/review:

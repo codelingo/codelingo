@@ -5,7 +5,7 @@ funcs:
       function (str) {
         return !str.match(/.*List$/);
       }
-tenets:
+specs:
   - name: well-named-lists
     actions:
       codelingo/docs:

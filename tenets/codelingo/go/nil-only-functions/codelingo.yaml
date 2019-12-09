@@ -5,7 +5,7 @@ funcs:
       function (name, comment) {
         return comment.indexOf(name + " satisfies interface ") !== -1;
       }
-tenets:
+specs:
   - name: nil-only-functions
     actions:
       codelingo/rewrite:

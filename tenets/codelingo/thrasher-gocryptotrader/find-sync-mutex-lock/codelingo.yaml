@@ -17,7 +17,7 @@ funcs:
       function(val1, val2) {
         return val1 == val2
       }
-tenets:
+specs:
   - name:  find-sync-mutex-lock
     actions:
       codelingo/review:

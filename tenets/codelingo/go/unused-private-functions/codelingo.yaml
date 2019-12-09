@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: find-unused-private-funcs
     actions:
       codelingo/rewrite:

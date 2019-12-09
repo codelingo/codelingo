@@ -5,7 +5,7 @@ funcs:
       function(ifName, methodName) {
         return methodName.toLowerCase() !== ifName.toLowerCase().substring(0, methodName.length)
       }
-tenets:
+specs:
   - name: single-method-interface-name
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: wrapping-func-signatures
     actions:
       codelingo/docs:

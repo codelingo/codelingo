@@ -15,7 +15,7 @@ funcs:
       }
 
 
-tenets:
+specs:
   - name: shorthand-assignment-operator
     actions:
       codelingo/docs:

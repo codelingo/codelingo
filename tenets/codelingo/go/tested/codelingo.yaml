@@ -17,7 +17,7 @@ funcs:
       function (str, substr) {
         return str.indexOf(substr) == -1
       }
-tenets:
+specs:
   - name: find-funcs
     actions:
       codelingo/docs:

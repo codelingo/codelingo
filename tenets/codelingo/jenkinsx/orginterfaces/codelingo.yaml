@@ -5,7 +5,7 @@ funcs:
     function (str) {
       return ! str.match(/(^|\/)interface.go$/);
     }
-tenets:
+specs:
   - name: orginterfaces
     actions:
       codelingo/docs:

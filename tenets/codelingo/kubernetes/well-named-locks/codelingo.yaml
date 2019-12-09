@@ -5,7 +5,7 @@ funcs:
       function (a) {
         return a.match(/^[a-z]\+\([A-Z][a-z]\+\)*\+Lock$/) === null
       }
-tenets:
+specs:
   - name: well-named-locks
     actions:
       codelingo/docs:

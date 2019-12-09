@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name:  missing-stop-ticker
     actions:
       codelingo/review:

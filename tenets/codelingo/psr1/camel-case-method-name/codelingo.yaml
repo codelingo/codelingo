@@ -27,7 +27,7 @@ funcs:
         }
         return newName.join('')
       }
-tenets:
+specs:
   - name: camel-case-method-name
     actions:
       codelingo/docs:

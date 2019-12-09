@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: php-lint-rules
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: caught-generic-exceptions
     actions:
       codelingo/docs:

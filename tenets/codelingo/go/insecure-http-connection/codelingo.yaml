@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: insecure-http-connection
     actions:
       codelingo/review:

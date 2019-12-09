@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: boolean-argument
     actions:
       codelingo/docs:

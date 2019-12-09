@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: redundant-defer-wraps
     actions:
       codelingo/docs:

@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: remove-break-statement
     actions:
       codelingo/docs:

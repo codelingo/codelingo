@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: do-not-discard-errors
     actions:
       codelingo/docs:

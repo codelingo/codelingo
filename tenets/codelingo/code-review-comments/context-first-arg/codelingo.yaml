@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: context-first-arg
     actions:
       codelingo/docs:

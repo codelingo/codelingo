@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: package-comment
     actions:
       codelingo/docs:

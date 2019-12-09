@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: dont-ignore-gofunc-returns
     actions:
       codelingo/review:

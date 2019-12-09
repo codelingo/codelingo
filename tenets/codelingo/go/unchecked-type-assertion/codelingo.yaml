@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: unchecked-type-assertion
     actions:
       codelingo/review:

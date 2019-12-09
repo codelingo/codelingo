@@ -1,4 +1,4 @@
-tenets:
+specs:
   - name: raised-generic-exceptions
     actions:
       codelingo/docs:

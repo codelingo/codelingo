@@ -17,7 +17,7 @@ funcs:
       function (a) {
         return a.match(/^`json:.*,name=name\"`$/)
       }
-tenets:
+specs:
   - name: jsonapi-kind-compulsory-metadata
     actions:
       codelingo/docs:
