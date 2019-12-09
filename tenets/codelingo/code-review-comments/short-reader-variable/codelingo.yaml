@@ -11,7 +11,7 @@ specs:
   - name:  short-reader-variable
     actions:
       codelingo/review:
-        comment: reader variable "{{varName}}" should be a single letter "r", or two letters starting with "r" followed by a number for more readability [See Code Review Comments](https://github.com/codelingo/codelingo/blob/master/specs/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
+        comment: reader variable "{{varName}}" should be a single letter "r", or two letters starting with "r" followed by a number for more readability [See Code Review Comments](https://github.com/codelingo/codelingo/blob/master/tenets/codelingo/code-review-comments/FULL_TEXT.md#variable-names)
         # We currently accept two letters rather than a single letter to allow use of r1...rn. This helps readibility if two readers are needed in the same scope
 
       codelingo/docs:
