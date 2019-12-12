@@ -1,0 +1,60 @@
+funcs:
+- name: compareFunc
+  type: asserter
+  body: |
+    function (a, b) {
+      return a < b;
+    }
+specs:
+  - name: close-never-called
+    actions:
+      codelingo/review:
+        comment: A closer was opened and close was called explicitly (not deferred), any path leading to a return before Close() is called will result in a leak
+    query: |
+      import codelingo/ast/go
+      go.file(depth = any):
+        go.decls:
+          go.func_decl:
+            go.block_stmt:
+              go.list:
+                go.assign_stmt:
+                  go.lhs:
+                    go.ident:
+                      name as needsToBeClosed
+                    go.ident:
+                      name as err
+                  go.rhs:
+                    go.call_expr:
+                      go.selector_expr:
+                        go.ident:
+                          name as anything
+                        go.ident:
+                          name == "Open"
+                go.if_stmt(depth = any):
+                  sibling_order as so1
+                  @review comment
+                  go.block_stmt:
+                    go.list:
+                      go.return_stmt:
+                        go.results:
+                          go.ident(depth = any):
+                            name as err
+            exclude:
+              any_of:
+                go.expr_stmt: # Excludes when file is closed prior to return (doesn't work)
+                  sibling_order as so2
+                  compareFunc(so2, so1)
+                  go.call_expr:
+                    go.selector_expr:
+                      go.ident:
+                        name == needsToBeClosed
+                      go.ident:
+                        name == "Close"
+                go.if_stmt: # Excludes when file is closed in if stmt (doesn't work)
+                  go.assign_stmt:
+                    go.rhs:
+                      go.call_expr:
+                        go.ident:
+                          name == needsToBeClosed
+                        go.ident:
+                          name == "Close"  
