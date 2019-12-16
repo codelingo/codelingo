@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sync"
 )
 
 func main() {
 
 	source := rand.New(rand.NewSource(43))
+
+	var mu sync.Mutex
 
 	go func(r *rand.Rand) {
 		fmt.Println(r.Int31())
@@ -21,6 +24,14 @@ func main() {
 	go func() {
 		fmt.Println(source.Int31()) //Issue
 	}()
+
+	go func(r *rand.Rand) {
+
+		mu.Lock()
+		fmt.Println(r.Int31())
+		mu.Unlock()
+
+	}(source)
 
 	printRand(source)
 
@@ -36,6 +47,13 @@ func main() {
 	printRand(sourceTwo)
 
 	go printRand(sourceTwo) // Issue (Requires use of CLQL types to catch)
+
+	go func(r *rand.Rand) {
+
+		mu.Lock()
+		fmt.Println(r.Int31())
+		mu.Unlock()
+	}(sourceTwo) // Issue (Requires callgraph to identify sourceTwo as it is returned by an function)
 }
 
 func printRand(r *rand.Rand) {

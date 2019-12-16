@@ -28,8 +28,23 @@ tenets:
                             name == "rand"
                           go.ident:
                             name == "NewSource"
+        go.decl_stmt(depth = any):
+          go.value_spec(depth = any):
+            go.names:
+              go.ident:
+                name as mutex
+            go.selector_expr:
+              go.ident:
+                name == "sync"
+              go.ident:
+                name == "Mutex"
         go.go_stmt(depth = any):
-          go.call_expr:
-            @review comment
-            go.ident(depth = any):
-              name == source
+          @review comment
+          go.ident(depth = any):
+            name == source
+          exclude:
+            go.selector_expr(depth = any):
+              go.ident:
+                name == "mu"
+              go.ident:
+                name == "Unlock"
