@@ -1,0 +1,56 @@
+[
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 65,
+   "Snippet": "\n\tvar l uint = 2\n\tfor l \u003c 9 { // Issue\n\t\tfmt.Println(l)\n\t}\n}\n"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 28,
+   "Snippet": "\n\td := 5\n\tfor 6 \u003e d { // Issue\n\t\tfmt.Println(d)\n\t}\n\n\te := 7"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 54,
+   "Snippet": "\n\tvar j int8 = 3\n\tfor j \u003c 8 { // Issue\n\t\tfmt.Println(j)\n\t}\n\n\tvar k int32"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 44,
+   "Snippet": "\tvar g int\n\tg = 3\n\tfor g \u003c 8 { // Issue\n\t\tfmt.Println(g)\n\t}\n\n\tvar h int = 2"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 13,
+   "Snippet": "\n\ta := 3\n\tfor a \u003c 10 { // Issue\n\t\tfmt.Println(a)\n\t}\n\n\tb := 4"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 49,
+   "Snippet": "\n\tvar h int = 2\n\tfor h \u003c 9 { // Issue\n\t\tfmt.Println(h)\n\t}\n\n\tvar j int8 = 3"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 60,
+   "Snippet": "\tvar k int32\n\tk = 2\n\tfor k \u003c 7 { // Issue\n\t\tfmt.Println(k)\n\t}\n\n\tvar l uint = 2"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 73,
+   "Snippet": "\n\tpi := 3.1415\n\tfor pi \u003c 6 { // Issue\n\t\tfmt.Println(pi)\n\t}\n\n\te := 2.7182"
+  },
+  {
+   "Comment": "This for loop does not increment or decrement the counter and will cause an infinite loop.",
+   "Filename": "example.go",
+   "Line": 88,
+   "Snippet": "\n\tvar b float32 = 3.3\n\tfor b \u003c 8 { // Issue\n\t\tfmt.Println(b)\n\t}\n\n\tvar c float64 = 4.4"
+  }
+ ]

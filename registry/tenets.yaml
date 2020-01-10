@@ -179,6 +179,8 @@ codelingo:
         hasIssues: false
       concurrent-use-of-rand:
         hasIssues: true
+      counter-not-incremented:
+        hasIssues: false
     tags:
     - golang
     - go
