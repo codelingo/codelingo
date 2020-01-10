@@ -1,5 +1,5 @@
 tenets:
-  - name: couter-not-incremented
+  - name: counter-not-incremented
     actions:
       codelingo/review:
         comment: This for loop does not increment or decrement the counter and will cause an infinite loop.
