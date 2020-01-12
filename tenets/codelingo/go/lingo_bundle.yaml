@@ -35,6 +35,7 @@ tenets:
 - unused-private-functions
 - insecure-http-connection
 - concurrent-use-of-rand
+- counter-not-incremented
 tags:
 - golang
 - go
