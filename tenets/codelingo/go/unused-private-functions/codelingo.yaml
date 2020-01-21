@@ -1,3 +1,11 @@
+funcs:
+  - name: isUnexported
+    type: asserter
+    body: |
+      function(name) {
+        // TODO: support unicode uppercase
+        return !name.match(/^[A-Z]/)
+      }
 tenets:
   - name: find-unused-private-funcs
     actions:
@@ -11,8 +19,8 @@ tenets:
         go.func_decl(depth = any):
           @review comment
           go.ident:
-            private == "true"
             name as funcName
+            isUnexported(funcName)
             name != "main"
             name != "init"
         exclude:

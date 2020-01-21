@@ -17,6 +17,13 @@ funcs:
       function (str, substr) {
         return str.indexOf(substr) == -1
       }
+  - name: isExported
+    type: asserter
+    body: |
+      function(name) {
+        // TODO: support unicode uppercase
+        return !!name.match(/^[A-Z]/)
+      }
 tenets:
   - name: find-funcs
     actions:
@@ -34,8 +41,8 @@ tenets:
           @review comment
           go.func_decl:
             go.ident:
-              public == "true"
               name as funcName
+              isExported(funcName)
       exclude:
         go.file(depth = any):
           filename == testFile(filename)

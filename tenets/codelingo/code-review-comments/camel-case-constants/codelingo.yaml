@@ -8,16 +8,17 @@ funcs:
   - name: fixName
     type: resolver
     body: |
-      function(varName, private){
+      function(varName){
         if(varName.indexOf("_") === -1 || varName === "_"){ 
           if(varName === varName.toUpperCase() && varName.length > 4) // variable is ALLCAPS, should be changed to Allcaps
             return varName.charAt(0).toUpperCase() + varName.toLowerCase().substring(1)
           return varName // variable can be all lowercase, mixedCaps or MixedCaps or ALLCAPS with length less than 4 (we do not change acronyms of length 4 or less)
         }
+        private = !varName.match(/^[A-Z]/)
         varName = varName.toLowerCase()
         pieces = varName.split("_");
         constName = []
-        if(private == "true"){
+        if(private){
           constName.push(pieces[0])
         }
         else{
@@ -33,7 +34,7 @@ tenets:
   - name:  camel-case-constants
     actions:
       codelingo/review:
-        comment: Define constant "{{varName}}" as "{{fixName(varName, varPrivate)}}". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)
+        comment: Define constant "{{varName}}" as "{{fixName(varName)}}". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)
       codelingo/docs:
         title: Camel case constants
         body: |    
@@ -51,9 +52,8 @@ tenets:
           
           go.names:
             @review comment
-            @rewrite --replace "{{fixName(varName, varPrivate)}}"
+            @rewrite --replace "{{fixName(varName)}}"
             go.ident:
               name as varName
               isNotValid(varName)
-              private as varPrivate
 
