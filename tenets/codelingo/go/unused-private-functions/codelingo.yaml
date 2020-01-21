@@ -1,8 +1,11 @@
 funcs:
-  - name: isUnexported
+  - name: isCandidate
     type: asserter
     body: |
       function(name) {
+        if (name == "main" || name == "init") {
+          return false
+        }
         // TODO: support unicode uppercase
         return !name.match(/^[A-Z]/)
       }
@@ -20,10 +23,8 @@ tenets:
           @review comment
           go.ident:
             name as funcName
-            isUnexported(funcName)
-            name != "main"
-            name != "init"
+            isCandidate(funcName)
         exclude:
           go.call_expr(depth = any):
             go.ident:
-              name as funcName
+              name == funcName
