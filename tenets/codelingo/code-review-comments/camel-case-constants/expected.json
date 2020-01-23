@@ -9,19 +9,19 @@
      "Comment": "Define constant \"PIVALUE\" as \"Pivalue\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
      "Line": 7,
-     "Snippet": "const Pi = 3.14\nconst PI = 3.14\nconst PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE"
+     "Snippet": "const Pi = 3.14\nconst PI = 3.14\nconst PIVALUE = 3.14    //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE"
     },
     {
      "Comment": "Define constant \"private_Pi\" as \"privatePi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
      "Line": 8,
-     "Snippet": "const PI = 3.14\nconst PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE"
+     "Snippet": "const PI = 3.14\nconst PIVALUE = 3.14    //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE"
     },
     {
      "Comment": "Define constant \"Public_Pi\" as \"PublicPi\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",
      "Filename": "test.go",
      "Line": 9,
-     "Snippet": "const PIVALUE = 3.14 //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n"
+     "Snippet": "const PIVALUE = 3.14    //ISSUE\nconst private_Pi = 3.14 //ISSUE\nconst Public_Pi = 3.14  //ISSUE\nconst PUBLIC_PI = 3.14  //ISSUE\n"
     },
     {
      "Comment": "Define constant \"private_World\" as \"privateWorld\". The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword constant names. [as specified in Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments#mixed-caps)",

@@ -11,6 +11,13 @@ funcs:
 
         return !filename.endsWith("_test.go")
       }
+  - name: isExported
+    type: asserter
+    body: |
+      function(name) {
+        // TODO: support unicode uppercase
+        return !!name.match(/^[A-Z]/)
+      }
 tenets:
   - name: comment-first-word-when-empty
     actions:
@@ -33,4 +40,4 @@ tenets:
             go.comment_group
           go.ident:
             name as funcName
-            public == "true"
+            isExported(funcName)

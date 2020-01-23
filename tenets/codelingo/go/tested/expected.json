@@ -1,45 +1,14 @@
 [
   {
-   "name": "find-funcs",
-   "position": {
-    "start": {
-     "filename": "main.go",
-     "Offset": 90,
-     "Line": 9,
-     "Column": 1
-    },
-    "end": {
-     "filename": "main.go",
-     "Offset": 111,
-     "Line": 9,
-     "Column": 22
-    }
-   },
-   "comment": "This exported function does not have a corresponding test function.",
-   "ctxBefore": "\n// SecondPrint also prints",
-   "lineText": "func SecondPrint() {}",
-   "newCode": true
+   "Comment": "This exported function does not have a corresponding test function.",
+   "Filename": "example.go",
+   "Line": 12,
+   "Snippet": "\n// No test function\nfunc (a *aStruct) SayA() string {\n\tif a.b == nil {\n\t\treturn \"end\"\n\t}\n\treturn \"I'm a \" // + a.b.SayB()\n}\n\ntype bStruct struct {"
   },
   {
-   "name": "find-funcs",
-   "position": {
-    "start": {
-     "filename": "example.go",
-     "Offset": 94,
-     "Line": 12,
-     "Column": 1
-    },
-    "end": {
-     "filename": "example.go",
-     "Offset": 197,
-     "Line": 17,
-     "Column": 2
-    }
-   },
-   "comment": "This exported function does not have a corresponding test function.",
-   "ctxBefore": "\n// No test function",
-   "lineText": "func (a *aStruct) SayA() string {\n\tif a.b == nil {\n\t\treturn \"end\"\n\t}\n\treturn \"I'm a \" // + a.b.SayB()\n}",
-   "ctxAfter": "\ntype bStruct struct {",
-   "newCode": true
+   "Comment": "This exported function does not have a corresponding test function.",
+   "Filename": "main.go",
+   "Line": 9,
+   "Snippet": "\n// SecondPrint also prints\nfunc SecondPrint() {}\n"
   }
  ]

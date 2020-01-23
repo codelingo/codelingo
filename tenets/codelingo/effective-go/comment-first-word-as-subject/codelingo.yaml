@@ -11,6 +11,13 @@ funcs:
 
         return !filename.endsWith("_test.go")
       }
+  - name: isExported
+    type: asserter
+    body: |
+      function(name) {
+        // TODO: support unicode uppercase
+        return !!name.match(/^[A-Z]/)
+      }
   - name: isValid
     type: asserter
     body: |
@@ -306,6 +313,6 @@ tenets:
               sibling_order == 0
               text as commText
           go.ident:
-            public == "true"
             name as funcName
+            isExported(funcName)
             isValid(commText, funcName)

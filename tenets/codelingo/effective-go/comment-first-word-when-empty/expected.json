@@ -1,8 +1,8 @@
 [
   {
-   "Comment": "The first sentence should be a one-sentence summary that starts with the name (Unnamed) being declared.\n",
+   "Comment": "Every exported function in a program should have a doc comment. The first sentence should be a summary that starts with the name (Unnamed) being declared.\n",
    "Filename": "example.go",
    "Line": 3,
    "Snippet": "package main\n\nfunc Unnamed() {}\n"
   }
- ]
+]
