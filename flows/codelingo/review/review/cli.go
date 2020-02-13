@@ -63,6 +63,10 @@ var CLIApp = &flowutil.CLIApp{
 				Hidden: true,
 				Usage:  "Review without TLS",
 			},
+			cli.StringFlag{
+				Name:  "repo",
+				Usage: "Review a repo directly, e.g. github.com/some/repo",
+			},
 			// cli.BoolFlag{
 			// 	Name:  "all",
 			// 	Usage: "review all files under all directories from pwd down",
@@ -110,8 +114,29 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 	dotlingo, err := ReadDotLingo(cliCtx)
 	if err != nil {
 		return nil, nil, nil, nil, errors.Trace(err)
-
 	}
+
+	ctx, cancel := util.UserCancelContext(context.Background())
+
+	if repo := cliCtx.String("repo"); repo != "" {
+		parts := strings.Split(repo, "/")
+		if len(parts) != 3 {
+			msg := "cannot parse repo; expected e.g. github.com/someuser/somerepo"
+			return nil, nil, nil, nil, errors.New(msg)
+		}
+		req := &flow.ReviewRequest{
+			Vcs:          "git",
+			Host:         parts[0],
+			OwnerOrDepot: &flow.ReviewRequest_Owner{parts[1]},
+			Repo:         parts[2],
+			Dotlingo:     dotlingo,
+		}
+
+		fmt.Println("Running review flow...")
+		resultc, userVarc, errc, err := RequestReview(ctx, req, insecure)
+		return resultc, userVarc, errc, cancel, errors.Trace(err)
+	}
+
 	vcsType, repo, err := vcs.New()
 	if err != nil {
 		return nil, nil, nil, nil, errors.Trace(err)
@@ -176,8 +201,6 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 		return nil, nil, nil, nil, errors.Trace(err)
 
 	}
-
-	ctx, cancel := util.UserCancelContext(context.Background())
 
 	req := &flow.ReviewRequest{
 		Repo:     name,
