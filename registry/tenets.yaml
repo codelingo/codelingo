@@ -171,7 +171,7 @@ codelingo:
         hasIssues: true
       shared-count-datarace:
         hasIssues: false
-      only-use-must-in-init:
+      avoid-delayed-must-calls:
         hasIssues: false
       async-writes-to-pointer:
         hasIssues: true
