@@ -36,6 +36,7 @@ func RequestReview(ctx context.Context, req *flow.ReviewRequest, insecure bool) 
 }
 
 type ReportStrt struct {
+	Name     string
 	Comment  string
 	Filename string
 	Line     int
