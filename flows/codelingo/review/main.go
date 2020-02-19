@@ -40,6 +40,7 @@ l:
 
 			issue := result.Payload.(*flow.Issue)
 			results = append(results, &review.ReportStrt{
+				Name:     issue.Name,
 				Comment:  issue.Comment,
 				Filename: issue.Position.Start.Filename,
 				Line:     int(issue.Position.Start.Line),
