@@ -173,8 +173,8 @@ codelingo:
         hasIssues: false
       avoid-delayed-must-calls:
         hasIssues: false
-      async-writes-to-pointer:
-        hasIssues: true
+      writes-to-async-pointer:
+        hasIssues: false
       insecure-http-connection:
         hasIssues: false
       concurrent-use-of-rand:
@@ -254,16 +254,6 @@ codelingo:
     - lnd
     - golang
     - go
-  modica:
-    description: Tenets written for Modica
-    version: 0.0.0
-    tenets:
-      null-check:
-        hasIssues: false
-      transport:
-        hasIssues: false
-    tags:
-    - php
   mozillazg-go-cos:
     description: Tenets written for mozillazg/go-cos.
     version: 0.0.0
@@ -292,8 +282,6 @@ codelingo:
       offsite-redirection:
         hasIssues: false
       phplint:
-        hasIssues: false
-      sql-concats:
         hasIssues: false
     tags:
     - php
@@ -365,13 +353,3 @@ codelingo:
     - go
     - lomik
     - go-carbon
-  dev:
-    description: Tenets tested in dev-lexicons
-    version: 0.0.0
-    tenets:
-      potential-nil-pointer:
-        hasIssues: false
-    tags:
-    - go
-    - golang
-
