@@ -67,6 +67,10 @@ var CLIApp = &flowutil.CLIApp{
 				Name:  "repo",
 				Usage: "Review a repo directly, e.g. github.com/some/repo",
 			},
+			cli.StringFlag{
+				Name:  "commit",
+				Usage: "With --repo, review a specific commit",
+			},
 			// cli.BoolFlag{
 			// 	Name:  "all",
 			// 	Usage: "review all files under all directories from pwd down",
@@ -137,6 +141,7 @@ func reviewAction(cliCtx *cli.Context) (chan proto.Message, <-chan *flowutil.Use
 			Host:         parts[0],
 			OwnerOrDepot: &flow.ReviewRequest_Owner{parts[1]},
 			Repo:         parts[2],
+			Sha:          cliCtx.String("commit"),
 			Dotlingo:     dotlingo,
 		}
 
