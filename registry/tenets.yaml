@@ -24,15 +24,7 @@ codelingo:
     description: Best Practices for CockroachDB from their contributor docs.
     version: 0.0.0
     tenets:
-      avoid-bool-params:
-        hasIssues: true
       fmt-verbs:
-        hasIssues: true
-      func-args-inline-comments:
-        hasIssues: true
-      line-length-limit:
-        hasIssues: true
-      wrapping-func-signatures:
         hasIssues: true
     tags:
     - golang
@@ -55,8 +47,6 @@ codelingo:
         hasIssues: true
       go-error-fmt:
         hasIssues: false
-      no-custom-context:
-        hasIssues: false
       use-crypto-rand:
         hasIssues: true
       same-receiver-name:
@@ -65,13 +55,7 @@ codelingo:
         hasIssues: false
       declare-empty-slice:
         hasIssues: false
-      single-letter-loop-variable:
-        hasIssues: false
-      short-reader-variable:
-        hasIssues: false
       camel-case-constants:
-        hasIssues: false
-      short-name-limited-scope:
         hasIssues: false
     tags:
     - golang
@@ -80,21 +64,11 @@ codelingo:
     description: Best Practices for Golang from Effective Go.
     version: 0.0.0
     tenets:
-      avoid-annotations-in-comments:
-        hasIssues: false
       comment-first-word-as-subject:
         hasIssues: false
       update-comment-first-word-as-subject:
         hasIssues: false
-      comment-first-word-when-empty:
-        hasIssues: false
-      good-package-name:
-        hasIssues: false
-      package-comment:
-        hasIssues: true
       single-method-interface-name:
-        hasIssues: false
-      underscores-in-name:
         hasIssues: false
       unnecessary-else:
         hasIssues: false
@@ -121,8 +95,6 @@ codelingo:
         hasIssues: false
       check-reader-bytes-before-err:
         hasIssues: false
-      deprecated:
-        hasIssues: false
       default-in-type-switch:
         hasIssues: false
       empty-slice:
@@ -133,53 +105,27 @@ codelingo:
         hasIssues: false
       goto:
         hasIssues: false
-      marshalling:
-        hasIssues: false
-      nil-only-functions:
-        hasIssues: true
       non-directional-chan:
         hasIssues: true
       non-exiting-goroutine:
         hasIssues: true
-      pointer-leaves-method:
-        hasIssues: false
-      println-format-strings:
-        hasIssues: false
       reallocated-slice:
         hasIssues: false
       reassigned-error:
         hasIssues: false
-      remove-empty-suite-functions:
-        hasIssues: false
       shadowed-variable:
         hasIssues: false
-      sprintf:
-        hasIssues: true
-      tested:
-        hasIssues: false
       ticker-in-for-select:
-        hasIssues: false
-      todo:
         hasIssues: false
       unchecked-type-assertion:
         hasIssues: false
       unconvert:
         hasIssues: false
-      ignore-defered-returns:
-        hasIssues: true
-      ignore-goroutine-return-values:
-        hasIssues: true
       shared-count-datarace:
         hasIssues: false
       avoid-delayed-must-calls:
         hasIssues: false
-      writes-to-async-pointer:
-        hasIssues: false
       insecure-http-connection:
-        hasIssues: false
-      concurrent-use-of-rand:
-        hasIssues: true
-      counter-not-incremented:
         hasIssues: false
     tags:
     - golang
