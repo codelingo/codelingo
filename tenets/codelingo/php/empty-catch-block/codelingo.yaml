@@ -12,4 +12,4 @@ tenets:
 
       @review comment
       php.stmt_catch(depth = any):
-        child_count == "1"
+        child_count == 1
