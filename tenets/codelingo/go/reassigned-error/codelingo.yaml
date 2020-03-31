@@ -12,7 +12,7 @@ funcs:
       return (a < b) && (a > c);
     }
 tenets:
-- name: error-reassign
+- name: reassigned-error
   actions:
     codelingo/review:
       comment: Error was not checked before reassignment
