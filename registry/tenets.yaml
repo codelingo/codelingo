@@ -138,6 +138,16 @@ codelingo:
     - jenkins-x
     - golang
     - go
+  juju-juju:
+    description: Rules finding potential issues specific to juju.
+    version: 0.0.0
+    tenets:
+      unmanaged-goroutine-in-worker:
+        hasIssues: false
+    tags:
+    - juju
+    - golang
+    - go
   landmines:
     description: Best practices from the The Three Go Landmines gist.
     version: 0.0.0
