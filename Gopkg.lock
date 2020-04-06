@@ -29,6 +29,25 @@
   revision = "cd527374f1e5bff4938207604a14f2e38a9cf512"
 
 [[projects]]
+  branch = "master"
+  digest = "1:e05c7b72aeba7570b1d2f9c6dc9f0373d224b16b70fa886c504de867bffe1c2e"
+  name = "github.com/aead/chacha20"
+  packages = [
+    ".",
+    "chacha",
+  ]
+  pruneopts = "UT"
+  revision = "8b13a72661dae6e9e5dea04f344f0dc95ea29547"
+
+[[projects]]
+  digest = "1:1c10bf6793afd790b0949d5384403d8d4850bf8f5f72ab6fc232277daaa5057b"
+  name = "github.com/aead/siphash"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "83563a290f60225eb120d724600b9690c3fb536f"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:705c40022f5c03bf96ffeb6477858d88565064485a513abcd0f11a0911546cb6"
   name = "github.com/blang/semver"
   packages = ["."]
@@ -37,12 +56,25 @@
   version = "v3.5.1"
 
 [[projects]]
-  digest = "1:0f98f59e9a2f4070d66f0c9c39561f68fcd1dc837b22a852d28d0003aebd1b1e"
-  name = "github.com/boltdb/bolt"
-  packages = ["."]
+  digest = "1:8167edb74b429be8f13e3a0172d5a694565be009c56f73b42b13996095d0d5e7"
+  name = "github.com/btcsuite/btcd"
+  packages = [
+    "addrmgr",
+    "blockchain",
+    "btcec",
+    "btcjson",
+    "chaincfg",
+    "chaincfg/chainhash",
+    "connmgr",
+    "database",
+    "peer",
+    "rpcclient",
+    "txscript",
+    "wire",
+  ]
   pruneopts = "UT"
-  revision = "2f1ce7a837dcb8da3ec595b1dac9d0632f0f99e8"
-  version = "v1.3.1"
+  revision = "f3ec13030e4e828869954472cbc51ac36bee5c1d"
+  version = "v0.20.1-beta"
 
 [[projects]]
   branch = "master"
@@ -53,20 +85,58 @@
   revision = "84c8d2346e9fc8c7b947e243b9c24e6df9fd206a"
 
 [[projects]]
-  branch = "master"
-  digest = "1:f5a785a2836dce1d5a46a313275fe868c332090a3709b5aa58b84e1368ae006f"
-  name = "github.com/btcsuite/fastsha256"
-  packages = ["."]
+  digest = "1:b247ee960cb32dceecc22b825f266daef5901bab8f505d3dec07d402a7d39933"
+  name = "github.com/btcsuite/btcutil"
+  packages = [
+    ".",
+    "base58",
+    "bech32",
+    "gcs",
+    "gcs/builder",
+    "hdkeychain",
+  ]
   pruneopts = "UT"
-  revision = "637e656429416087660c84436a2a035d69d54e2e"
+  revision = "02a4fd9de1d52e877491996349a92d54c653ccbf"
+  version = "v1.0.1"
+
+[[projects]]
+  digest = "1:8afcc19670e29d6b7c3cb99114d12af4bfab2dd0ceb3a24934ceabe1ff3596ac"
+  name = "github.com/btcsuite/btcwallet"
+  packages = [
+    "chain",
+    "internal/legacy/keystore",
+    "internal/legacy/rename",
+    "internal/prompt",
+    "internal/zero",
+    "snacl",
+    "waddrmgr",
+    "wallet",
+    "wallet/txauthor",
+    "wallet/txrules",
+    "wallet/txsizes",
+    "walletdb",
+    "walletdb/migration",
+    "wtxmgr",
+  ]
+  pruneopts = "UT"
+  revision = "b19df70dddb66b27902f48cc48e69741909ef2e9"
+  version = "v0.11.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:49ad1acb33bb5b40c0d197321d3cf9ee9a29eb02f4765ab7c316e08983eb7559"
-  name = "github.com/btcsuite/golangcrypto"
-  packages = ["ripemd160"]
+  digest = "1:1e6b2f7aa98b082c30a1303c29a702c369b2ec6d86b74a599bc8bbe2333db299"
+  name = "github.com/btcsuite/go-socks"
+  packages = ["socks"]
   pruneopts = "UT"
-  revision = "53f62d9b43e87a6c56975cf862af7edf33a8d0df"
+  revision = "4720035b7bfd2a9bb130b1c184f8bbe41b6f0d0f"
+
+[[projects]]
+  branch = "master"
+  digest = "1:0b2242fd2f4f51fb491e97e204464f75da680897a0db10ec7554c87b71b5afc3"
+  name = "github.com/btcsuite/websocket"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "31079b6807923eb23992c421b114992b95131b55"
 
 [[projects]]
   digest = "1:b24d38b282bacf9791408a080f606370efa3d364e4b5fd9ba0f7b87786d3b679"
@@ -116,14 +186,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:78d0cea6d598e3f2498ee014cd4ee767966698a35bef29b4dd28922846c5eabb"
-  name = "github.com/codelingo/rectangle"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "a8eef7aa76cf129d19f122ad003e28b198bedf84"
-
-[[projects]]
-  branch = "master"
   digest = "1:b5ba3f29d3763f6962adefe157a136cbb2d67e19950bdb60035490b776ddbe6e"
   name = "github.com/codelingo/rpc"
   packages = [
@@ -149,6 +211,22 @@
   packages = ["pathdriver"]
   pruneopts = "UT"
   revision = "0377f7d767206f3a9e8881d0f02267b0d89c7a62"
+
+[[projects]]
+  digest = "1:c7db0d7eb0409eda9ac91b3a9d9ed49a019d0c9c82c6dd4e4bfcf97267c7d435"
+  name = "github.com/coreos/bbolt"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "68cc10a767ea1c6b9e8dcb9847317ff192d6d974"
+  version = "v1.3.4"
+
+[[projects]]
+  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  pruneopts = "UT"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:d665be6d68a70466a6df6939d9d7dace71df3d7ecbea190e7abb9b48f8d4c37c"
@@ -242,6 +320,14 @@
   pruneopts = "UT"
   revision = "d459835d2b077e44f7c9b453505ee29881d5d12d"
   version = "v1.2"
+
+[[projects]]
+  digest = "1:aacef5f5e45685f2aeda5534d0a750dee6859de7e9088cdd06192787bb01ae6d"
+  name = "github.com/go-errors/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a6af135bd4e28680facf08a3d206b454abc877a4"
+  version = "v1.0.1"
 
 [[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
@@ -345,6 +431,14 @@
   version = "v1.0"
 
 [[projects]]
+  digest = "1:4b6a85c651ea3faa6dfb4e6de5249b602226270b9eb3dfb8f49ec91fa3ef08ff"
+  name = "github.com/jrick/logrotate"
+  packages = ["rotator"]
+  pruneopts = "UT"
+  revision = "a93b200c26cbae3bb09dd0dc2c7c7fe1468a034a"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   digest = "1:ba8f64ba7ccf5eb99d78d3e519045b42c2c8d6ea55938176b54e918e791b3b0d"
   name = "github.com/juju/clock"
@@ -377,6 +471,14 @@
   revision = "472a3e8b2073fb3cd67c12d2bc5f3cd28e5f4116"
 
 [[projects]]
+  digest = "1:306e69960dffb60f242cc35256a053ca9712ca801fdbb4e49879d76a4415a33e"
+  name = "github.com/kkdai/bstream"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a8d27c5aa8eedad6b6683069d64b96ece63696db"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:ca955a9cd5b50b0f43d2cc3aeb35c951473eeca41b34eb67507f1dbcc0542394"
   name = "github.com/kr/pretty"
   packages = ["."]
@@ -393,15 +495,78 @@
   version = "v0.1.0"
 
 [[projects]]
-  digest = "1:8406282e292c5bf5c748c462e282a421ae2b0d6c0673a2e257244ae2a84d481c"
-  name = "github.com/lightningnetwork/lnd"
+  branch = "master"
+  digest = "1:0174e61ac7925014230ea874358ecd765dc253d0e0f079c8e902b38de8f50e76"
+  name = "github.com/lightninglabs/gozmq"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "d20a764486bf506bc045642e455bc7f0d21b232a"
+
+[[projects]]
+  digest = "1:1408bf2486c0b8cede54b0fd0112456daff1db45d78cc9a00a3c83b5988124a1"
+  name = "github.com/lightninglabs/neutrino"
   packages = [
-    "channeldb",
-    "elkrem",
+    ".",
+    "banman",
+    "blockntfns",
+    "cache",
+    "cache/lru",
+    "chainsync",
+    "filterdb",
+    "headerfs",
+    "headerlist",
+    "pushtx",
+    "query",
   ]
   pruneopts = "UT"
-  revision = "9537539cfc67e28ba9933c31ee01cf7f2aa6165f"
-  version = "v0.0.2"
+  revision = "e6008cebf1d97fc49e468d8caa8b6eb13f27cbe1"
+  version = "v0.11.0"
+
+[[projects]]
+  digest = "1:89ed66906e6bf0f053c58dfcba58a034d2fe0126c749dcb31c093faed9aa292b"
+  name = "github.com/lightningnetwork/lightning-onion"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "25954be99ab05ad18ae745a00f81f271ae3590c4"
+  version = "v1.0.1"
+
+[[projects]]
+  digest = "1:d1acda46fb621d98651fc6ab933f56d0e74bf9ddd42613f8a5226d4f5887dad1"
+  name = "github.com/lightningnetwork/lnd"
+  packages = [
+    "build",
+    "channeldb",
+    "channeldb/migration12",
+    "channeldb/migration_01_to_11",
+    "htlcswitch/hop",
+    "input",
+    "keychain",
+    "lntypes",
+    "lnwire",
+    "queue",
+    "record",
+    "routing/route",
+    "shachain",
+    "ticker",
+    "tlv",
+    "tor",
+    "zpay32",
+  ]
+  pruneopts = "UT"
+  revision = "ab87dc5fe2fc5f9b3f8c4d5d6cabea796f46ae2d"
+  version = "v0.9.2-beta"
+
+[[projects]]
+  digest = "1:1eed3814667111a72d3c342fdb99fe6ea8f280334e140f153ec32d1fff4f1f80"
+  name = "github.com/ltcsuite/ltcd"
+  packages = [
+    "chaincfg",
+    "chaincfg/chainhash",
+    "wire",
+  ]
+  pruneopts = "UT"
+  revision = "4faa85afe0ded0dc7316ad0fa2912c3ae3507794"
+  version = "v0.20.1-beta"
 
 [[projects]]
   digest = "1:c568d7727aa262c32bdf8a3f7db83614f7af0ed661474b24588de635c20024c7"
@@ -434,6 +599,14 @@
   pruneopts = "UT"
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  digest = "1:3e2a07391c0756e06504dfa2fb6c52d55261c8d5a9d790ab316a1544bbe87b0d"
+  name = "github.com/miekg/dns"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "f515aa579d28efa1af67d9a62cc57f2dfe59da76"
+  version = "v1.1.29"
 
 [[projects]]
   branch = "master"
@@ -512,31 +685,6 @@
   packages = ["selfupdate"]
   pruneopts = "UT"
   revision = "6329a43531c520b7044ee4a595f09f0e3ed9f7ce"
-
-[[projects]]
-  branch = "master"
-  digest = "1:0597105be82a6bf3ddab07ab19402142f60b7329844712fc22ed21946864cb2f"
-  name = "github.com/roasbeef/btcd"
-  packages = [
-    "btcec",
-    "chaincfg",
-    "chaincfg/chainhash",
-    "wire",
-  ]
-  pruneopts = "UT"
-  revision = "a03db407e40d3b66ea29984263bbc8bf4d2f04c4"
-
-[[projects]]
-  branch = "master"
-  digest = "1:a3780cd4884824a3a274c6c7f967c097cfebb0b8af9eddf1441e9f5d3f30e468"
-  name = "github.com/roasbeef/btcutil"
-  packages = [
-    ".",
-    "base58",
-    "bech32",
-  ]
-  pruneopts = "UT"
-  revision = "dfb640c57141f1c2113b92b4b16d2a89c30dd258"
 
 [[projects]]
   digest = "1:b36a0ede02c4c2aef7df7f91cbbb7bb88a98b5d253509d4f997dda526e50c88c"
@@ -683,10 +831,18 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9c2ed66f474408b23cdc4a845f0236897f7b826bf1c4b19eab6e90df998905cb"
+  digest = "1:52d4ec64c14c33c677a866ca7b70019358f71e905d21eded91047875bc821736"
   name = "golang.org/x/crypto"
   packages = [
+    "ed25519",
+    "ed25519/internal/edwards25519",
+    "internal/subtle",
+    "nacl/secretbox",
+    "pbkdf2",
+    "poly1305",
     "ripemd160",
+    "salsa20/salsa",
+    "scrypt",
     "ssh/terminal",
   ]
   pruneopts = "UT"
@@ -694,16 +850,23 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3678c5905f4223908ae7f0e09d7be17393a38ace3daaa5ece320e55b9b42314a"
+  digest = "1:987dd4556a5577c868f6eeeab6d3d2d7a28553485e51fc3149bad6fb14652ce0"
   name = "golang.org/x/net"
   packages = [
+    "bpf",
     "context",
     "context/ctxhttp",
     "http/httpguts",
     "http2",
     "http2/hpack",
     "idna",
+    "internal/iana",
+    "internal/socket",
+    "internal/socks",
     "internal/timeseries",
+    "ipv4",
+    "ipv6",
+    "proxy",
     "trace",
   ]
   pruneopts = "UT"
@@ -722,9 +885,10 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8742e6e73627b2877c3f723bc1823d5667ec59011242480309dc90fa862512aa"
+  digest = "1:a220a85c72a6cb7339c412cb2b117019a7fd94007cdfffb3b5b1d058227a2bf8"
   name = "golang.org/x/sys"
   packages = [
+    "cpu",
     "unix",
     "windows",
   ]
@@ -753,6 +917,23 @@
   pruneopts = "UT"
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
   version = "v0.3.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:eeeca39588235f555a835e13d67b4f13477f5a231a80ca111e886fa3864af4d1"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/gcexportdata",
+    "go/internal/gcimporter",
+    "go/internal/packagesdriver",
+    "go/packages",
+    "go/types/typeutil",
+    "internal/gocommand",
+    "internal/packagesinternal",
+  ]
+  pruneopts = "UT"
+  revision = "fa3cc9eebcfea6574930b14f65917ce74e6fa4fd"
 
 [[projects]]
   digest = "1:6247f76e55a1e1a5c19a81e2d4b4dff6730461eeb5bbb0a16dd4a8ec8637ee93"
@@ -904,7 +1085,6 @@
     "github.com/codelingo/lingo/service",
     "github.com/codelingo/lingo/service/grpc",
     "github.com/codelingo/lingo/vcs",
-    "github.com/codelingo/rectangle",
     "github.com/codelingo/rpc/flow",
     "github.com/codelingo/rpc/flow/client",
     "github.com/common-nighthawk/go-figure",
@@ -929,6 +1109,7 @@
     "gopkg.in/check.v1",
     "gopkg.in/juju/worker.v1",
     "gopkg.in/tomb.v1",
+    "gopkg.in/yaml.v1",
     "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
