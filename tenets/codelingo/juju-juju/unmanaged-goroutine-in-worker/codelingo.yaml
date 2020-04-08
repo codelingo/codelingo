@@ -1,10 +1,9 @@
 tenets:
 - name: unmanaged-goroutine-in-worker
   actions:
-    codelingo/review:
-      comment: |
-        {{packageName}}.{{typeName}} is a Worker which starts an unmanaged goroutine.
-        
+    codelingo/docs:
+      title: Unmanaged goroutine in worker
+      body: |
         Implementations of worker.Worker should guarantee that they're no longer doing work or
         consuming resources once Wait returns.
         
@@ -12,6 +11,9 @@ tenets:
         using Tomb.Go or Catacomb.Add (with NewSimpleWorker) to ensure that all work is completed
         and all errors are handled. (Constructs from package sync may also serve, but they are
         harder to verify correct, especially as code evolves, and are therefore not preferred.)
+    codelingo/review:
+      comment: |
+        {{packageName}}.{{typeName}} is a worker.Worker which starts an unmanaged goroutine.
   query: |
     import codelingo/ast/gotypes
 
