@@ -1,0 +1,20 @@
+[
+    {
+        "Comment": "The loop's exit condition is not consistent with its step operation.\n",
+        "Filename": "sample.go",
+        "Line": 15,
+        "Snippet": "\nfunc bad() {\n\tfor i := 0; i > 10; i++ {\n\t\tfmt.Println(i)\n\t}"
+    },
+    {
+        "Comment": "The loop's exit condition is not consistent with its step operation.\n",
+        "Filename": "sample.go",
+        "Line": 18,
+        "Snippet": "\t\tfmt.Println(i)\n\t}\n\tfor i := 0; i <= 10; i-- {\n\t\tfmt.Println(i)\n\t}"
+    },
+    {
+        "Comment": "The loop's exit condition is not consistent with its step operation.\n",
+        "Filename": "sample.go",
+        "Line": 21,
+        "Snippet": "\t\tfmt.Println(i)\n\t}\n\tfor i := uint(10); i <= 10; i-- {\n\t\t// This is... correct, but confusing.\n\t\tfmt.Println(i)"
+    }
+]

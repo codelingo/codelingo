@@ -104,6 +104,8 @@ codelingo:
         hasIssues: false
       shadowed-variable:
         hasIssues: false
+      surprising-for-direction:
+        hasIssues: false
       ticker-in-for-select:
         hasIssues: false
       unchecked-type-assertion:
