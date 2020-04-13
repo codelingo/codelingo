@@ -25,6 +25,7 @@ tenets:
 - shadowed-variable
 - shared-count-datarace
 - sprintf
+- surprising-for-direction
 - tested
 - ticker-in-for-select
 - todo

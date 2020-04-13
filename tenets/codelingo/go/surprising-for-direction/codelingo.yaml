@@ -1,0 +1,39 @@
+tenets:
+- name: surprising-for-direction
+  actions:
+    codelingo/docs:
+      title: Surprising for direction
+      body: |
+        A loop which counts upwards should check an upper bound; a loop which counts downwards
+        should check a lower bound. Violating this rule is not necessarily incorrect, but it's
+        invariably surprising and likely to confuse readers.
+    codelingo/review:
+      comment: |
+        The loop's exit condition is not consistent with its step operation.
+  query: |
+    import codelingo/ast/gotypes
+
+    gotypes.for_stmt(depth=any):
+      @review comment
+      gotypes.cond:
+        gotypes.binary_expr:
+          op as op
+      gotypes.post:
+        gotypes.element:
+          # matches both assign_stmt and inc_dec_stmt
+          token as token
+
+    mismatch(op, token)
+
+funcs:
+- name: mismatch
+  type: asserter
+  body: |
+    function(op, token) {
+      if (op === "<" || op === "<=") {
+        return (token == "--" || token == "-=")
+      }
+      if (op === ">" || op === ">=") {
+        return (token == "++" || token == "+=")
+      }
+    }
