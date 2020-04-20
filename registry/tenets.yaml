@@ -133,7 +133,7 @@ codelingo:
         hasIssues: false
       test-package-name:
         hasIssues: false
-      tparallel:
+      parallel-integration-tests:
         hasIssues: false
     tags:
     - jenkins
