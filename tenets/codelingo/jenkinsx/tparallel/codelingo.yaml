@@ -12,8 +12,9 @@ tenets:
       import codelingo/ast/go
 
       go.file(depth = any):
-        filename as fname
-        regex(/.*_integration_test.go/, fname)
+        go.comment_group:
+          go.comment:
+            text == "// +build integration"
         @review comment
         @rewrite ""
         go.call_expr(depth = any):
