@@ -1,5 +1,5 @@
 <h3 align="center"> <a href="https://codelingo.io" target="_blank">
-    <img width="500"  src="./public/img/codelingologobig.svg" />
+    <img width="500" alt="logo" src="./public/img/codelingologobig.svg" />
   </a> </h3>
 
 <h3 align="center">
@@ -10,8 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/apps/codelingo" target="_blank">
-    <img width="295" height="38" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/install.png" />
+  <a href="https://github.com/marketplace/codelingo" target="_blank">
+    <img width="295" height="38" alt="install" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/install.png" />
   </a>
 </p>
 
@@ -28,6 +28,7 @@
 
 
 CodeLingo learns your coding rules to auto identify issues and teach your best practices; keeping you nimble on a fast-moving codebase.
+Use simple in-line workflows to document your best practices and enforce them in real-time.
 
 # Installation
 
@@ -37,15 +38,27 @@ To have CodeLingo automatically review every new Pull Request to your repo, [ins
 
 Every pull request to your repository will now be checked against the rules you've created and published:
 
-<p align="center">
-<img width="800" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_review2.png" />
+<p>
+<img width="700" alt="issue comment example" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_review2.png" />
 </p>
 
 ## VSCode
 
 [Capture](https://docs.codelingo.io/concepts/integrating-with-github/#capture) rules from within VSCode using our [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo).
 
+
+
+<p>
+<img width="700" alt="capture example" src="https://raw.githubusercontent.com/codelingo/vscode-extension/master/images/capture-example.png" />
+</p>
+
 # Integrating with GitHub
+
+## GitHub App
+
+The CodeLingo [GitHub app](https://github.com/marketplace/codelingo) will scan new pull requests for issues that match the query specified in your rules and comment on any violations.
+
+## CodeLingoBot
 
 @CodeLingoBot will help you manage your CodeLingo workflow on GitHub. There are [several ways](https://docs.codelingo.io/concepts/integrating-with-github/) you can interact with @CodeLingoBot. The simplest is to trigger actions by commenting on a Pull Request.
 
@@ -53,7 +66,7 @@ Every pull request to your repository will now be checked against the rules you'
 
 [![lexicon](https://img.shields.io/badge/GitHub-lexicon-lightgrey)](https://github.com/codelingo/lexicon)
 
-CodeLingo Query Language (CLQL) queries are statements of Facts about a domain of knowledge (e.g. an AST). In the case of an AST lexicon, a lexicon provides Facts about the syntatic structure of a codebase, which can then be queried to identify arbitrary patterns in code.
+[CodeLingo Query Language](https://docs.codelingo.io/concepts/CLQL/) (CLQL) queries are statements of Facts about a domain of knowledge (e.g. an AST). In the case of an AST lexicon, a lexicon provides Facts about the syntatic structure of a codebase, which can then be queried to identify arbitrary patterns in code.
 
 [![vscode-extension](https://img.shields.io/badge/GitHub-vscode--extension-lightgrey)](https://github.com/codelingo/vscode-extension)
 
@@ -61,7 +74,7 @@ Capture ideas needed for coding Rules directly from VSCode simply by selecting t
 
 [![ideplugins](https://img.shields.io/badge/GitHub-ideplugins-lightgrey)](https://github.com/codelingo/ideplugins)
 
-A repository for CLQL-generating plugins for IDEs.
+A repository for [CLQL](https://docs.codelingo.io/concepts/CLQL/)-generating plugins for IDEs.
 
 
 # About Us
