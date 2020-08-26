@@ -15,6 +15,9 @@
   </a>
 </p>
 
+<br/>
+<br/>
+
 [![Dashboard](https://img.shields.io/badge/-Dashboard-informational?style=flat)](https://dash.codelingo.io)
 [![codelingo.io](https://img.shields.io/badge/-codelingo.io-yellowgreen?style=flat)](https://codelingo.io)
 [![Slack](https://img.shields.io/badge/Slack-codelingo--dev-blueviolet?style=flat)](https://codelingo.slack.com/messages/codelingo-dev)
