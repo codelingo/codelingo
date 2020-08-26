@@ -60,7 +60,7 @@ The CodeLingo [GitHub app](https://github.com/marketplace/codelingo) will scan n
 
 ## CodeLingoBot
 
-@CodeLingoBot will help you manage your CodeLingo workflow on GitHub. There are [several ways](https://docs.codelingo.io/concepts/integrating-with-github/) you can interact with @CodeLingoBot. The simplest is to trigger actions by commenting on a Pull Request.
+@CodeLingoBot will help you manage your CodeLingo workflow on GitHub. @CodeLingoBot will react to a [variety of commands](https://docs.codelingo.io/concepts/integrating-with-github/) that can be triggered by mentioning the bot in pull request comments.
 
 # Repositories
 
