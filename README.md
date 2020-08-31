@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/marketplace/codelingo" target="_blank">
+  <a href="https://github.com/apps/codelingo" target="_blank">
     <img width="295" height="38" alt="install" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/install.png" />
   </a>
 </p>
@@ -34,7 +34,7 @@ Use simple in-line workflows to document your best practices and enforce them in
 
 ## GitHub
 
-To have CodeLingo automatically review every new Pull Request to your repo, [install CodeLingo on your repo](https://github.com/marketplace/codelingo) and add some rules to your repo via the [dashboard](https://dash.codelingo.io).
+To have CodeLingo automatically review every new Pull Request to your repo, [install CodeLingo on your repo](https://github.com/apps/codelingo) and add some rules to your repo via the [dashboard](https://dash.codelingo.io).
 
 Every pull request to your repository will now be checked against the rules you've created and published:
 
@@ -46,17 +46,23 @@ Every pull request to your repository will now be checked against the rules you'
 
 [Capture](https://docs.codelingo.io/concepts/integrating-with-github/#capture) rules from within VSCode using our [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo).
 
-
+<p>
+<i>Example of capturing a rule in a pull request.</i>
+<br />
+<img width="700" alt="capture example" src="./public/img/capture-pr.png" />
+</p>
 
 <p>
-<img width="700" alt="capture example" src="https://raw.githubusercontent.com/codelingo/vscode-extension/master/images/capture-example.png" />
+<i>Example of capturing a rule in VSCode.</i>
+<br />
+<img width="1000" alt="capture example" src="./public/img/capture-ex.png" />
 </p>
 
 # Integrating with GitHub
 
 ## GitHub App
 
-The CodeLingo [GitHub app](https://github.com/marketplace/codelingo) will scan new pull requests for issues that match the query specified in your rules and comment on any violations.
+The CodeLingo [GitHub app](https://github.com/apps/codelingo) will scan new pull requests for issues that match the query specified in your rules and comment on any violations.
 
 ## CodeLingoBot
 
