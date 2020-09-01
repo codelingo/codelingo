@@ -1,8 +1,0 @@
-[
-    {
-     "Comment": "Close the file when you are done",
-     "Filename": "test.go",
-     "Line": 16,
-     "Snippet": "func main() {\n\n    f, err := os.Open(\"/tmp/test.txt\")\n    check(err)\n    b1 := make([]byte, 5)"
-    }
-]

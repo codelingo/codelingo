@@ -1,8 +1,0 @@
-[
-  {
-   "Comment": "By convention, packages are given lower case, single-word names; \nthere should be no need for underscores or mixedCaps. Err on the side of brevity.\n",
-   "Filename": "effective-go/good-package-name/a_really_long_and_bad_package_name/example-bad.go",
-   "Line": 1,
-   "Snippet": "\npackage a_really_long_and_bad_package_name\n"
-  }
- ]

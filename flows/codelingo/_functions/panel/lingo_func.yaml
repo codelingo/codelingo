@@ -1,4 +1,0 @@
-name: panel
-description: Create a panel to display information from other flows in the codelingo dashboard.
-parameters:
-  name: ""

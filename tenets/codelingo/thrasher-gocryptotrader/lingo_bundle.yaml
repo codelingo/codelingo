@@ -1,8 +1,0 @@
-description: Tenets written for thrasher-/gocryptotrader
-version: 0.0.0
-tenets:
-- find-sync-mutex-lock
-tags:
-- go
-- thrasher
-- gocryptotrader

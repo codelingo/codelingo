@@ -1,3 +1,0 @@
-package ooo
-
-func ooo() {}

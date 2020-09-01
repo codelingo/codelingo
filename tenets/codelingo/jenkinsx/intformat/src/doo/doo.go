@@ -1,3 +1,0 @@
-package doo
-
-func doo() {}

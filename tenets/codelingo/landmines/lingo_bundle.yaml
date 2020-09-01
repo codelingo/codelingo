@@ -1,9 +1,0 @@
-description: Best practices from the The Three Go Landmines gist.
-version: 0.0.0
-tenets:
-- looped-vars-outside-loop
-- misused-nil-interface
-- shadowed-func-parameter
-tags:
-- golang
-- go

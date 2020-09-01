@@ -1,9 +1,0 @@
-description: Tenets written for juju-juju
-version: 0.0.0
-tenets:
-- find-typed-nil
-- unmanaged-goroutine-in-worker
-tags:
-- go
-- juju
-
