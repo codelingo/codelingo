@@ -1,8 +1,0 @@
-[
-  {
-   "Comment": "Always include a default case when using a type switch.",
-   "Filename": "main.go",
-   "Line": 18,
-   "Snippet": "\nfunc dont(i interface{}) {\n\tswitch v := i.(type) { // ISSUE\n\tcase int:\n\t\tfmt.Printf(\"Twice %v is %v\\n\", v, v*2)\n\tcase string:\n\t\tfmt.Printf(\"%q is %v bytes long\\n\", v, len(v))\n\t}\n\n}"
-  }
- ]

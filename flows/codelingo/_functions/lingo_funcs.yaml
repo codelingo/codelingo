@@ -1,8 +1,0 @@
-flows:
-  - filter
-  - github-comment
-  - panel
-  - parse
-  - review-local-repo
-  - search
-  - specify

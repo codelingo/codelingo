@@ -1,6 +1,0 @@
-[{
-    "Filename": "sample.go",
-    "Line": 7,
-    "Comment": "sample.W is a Worker which starts an unmanaged goroutine.\n\nImplementations of worker.Worker should guarantee that they're no longer doing work or\nconsuming resources once Wait returns.\n\nStarting a goroutine directly makes it much harder to fulfil this requirement; consider\nusing Tomb.Go or Catacomb.Add (with NewSimpleWorker) to ensure that all work is completed\nand all errors are handled. (Constructs from package sync may also serve, but they are\nharder to verify correct, especially as code evolves, and are therefore not preferred.)\n",
-    "Snippet": "func (W) Kill()       {}\nfunc (W) Wait() error { return nil }\nfunc (W) ohNo()       { go func() {}() }\n\ntype X struct{}"
-}]

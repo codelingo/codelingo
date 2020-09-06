@@ -1,4 +1,0 @@
-name: specify
-description: Pull decorated values from result trees.
-parameters:
-  result: ""

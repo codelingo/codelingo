@@ -1,8 +1,0 @@
-[
-  {
-   "Comment": "Unchecked type assertions can cause panics. Check for success with the x, ok := y.(type) style.",
-   "Filename": "main.go",
-   "Line": 17,
-   "Snippet": "\nfunc unchecked(in interface{}) {\n\ts := in.(string) // ISSUE\n\tfmt.Println(s)\n}"
-  }
- ]

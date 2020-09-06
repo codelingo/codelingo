@@ -1,8 +1,0 @@
-[
-  {
-   "Comment": "Most functions that use a Context should accept it as their first parameter. \nConsider moving Context to the front.\n",
-   "Filename": "example.go",
-   "Line": 16,
-   "Snippet": "}\n\nfunc cFunc(c int, b int, ctx context.Context, a int) {\n\n}"
-  }
- ]

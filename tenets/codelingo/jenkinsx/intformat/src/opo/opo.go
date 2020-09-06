@@ -1,3 +1,0 @@
-package opo
-
-func opo() {}

@@ -1,7 +1,0 @@
-[{
-    "Name": "parallel-integration-tests",
-    "Comment": "You should NOT add t.Parallel() to an unencapsulated test as it may cause intermittent failures.",
-    "Filename": "auth_integration_test.go",
-    "Line": 12,
-    "Snippet": "\nfunc TestAuthConfigParallel(t *testing.T) {\n\tt.Parallel()\n\tauth.DoAuthStuff()\n}"
-}]

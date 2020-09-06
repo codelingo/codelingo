@@ -1,8 +1,0 @@
-[
-    {
-     "Comment": "Should replace errors.New(fmt.Sprintf(...)) with errors.Errorf(...).",
-     "Filename": "example.go",
-     "Line": 16,
-     "Snippet": "func doStuffA(param string) error {\n\t// bad\n\treturn errors.New(fmt.Sprintf(\"Don't call with \\\"%s\\\" param - it will literally do nothing!\", param))\n}\n"
-    }
-   ]

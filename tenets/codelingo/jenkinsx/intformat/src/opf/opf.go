@@ -1,3 +1,0 @@
-package opf
-
-func opf() {}

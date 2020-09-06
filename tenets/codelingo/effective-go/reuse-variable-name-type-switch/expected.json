@@ -1,8 +1,0 @@
-[
-    {
-     "Comment": "Reuse `i` instead of a new variable `v` in the type switch. [as specified in Effective Go](https://golang.org/doc/effective_go.html#type_switch)",
-     "Filename": "test.go",
-     "Line": 6,
-     "Snippet": "\nfunc do(i interface{}) {\n\tswitch v := i.(type) { //ISSUE\n\tcase int:\n\t\tfmt.Printf(\"Twice %v is %v\\n\", v, v*2)\n\tcase string:\n\t\tfmt.Printf(\"%q is %v bytes long\\n\", v, len(v))\n\tdefault:\n\t\tfmt.Printf(\"I don't know about type %T!\\n\", v)\n\t}\n\n\tswitch i := i.(type) {"
-    }
-]

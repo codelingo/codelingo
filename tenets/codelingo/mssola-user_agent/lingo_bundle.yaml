@@ -1,8 +1,0 @@
-description: Tenets written for mssola-user_agent
-version: 0.0.0
-tenets:
-- else-if-when-mutually-exclusive
-tags:
-- go
-- mssola
-- user_agent
