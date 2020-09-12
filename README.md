@@ -70,7 +70,7 @@ The CodeLingo [GitHub app](https://github.com/apps/codelingo) will scan new pull
 
 # Repositories
 
-[![lexicon](https://img.shields.io/badge/GitHub-lexicon-lightgrey)](https://github.com/codelingo/lexicon)
+[![lexicon](https://img.shields.io/badge/GitHub-lexiconsdk-lightgrey)](https://github.com/codelingo/lexiconsdk)
 
 [CodeLingo Query Language](https://docs.codelingo.io/concepts/CLQL/) (CLQL) queries are statements of Facts about a domain of knowledge (e.g. an AST). In the case of an AST lexicon, a lexicon provides Facts about the syntatic structure of a codebase, which can then be queried to identify arbitrary patterns in code.
 
