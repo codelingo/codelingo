@@ -40,7 +40,7 @@ Share links to snippets that open directly in VS Code.
 
 3.  The snippet URL link is automatically copied to your clipboard.
 
-4.  Share the link (e.g. slack) to anyone to have it highlight the snippet in their VS Code.
+4.  Share the link (e.g. Slack) to anyone to have it highlight the snippet in their VS Code.
 
 ## Playbooks
 
