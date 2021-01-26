@@ -3,7 +3,7 @@
   </a> </h3>
 
 <h3 align="center">
-  Get on the same page, <i>Fast</i>
+  Get on the same page, <i>fast</i>
 </h3>
 <p align="center">
   Share links to snippets that open directly in VS Code.
