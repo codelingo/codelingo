@@ -32,8 +32,6 @@
 
 Share links to snippets that open directly in VS Code.
 
-![share snippet](./images/share-snippet.gif)
-
 #### How to Share a Snippet
 
 1.  Select the code snippet you want to share.
