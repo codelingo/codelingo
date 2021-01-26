@@ -16,7 +16,7 @@
 </p>
 
 <br/>
-![share snippet](./images/share-snippet.gif)
+![share snippet](./public/img/share-snippet.gif)
 <br/>
 
 [![codelingo.io](https://img.shields.io/badge/-codelingo.io-yellowgreen?style=flat)](https://codelingo.io)
