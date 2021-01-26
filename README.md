@@ -3,88 +3,77 @@
   </a> </h3>
 
 <h3 align="center">
-  The Linter for Devs Who <i>Hate</i> Linters
+  Get on the same page, <i>fast</i>
 </h3>
 <p align="center">
-  Stop making linters happy. Start making your team productive.
+  Share links to snippets that open directly in VS Code.
 </p>
 
 <p align="center">
-  <a href="https://github.com/apps/codelingo" target="_blank">
+  <a href="https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo" target="_blank">
     <img width="295" height="38" alt="install" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/install.png" />
   </a>
 </p>
 
 <br/>
+![share snippet](./public/img/share-snippet.gif)
 <br/>
 
-[![Dashboard](https://img.shields.io/badge/-Dashboard-informational?style=flat)](https://dash.codelingo.io)
 [![codelingo.io](https://img.shields.io/badge/-codelingo.io-yellowgreen?style=flat)](https://codelingo.io)
 [![Slack](https://img.shields.io/badge/Slack-codelingo--dev-blueviolet?style=flat)](https://codelingo.slack.com/messages/codelingo-dev)
-[![VSCode Extension](https://img.shields.io/badge/VSCode-Capture-Blue?style=flat)](https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo)
-[![Docs](https://img.shields.io/badge/Docs-CodeLingo-green?style=flat)](https://docs.codelingo.io)
-[![Playground](https://img.shields.io/badge/Playground-CodeLingo-orange?style=flat)](https://playground.codelingo.io)
+[![VSCode Extension](https://img.shields.io/badge/VS%20Code-CodeLingo-blue?style=flat)](https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo)
 [![Twitter](https://img.shields.io/twitter/follow/codelingoapp?label=Follow%20Us)](https://twitter.com/codelingoapp)
 
+### Usage
 
-CodeLingo learns your coding rules to auto identify issues and teach your best practices; keeping you nimble on a fast-moving codebase.
-Use simple in-line workflows to document your best practices and enforce them in real-time.
+## Snippets
 
-# Installation
+Share links to snippets that open directly in VS Code.
 
-## GitHub
+![share snippet](./images/share-snippet.gif)
 
-To have CodeLingo automatically review every new Pull Request to your repo, [install CodeLingo on your repo](https://github.com/apps/codelingo) and add some rules to your repo via the [dashboard](https://dash.codelingo.io).
+#### How to Share a Snippet
 
-Every pull request to your repository will now be checked against the rules you've created and published:
+1.  Select the code snippet you want to share.
 
-<p>
-<img width="700" alt="issue comment example" src="https://raw.githubusercontent.com/codelingo/codelingo/master/public/img/cl_review2.png" />
-</p>
+2.  Press `Alt`+`Shift`+`S` (`Option`+`Shift`+`P` on macOS).
 
-## VSCode
+3.  The snippet URL link is automatically copied to your clipboard.
 
-[Capture](https://docs.codelingo.io/concepts/integrating-with-github/#capture) rules from within VSCode using our [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=codelingo.codelingo).
+4.  Share the link (e.g. Slack) to anyone to have it highlight the snippet in their VS Code.
 
-<p>
-<i>Example of capturing a rule in a pull request.</i>
-<br />
-<img width="700" alt="capture example" src="./public/img/capture-pr.png" />
-</p>
+## Playbooks
 
-<p>
-<i>Example of capturing a rule in VSCode.</i>
-<br />
-<img width="1000" alt="capture example" src="./public/img/capture-ex.png" />
-</p>
+But wait, there's more!
 
-# Integrating with GitHub
+Snippets are shared via Playbooks, where you can plan out and think through code design problems with your team.
 
-## GitHub App
+Playbooks can then be used to dynamically guide developers as they code, tightening the loop and keeping alignment between design discussions and implementation efforts.
 
-The CodeLingo [GitHub app](https://github.com/apps/codelingo) will scan new pull requests for issues that match the query specified in your rules and comment on any violations.
+#### Creating/Adding to a playbook
 
-## CodeLingoBot
+Let's get you adding your own code snippets to a new playbook!
 
-@CodeLingoBot will help you manage your CodeLingo workflow on GitHub. @CodeLingoBot will react to a [variety of commands](https://docs.codelingo.io/concepts/integrating-with-github/) that can be triggered by mentioning the bot in pull request comments.
+1.  Select a snippet of code.
 
-# Repositories
+2.  Press `Cmd`+`Shift`+`P` to open the command palette and type `add to playbook`.  
+    _Tip &mdash; press `Alt`+`P` (`Option`+`P` on macOS) as a shortcut for step 2._
 
-[![lexicon](https://img.shields.io/badge/GitHub-lexiconsdk-lightgrey)](https://github.com/codelingo/lexiconsdk)
+3.  Follow the prompts to add your code snippet to a playbook.
 
-[CodeLingo Query Language](https://docs.codelingo.io/concepts/CLQL/) (CLQL) queries are statements of Facts about a domain of knowledge (e.g. an AST). In the case of an AST lexicon, a lexicon provides Facts about the syntatic structure of a codebase, which can then be queried to identify arbitrary patterns in code.
+#### Opening playbooks
 
-[![vscode-extension](https://img.shields.io/badge/GitHub-vscode--extension-lightgrey)](https://github.com/codelingo/vscode-extension)
+1. Press `Cmd`+`Shift`+`P` to open the command palette and enter `open playbook`.
 
-Capture ideas needed for coding Rules directly from VSCode simply by selecting the code and noting the needed Rule idea.
+2. Select a playbook from the drop-down and it will open in your browser.
 
-[![ideplugins](https://img.shields.io/badge/GitHub-ideplugins-lightgrey)](https://github.com/codelingo/ideplugins)
+## Feedback
 
-A repository for [CLQL](https://docs.codelingo.io/concepts/CLQL/)-generating plugins for IDEs.
+We'd love to hear from you: [feedback form 📋](https://jesse094360.typeform.com/to/sMmjdbVm)
 
 
 # About Us
 
-We are a small **VC backed** development team from 🥝 **New Zealand** with a passion for the art of software development in itself!
+We are a small dev team from 🥝 **New Zealand** with a passion for the art of deving in teams!
 
 Check out our team here: <a href="https://www.codelingo.io/about" target="_blank">codelingo.io/about</a>.
