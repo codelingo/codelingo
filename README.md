@@ -42,30 +42,30 @@ Share links to snippets that open directly in VS Code.
 
 4.  Share the link (e.g. Slack) to anyone to have it highlight the snippet in their VS Code.
 
-## Playbooks
+## Notebooks
 
 But wait, there's more!
 
-Snippets are shared via Playbooks, where you can plan out and think through code design problems with your team.
+Snippets are shared via Notebooks, where you can plan out and think through code design problems with your team.
 
-Playbooks can then be used to dynamically guide developers as they code, tightening the loop and keeping alignment between design discussions and implementation efforts.
+Notebooks can then be used to dynamically guide developers as they code, tightening the loop and keeping alignment between design discussions and implementation efforts.
 
-#### Creating/Adding to a playbook
+#### Creating/Adding to a Notebook
 
-Let's get you adding your own code snippets to a new playbook!
+Let's get you adding your own code snippets to a new Notebook!
 
 1.  Select a snippet of code.
 
-2.  Press `Cmd`+`Shift`+`P` to open the command palette and type `add to playbook`.  
+2.  Press `Cmd`+`Shift`+`P` to open the command palette and type `add to Notebook`.  
     _Tip &mdash; press `Alt`+`P` (`Option`+`P` on macOS) as a shortcut for step 2._
 
-3.  Follow the prompts to add your code snippet to a playbook.
+3.  Follow the prompts to add your code snippet to a Notebook.
 
-#### Opening playbooks
+#### Opening Notebooks
 
-1. Press `Cmd`+`Shift`+`P` to open the command palette and enter `open playbook`.
+1. Press `Cmd`+`Shift`+`P` to open the command palette and enter `open Notebook`.
 
-2. Select a playbook from the drop-down and it will open in your browser.
+2. Select a Notebook from the drop-down and it will open in your browser.
 
 ## Feedback
 
